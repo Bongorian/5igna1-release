@@ -1,0 +1,38 @@
+# Build output and local IDE/SDK state
+.gradle/
+**/build/
+local.properties
+.idea/
+*.iml
+.DS_Store
+
+# Local APKs, captures, logs, device dumps and working backups
+/dist/
+/verification/
+*.apk
+*.aab
+*.class
+*.hprof
+*.log
+
+# Credentials and signing material
+.env
+.env.*
+*.jks
+*.keystore
+*.pem
+key.properties
+keystore.properties
+
+# Local Google Play upload credentials
+.signing/
+signing.properties
+*.p12
+
+# Explicit GitHub/FOSS release signing configuration
+fdroid-signing.properties
+*.pfx
+
+# Python tool caches
+__pycache__/
+*.pyc

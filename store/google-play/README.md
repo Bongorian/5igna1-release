@@ -1,0 +1,34 @@
+# Google Play 配布準備
+
+1.0.0 / versionCode 8の初回公開向け資料です。提出・掲載はまだ行っていません。アプリIDは **com.bongorian.signa1**。F-Droid/GitHubとの署名関係は[共通リリース手順](../../docs/RELEASING.md)を先に確認してください。
+
+## 成果物
+
+```sh
+./tools/build.sh bundlePlayRelease
+# JDKのjarsignerとPillowが必要
+python3 tools/package-play.py
+```
+
+Play用署名は未追跡の `signing.properties` または `SIGNAL_PLAY_*` 環境変数から読みます。鍵がなければAABは未署名であり、packagingは失敗します。既存のupload keyを上書き・再生成しないでください。
+
+AABは `app/build/outputs/bundle/playRelease/app-play-release.aab`。包装後は `dist/5igna1-v1.0.0-google-play.zip` です。ZIPにはAAB、日英素材、説明資料、プライバシーHTML、SHA256SUMSを含めます。秘密鍵・署名設定は含めません。GitHubの一般配布APKはこのPlay成果物ではなくfdroidReleaseから作ります。
+
+## 素材
+
+- `fastlane/metadata/android/ja-JP` と `en-US`：名称、短い説明、詳細説明、`changelogs/8.txt`。
+- アイコン512×512、feature graphic 1024×500、各言語の現在のUIスクリーンショット1080×1920を4枚。
+- 広告用feature graphicは生成アートです。実機の撮影結果ではありません。[作成記録](asset-provenance.md)と[素材監査](../../docs/audit/ASSETS.md)参照。
+- スクリーンショットはエミュレーターのテストパターンを写した実行画面。公開前に実機での見え方と表示内容を最終確認してください。
+
+## Console側の作業
+
+1. 開発者登録とアプリ作成。公開者・アプリID・署名方針を確認。
+2. Play App Signingを設定。upload keyと配信用app signing keyは役割が異なります。
+3. 署名済みplayRelease AABをアップロード。
+4. 日英ストア情報・画像・連絡先を登録。対象年齢、IARC、データセーフティ等は[申告下書き](console-declarations.md)と実際の質問を照合して回答。
+5. `privacy/index.html` を管理するHTTPSサイトへ配置して公開URLをConsoleに登録。ローカルファイルのままでは提出できません。
+6. Consoleが要求する内部/クローズドテスト・審査を完了後に公開。適用条件はアカウントと公開時点で確認。
+7. 掲載された実URLをREADMEへ追記。
+
+このアプリはBilling、広告、解析SDKを実装していません。主要機能はF-Droid版と同じです。公開のためにBilling商品やSupporter Packを作成する必要はありません。

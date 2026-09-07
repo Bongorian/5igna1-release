@@ -1,0 +1,43 @@
+name: Android build
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+concurrency:
+  group: android-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+      - run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
+      - name: Check release metadata, translations and wrapper
+        run: |
+          python3 tools/release.py check
+          python3 tools/check-locales.py
+          python3 tools/check-repository.py
+      - name: Test both flavors and build unsigned FOSS release
+        run: ./gradlew --no-daemon lint lintPlayDebug test assembleFdroidDebug assembleFdroidRelease assemblePlayDebug assembleFdroidDebugAndroidTest verifyFossDependencies dependencyInventory
+      - name: Verify reviewed dependency graph
+        run: python3 tools/audit-dependencies.py --check
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: verification-${{ matrix.os }}
+          path: |
+            app/build/reports/
+            app/build/test-results/
+          retention-days: 14

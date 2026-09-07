@@ -1,0 +1,9 @@
+* text=auto
+*.java text eol=lf
+*.glsl text eol=lf
+*.md text eol=lf
+*.gradle text eol=lf
+gradlew text eol=lf
+*.jar binary
+
+gradlew.bat text eol=crlf

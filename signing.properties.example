@@ -1,0 +1,5 @@
+# Copy to signing.properties (ignored by Git), or run tools/create-upload-key.py.
+storeFile=.signing/5igna1-upload.p12
+storePassword=REPLACE_LOCALLY
+keyAlias=upload
+keyPassword=REPLACE_LOCALLY

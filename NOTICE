@@ -1,0 +1,35 @@
+5igna1 — Glitch Camera
+Copyright 2026 Bongorian and the 5igna1 contributors.
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+This notice does not change the licenses of third-party components.
+
+This product includes AndroidX software developed by The Android Open Source
+Project and its contributors, licensed under the Apache License 2.0.
+
+Kotlin standard library and annotations:
+Copyright 2010-2023 JetBrains s.r.o. and Kotlin Programming Language contributors.
+Kotlin coroutines: Copyright JetBrains s.r.o. and the respective contributors.
+Licensed under the Apache License 2.0.
+The standard library includes Apache-2.0 code derived from GWT (Copyright
+2007-08 Google Inc.) and Guava (Copyright 2011 The Guava Authors).
+The JVM math implementation includes code derived from Boost special math
+functions, Copyright Eric Ford & Hubert Holin 2001, under the Boost Software
+License 1.0. See licenses/Kotlin-Boost-1.0.txt.
+
+Guava ListenableFuture: Copyright The Guava Authors. Apache License 2.0.
+
+Settings gear icon: derived from Google Material Design Icons 3.0.1,
+Copyright Google Inc., Apache License 2.0. Converted to an Android vector;
+color and path simplified for this application's UI.
+
+Gradle Wrapper and launch scripts: Copyright the original Gradle authors.
+Apache License 2.0. Build tooling only; not included in the app.
+
+See THIRD_PARTY_LICENSES.md and docs/audit/dependencies.json for the component
+inventory, versions, upstream sources and build/test-only licenses.
+
+Store screenshots show the Android Emulator's generated fake-camera scene,
+based on Scene.cpp, Copyright (C) 2012 The Android Open Source Project,
+Apache License 2.0. The camera pattern is rendered through 5igna1's effects.
+The scene generator is not included in the app. See docs/audit/ASSETS.md.

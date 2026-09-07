@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui_open_saved_photos_and_videos" formatted="false">"Open saved photos and videos"</string>
+    <string name="ui_open_the_last_saved_video" formatted="false">"Open the last saved video"</string>
+    <string name="ui_open_the_last_saved_photo" formatted="false">"Open the last saved photo"</string>
+    <string name="ui_open_the_last_saved_raw_video_zip" formatted="false">"Open the last saved RAW video ZIP"</string>
+    <string name="ui_select_an_option_then_apply" formatted="false">"Select an option, then apply"</string>
+    <string name="ui_photo_full_resolution" formatted="false">"Photo · Full resolution"</string>
+    <string name="ui_processed_jpeg" formatted="false">"Processed JPEG"</string>
+    <string name="ui_raw_dng_original" formatted="false">"RAW / DNG original"</string>
+    <string name="ui_raw_dng_sensor_processing" formatted="false">"RAW / DNG sensor processing"</string>
+    <string name="ui_save_format" formatted="false">"Save format"</string>
+    <string name="ui_standard_prefer_12_mp_or_less" formatted="false">"Standard (prefer 12 MP or less)"</string>
+    <string name="ui_maximum_camera_resolution" formatted="false">"Maximum camera resolution"</string>
+    <string name="ui_photo_resolution" formatted="false">"Photo resolution"</string>
+    <string name="ui_jpeg_quality" formatted="false">"JPEG quality"</string>
+    <string name="ui_85_smaller_files" formatted="false">"85 · Smaller files"</string>
+    <string name="ui_95_high_quality" formatted="false">"95 · High quality"</string>
+    <string name="ui_100_best_quality" formatted="false">"100 · Best quality"</string>
+    <string name="ui_video_resolution_and_frame_rate" formatted="false">"Video · Resolution and frame rate"</string>
+    <string name="ui_raw_video_dng_sequence_experimental" formatted="false">"RAW video / DNG sequence (experimental)"</string>
+    <string name="ui_saves_original_silent_dng_frames_as_a_zip" formatted="false">"\nSaves original, silent DNG frames as a ZIP in Download / 5igna1. Regular video players cannot play it directly. Extract the ZIP and develop the frames in RAW-compatible software. Effects and LIVE FAULT are not applied."</string>
+    <string name="ui_raw_video_resolution" formatted="false">"RAW video resolution"</string>
+    <string name="ui_fps_target" formatted="false">" fps / target"</string>
+    <string name="ui_raw_video_target_frame_rate" formatted="false">"RAW video target frame rate"</string>
+    <string name="ui_hevc_h_265_efficient" formatted="false">"HEVC / H.265 · Efficient"</string>
+    <string name="ui_avc_h_264_compatible" formatted="false">"AVC / H.264 · Compatible"</string>
+    <string name="ui_video_codec" formatted="false">"Video codec"</string>
+    <string name="ui_video_resolution_fps" formatted="false">"Video resolution / fps"</string>
+    <string name="ui_smaller_files" formatted="false">"Smaller files"</string>
+    <string name="ui_high_quality" formatted="false">"High quality"</string>
+    <string name="ui_best_quality" formatted="false">"Best quality"</string>
+    <string name="ui_encoder_maximum" formatted="false">"Encoder maximum"</string>
+    <string name="ui_1f_mbps_approx_0f_mb_min" formatted="false">" · %.1f Mbps / approx. %.0f MB/min"</string>
+    <string name="ui_video_quality" formatted="false">"Video quality"</string>
+    <string name="ui_location_and_exif" formatted="false">"Location and EXIF"</string>
+    <string name="ui_save_capture_location" formatted="false">"Save capture location"</string>
+    <string name="ui_photos_include_the_date_device_exposure_iso_and" formatted="false">"Photos include the date, device, exposure, ISO and effects. With location enabled, an available location is added to photo GPS and video location tags. No location tag is added when a fix is unavailable.\n\nRAW processing changes sensor rows, pixels and bits. Its preview is an approximation. Open DNG files in RAW-compatible software.\n\nStandard and RAW videos split into files at about 3.5 GB. Recording stops when storage is low. RAW fps is a target, not a guarantee. Dropped frames and timestamps are recorded inside the ZIP. Keep the app in the foreground while recording."</string>
+    <string name="ui_privacy_policy_support" formatted="false">"Privacy policy / Support"</string>
+    <string name="ui_capture_settings" formatted="false">"CAPTURE / Settings"</string>
+    <string name="ui_resolution_format_and_location" formatted="false">"Resolution, format and location"</string>
+    <string name="ui_raw_video_resolution_39" formatted="false">"RAW video resolution\n"</string>
+    <string name="ui_raw_video_target_frame_rate_d_fps_approx" formatted="false">"RAW video target frame rate\n%d fps · approx. %.0f MB/s"</string>
+    <string name="ui_photo_format" formatted="false">"Photo format\n"</string>
+    <string name="ui_photo_resolution_42" formatted="false">"Photo resolution\n"</string>
+    <string name="ui_unavailable_on_this_camera" formatted="false">"Unavailable on this camera"</string>
+    <string name="ui_jpeg_quality_44" formatted="false">"JPEG quality\n"</string>
+    <string name="ui_raw_quality_uncompressed_sensor_data" formatted="false">"RAW quality\nUncompressed sensor data"</string>
+    <string name="ui_video_codec_46" formatted="false">"Video codec\n"</string>
+    <string name="ui_video_resolution_fps_47" formatted="false">"Video resolution / fps\n"</string>
+    <string name="ui_unavailable" formatted="false">"Unavailable"</string>
+    <string name="ui_video_quality_1f_mbps_approx_0f_mb_min" formatted="false">"Video quality\n%.1f Mbps · approx. %.0f MB/min"</string>
+    <string name="ui_required_raw_metadata_for_dng_is_unavailable" formatted="false">"Required RAW metadata for DNG is unavailable"</string>
+    <string name="ui_raw_recording_stopped_previously_saved_segments_are_kept" formatted="false">"RAW recording stopped. Previously saved segments are kept."</string>
+    <string name="ui_raw_output_and_dng_encoding_verified" formatted="false">"RAW output and DNG encoding verified · "</string>
+    <string name="ui_5igna1_raw_video_dng_sequence_extract_the_zip" formatted="false">"5igna1 RAW video / DNG sequence\nExtract the ZIP and import the DNG sequence into RAW-compatible software. These are original, silent frames. The preview is developed by the camera. See timestamps.csv for capture timing and manifest.json for measured fps. Frames may be dropped under load.\n"</string>
+    <string name="ui_could_not_save_raw_video" formatted="false">"Could not save RAW video"</string>
+    <string name="ui_no_raw_frames_were_captured" formatted="false">"No RAW frames were captured"</string>
+    <string name="ui_raw_saved" formatted="false">"RAW saved · "</string>
+    <string name="ui_frames_dropped" formatted="false">" frames / dropped "</string>
+    <string name="ui_could_not_load_the_privacy_policy_contact_dennosamurai" formatted="false">"Could not load the privacy policy. Contact: dennosamurai@gmail.com"</string>
+    <string name="ui_close" formatted="false">"Close"</string>
+    <string name="ui_contact" formatted="false">"Contact"</string>
+    <string name="ui_contact_dennosamurai_gmail_com" formatted="false">"Contact dennosamurai@gmail.com"</string>
+    <string name="ui_high_resolution_sensor" formatted="false">" / High-resolution sensor"</string>
+    <string name="ui_no_effects" formatted="false">" / No effects"</string>
+    <string name="ui_estimated_raw_limit" formatted="false">" / Estimated RAW limit "</string>
+    <string name="ui_continuous_raw_output_is_unavailable_on_this_camera" formatted="false">"Continuous RAW output is unavailable on this camera"</string>
+    <string name="ui_raw_output_available_checked_when_selected" formatted="false">"RAW output available · Checked when selected"</string>
+    <string name="ui_about_5igna1_and_privacy_policy" formatted="false">"About 5igna1 and privacy policy"</string>
+    <string name="ui_settings_raw" formatted="false">"Settings / RAW"</string>
+    <string name="ui_capture_and_language_settings" formatted="false">"Capture and language settings"</string>
+    <string name="ui_camera_preview_tap_to_focus" formatted="false">"Camera preview. Tap to focus."</string>
+    <string name="ui_adjust" formatted="false">"Adjust"</string>
+    <string name="ui_chain" formatted="false">"＋ Chain"</string>
+    <string name="ui_live_fault_current_chain" formatted="false">"LIVE FAULT · Current chain"</string>
+    <string name="ui_strength" formatted="false">"Strength"</string>
+    <string name="ui_random" formatted="false">"Random"</string>
+    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"Tap to randomize an effect. Hold to randomize the chain."</string>
+    <string name="ui_toggle_live_fault" formatted="false">"Toggle LIVE FAULT"</string>
+    <string name="ui_live_fault_settings" formatted="false">"LIVE FAULT settings"</string>
+    <string name="ui_photo" formatted="false">"Photo"</string>
+    <string name="ui_video" formatted="false">"Video"</string>
+    <string name="ui_take_a_photo" formatted="false">"Take a photo"</string>
+    <string name="ui_switch_front_and_rear_cameras" formatted="false">"Switch front and rear cameras"</string>
+    <string name="ui_light_off" formatted="false">"Light OFF"</string>
+    <string name="ui_light_on" formatted="false">"Light ON"</string>
+    <string name="ui_audio_on" formatted="false">"Audio ON"</string>
+    <string name="ui_audio_off" formatted="false">"Audio OFF"</string>
+    <string name="ui_preview_editing" formatted="false">"  PREVIEW / Editing  "</string>
+    <string name="ui_edits_discarded_because_the_capture_mode_changed" formatted="false">"Edits discarded because the capture mode changed"</string>
+    <string name="ui_original_sensor_data_no_effects" formatted="false">"Original sensor data / No effects"</string>
+    <string name="ui_raw_preview" formatted="false">"RAW preview / "</string>
+    <string name="ui_global_strength" formatted="false">"Global strength "</string>
+    <string name="ui_effective_strength_per_stage" formatted="false">"%\n\nEffective strength per stage\n"</string>
+    <string name="ui_stages" formatted="false">" stages · "</string>
+    <string name="ui_tap_to_view_the_full_chain" formatted="false">" · Tap to view the full chain"</string>
+    <string name="ui_original_raw_is_not_processed" formatted="false">"Original RAW is not processed"</string>
+    <string name="ui_stage_chain" formatted="false">"-stage chain"</string>
+    <string name="ui_start_video_recording" formatted="false">"Start video recording"</string>
+    <string name="ui_video_is_unavailable_on_this_camera" formatted="false">"Video is unavailable on this camera"</string>
+    <string name="ui_apply_or_discard_your_edits_before_capturing" formatted="false">"Apply or discard your edits before capturing"</string>
+    <string name="ui_preparing_the_camera" formatted="false">"Preparing the camera"</string>
+    <string name="ui_open_your_captured_photos_and_videos_here" formatted="false">"Open your captured photos and videos here"</string>
+    <string name="ui_photos_are_in_pictures_videos_in_movies_and" formatted="false">"Photos are in Pictures, videos in Movies, and RAW video ZIPs in Download / 5igna1. Extract DNG sequences and open them in RAW-compatible software."</string>
+    <string name="ui_failed" formatted="false">"failed"</string>
+    <string name="ui_could_not" formatted="false">"Could not"</string>
+    <string name="ui_error" formatted="false">"error"</string>
+    <string name="ui_stop_recording" formatted="false">"Stop recording"</string>
+    <string name="ui_raw_video_saved_to_download_5igna1" formatted="false">"RAW video saved to Download / 5igna1"</string>
+    <string name="ui_video_saved_to_movies_5igna1" formatted="false">"Video saved to Movies / 5igna1"</string>
+    <string name="ui_photo_saved_to_pictures_5igna1" formatted="false">"Photo saved to Pictures / 5igna1"</string>
+    <string name="ui_audio_reaction_is_off_live_fault_can_use" formatted="false">"Audio reaction is off. LIVE FAULT can use other inputs."</string>
+    <string name="ui_tap_capture_to_allow_camera_access" formatted="false">"Tap capture to allow camera access"</string>
+    <string name="ui_camera_access_is_required_to_capture_if_the" formatted="false">"Camera access is required to capture. If the permission prompt does not appear, allow access in Settings."</string>
+    <string name="ui_settings" formatted="false">"Settings"</string>
+    <string name="ui_turn_audio_off_to_record_a_silent_video" formatted="false">"Turn audio off to record a silent video"</string>
+    <string name="ui_capture_location_settings" formatted="false">"Capture location settings · "</string>
+    <string name="ui_check_location_permission" formatted="false">"Check location permission"</string>
+    <string name="ui_in_app_info_permissions_location_allow_access_while" formatted="false">"In App info → Permissions → Location, allow access while using the app. Enable precise location to save an accurate capture position."</string>
+    <string name="ui_app_settings" formatted="false">"App settings"</string>
+    <string name="ui_change_location_settings_after_recording_stops" formatted="false">"Change location settings after recording stops"</string>
+    <string name="ui_enable_capture_location" formatted="false">"Enable capture location"</string>
+    <string name="ui_allow_location" formatted="false">"Allow location"</string>
+    <string name="ui_device_location_settings" formatted="false">"Device location settings"</string>
+    <string name="ui_get_location_again" formatted="false">"Get location again"</string>
+    <string name="ui_allow_precise_location" formatted="false">"Allow precise location"</string>
+    <string name="ui_app_permissions" formatted="false">"App permissions"</string>
+    <string name="ui_capture_location_gps" formatted="false">"Capture location / GPS"</string>
+    <string name="ui_do_not_save_location" formatted="false">"Do not save location"</string>
+    <string name="ui_cancel" formatted="false">"Cancel"</string>
+    <string name="ui_change_settings_after_capture_finishes" formatted="false">"Change settings after capture finishes"</string>
+    <string name="ui_loading_camera_information" formatted="false">"Loading camera information"</string>
+    <string name="ui_raw_silent" formatted="false">"RAW · Silent"</string>
+    <string name="ui_check_location_permissions" formatted="false">"Check location permissions"</string>
+    <string name="ui_location_service_unavailable" formatted="false">"Location service unavailable"</string>
+    <string name="ui_gps_denied" formatted="false">"GPS Denied"</string>
+    <string name="ui_gps_device_off" formatted="false">"GPS Device OFF"</string>
+    <string name="ui_gps_approx" formatted="false">"GPS Approx."</string>
+    <string name="ui_gps_unavailable" formatted="false">"GPS Unavailable"</string>
+    <string name="ui_gps_no_fix" formatted="false">"GPS No fix"</string>
+    <string name="ui_gps_locating" formatted="false">"GPS Locating"</string>
+    <string name="ui_precise_location_allowed" formatted="false">"Precise location: allowed"</string>
+    <string name="ui_approximate_location_allowed" formatted="false">"Approximate location: allowed"</string>
+    <string name="ui_location_not_allowed" formatted="false">"Location: not allowed"</string>
+    <string name="ui_device_location_on" formatted="false">"Device location: ON"</string>
+    <string name="ui_device_location_off" formatted="false">"Device location: OFF"</string>
+    <string name="ui_saving_capture_location_is_off" formatted="false">"Saving capture location is off."</string>
+    <string name="ui_select_allow_location_and_grant_access_while_using" formatted="false">"Select Allow location and grant access while using the app."</string>
+    <string name="ui_enable_location_in_the_device_settings" formatted="false">"Enable location in the device settings."</string>
+    <string name="ui_estimated_accuracy_0f_m" formatted="false">"Estimated accuracy ±%.0f m"</string>
+    <string name="ui_location_acquired" formatted="false">"Location acquired"</string>
+    <string name="ui_d_s_ago" formatted="false">" · %d s ago"</string>
+    <string name="ui_acquiring_location_gps_reception_may_be_weak_indoors" formatted="false">"Acquiring location. GPS reception may be weak indoors. Try again near a window or outdoors."</string>
+    <string name="ui_no_location_service_is_available_check_your_device" formatted="false">"No location service is available. Check your device location settings."</string>
+    <string name="ui_an_available_location_is_saved_in_photo_and" formatted="false">"\n\nAn available location is saved in photo and video tags. Captures without a location fix have no location tag."</string>
+    <string name="ui_capture_without_effects" formatted="false">"Capture without effects."</string>
+    <string name="ui_simulates_dead_pixels_columns_and_bright_pixels" formatted="false">"Simulates dead pixels, columns and bright pixels."</string>
+    <string name="ui_simulates_exposure_bands_and_flicker" formatted="false">"Simulates exposure bands and flicker."</string>
+    <string name="ui_shifts_image_rows_horizontally" formatted="false">"Shifts image rows horizontally."</string>
+    <string name="ui_drops_rows_or_repeats_the_previous_row" formatted="false">"Drops rows or repeats the previous row."</string>
+    <string name="ui_flips_pixel_bits_to_alter_color_and_tone" formatted="false">"Flips pixel bits to alter color and tone."</string>
+    <string name="ui_shifts_byte_positions_to_disrupt_color" formatted="false">"Shifts byte positions to disrupt color."</string>
+    <string name="ui_shifts_cfa_data_locally_to_create_false_color" formatted="false">"Shifts CFA data locally to create false color."</string>
+    <string name="ui_changes_the_bayer_phase_to_alter_color" formatted="false">"Changes the Bayer phase to alter color."</string>
+    <string name="ui_simulates_demosaicing_errors_and_false_color_rgb_approximation" formatted="false">"Simulates demosaicing errors and false color (RGB approximation)."</string>
+    <string name="ui_offsets_rgb_channels_to_create_colored_edges" formatted="false">"Offsets RGB channels to create colored edges."</string>
+    <string name="ui_remaps_colors_based_on_brightness" formatted="false">"Remaps colors based on brightness."</string>
+    <string name="ui_reduces_chroma_resolution_into_blocks" formatted="false">"Reduces chroma resolution into blocks."</string>
+    <string name="ui_disrupts_image_blocks_and_color_data" formatted="false">"Disrupts image blocks and color data."</string>
+    <string name="ui_drops_or_repeats_parts_of_the_image" formatted="false">"Drops or repeats parts of the image."</string>
+    <string name="ui_simulates_horizontal_jitter_color_shifts_and_tape_noise" formatted="false">"Simulates horizontal jitter, color shifts and tape noise."</string>
+    <string name="ui_adds_scanlines_and_noise_to_a_green_display" formatted="false">"Adds scanlines and noise to a green display."</string>
+    <string name="ui_1f_s" formatted="false">"%.1f s"</string>
+    <string name="ui_2f_s" formatted="false">"%.2f s"</string>
+    <string name="ui_event_interval" formatted="false">"Event interval"</string>
+    <string name="ui_occurrence_rate" formatted="false">"Occurrence rate"</string>
+    <string name="ui_event_duration" formatted="false">"Event duration"</string>
+    <string name="ui_parameter_variation" formatted="false">"Parameter variation"</string>
+    <string name="ui_smoothness" formatted="false">"Smoothness"</string>
+    <string name="ui_allow_chain_switching" formatted="false">"Allow chain switching"</string>
+    <string name="ui_keep_original_display_stages_vhs_terminal" formatted="false">"Keep original display stages (VHS / TERMINAL)"</string>
+    <string name="ui_random_chain_size_total" formatted="false">"Random chain size (total)"</string>
+    <string name="ui_minimum" formatted="false">"Minimum"</string>
+    <string name="ui_maximum" formatted="false">"Maximum"</string>
+    <string name="ui_minimum_stage_count" formatted="false">"Minimum stage count"</string>
+    <string name="ui_maximum_stage_count" formatted="false">"Maximum stage count"</string>
+    <string name="ui_more_stages_increase_processing_load_the_count_is" formatted="false">"More stages increase processing load. The count is limited by available effects and cannot be lower than the number of display stages being kept. SENSOR FAIL is eligible only when it is in the original chain. Turn display retention off to reshuffle VHS / TERMINAL too.\nManual settings return when the event ends. LIVE FAULT starts off."</string>
+    <string name="ui_live_fault_auto_variation" formatted="false">"LIVE FAULT / Auto variation"</string>
+    <string name="ui_varies_effects_at_the_chosen_interval_and_probability" formatted="false">"Varies effects at the chosen interval and probability, even with a stationary device."</string>
+    <string name="ui_defect_shape_pixels_columns" formatted="false">"Defect shape · Pixels → Columns"</string>
+    <string name="ui_defect_value_dark_bright" formatted="false">"Defect value · Dark → Bright"</string>
+    <string name="ui_band_density" formatted="false">"Band density"</string>
+    <string name="ui_flow_speed" formatted="false">"Flow speed"</string>
+    <string name="ui_row_band_height" formatted="false">"Row band height"</string>
+    <string name="ui_shift_width" formatted="false">"Shift width"</string>
+    <string name="ui_dropped_or_repeated_band_height" formatted="false">"Dropped or repeated band height"</string>
+    <string name="ui_drop_repeat" formatted="false">"Drop → Repeat"</string>
+    <string name="ui_bit_position_low_high" formatted="false">"Bit position · Low → High"</string>
+    <string name="ui_block_size" formatted="false">"Block size"</string>
+    <string name="ui_data_shift_0_31_bytes" formatted="false">"Data shift · 0–31 bytes"</string>
+    <string name="ui_tile_size" formatted="false">"Tile size"</string>
+    <string name="ui_phase_pattern" formatted="false">"Phase pattern"</string>
+    <string name="ui_cfa_phase_horizontal_vertical_both" formatted="false">"CFA phase · Horizontal / Vertical / Both"</string>
+    <string name="ui_affected_area_size" formatted="false">"Affected area size"</string>
+    <string name="ui_interpolation_error_scale" formatted="false">"Interpolation error scale"</string>
+    <string name="ui_false_color_amount" formatted="false">"False color amount"</string>
+    <string name="ui_shift_direction_horizontal_vertical" formatted="false">"Shift direction · Horizontal → Vertical"</string>
+    <string name="ui_tear_width" formatted="false">"Tear width"</string>
+    <string name="ui_palette_period" formatted="false">"Palette period"</string>
+    <string name="ui_hue_phase" formatted="false">"Hue phase"</string>
+    <string name="ui_chroma_block_width" formatted="false">"Chroma block width"</string>
+    <string name="ui_vertical_coarseness" formatted="false">"Vertical coarseness"</string>
+    <string name="ui_color_data_corruption" formatted="false">"Color data corruption"</string>
+    <string name="ui_packet_size" formatted="false">"Packet size"</string>
+    <string name="ui_missing_data_fill_black_repeat" formatted="false">"Missing data fill · Black → Repeat"</string>
+    <string name="ui_tracking_error" formatted="false">"Tracking error"</string>
+    <string name="ui_tape_noise" formatted="false">"Tape noise"</string>
+    <string name="ui_scanline_density" formatted="false">"Scanline density"</string>
+    <string name="ui_noise" formatted="false">"Noise"</string>
+    <string name="ui_no_permission" formatted="false">"No permission"</string>
+    <string name="ui_recorded_audio" formatted="false">"Recorded audio"</string>
+    <string name="ui_unavailable_220" formatted="false">"Unavailable"</string>
+    <string name="ui_level_detection" formatted="false">"Level detection"</string>
+    <string name="ui_reading_motion" formatted="false">"Reading motion"</string>
+    <string name="ui_motion" formatted="false">"Motion —"</string>
+    <string name="ui_audio" formatted="false">" / Audio "</string>
+    <string name="ui_battery_temperature" formatted="false">"Battery temperature —"</string>
+    <string name="ui_battery_1f_c" formatted="false">"Battery %.1f°C"</string>
+    <string name="ui_thermal_state" formatted="false">" / Thermal state "</string>
+    <string name="ui_app_cpu_0f_one_core" formatted="false">"App CPU %.0f%% (one core)"</string>
+    <string name="ui_readout_1f_ms" formatted="false">"Readout %.1f ms"</string>
+    <string name="ui_readout" formatted="false">"Readout —"</string>
+    <string name="ui_clear_selection" formatted="false">"Clear selection"</string>
+    <string name="ui_stage_strength" formatted="false">"Stage strength"</string>
+    <string name="ui_reset" formatted="false">"Reset"</string>
+    <string name="ui_reseed" formatted="false">"Reseed ↝"</string>
+    <string name="ui_effect_adjust" formatted="false">"EFFECT / Adjust"</string>
+    <string name="ui_chain_effects" formatted="false">"CHAIN / Effects"</string>
+    <string name="ui_preview_applying_also_changes_the_recording" formatted="false">"Preview · Applying also changes the recording"</string>
+    <string name="ui_preview_apply_to_save_back_to_discard" formatted="false">"Preview · Apply to save, Back to discard"</string>
+    <string name="ui_off_enable_to_apply" formatted="false">"OFF · Enable to apply"</string>
+    <string name="ui_global_strength_is_0" formatted="false">"Global strength is 0%"</string>
+    <string name="ui_this_stage_has_0_strength" formatted="false">"This stage has 0% strength"</string>
+    <string name="ui_shift_is_0_rows_stay_in_place" formatted="false">"Shift is 0% · Rows stay in place"</string>
+    <string name="ui_0_bytes_data_positions_stay_unchanged" formatted="false">"0 bytes · Data positions stay unchanged"</string>
+    <string name="ui_false_color_is_0_no_interpolation_error_applied" formatted="false">"False color is 0% · No interpolation error applied"</string>
+    <string name="ui_adjust_while_watching_the_preview" formatted="false">"Adjust while watching the preview"</string>
+    <string name="ui_horizontal" formatted="false">"Horizontal"</string>
+    <string name="ui_vertical" formatted="false">"Vertical"</string>
+    <string name="ui_diagonal" formatted="false">"Diagonal"</string>
+    <string name="ui_low" formatted="false">" · Low"</string>
+    <string name="ui_high" formatted="false">" · High"</string>
+    <string name="ui_back" formatted="false">"Back"</string>
+    <string name="ui_apply" formatted="false">"Apply"</string>
+    <string name="ui_frames_dropped_253" formatted="false">" frames / dropped "</string>
+    <string name="ui_recording_saved_and_stopped_due_to_low_storage" formatted="false">"Recording saved and stopped due to low storage"</string>
+    <string name="ui_could_not_start_the_camera" formatted="false">"Could not start the camera"</string>
+    <string name="ui_configuring_camera" formatted="false">"Configuring camera…"</string>
+    <string name="ui_could_not_change_capture_settings" formatted="false">"Could not change capture settings"</string>
+    <string name="ui_this_camera_has_no_light" formatted="false">"This camera has no light"</string>
+    <string name="ui_allow_camera_access" formatted="false">"Allow camera access"</string>
+    <string name="ui_raw_is_unavailable_on_this_camera_switched_to" formatted="false">"RAW is unavailable on this camera. Switched to JPEG."</string>
+    <string name="ui_raw_video_is_unavailable_on_this_camera" formatted="false">"RAW video is unavailable on this camera"</string>
+    <string name="ui_camera_disconnected_select_your_settings_again" formatted="false">"Camera disconnected. Select your settings again."</string>
+    <string name="ui_camera_error" formatted="false">"Camera error "</string>
+    <string name="ui_select_your_settings_again" formatted="false">" · Select your settings again"</string>
+    <string name="ui_could_not_open_the_camera" formatted="false">"Could not open the camera"</string>
+    <string name="ui_raw_sequence" formatted="false">"RAW sequence · "</string>
+    <string name="ui_target" formatted="false">" / Target "</string>
+    <string name="ui_raw_original" formatted="false">"RAW original"</string>
+    <string name="ui_processed_raw" formatted="false">"Processed RAW"</string>
+    <string name="ui_could_not_receive_continuous_raw_frames" formatted="false">"Could not receive continuous RAW frames"</string>
+    <string name="ui_could_not_configure_the_preview" formatted="false">"Could not configure the preview"</string>
+    <string name="ui_simultaneous_raw_and_preview_output_is_unsupported" formatted="false">"Simultaneous RAW and preview output is unsupported"</string>
+    <string name="ui_returning_to_standard_video" formatted="false">" · Returning to standard video"</string>
+    <string name="ui_could_not_start_the_raw_video_session" formatted="false">"Could not start the RAW video session"</string>
+    <string name="ui_this_camera_cannot_use_these_capture_settings" formatted="false">"This camera cannot use these capture settings"</string>
+    <string name="ui_retrying_with_a_compatible_lower_resolution" formatted="false">"Retrying with a compatible lower resolution…"</string>
+    <string name="ui_could_not_reconfigure_the_camera" formatted="false">"Could not reconfigure the camera"</string>
+    <string name="ui_could_not_apply_camera_settings" formatted="false">"Could not apply camera settings"</string>
+    <string name="ui_automatic_variation_0f" formatted="false">"Automatic variation %.0f%%"</string>
+    <string name="ui_image_processing_error" formatted="false">"Image processing error"</string>
+    <string name="ui_capturing_at_full_resolution" formatted="false">"Capturing at full resolution…"</string>
+    <string name="ui_could_not_capture_the_photo_try_lower_settings" formatted="false">"Could not capture the photo. Try lower settings."</string>
+    <string name="ui_photo_capture_timed_out" formatted="false">"Photo capture timed out"</string>
+    <string name="ui_could_not_capture" formatted="false">"Could not capture"</string>
+    <string name="ui_could_not_read_raw_frames" formatted="false">"Could not read RAW frames"</string>
+    <string name="ui_could_not_read_capture_data" formatted="false">"Could not read capture data"</string>
+    <string name="ui_saving_full_resolution_effects" formatted="false">"Saving full-resolution effects…"</string>
+    <string name="ui_saving_raw_data" formatted="false">"Saving RAW data…"</string>
+    <string name="ui_no_location_fix_saved_without_gps" formatted="false">"No location fix. Saved without GPS."</string>
+    <string name="ui_could_not_save_the_photo" formatted="false">"Could not save the photo"</string>
+    <string name="ui_not_enough_memory_to_process_the_photo_lower" formatted="false">"Not enough memory to process the photo. Lower the resolution."</string>
+    <string name="ui_checking_raw_output" formatted="false">"Checking RAW output"</string>
+    <string name="ui_recording_interrupted_check_the_saved_files" formatted="false">"Recording interrupted. Check the saved files."</string>
+    <string name="ui_could_not_start_the_next_file_recording_saved" formatted="false">"Could not start the next file. Recording saved and stopped."</string>
+    <string name="ui_no_gps_fix_video_will_have_no_location" formatted="false">"No GPS fix · Video will have no location tag"</string>
+    <string name="ui_could_not_start_recording_try_lower_settings" formatted="false">"Could not start recording. Try lower settings."</string>
+    <string name="ui_could_not_prepare_the_next_recording_file" formatted="false">"Could not prepare the next recording file"</string>
+    <string name="ui_could_not_publish_the_recording_segment" formatted="false">"Could not publish the recording segment"</string>
+    <string name="ui_finalizing_raw_sequence" formatted="false">"Finalizing RAW sequence…"</string>
+    <string name="ui_recording_was_too_short_or_could_not_be" formatted="false">"Recording was too short or could not be saved"</string>
+    <string name="ui_could_not_save_the_video" formatted="false">"Could not save the video"</string>
+    <string name="ui_capture_cancelled_because_the_camera_closed_before_completion" formatted="false">"Capture cancelled because the camera closed before completion"</string>
+    <string name="language_title">"App language"</string>
+    <string name="language_system">"Device language"</string>
+    <string name="language_summary">"Language"</string>
+    <string name="camera_settings_unavailable">"Camera settings are available after camera access is granted. You can change the app language here."</string>
+    <string name="ui_open_source_licenses">"Open-source licenses"</string>
+</resources>

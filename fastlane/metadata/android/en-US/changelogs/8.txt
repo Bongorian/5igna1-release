@@ -1,0 +1,1 @@
+First public release preparation: 16 effects, chains and LIVE FAULT; JPEG/DNG/MP4 and experimental original RAW video on compatible cameras. Japanese, English and Simplified Chinese. Shared Play/FOSS features, native language settings and open-source notices.

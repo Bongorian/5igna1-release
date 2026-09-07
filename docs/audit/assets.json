@@ -1,0 +1,112 @@
+[
+  {
+    "path": "app/src/main/res/drawable/ic_camera_flip.xml",
+    "sha256": "434f0ed82845007896cbbb6e7fcd2158d1b4bf33399b418b28ef3a68db9cd6ef",
+    "bytes": 549
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_gallery.xml",
+    "sha256": "d7964a62bffd4e590ae024f3bc230e0293d86ed8f80ff0e1ce23b70e2a3015c8",
+    "bytes": 488
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_settings.xml",
+    "sha256": "d0291d0fd19a5f77c2f484b74d6a248b997a9f40b61e7f4b878e3de877a9bd4d",
+    "bytes": 1256
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_shuffle.xml",
+    "sha256": "9ec4ed1eddd87770e8cce42a155ec2c5d0a7e3959c5b4de0513571faef02459b",
+    "bytes": 493
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_tune.xml",
+    "sha256": "42af4edf5ee7f991993ef9152d6227e27760c6742a85762c439de3e5689220de",
+    "bytes": 445
+  },
+  {
+    "path": "app/src/main/res/drawable/icon.xml",
+    "sha256": "79a23654d7149d55a30c1771e741a36c8f65f3ea65ad44bf630a0cc22b4e00ae",
+    "bytes": 532
+  },
+  {
+    "path": "app/src/main/res/drawable/icon_foreground.xml",
+    "sha256": "9927eabb6de713e34de5ac8c5154d5baa20645aed7ba45ea43493179fe3164a8",
+    "bytes": 453
+  },
+  {
+    "path": "app/src/main/res/drawable/icon_monochrome.xml",
+    "sha256": "e58033668420c0cd21993b2be62054a0f452a5208f395af9cc4de8c31dfa152f",
+    "bytes": 331
+  },
+  {
+    "path": "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+    "sha256": "e210bdb37a6f137916d165fa8b54969fcb4eb5c69e2c548ff6b8a2f13ba20bee",
+    "bytes": 281
+  },
+  {
+    "path": "fastlane/metadata/android/en-US/images/featureGraphic.png",
+    "sha256": "3a21945081851c8806b062606b038095a9d9cf300281763c233796b4540797e9",
+    "bytes": 222587
+  },
+  {
+    "path": "fastlane/metadata/android/en-US/images/icon.png",
+    "sha256": "c4edd2dffa871621cd30c492e85d06b657d193f880b2071152ff5825c3393e07",
+    "bytes": 3951
+  },
+  {
+    "path": "fastlane/metadata/android/en-US/images/phoneScreenshots/01-camera.png",
+    "sha256": "830fedf6e9167f39d4f599d6c6bec87dc5950e3b353f470bcb4c3bf373ec077e",
+    "bytes": 98675
+  },
+  {
+    "path": "fastlane/metadata/android/en-US/images/phoneScreenshots/02-row-shift.png",
+    "sha256": "0de2f22edbd6711b58c27b8590872cf620ba8360ab3954538aae21c3e3bde660",
+    "bytes": 109229
+  },
+  {
+    "path": "fastlane/metadata/android/en-US/images/phoneScreenshots/03-chain.png",
+    "sha256": "793673d57a7a6bf65c5c6c28851115bf850615ddae491ea4ee4cabd04178a780",
+    "bytes": 772338
+  },
+  {
+    "path": "fastlane/metadata/android/en-US/images/phoneScreenshots/04-adjust.png",
+    "sha256": "852f3cd642c208c9c4ba8b4611d886f15f2595c81c28f46f5ae0e5d3bea6eeca",
+    "bytes": 317782
+  },
+  {
+    "path": "fastlane/metadata/android/ja-JP/images/featureGraphic.png",
+    "sha256": "3a21945081851c8806b062606b038095a9d9cf300281763c233796b4540797e9",
+    "bytes": 222587
+  },
+  {
+    "path": "fastlane/metadata/android/ja-JP/images/icon.png",
+    "sha256": "c4edd2dffa871621cd30c492e85d06b657d193f880b2071152ff5825c3393e07",
+    "bytes": 3951
+  },
+  {
+    "path": "fastlane/metadata/android/ja-JP/images/phoneScreenshots/01-camera.png",
+    "sha256": "da6ecbc6d731b9d69b4a8d5548cf2117db98477f60a9e089d55070395bcacd79",
+    "bytes": 97877
+  },
+  {
+    "path": "fastlane/metadata/android/ja-JP/images/phoneScreenshots/02-row-shift.png",
+    "sha256": "a280e54ac7f2631552026f07e3c270c508016608b650a557b5727f149e910a6e",
+    "bytes": 111765
+  },
+  {
+    "path": "fastlane/metadata/android/ja-JP/images/phoneScreenshots/03-chain.png",
+    "sha256": "7f6ec14c01fe13f1d13d5f38c2f110d4dee458ee6c2c01fedf54fea462e2803b",
+    "bytes": 760366
+  },
+  {
+    "path": "fastlane/metadata/android/ja-JP/images/phoneScreenshots/04-adjust.png",
+    "sha256": "3330d1a783f2567a88b5b265f2905b3cb48076a37a2142a869159de28c9635da",
+    "bytes": 327918
+  },
+  {
+    "path": "store/google-play/source/feature-graphic.png",
+    "sha256": "cdbacc6a7b80dec6b557a5624fd4929e17dd1105f1fb10ee7ce1126611b26a7e",
+    "bytes": 533815
+  }
+]

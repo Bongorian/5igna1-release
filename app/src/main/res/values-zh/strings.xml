@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui_open_saved_photos_and_videos" formatted="false">"打开已保存的照片和视频"</string>
+    <string name="ui_open_the_last_saved_video" formatted="false">"打开最近保存的视频"</string>
+    <string name="ui_open_the_last_saved_photo" formatted="false">"打开最近保存的照片"</string>
+    <string name="ui_open_the_last_saved_raw_video_zip" formatted="false">"打开最近保存的 RAW 视频 ZIP"</string>
+    <string name="ui_select_an_option_then_apply" formatted="false">"选择后应用"</string>
+    <string name="ui_photo_full_resolution" formatted="false">"照片 · 全分辨率"</string>
+    <string name="ui_processed_jpeg" formatted="false">"处理后的 JPEG"</string>
+    <string name="ui_raw_dng_original" formatted="false">"RAW / DNG 原片"</string>
+    <string name="ui_raw_dng_sensor_processing" formatted="false">"RAW / DNG 传感器数据处理"</string>
+    <string name="ui_save_format" formatted="false">"保存格式"</string>
+    <string name="ui_standard_prefer_12_mp_or_less" formatted="false">"标准（优先使用 1200 万像素及以下）"</string>
+    <string name="ui_maximum_camera_resolution" formatted="false">"相机最高分辨率"</string>
+    <string name="ui_photo_resolution" formatted="false">"照片分辨率"</string>
+    <string name="ui_jpeg_quality" formatted="false">"JPEG 画质"</string>
+    <string name="ui_85_smaller_files" formatted="false">"85 · 小文件"</string>
+    <string name="ui_95_high_quality" formatted="false">"95 · 高画质"</string>
+    <string name="ui_100_best_quality" formatted="false">"100 · 最高画质"</string>
+    <string name="ui_video_resolution_and_frame_rate" formatted="false">"视频 · 分辨率与帧率"</string>
+    <string name="ui_raw_video_dng_sequence_experimental" formatted="false">"RAW 视频 / DNG 序列（实验功能）"</string>
+    <string name="ui_saves_original_silent_dng_frames_as_a_zip" formatted="false">"\n将无声 DNG 原片序列以 ZIP 保存到 Download / 5igna1。普通视频播放器无法直接播放。请解压后使用支持 RAW 的软件处理。不应用效果或 LIVE FAULT。"</string>
+    <string name="ui_raw_video_resolution" formatted="false">"RAW 视频分辨率"</string>
+    <string name="ui_fps_target" formatted="false">" fps / 目标"</string>
+    <string name="ui_raw_video_target_frame_rate" formatted="false">"RAW 视频目标帧率"</string>
+    <string name="ui_hevc_h_265_efficient" formatted="false">"HEVC / H.265 · 高效率"</string>
+    <string name="ui_avc_h_264_compatible" formatted="false">"AVC / H.264 · 高兼容性"</string>
+    <string name="ui_video_codec" formatted="false">"视频编码"</string>
+    <string name="ui_video_resolution_fps" formatted="false">"视频分辨率 / fps"</string>
+    <string name="ui_smaller_files" formatted="false">"小文件"</string>
+    <string name="ui_high_quality" formatted="false">"高画质"</string>
+    <string name="ui_best_quality" formatted="false">"最高画质"</string>
+    <string name="ui_encoder_maximum" formatted="false">"编码器上限"</string>
+    <string name="ui_1f_mbps_approx_0f_mb_min" formatted="false">" · %.1f Mbps / 约 %.0f MB/分钟"</string>
+    <string name="ui_video_quality" formatted="false">"视频画质"</string>
+    <string name="ui_location_and_exif" formatted="false">"位置与 EXIF"</string>
+    <string name="ui_save_capture_location" formatted="false">"保存拍摄位置"</string>
+    <string name="ui_photos_include_the_date_device_exposure_iso_and" formatted="false">"照片记录日期、设备、曝光、ISO 和效果信息。启用位置后，会将已获取的位置写入照片 GPS 和视频位置标签。未定位时不添加位置标签。\n\nRAW 处理会更改传感器的行、像素和位数据，预览仅为近似效果。请使用支持 RAW 的软件打开 DNG。\n\n普通视频和 RAW 视频约每 3.5 GB 分为一个文件。存储空间不足时停止录制。RAW 帧率仅为目标值，不保证达到。ZIP 内记录丢帧数和拍摄时间。录制时请保持应用在前台。"</string>
+    <string name="ui_privacy_policy_support" formatted="false">"隐私政策 / 联系支持"</string>
+    <string name="ui_capture_settings" formatted="false">"CAPTURE / 拍摄设置"</string>
+    <string name="ui_resolution_format_and_location" formatted="false">"分辨率、保存格式与位置"</string>
+    <string name="ui_raw_video_resolution_39" formatted="false">"RAW 视频分辨率\n"</string>
+    <string name="ui_raw_video_target_frame_rate_d_fps_approx" formatted="false">"RAW 视频目标帧率\n%d fps · 约 %.0f MB/秒"</string>
+    <string name="ui_photo_format" formatted="false">"照片格式\n"</string>
+    <string name="ui_photo_resolution_42" formatted="false">"照片分辨率\n"</string>
+    <string name="ui_unavailable_on_this_camera" formatted="false">"此相机不可用"</string>
+    <string name="ui_jpeg_quality_44" formatted="false">"JPEG 画质\n"</string>
+    <string name="ui_raw_quality_uncompressed_sensor_data" formatted="false">"RAW 画质\n未压缩的传感器数据"</string>
+    <string name="ui_video_codec_46" formatted="false">"视频编码\n"</string>
+    <string name="ui_video_resolution_fps_47" formatted="false">"视频分辨率 / fps\n"</string>
+    <string name="ui_unavailable" formatted="false">"不可用"</string>
+    <string name="ui_video_quality_1f_mbps_approx_0f_mb_min" formatted="false">"视频画质\n%.1f Mbps · 约 %.0f MB/分钟"</string>
+    <string name="ui_required_raw_metadata_for_dng_is_unavailable" formatted="false">"无法获取保存 DNG 所需的 RAW 信息"</string>
+    <string name="ui_raw_recording_stopped_previously_saved_segments_are_kept" formatted="false">"RAW 录制已中断，已保存的片段会保留。"</string>
+    <string name="ui_raw_output_and_dng_encoding_verified" formatted="false">"已验证 RAW 输出与 DNG 编码 · "</string>
+    <string name="ui_5igna1_raw_video_dng_sequence_extract_the_zip" formatted="false">"5igna1 RAW 视频 / DNG 序列\n请解压 ZIP，并将 DNG 序列导入支持 RAW 的软件。这些是无声原片。预览由相机显影。拍摄时间见 timestamps.csv，实测帧率见 manifest.json。负载较高时可能丢帧。\n"</string>
+    <string name="ui_could_not_save_raw_video" formatted="false">"无法保存 RAW 视频"</string>
+    <string name="ui_no_raw_frames_were_captured" formatted="false">"未获取到 RAW 帧"</string>
+    <string name="ui_raw_saved" formatted="false">"RAW 已保存 · "</string>
+    <string name="ui_frames_dropped" formatted="false">" 帧 / 丢帧 "</string>
+    <string name="ui_could_not_load_the_privacy_policy_contact_dennosamurai" formatted="false">"无法加载隐私政策。联系邮箱：dennosamurai@gmail.com"</string>
+    <string name="ui_close" formatted="false">"关闭"</string>
+    <string name="ui_contact" formatted="false">"联系"</string>
+    <string name="ui_contact_dennosamurai_gmail_com" formatted="false">"请联系 dennosamurai@gmail.com"</string>
+    <string name="ui_high_resolution_sensor" formatted="false">" / 高分辨率传感器"</string>
+    <string name="ui_no_effects" formatted="false">" / 不应用效果"</string>
+    <string name="ui_estimated_raw_limit" formatted="false">" / RAW 上限估计 "</string>
+    <string name="ui_continuous_raw_output_is_unavailable_on_this_camera" formatted="false">"此相机不支持连续 RAW 输出"</string>
+    <string name="ui_raw_output_available_checked_when_selected" formatted="false">"支持 RAW 输出 · 选择后验证"</string>
+    <string name="ui_about_5igna1_and_privacy_policy" formatted="false">"关于 5igna1 与隐私政策"</string>
+    <string name="ui_settings_raw" formatted="false">"设置 / RAW"</string>
+    <string name="ui_capture_and_language_settings" formatted="false">"拍摄与语言设置"</string>
+    <string name="ui_camera_preview_tap_to_focus" formatted="false">"相机预览。轻触对焦。"</string>
+    <string name="ui_adjust" formatted="false">"调整"</string>
+    <string name="ui_chain" formatted="false">"＋ 链"</string>
+    <string name="ui_live_fault_current_chain" formatted="false">"LIVE FAULT · 当前效果链"</string>
+    <string name="ui_strength" formatted="false">"强度"</string>
+    <string name="ui_random" formatted="false">"随机"</string>
+    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"轻触随机选择效果，长按随机选择效果链。"</string>
+    <string name="ui_toggle_live_fault" formatted="false">"切换 LIVE FAULT"</string>
+    <string name="ui_live_fault_settings" formatted="false">"LIVE FAULT 设置"</string>
+    <string name="ui_photo" formatted="false">"照片"</string>
+    <string name="ui_video" formatted="false">"视频"</string>
+    <string name="ui_take_a_photo" formatted="false">"拍摄照片"</string>
+    <string name="ui_switch_front_and_rear_cameras" formatted="false">"切换前后相机"</string>
+    <string name="ui_light_off" formatted="false">"补光 OFF"</string>
+    <string name="ui_light_on" formatted="false">"补光 ON"</string>
+    <string name="ui_audio_on" formatted="false">"音频 ON"</string>
+    <string name="ui_audio_off" formatted="false">"音频 OFF"</string>
+    <string name="ui_preview_editing" formatted="false">"  PREVIEW / 调整中  "</string>
+    <string name="ui_edits_discarded_because_the_capture_mode_changed" formatted="false">"拍摄模式已改变，调整已取消"</string>
+    <string name="ui_original_sensor_data_no_effects" formatted="false">"传感器原始数据 / 不应用效果"</string>
+    <string name="ui_raw_preview" formatted="false">"RAW 近似预览 / "</string>
+    <string name="ui_global_strength" formatted="false">"整体强度 "</string>
+    <string name="ui_effective_strength_per_stage" formatted="false">"%\n\n各阶段实际强度\n"</string>
+    <string name="ui_stages" formatted="false">" 阶段 · "</string>
+    <string name="ui_tap_to_view_the_full_chain" formatted="false">" · 轻触查看完整效果链"</string>
+    <string name="ui_original_raw_is_not_processed" formatted="false">"RAW 原片不进行处理"</string>
+    <string name="ui_stage_chain" formatted="false">" 阶段效果链"</string>
+    <string name="ui_start_video_recording" formatted="false">"开始录制视频"</string>
+    <string name="ui_video_is_unavailable_on_this_camera" formatted="false">"此相机不支持视频"</string>
+    <string name="ui_apply_or_discard_your_edits_before_capturing" formatted="false">"拍摄前请应用或取消调整"</string>
+    <string name="ui_preparing_the_camera" formatted="false">"正在准备相机"</string>
+    <string name="ui_open_your_captured_photos_and_videos_here" formatted="false">"在此打开拍摄的照片和视频"</string>
+    <string name="ui_photos_are_in_pictures_videos_in_movies_and" formatted="false">"照片保存在 Pictures，视频保存在 Movies，RAW 视频 ZIP 保存在 Download / 5igna1。请解压 DNG 序列并使用支持 RAW 的软件打开。"</string>
+    <string name="ui_failed" formatted="false">"失败"</string>
+    <string name="ui_could_not" formatted="false">"无法"</string>
+    <string name="ui_error" formatted="false">"错误"</string>
+    <string name="ui_stop_recording" formatted="false">"停止录制"</string>
+    <string name="ui_raw_video_saved_to_download_5igna1" formatted="false">"RAW 视频已保存到 Download / 5igna1"</string>
+    <string name="ui_video_saved_to_movies_5igna1" formatted="false">"视频已保存到 Movies / 5igna1"</string>
+    <string name="ui_photo_saved_to_pictures_5igna1" formatted="false">"照片已保存到 Pictures / 5igna1"</string>
+    <string name="ui_audio_reaction_is_off_live_fault_can_use" formatted="false">"声音响应已关闭，LIVE FAULT 可使用其他输入。"</string>
+    <string name="ui_tap_capture_to_allow_camera_access" formatted="false">"轻触拍摄按钮以允许访问相机"</string>
+    <string name="ui_camera_access_is_required_to_capture_if_the" formatted="false">"拍摄需要相机权限。若未显示权限提示，请在设置中允许访问。"</string>
+    <string name="ui_settings" formatted="false">"设置"</string>
+    <string name="ui_turn_audio_off_to_record_a_silent_video" formatted="false">"关闭音频即可录制无声视频"</string>
+    <string name="ui_capture_location_settings" formatted="false">"拍摄位置设置 · "</string>
+    <string name="ui_check_location_permission" formatted="false">"检查位置权限"</string>
+    <string name="ui_in_app_info_permissions_location_allow_access_while" formatted="false">"请在应用信息 → 权限 → 位置信息中选择“仅在使用应用时允许”。如需保存准确拍摄位置，请启用精确位置。"</string>
+    <string name="ui_app_settings" formatted="false">"应用设置"</string>
+    <string name="ui_change_location_settings_after_recording_stops" formatted="false">"停止录制后才能更改位置设置"</string>
+    <string name="ui_enable_capture_location" formatted="false">"启用拍摄位置"</string>
+    <string name="ui_allow_location" formatted="false">"允许位置权限"</string>
+    <string name="ui_device_location_settings" formatted="false">"设备位置设置"</string>
+    <string name="ui_get_location_again" formatted="false">"重新定位"</string>
+    <string name="ui_allow_precise_location" formatted="false">"允许精确位置"</string>
+    <string name="ui_app_permissions" formatted="false">"应用权限"</string>
+    <string name="ui_capture_location_gps" formatted="false">"拍摄位置 / GPS"</string>
+    <string name="ui_do_not_save_location" formatted="false">"不保存位置"</string>
+    <string name="ui_cancel" formatted="false">"取消"</string>
+    <string name="ui_change_settings_after_capture_finishes" formatted="false">"拍摄结束后才能更改设置"</string>
+    <string name="ui_loading_camera_information" formatted="false">"正在获取相机信息"</string>
+    <string name="ui_raw_silent" formatted="false">"RAW · 无声"</string>
+    <string name="ui_check_location_permissions" formatted="false">"请检查位置权限"</string>
+    <string name="ui_location_service_unavailable" formatted="false">"定位服务不可用"</string>
+    <string name="ui_gps_denied" formatted="false">"GPS 未授权"</string>
+    <string name="ui_gps_device_off" formatted="false">"GPS 设备已关闭"</string>
+    <string name="ui_gps_approx" formatted="false">"GPS 大致位置"</string>
+    <string name="ui_gps_unavailable" formatted="false">"GPS 不可用"</string>
+    <string name="ui_gps_no_fix" formatted="false">"GPS 未定位"</string>
+    <string name="ui_gps_locating" formatted="false">"GPS 定位中"</string>
+    <string name="ui_precise_location_allowed" formatted="false">"精确位置：已允许"</string>
+    <string name="ui_approximate_location_allowed" formatted="false">"大致位置：已允许"</string>
+    <string name="ui_location_not_allowed" formatted="false">"位置信息：未授权"</string>
+    <string name="ui_device_location_on" formatted="false">"设备位置：ON"</string>
+    <string name="ui_device_location_off" formatted="false">"设备位置：OFF"</string>
+    <string name="ui_saving_capture_location_is_off" formatted="false">"拍摄位置保存已关闭。"</string>
+    <string name="ui_select_allow_location_and_grant_access_while_using" formatted="false">"请点击“允许位置权限”，并允许应用在使用时访问位置。"</string>
+    <string name="ui_enable_location_in_the_device_settings" formatted="false">"请在设备设置中启用位置信息。"</string>
+    <string name="ui_estimated_accuracy_0f_m" formatted="false">"精度估计 ±%.0f 米"</string>
+    <string name="ui_location_acquired" formatted="false">"已获取位置"</string>
+    <string name="ui_d_s_ago" formatted="false">" · %d 秒前"</string>
+    <string name="ui_acquiring_location_gps_reception_may_be_weak_indoors" formatted="false">"正在获取位置。室内 GPS 信号可能较弱，请在窗边或室外重新尝试。"</string>
+    <string name="ui_no_location_service_is_available_check_your_device" formatted="false">"没有可用的定位服务，请检查设备的位置设置。"</string>
+    <string name="ui_an_available_location_is_saved_in_photo_and" formatted="false">"\n\n获取到的位置会保存到照片和视频的位置标签中。未定位时不添加位置标签。"</string>
+    <string name="ui_capture_without_effects" formatted="false">"不应用效果拍摄。"</string>
+    <string name="ui_simulates_dead_pixels_columns_and_bright_pixels" formatted="false">"模拟坏点、坏列和亮点。"</string>
+    <string name="ui_simulates_exposure_bands_and_flicker" formatted="false">"模拟曝光条带与闪烁。"</string>
+    <string name="ui_shifts_image_rows_horizontally" formatted="false">"沿水平方向移动图像行。"</string>
+    <string name="ui_drops_rows_or_repeats_the_previous_row" formatted="false">"丢弃图像行或重复前一行。"</string>
+    <string name="ui_flips_pixel_bits_to_alter_color_and_tone" formatted="false">"翻转像素位以改变色彩与色阶。"</string>
+    <string name="ui_shifts_byte_positions_to_disrupt_color" formatted="false">"偏移字节位置以打乱色彩。"</string>
+    <string name="ui_shifts_cfa_data_locally_to_create_false_color" formatted="false">"局部偏移 CFA 数据以产生伪色。"</string>
+    <string name="ui_changes_the_bayer_phase_to_alter_color" formatted="false">"改变 Bayer 相位以改变色彩。"</string>
+    <string name="ui_simulates_demosaicing_errors_and_false_color_rgb_approximation" formatted="false">"模拟插值错误和伪色（RGB 近似）。"</string>
+    <string name="ui_offsets_rgb_channels_to_create_colored_edges" formatted="false">"偏移 RGB 通道以产生彩色边缘。"</string>
+    <string name="ui_remaps_colors_based_on_brightness" formatted="false">"根据亮度重新映射色彩。"</string>
+    <string name="ui_reduces_chroma_resolution_into_blocks" formatted="false">"降低色度分辨率以产生块状效果。"</string>
+    <string name="ui_disrupts_image_blocks_and_color_data" formatted="false">"打乱图像块的位置与色彩数据。"</string>
+    <string name="ui_drops_or_repeats_parts_of_the_image" formatted="false">"丢弃或重复部分图像。"</string>
+    <string name="ui_simulates_horizontal_jitter_color_shifts_and_tape_noise" formatted="false">"模拟水平抖动、色偏与磁带噪点。"</string>
+    <string name="ui_adds_scanlines_and_noise_to_a_green_display" formatted="false">"在绿色显示效果中添加扫描线与噪点。"</string>
+    <string name="ui_1f_s" formatted="false">"%.1f 秒"</string>
+    <string name="ui_2f_s" formatted="false">"%.2f 秒"</string>
+    <string name="ui_event_interval" formatted="false">"变化间隔"</string>
+    <string name="ui_occurrence_rate" formatted="false">"发生概率"</string>
+    <string name="ui_event_duration" formatted="false">"持续时间"</string>
+    <string name="ui_parameter_variation" formatted="false">"参数变化幅度"</string>
+    <string name="ui_smoothness" formatted="false">"平滑程度"</string>
+    <string name="ui_allow_chain_switching" formatted="false">"允许切换效果链"</string>
+    <string name="ui_keep_original_display_stages_vhs_terminal" formatted="false">"保留原显示阶段（VHS / TERMINAL）"</string>
+    <string name="ui_random_chain_size_total" formatted="false">"随机效果链数量（总数）"</string>
+    <string name="ui_minimum" formatted="false">"最小"</string>
+    <string name="ui_maximum" formatted="false">"最大"</string>
+    <string name="ui_minimum_stage_count" formatted="false">"最少阶段数"</string>
+    <string name="ui_maximum_stage_count" formatted="false">"最多阶段数"</string>
+    <string name="ui_more_stages_increase_processing_load_the_count_is" formatted="false">"阶段越多，处理负载越高。数量不会超过可用效果数，也不会少于保留的显示阶段数。只有原效果链包含 SENSOR FAIL 时，它才会进入候选。关闭显示阶段保留后，VHS / TERMINAL 也会重新随机选择。\n变化结束后恢复手动设置。LIVE FAULT 启动时默认关闭。"</string>
+    <string name="ui_live_fault_auto_variation" formatted="false">"LIVE FAULT / 自动变化"</string>
+    <string name="ui_varies_effects_at_the_chosen_interval_and_probability" formatted="false">"即使设备静止，也会按设定的间隔与概率改变效果。"</string>
+    <string name="ui_defect_shape_pixels_columns" formatted="false">"故障形状 · 点 → 列"</string>
+    <string name="ui_defect_value_dark_bright" formatted="false">"故障值 · 暗点 → 亮点"</string>
+    <string name="ui_band_density" formatted="false">"条带密度"</string>
+    <string name="ui_flow_speed" formatted="false">"流动速度"</string>
+    <string name="ui_row_band_height" formatted="false">"行条带高度"</string>
+    <string name="ui_shift_width" formatted="false">"偏移宽度"</string>
+    <string name="ui_dropped_or_repeated_band_height" formatted="false">"丢弃或重复条带的高度"</string>
+    <string name="ui_drop_repeat" formatted="false">"丢弃 → 重复"</string>
+    <string name="ui_bit_position_low_high" formatted="false">"翻转位 · 低位 → 高位"</string>
+    <string name="ui_block_size" formatted="false">"块大小"</string>
+    <string name="ui_data_shift_0_31_bytes" formatted="false">"数据偏移 · 0–31 字节"</string>
+    <string name="ui_tile_size" formatted="false">"图块大小"</string>
+    <string name="ui_phase_pattern" formatted="false">"相位模式"</string>
+    <string name="ui_cfa_phase_horizontal_vertical_both" formatted="false">"CFA 相位 · 水平 / 垂直 / 双向"</string>
+    <string name="ui_affected_area_size" formatted="false">"作用区域大小"</string>
+    <string name="ui_interpolation_error_scale" formatted="false">"插值错误尺度"</string>
+    <string name="ui_false_color_amount" formatted="false">"伪色强度"</string>
+    <string name="ui_shift_direction_horizontal_vertical" formatted="false">"偏移方向 · 水平 → 垂直"</string>
+    <string name="ui_tear_width" formatted="false">"撕裂宽度"</string>
+    <string name="ui_palette_period" formatted="false">"调色板周期"</string>
+    <string name="ui_hue_phase" formatted="false">"色相相位"</string>
+    <string name="ui_chroma_block_width" formatted="false">"色度块宽度"</string>
+    <string name="ui_vertical_coarseness" formatted="false">"垂直粗糙度"</string>
+    <string name="ui_color_data_corruption" formatted="false">"色彩数据损坏"</string>
+    <string name="ui_packet_size" formatted="false">"数据包大小"</string>
+    <string name="ui_missing_data_fill_black_repeat" formatted="false">"丢失数据填充 · 黑色 → 重复"</string>
+    <string name="ui_tracking_error" formatted="false">"磁带循迹偏差"</string>
+    <string name="ui_tape_noise" formatted="false">"磁带噪点"</string>
+    <string name="ui_scanline_density" formatted="false">"扫描线密度"</string>
+    <string name="ui_noise" formatted="false">"噪点"</string>
+    <string name="ui_no_permission" formatted="false">"未授权"</string>
+    <string name="ui_recorded_audio" formatted="false">"录制音频"</string>
+    <string name="ui_unavailable_220" formatted="false">"不可用"</string>
+    <string name="ui_level_detection" formatted="false">"音量检测"</string>
+    <string name="ui_reading_motion" formatted="false">"正在获取运动数据"</string>
+    <string name="ui_motion" formatted="false">"运动 —"</string>
+    <string name="ui_audio" formatted="false">" / 音频 "</string>
+    <string name="ui_battery_temperature" formatted="false">"电池温度 —"</string>
+    <string name="ui_battery_1f_c" formatted="false">"电池 %.1f°C"</string>
+    <string name="ui_thermal_state" formatted="false">" / 温度状态 "</string>
+    <string name="ui_app_cpu_0f_one_core" formatted="false">"应用 CPU %.0f%%（单核基准）"</string>
+    <string name="ui_readout_1f_ms" formatted="false">"读出 %.1f 毫秒"</string>
+    <string name="ui_readout" formatted="false">"读出 —"</string>
+    <string name="ui_clear_selection" formatted="false">"清除选择"</string>
+    <string name="ui_stage_strength" formatted="false">"阶段强度"</string>
+    <string name="ui_reset" formatted="false">"恢复默认"</string>
+    <string name="ui_reseed" formatted="false">"更换分布 ↝"</string>
+    <string name="ui_effect_adjust" formatted="false">"EFFECT / 调整"</string>
+    <string name="ui_chain_effects" formatted="false">"CHAIN / 效果"</string>
+    <string name="ui_preview_applying_also_changes_the_recording" formatted="false">"预览 · 应用后也会影响录制"</string>
+    <string name="ui_preview_apply_to_save_back_to_discard" formatted="false">"预览 · 应用以保存，返回以取消"</string>
+    <string name="ui_off_enable_to_apply" formatted="false">"OFF · 开启后应用"</string>
+    <string name="ui_global_strength_is_0" formatted="false">"整体强度为 0%"</string>
+    <string name="ui_this_stage_has_0_strength" formatted="false">"此阶段强度为 0%"</string>
+    <string name="ui_shift_is_0_rows_stay_in_place" formatted="false">"偏移宽度为 0% · 行位置不变"</string>
+    <string name="ui_0_bytes_data_positions_stay_unchanged" formatted="false">"0 字节 · 数据位置不变"</string>
+    <string name="ui_false_color_is_0_no_interpolation_error_applied" formatted="false">"伪色强度为 0% · 不应用插值错误"</string>
+    <string name="ui_adjust_while_watching_the_preview" formatted="false">"观看预览并调整"</string>
+    <string name="ui_horizontal" formatted="false">"水平"</string>
+    <string name="ui_vertical" formatted="false">"垂直"</string>
+    <string name="ui_diagonal" formatted="false">"斜向"</string>
+    <string name="ui_low" formatted="false">" · 低位"</string>
+    <string name="ui_high" formatted="false">" · 高位"</string>
+    <string name="ui_back" formatted="false">"返回"</string>
+    <string name="ui_apply" formatted="false">"应用"</string>
+    <string name="ui_frames_dropped_253" formatted="false">" 帧 / 丢帧 "</string>
+    <string name="ui_recording_saved_and_stopped_due_to_low_storage" formatted="false">"存储空间不足，录制已保存并停止"</string>
+    <string name="ui_could_not_start_the_camera" formatted="false">"无法启动相机"</string>
+    <string name="ui_configuring_camera" formatted="false">"正在配置相机…"</string>
+    <string name="ui_could_not_change_capture_settings" formatted="false">"无法更改拍摄设置"</string>
+    <string name="ui_this_camera_has_no_light" formatted="false">"此相机没有补光灯"</string>
+    <string name="ui_allow_camera_access" formatted="false">"请允许访问相机"</string>
+    <string name="ui_raw_is_unavailable_on_this_camera_switched_to" formatted="false">"此相机不支持 RAW，已切换到 JPEG。"</string>
+    <string name="ui_raw_video_is_unavailable_on_this_camera" formatted="false">"此相机不支持 RAW 视频"</string>
+    <string name="ui_camera_disconnected_select_your_settings_again" formatted="false">"相机已断开连接，请重新选择设置。"</string>
+    <string name="ui_camera_error" formatted="false">"相机错误 "</string>
+    <string name="ui_select_your_settings_again" formatted="false">" · 请重新选择设置"</string>
+    <string name="ui_could_not_open_the_camera" formatted="false">"无法打开相机"</string>
+    <string name="ui_raw_sequence" formatted="false">"RAW 序列 · "</string>
+    <string name="ui_target" formatted="false">" / 目标 "</string>
+    <string name="ui_raw_original" formatted="false">"RAW 原片"</string>
+    <string name="ui_processed_raw" formatted="false">"处理后的 RAW"</string>
+    <string name="ui_could_not_receive_continuous_raw_frames" formatted="false">"无法连续获取 RAW 帧"</string>
+    <string name="ui_could_not_configure_the_preview" formatted="false">"无法配置预览"</string>
+    <string name="ui_simultaneous_raw_and_preview_output_is_unsupported" formatted="false">"不支持同时输出 RAW 与预览"</string>
+    <string name="ui_returning_to_standard_video" formatted="false">" · 正在恢复普通视频"</string>
+    <string name="ui_could_not_start_the_raw_video_session" formatted="false">"无法启动 RAW 视频会话"</string>
+    <string name="ui_this_camera_cannot_use_these_capture_settings" formatted="false">"此相机无法使用这些拍摄设置"</string>
+    <string name="ui_retrying_with_a_compatible_lower_resolution" formatted="false">"正在使用兼容的较低分辨率重试…"</string>
+    <string name="ui_could_not_reconfigure_the_camera" formatted="false">"无法重新配置相机"</string>
+    <string name="ui_could_not_apply_camera_settings" formatted="false">"无法应用相机设置"</string>
+    <string name="ui_automatic_variation_0f" formatted="false">"自动变化 %.0f%%"</string>
+    <string name="ui_image_processing_error" formatted="false">"图像处理错误"</string>
+    <string name="ui_capturing_at_full_resolution" formatted="false">"正在以全分辨率拍摄…"</string>
+    <string name="ui_could_not_capture_the_photo_try_lower_settings" formatted="false">"无法拍摄照片，请降低设置。"</string>
+    <string name="ui_photo_capture_timed_out" formatted="false">"照片拍摄超时"</string>
+    <string name="ui_could_not_capture" formatted="false">"无法拍摄"</string>
+    <string name="ui_could_not_read_raw_frames" formatted="false">"无法读取 RAW 帧"</string>
+    <string name="ui_could_not_read_capture_data" formatted="false">"无法读取拍摄数据"</string>
+    <string name="ui_saving_full_resolution_effects" formatted="false">"正在保存全分辨率效果…"</string>
+    <string name="ui_saving_raw_data" formatted="false">"正在保存 RAW 数据…"</string>
+    <string name="ui_no_location_fix_saved_without_gps" formatted="false">"未定位，已保存但不含 GPS。"</string>
+    <string name="ui_could_not_save_the_photo" formatted="false">"无法保存照片"</string>
+    <string name="ui_not_enough_memory_to_process_the_photo_lower" formatted="false">"照片处理内存不足，请降低分辨率。"</string>
+    <string name="ui_checking_raw_output" formatted="false">"正在检查 RAW 输出"</string>
+    <string name="ui_recording_interrupted_check_the_saved_files" formatted="false">"录制已中断，请检查保存的文件。"</string>
+    <string name="ui_could_not_start_the_next_file_recording_saved" formatted="false">"无法切换到下一个文件，录制已保存并停止。"</string>
+    <string name="ui_no_gps_fix_video_will_have_no_location" formatted="false">"GPS 未定位 · 视频不含位置标签"</string>
+    <string name="ui_could_not_start_recording_try_lower_settings" formatted="false">"无法开始录制，请降低设置。"</string>
+    <string name="ui_could_not_prepare_the_next_recording_file" formatted="false">"无法准备下一个录制文件"</string>
+    <string name="ui_could_not_publish_the_recording_segment" formatted="false">"无法完成录制片段的保存"</string>
+    <string name="ui_finalizing_raw_sequence" formatted="false">"正在完成 RAW 序列保存…"</string>
+    <string name="ui_recording_was_too_short_or_could_not_be" formatted="false">"录制时间过短或无法保存"</string>
+    <string name="ui_could_not_save_the_video" formatted="false">"无法保存视频"</string>
+    <string name="ui_capture_cancelled_because_the_camera_closed_before_completion" formatted="false">"拍摄完成前相机已关闭，保存已取消"</string>
+    <string name="language_title">"应用语言"</string>
+    <string name="language_system">"跟随设备语言"</string>
+    <string name="language_summary">"语言"</string>
+    <string name="camera_settings_unavailable">"允许使用相机后可显示拍摄设置。您可以在此更改应用语言。"</string>
+    <string name="ui_open_source_licenses">"开源许可证"</string>
+</resources>

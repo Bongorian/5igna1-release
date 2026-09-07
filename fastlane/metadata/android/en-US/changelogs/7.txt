@@ -1,0 +1,4 @@
+Renamed the app to 5igna1.
+Added DATA SHIFT, LINE LOSS, CFA OFFSET and DEMOSAIC.
+Updated for Android 16, adjusted screen insets and added the privacy policy.
+Effect selections and adjustments from 5.x reset; capture settings and saved media remain.

@@ -1,0 +1,6 @@
+# Copy to fdroid-signing.properties (ignored); use an existing long-lived distribution key.
+# Enable explicitly with -PsignFdroidRelease=true. Do not use the Play upload key implicitly.
+storeFile=.signing/5igna1-distribution.p12
+storePassword=REPLACE_LOCALLY
+keyAlias=distribution
+keyPassword=REPLACE_LOCALLY

@@ -1,0 +1,109 @@
+plugins { id 'com.android.application' }
+
+// The existing signing.properties is the Play upload configuration only.
+// F-Droid's build server gets an unsigned APK; GitHub signing is explicit opt-in.
+def loadSigning = { String fileName, String prefix ->
+    def values = new Properties()
+    def source = rootProject.file(fileName)
+    if (source.exists()) source.withInputStream { values.load(it) }
+    [storeFile: 'KEYSTORE', storePassword: 'STORE_PASSWORD', keyAlias: 'KEY_ALIAS', keyPassword: 'KEY_PASSWORD'].each { field, suffix ->
+        def value = providers.environmentVariable("${prefix}_${suffix}").orNull
+        if (value) values.setProperty(field, value)
+    }
+    values
+}
+def playSigning = loadSigning('signing.properties', 'SIGNAL_PLAY')
+def signFdroid = providers.gradleProperty('signFdroidRelease').orElse('false').get().toBoolean()
+def fdroidSigning = signFdroid ? loadSigning('fdroid-signing.properties', 'SIGNAL_FDROID') : new Properties()
+def validateSigning = { Properties values, String label ->
+    if (['storeFile', 'storePassword', 'keyAlias', 'keyPassword'].any { !values.getProperty(it) })
+        throw new GradleException("Incomplete ${label} signing configuration. See docs/RELEASING.md.")
+    if (!rootProject.file(values.getProperty('storeFile')).isFile())
+        throw new GradleException("${label} keystore does not exist. See docs/RELEASING.md.")
+}
+if (!playSigning.isEmpty()) validateSigning(playSigning, 'Play')
+if (signFdroid) validateSigning(fdroidSigning, 'GitHub/FOSS')
+
+android {
+    namespace 'com.bongorian.signa1'
+    compileSdk 36
+    buildToolsVersion '35.0.0'
+    buildFeatures { buildConfig true }
+    defaultConfig {
+        applicationId 'com.bongorian.signa1'
+        minSdk 31
+        targetSdk 36
+        // Keep these literals readable by F-Droid's update checker.
+        versionCode 8
+        versionName '1.0.0'
+        resValue 'string', 'app_name', '5igna1'
+        buildConfigField 'String', 'APP_NAME', '"5igna1"'
+        testInstrumentationRunner 'com.bongorian.signa1.DeviceChecks'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    signingConfigs {
+        if (!playSigning.isEmpty()) {
+            playRelease {
+                storeFile rootProject.file(playSigning.getProperty('storeFile'))
+                storePassword playSigning.getProperty('storePassword')
+                keyAlias playSigning.getProperty('keyAlias')
+                keyPassword playSigning.getProperty('keyPassword')
+            }
+        }
+        if (signFdroid) {
+            fdroidRelease {
+                storeFile rootProject.file(fdroidSigning.getProperty('storeFile'))
+                storePassword fdroidSigning.getProperty('storePassword')
+                keyAlias fdroidSigning.getProperty('keyAlias')
+                keyPassword fdroidSigning.getProperty('keyPassword')
+            }
+        }
+    }
+    flavorDimensions 'distribution'
+    productFlavors {
+        play {
+            dimension 'distribution'
+            if (!playSigning.isEmpty()) signingConfig signingConfigs.playRelease
+        }
+        fdroid {
+            dimension 'distribution'
+            if (signFdroid) signingConfig signingConfigs.fdroidRelease
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+            resValue 'string', 'app_name', '5igna1 DEV'
+        }
+        release {
+            debuggable false
+            minifyEnabled false
+        }
+    }
+    // Run existing independent behavior fixtures through Gradle's standard test task.
+    sourceSets { test.java.srcDir(rootProject.file('tools')) }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    // Referenced by the manifest's initializer opt-out; already a runtime dependency of AppCompat.
+    implementation 'androidx.startup:startup-runtime:1.1.1'
+    implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.22')
+    testImplementation 'junit:junit:4.13.2'
+    // Future Play services use playImplementation; no Billing SDK is needed today.
+}
+
+// Bundle the same reviewed legal notices in both distributions, without duplicate sources.
+def licenseAssets = tasks.register('prepareLicenseAssets', Sync) {
+    from(rootProject.file('LICENSE'), rootProject.file('NOTICE'), rootProject.file('THIRD_PARTY_LICENSES.md'))
+    from(rootProject.file('licenses')) { include '*.txt' }
+    into(layout.buildDirectory.dir('generated/licenseAssets/licenses'))
+}
+android.sourceSets.main.assets.srcDir(layout.buildDirectory.dir('generated/licenseAssets'))
+tasks.named('preBuild').configure { dependsOn(licenseAssets) }
+
+apply from: rootProject.file('gradle/distribution-audit.gradle')

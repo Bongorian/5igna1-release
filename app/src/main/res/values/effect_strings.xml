@@ -1,0 +1,57 @@
+<resources>
+    <string-array name="effect_descriptions">
+        <item>@string/ui_capture_without_effects</item>
+        <item>@string/ui_simulates_dead_pixels_columns_and_bright_pixels</item>
+        <item>@string/ui_simulates_exposure_bands_and_flicker</item>
+        <item>@string/ui_shifts_image_rows_horizontally</item>
+        <item>@string/ui_drops_rows_or_repeats_the_previous_row</item>
+        <item>@string/ui_flips_pixel_bits_to_alter_color_and_tone</item>
+        <item>@string/ui_shifts_byte_positions_to_disrupt_color</item>
+        <item>@string/ui_shifts_cfa_data_locally_to_create_false_color</item>
+        <item>@string/ui_changes_the_bayer_phase_to_alter_color</item>
+        <item>@string/ui_simulates_demosaicing_errors_and_false_color_rgb_approximation</item>
+        <item>@string/ui_offsets_rgb_channels_to_create_colored_edges</item>
+        <item>@string/ui_remaps_colors_based_on_brightness</item>
+        <item>@string/ui_reduces_chroma_resolution_into_blocks</item>
+        <item>@string/ui_disrupts_image_blocks_and_color_data</item>
+        <item>@string/ui_drops_or_repeats_parts_of_the_image</item>
+        <item>@string/ui_simulates_horizontal_jitter_color_shifts_and_tape_noise</item>
+        <item>@string/ui_adds_scanlines_and_noise_to_a_green_display</item>
+    </string-array>
+    <string-array name="parameter_labels">
+        <item>""</item>
+        <item>""</item>
+        <item>@string/ui_defect_shape_pixels_columns</item>
+        <item>@string/ui_defect_value_dark_bright</item>
+        <item>@string/ui_band_density</item>
+        <item>@string/ui_flow_speed</item>
+        <item>@string/ui_row_band_height</item>
+        <item>@string/ui_shift_width</item>
+        <item>@string/ui_dropped_or_repeated_band_height</item>
+        <item>@string/ui_drop_repeat</item>
+        <item>@string/ui_bit_position_low_high</item>
+        <item>@string/ui_block_size</item>
+        <item>@string/ui_data_shift_0_31_bytes</item>
+        <item>@string/ui_block_size</item>
+        <item>@string/ui_tile_size</item>
+        <item>@string/ui_phase_pattern</item>
+        <item>@string/ui_cfa_phase_horizontal_vertical_both</item>
+        <item>@string/ui_affected_area_size</item>
+        <item>@string/ui_interpolation_error_scale</item>
+        <item>@string/ui_false_color_amount</item>
+        <item>@string/ui_shift_direction_horizontal_vertical</item>
+        <item>@string/ui_tear_width</item>
+        <item>@string/ui_palette_period</item>
+        <item>@string/ui_hue_phase</item>
+        <item>@string/ui_chroma_block_width</item>
+        <item>@string/ui_vertical_coarseness</item>
+        <item>@string/ui_block_size</item>
+        <item>@string/ui_color_data_corruption</item>
+        <item>@string/ui_packet_size</item>
+        <item>@string/ui_missing_data_fill_black_repeat</item>
+        <item>@string/ui_tracking_error</item>
+        <item>@string/ui_tape_noise</item>
+        <item>@string/ui_scanline_density</item>
+        <item>@string/ui_noise</item>
+    </string-array>
+</resources>
