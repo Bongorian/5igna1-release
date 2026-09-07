@@ -2,7 +2,7 @@
 
 Audit date: 2026-09-08. Candidate: **5igna1 1.0.0 / versionCode 8**.
 
-The current source builds as FOSS and the candidate metadata/source scan passed before the public repository was created. This repository starts from the audited current source, with a new Git history and the old development screenshots excluded. Acceptance into F-Droid remains a separate process.
+The current source builds as FOSS. Candidate metadata lint and a scan of the new public source snapshot passed with zero source errors or warnings. This repository starts from the audited current source, with a new Git history and the old development screenshots excluded. Acceptance into F-Droid remains a separate process.
 
 ## Remaining work
 
@@ -25,7 +25,7 @@ GitHub distribution signing is configured locally and the key/recovery files are
 | Assets | Current icons, generated title art, and AOSP-pattern screenshots are recorded in the asset inventory. Old Toren1BD screenshots and their Git objects are not imported. |
 | Credentials | Keys and local signing/recovery files remain ignored. The staged public snapshot is checked for known credential and binary patterns. |
 | Metadata | Japanese/English fastlane descriptions, current UI screenshots, and candidate F-Droid metadata are present. |
-| fdroidserver 2.4.5 | Candidate lint passed; a source-copy scan found fatal 0 / warnings 0. Full server build remains pending. |
+| fdroidserver 2.4.5 | New-public-source candidate lint passed; a source-copy scan found fatal 0 / warnings 0. Full server build remains pending. |
 
 ## License classifications
 

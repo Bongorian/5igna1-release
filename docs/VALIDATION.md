@@ -6,7 +6,7 @@ This is a record of what was checked for 5igna1 1.0.0. It is not a guarantee of 
 
 - JDK 17 on macOS: clean build, lint for both flavors, fdroidDebug, unsigned fdroidRelease, and playDebug passed.
 - JVM checks: 3 behavior fixtures × 4 build variants = 12 tests passed. Coverage includes state snapshots, edit/cancel behavior, RAW row/byte/CFA transformations, and LIVE FAULT selection/recovery.
-- CI is configured for Ubuntu and macOS. [Current runs](https://github.com/Bongorian/5igna1-release/actions/workflows/android.yml)
+- The initial public source passed CI on Ubuntu and macOS. [Verified run](https://github.com/Bongorian/5igna1-release/actions/runs/34147880216) · [Current runs](https://github.com/Bongorian/5igna1-release/actions/workflows/android.yml)
 - Dependency inventory, prohibited-SDK check, translation consistency, release metadata, and wrapper integrity checks passed.
 - The distribution APK's signing certificate, package ID, version, release mode, and SHA-256 were verified. The release key is separate from the Play upload key.
 

@@ -11,8 +11,8 @@ The public project starts here: **Bongorian/5igna1-release**. Google Play develo
 - [x] Sign and verify the 1.0.0 FOSS APK and SHA-256.
 - [x] Rewrite the public presentation in English, including the one-time encounter, fault models, and distinction from a preset-filter workflow.
 - [x] Add first-use, installation, recipe, format, controls, and troubleshooting guides, with a Japanese edition.
-- [ ] Publish this clean repository and its initial v1.0.0 release.
-- [ ] Verify anonymous APK/checksum/source downloads from the new URL.
+- [x] Publish this clean repository and its initial v1.0.0 release.
+- [x] Verify anonymous APK/checksum/source downloads from the new URL.
 - [ ] Confirm Obtainium installation on a device using the new source URL.
 
 ## Ongoing releases and keys
@@ -46,3 +46,7 @@ Billing products and Sponsors setup are optional future work, not prerequisites 
 - Repository / Obtainium source: `https://github.com/Bongorian/5igna1-release`
 - Latest release: `https://github.com/Bongorian/5igna1-release/releases/latest`
 - Initial release: `https://github.com/Bongorian/5igna1-release/releases/tag/v1.0.0`
+
+## Publication verification — 2026-09-08
+
+The initial public history has one root commit and no imported parent commits. APK and checksum downloads were fetched without authentication and matched the local files. The tagged app source was readable publicly; the previous private repository returned 404 without authentication. [Initial Ubuntu/macOS CI](https://github.com/Bongorian/5igna1-release/actions/runs/34147880216) passed both jobs. Obtainium’s on-device import/install remains a follow-up check.
