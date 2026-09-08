@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-Changes after 1.1.0 will be recorded here.
+- Add an offline five-page first-launch tutorial with Settings replay, skip/back navigation, activity-state restoration and English/Japanese/Simplified Chinese text. This remains development-only and is not part of the submitted 1.1.0 / code 9 bundle.
 
 ## [1.1.0] — unreleased
 

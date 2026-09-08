@@ -29,6 +29,8 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity imple
     boolean resumed, ready, recording, videoMode, sound=true;
     boolean latestVideo,advancedMode;
     int captureCount;
+    TutorialDialog tutorial;
+    int tutorialPage=-1;
     EffectState effectState;
     TextView liveChainStatus;Dialog liveChainDialog;FaultStateDialog faultStatePanel;EffectState.Frame shownLiveFrame;
     FaultDialog.Editor liveEditor;LinearLayout liveTransport;TextView liveHold;
@@ -59,8 +61,10 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity imple
         engine=new GlitchEngine(this,this);engine.position=geo::snapshot;engine.configure(settings,videoMode,effectState);if(b!=null){engine.front=b.getBoolean("session.front",false);engine.zoom=zoom;}
         faultConfig=FaultPreferences.load(prefs);if(b!=null)faultConfig=faultConfig.enabled(b.getBoolean("session.live",false));engine.setFaultConfig(faultConfig);
         buildUi();
+        tutorialPage=b!=null&&b.containsKey("tutorial.page")?b.getInt("tutorial.page"):
+            (prefs.getBoolean(TutorialDialog.SEEN,false)?-1:0);
     }
-    @Override protected void onSaveInstanceState(Bundle out){super.onSaveInstanceState(out);savePrefs();out.putInt("session.count",captureCount);out.putBoolean("session.video",videoMode);out.putBoolean("session.front",engine.front);out.putFloat("session.zoom",zoom);out.putBoolean("session.live",faultConfig.enabled);}
+    @Override protected void onSaveInstanceState(Bundle out){super.onSaveInstanceState(out);out.putInt("tutorial.page",tutorial==null?tutorialPage:tutorial.page);savePrefs();out.putInt("session.count",captureCount);out.putBoolean("session.video",videoMode);out.putBoolean("session.front",engine.front);out.putFloat("session.zoom",zoom);out.putBoolean("session.live",faultConfig.enabled);}
     // One radius for panels, fields and controls; small labels use a scaled detail radius.
     static final int UI_RADIUS=12, DETAIL_RADIUS=4;
     GradientDrawable bg(int color,int border){return roundedBackground(color,UI_RADIUS,border);}
@@ -247,9 +251,11 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity imple
     public void ready(boolean value){ready=value&&resumed&&mediaPreview==null;capture.setAlpha(ready?1:.4f);}
     public void recording(boolean value){recording=value;capture.invalidate();capture.setContentDescription(value?getString(R.string.ui_stop_recording):videoMode?getString(R.string.ui_start_video_recording):getString(R.string.ui_take_a_photo));flipButton.setEnabled(!value);flipButton.setAlpha(value?.3f:1);micButton.setAlpha(value?.3f:1);renderAudio();galleryButton.setEnabled(!value);if(value){start=SystemClock.elapsedRealtime();status.setTextColor(RED);handler.post(timer);}else{handler.removeCallbacks(timer);status.setTextColor(LIME);status.setText("LIVE · "+engine.description());}}
     public void saved(Uri uri,boolean video){boolean rawSequence="application/zip".equals(getContentResolver().getType(uri));latest=uri;latestVideo=video;captureCount++;getSharedPreferences("signal",0).edit().putString("last",uri.toString()).putBoolean("lastVideo",video).apply();Toast.makeText(this,rawSequence?getString(R.string.ui_raw_video_saved_to_download_5igna1):video?getString(R.string.ui_video_saved_to_movies_5igna1):getString(R.string.ui_photo_saved_to_pictures_5igna1),Toast.LENGTH_SHORT).show();galleryButton.load(uri,video);}
-    protected void onResume(){super.onResume();resumed=true;handler.removeCallbacks(previewAcknowledgement);handler.post(previewAcknowledgement);geo.start();galleryButton.load(latest,latestVideo);if(checkSelfPermission(Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED)requestPermissions(new String[]{Manifest.permission.CAMERA},1);else resumeCameraPreview();}
+    protected void onResume(){super.onResume();resumed=true;handler.removeCallbacks(previewAcknowledgement);handler.post(previewAcknowledgement);geo.start();galleryButton.load(latest,latestVideo);if(tutorialPage>=0&&tutorial==null)showTutorial();if(checkSelfPermission(Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED)resumeCameraPreview();else if(tutorial==null)requestPermissions(new String[]{Manifest.permission.CAMERA},1);}
     protected void onPause(){resumed=false;if(mediaPreview!=null)mediaPreview.dismiss();if(liveChainDialog!=null)liveChainDialog.dismiss();if(liveEditor!=null)liveEditor.dialog.dismiss();cancelEffectPreview();savePrefs();ready(false);resumed=false;handler.removeCallbacks(previewAcknowledgement);geo.stop();engine.detach();handler.removeCallbacks(timer);super.onPause();}
-    protected void onDestroy(){galleryButton.dispose();engine.shutdown();super.onDestroy();}
+    void showTutorial(){if(tutorial!=null)return;tutorial=new TutorialDialog(this,Math.max(0,tutorialPage));tutorial.show();}
+    void tutorialClosed(){tutorial=null;tutorialPage=-1;getSharedPreferences("signal",0).edit().putBoolean(TutorialDialog.SEEN,true).apply();if(resumed&&checkSelfPermission(Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED)requestPermissions(new String[]{Manifest.permission.CAMERA},1);}
+    protected void onDestroy(){if(tutorial!=null)tutorial.dispose();galleryButton.dispose();engine.shutdown();super.onDestroy();}
     public void onRequestPermissionsResult(int code,String[] p,int[] results){super.onRequestPermissionsResult(code,p,results);if(code==4&&pendingFaultConfig!=null){FaultConfig requested=pendingFaultConfig;pendingFaultConfig=null;boolean allowed=checkSelfPermission(Manifest.permission.RECORD_AUDIO)==PackageManager.PERMISSION_GRANTED;applyFaultConfig(allowed?requested:requested.audio(false));if(!allowed)Toast.makeText(this,getString(R.string.ui_audio_reaction_is_off_live_fault_can_use),Toast.LENGTH_LONG).show();return;}if(code==1){if(checkSelfPermission(Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED && resumed && mediaPreview==null && preview.isAvailable())engine.attach(preview.getSurfaceTexture(),preview.getWidth(),preview.getHeight());else{status.setText(getString(R.string.ui_tap_capture_to_allow_camera_access));SignalSheet.message(this,getString(R.string.ui_settings),getString(R.string.ui_camera_access_is_required_to_capture_if_the),R.string.ui_settings,()->openAppSettings());}}if(code==3){if(resumed)geo.start();renderGeo();showLocation();}if(code==2){if(checkSelfPermission(Manifest.permission.RECORD_AUDIO)==PackageManager.PERMISSION_GRANTED)shoot();else Toast.makeText(this,getString(R.string.ui_turn_audio_off_to_record_a_silent_video),Toast.LENGTH_LONG).show();}}
     public void onSurfaceTextureAvailable(SurfaceTexture s,int w,int h){if(resumed && mediaPreview==null && checkSelfPermission(Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED)engine.attach(s,w,h);}
     public void onSurfaceTextureSizeChanged(SurfaceTexture s,int w,int h){engine.resize(w,h);}

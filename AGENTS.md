@@ -31,3 +31,9 @@
 
 - The owner explicitly requested applying the current 1.1.0 source to Google Play and reports nine testers currently using 1.0.0. This authorizes a 1.1.0 / code 9 update to the existing closed-test Alpha track and the matching store materials. Preserve its tester group and country settings.
 - Continue preserving the original 1.0.0 artifacts, v1.0.0 tag and signing keys. F-Droid remains on its existing submission; this Play update does not authorize changing that submission or publishing a GitHub release.
+
+
+## Owner direction — tutorial development, 2026-09-09
+
+- The owner requested first-launch and Settings-accessible tutorials on a development branch, with no physical device connected. Keep this work on `codex/onboarding-tutorial`; use the emulator and debug builds.
+- This feature is not part of the signed Play 1.1.0 / code 9 submission. Preserve that bundle and main; allocate a higher versionCode before any future submission of changed application code.

@@ -19,9 +19,20 @@ public final class DeviceChecks extends Instrumentation {
     void await(String what,BooleanSupplier condition,long millis){long until=SystemClock.elapsedRealtime()+millis;while(SystemClock.elapsedRealtime()<until){if(condition.getAsBoolean())return;SystemClock.sleep(100);}throw new AssertionError("Timeout: "+what);}
     @Override public void onStart(){Bundle result=new Bundle();CaptureSettings original=null;EffectState effectsBefore=null;FaultConfig faultsBefore=null;boolean video=false;try{
         new Thread(()->{SystemClock.sleep(12000);if(activity==null){for(java.util.Map.Entry<Thread,StackTraceElement[]> entry:Thread.getAllStackTraces().entrySet())if(entry.getKey().getName().equals("main")||entry.getKey().getName().contains("Signal")||entry.getKey().getName().contains("Instr"))android.util.Log.i("SignalCheck",entry.getKey().getName()+" "+java.util.Arrays.toString(entry.getValue()));}},"CheckWatch").start();
+        if(args.getString("action","").startsWith("tutorial"))getTargetContext().getSharedPreferences("signal",0).edit().remove(TutorialDialog.SEEN).commit();
         ActivityMonitor monitor=addMonitor(MainActivity.class.getName(),null,false);
         try(ParcelFileDescriptor launched=getUiAutomation().executeShellCommand("am start -f 0x10008000 -n "+getTargetContext().getPackageName()+"/"+MainActivity.class.getName())){}
         activity=(MainActivity)monitor.waitForActivityWithTimeout(20000);removeMonitor(monitor);if(activity==null)throw new AssertionError("Activity start timeout");
+        if(args.getString("action","").equals("tutorial-permission")){
+            await("guide before permission",()->activity.tutorial!=null&&activity.tutorial.dialog.isShowing(),5000);
+            if(activity.checkSelfPermission(android.Manifest.permission.CAMERA)==android.content.pm.PackageManager.PERMISSION_GRANTED)throw new AssertionError("Test requires denied camera permission");
+            SystemClock.sleep(1200);languageScreenshot("tutorial-before-permission");
+            if(!getTargetContext().getPackageName().contentEquals(getUiAutomation().getRootInActiveWindow().getPackageName()))throw new AssertionError("Permission covered tutorial");
+            tutorialClick("tutorial-skip");await("camera permission after guide",()->{android.view.accessibility.AccessibilityNodeInfo root=getUiAutomation().getRootInActiveWindow();return root!=null&&root.getPackageName().toString().contains("permissioncontroller");},5000);
+            result.putString("result","PASS tutorial readable before camera permission; permission requested only after dismissal");return;
+        }
+        if(args.getString("action","").equals("tutorial")){checkTutorial();result.putString("result","PASS first launch, page restoration, skip/back/completion, settings draft isolation, all locales and camera recovery");return;}
+        runOnMainSync(()->{if(activity.tutorial!=null)activity.tutorial.dialog.dismiss();});
         runOnMainSync(()->{android.widget.TextView cover=new android.widget.TextView(activity);cover.setText("撮影テスト中…");cover.setTextColor(0xffc7ff4a);cover.setTextSize(16);cover.setGravity(android.view.Gravity.TOP|android.view.Gravity.CENTER_HORIZONTAL);cover.setPadding(0,activity.dp(35),0,0);cover.setClickable(true);cover.setTag("deviceCheckOverlay");((android.widget.FrameLayout)activity.getWindow().getDecorView()).addView(cover,new android.widget.FrameLayout.LayoutParams(-1,-1));});
         await("camera ready",()->activity.engine.frameSeen&&activity.cameraOptions!=null,20000);
         original=new CaptureSettings(activity.settings);effectsBefore=activity.effectState;faultsBefore=activity.faultConfig;video=activity.videoMode;
@@ -70,6 +81,31 @@ public final class DeviceChecks extends Instrumentation {
 
     }catch(Throwable error){result.putString("failure",android.util.Log.getStackTraceString(error));}
     finally{if(activity!=null&&original!=null){CaptureSettings restore=original;EffectState restoreEffects=effectsBefore;boolean restoreVideo=video;FaultConfig restoreFaults=faultsBefore;runOnMainSync(()->{activity.applyFaultConfig(restoreFaults);activity.videoMode=restoreVideo;boolean restoreLocation=restore.location;restore.location=false;activity.applySettings(restore);activity.setLocationEnabled(restoreLocation);activity.commitEffects(restoreEffects);android.view.View cover=activity.getWindow().getDecorView().findViewWithTag("deviceCheckOverlay");if(cover!=null)((android.view.ViewGroup)cover.getParent()).removeView(cover);});getTargetContext().getSharedPreferences("signal",0).edit().commit();}finish(result.containsKey("failure")?Activity.RESULT_CANCELED:Activity.RESULT_OK,result);}
+    }
+    void tutorialClick(String tag){runOnMainSync(()->activity.tutorial.dialog.getWindow().getDecorView().findViewWithTag(tag).performClick());waitForIdleSync();}
+    void recreateTutorialActivity()throws Exception{
+        MainActivity old=activity;ActivityMonitor monitor=addMonitor(MainActivity.class.getName(),null,false);runOnMainSync(old::recreate);
+        activity=(MainActivity)monitor.waitForActivityWithTimeout(20000);removeMonitor(monitor);if(activity==null)throw new AssertionError("Recreation timeout");waitForIdleSync();
+    }
+    void checkTutorial()throws Exception{
+        await("first-launch tutorial",()->activity.tutorial!=null&&activity.tutorial.dialog.isShowing(),5000);
+        if(getTargetContext().getSharedPreferences("signal",0).getBoolean(TutorialDialog.SEEN,false))throw new AssertionError("Seen before user dismissal");
+        tutorialClick("tutorial-next");tutorialClick("tutorial-next");recreateTutorialActivity();
+        if(activity.tutorial==null||activity.tutorial.page!=2)throw new AssertionError("Lost tutorial page on recreation");
+        tutorialClick("tutorial-back");if(activity.tutorial.page!=1)throw new AssertionError("Back page");tutorialClick("tutorial-skip");
+        if(!getTargetContext().getSharedPreferences("signal",0).getBoolean(TutorialDialog.SEEN,false))throw new AssertionError("Skip not persisted");
+        recreateTutorialActivity();if(activity.tutorial!=null)throw new AssertionError("Tutorial repeated after skip");
+        await("camera after guide",()->activity.ready&&activity.engine.frameSeen,20000);
+        String language=AppLanguage.current();
+        try{for(String tag:new String[]{"ja","en","zh"}){
+            changeLanguage(tag);QualityDialog[] settings={null};boolean before=activity.advancedMode;
+            runOnMainSync(()->{settings[0]=new QualityDialog(activity);settings[0].show();settings[0].advanced=!before;settings[0].content.findViewWithTag("settings-tutorial").performClick();});
+            for(int page=0;page<5;page++){if(activity.tutorial.page!=page)throw new AssertionError("Unexpected page");SystemClock.sleep(900);languageScreenshot("tutorial-"+tag+"-"+page);tutorialClick("tutorial-next");}
+            if(activity.tutorial!=null||!settings[0].sheet.isShowing()||settings[0].advanced==before||activity.advancedMode!=before)throw new AssertionError("Tutorial changed settings draft");
+            runOnMainSync(()->settings[0].sheet.dismiss());
+        }}finally{changeLanguage(language);}
+        runOnMainSync(()->activity.showTutorial());sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK);waitForIdleSync();if(activity.tutorial!=null)throw new AssertionError("System back failed");
+        recreateTutorialActivity();if(activity.tutorial!=null)throw new AssertionError("Tutorial repeated after completion");await("final preview",()->activity.ready&&activity.engine.frameSeen,20000);
     }
     void checkStoreScreenshots()throws Exception{
         String locale=AppLanguage.current();

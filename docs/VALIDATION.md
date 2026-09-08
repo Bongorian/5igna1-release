@@ -101,3 +101,14 @@ Unit tests, lint, both debug builds, 380 localized strings and repository checks
 ## 1.1.0 source integration — 2026-09-08
 
 Allocated versionName 1.1.0 / versionCode 9 for the next release. `lint`, `test`, `assembleFdroidDebug`, `assembleFdroidRelease` (unsigned), `assemblePlayDebug`, `assembleFdroidDebugAndroidTest`, `verifyFossDependencies` and `dependencyInventory` passed. Release metadata, 380 translated strings, repository guards, dependency inventory and whitespace checks passed. Verified release/debug APK IDs and version metadata, 267 local Markdown links, and all three privacy HTML bodies against bundled text. Earlier physical-device checks above cover the unchanged app behavior; this integration changes version metadata and documentation only. Existing v1.0.0 and submitted code-8 artifacts remain the published/submitted baseline; no new signing, store submission, tag or release publication is part of this integration. Store screenshots still represent 1.0.0 and must be refreshed before the next store submission.
+
+
+## Development tutorial — 2026-09-09
+
+Branch `codex/onboarding-tutorial` adds the guide after the submitted Play 1.1.0 / code 9 candidate. It has not been merged into main or submitted to a store. No physical device was connected.
+
+- Android emulator Pixel 9 / API 37: first-launch display, forward/back pages, skip and completion persistence, system Back, activity recreation at page 3, Settings replay with an uncommitted settings draft, and camera recovery passed (`DeviceChecks`, action `tutorial`).
+- With camera permission revoked, the guide remained the active readable window; the permission prompt appeared only after dismissal (`tutorial-permission`).
+- All five pages were visually reviewed in English, Japanese and Simplified Chinese at normal and 1.5× font scale. The body scrolls independently of navigation buttons. Screenshot checks wait for dialog transitions to settle.
+- `lint`, `test`, F-Droid debug / unsigned release, Play debug and instrumentation APK builds passed. Locale validation covers 395 strings; repository, release metadata and whitespace checks passed.
+- Tests use only the debug application ID. Existing version 8 artifacts, signed Play version 9 bundle, main branch and published tag remain unchanged. A future submission must allocate a new release version/code.

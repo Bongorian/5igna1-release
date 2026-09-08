@@ -380,4 +380,19 @@
     <string name="media_play">Play</string>
     <string name="media_gestures">Swipe sideways to browse · swipe down to close</string>
     <string name="media_preview_unavailable">Preview unavailable. Open this file in another app using ↗.</string>
+    <string name="tutorial_title">Quick start</string>
+    <string name="tutorial_skip">Skip</string>
+    <string name="tutorial_next">Next</string>
+    <string name="tutorial_done">Start shooting</string>
+    <string name="tutorial_progress">%1$d of %2$d</string>
+    <string name="tutorial_heading_0">Make a fault your own</string>
+    <string name="tutorial_body_0">5igna1 turns camera images into deliberate digital faults. Start with a photo, then shape the damage. This guide is always available in Settings.</string>
+    <string name="tutorial_heading_1">Shoot a photo or video</string>
+    <string name="tutorial_body_1">Choose PHOTO or VIDEO, then tap the large capture button. Tap again to stop a video. Use the format label to choose JPG or RAW; available formats depend on your camera. Light, location and recording audio are controlled at the top.</string>
+    <string name="tutorial_heading_2">Build your FAULT chain</string>
+    <string name="tutorial_body_2">Tap + below the preview to select and combine faults. Tap a selected fault to adjust its controls. Apply keeps editor changes; Back discards them. The LEVEL slider changes overall strength immediately. The shuffle icon tries a new random chain.</string>
+    <string name="tutorial_heading_3">Let faults react with LIVE</string>
+    <string name="tutorial_body_3">Enable LIVE for variation over time and reactions to enabled inputs such as motion and sound. PAUSE freezes the variation; TRIGGER triggers a burst. Microphone access is requested when audio reaction needs it. RAW previews are approximations of the saved result.</string>
+    <string name="tutorial_heading_4">Review what you saved</string>
+    <string name="tutorial_body_4">Tap the thumbnail to open saved photos and videos. Swipe left or right to browse, pinch photos to zoom, and use playback controls for video. Swipe down to return to the camera. Settings also contains this guide, capture options and language.</string>
 </resources>
