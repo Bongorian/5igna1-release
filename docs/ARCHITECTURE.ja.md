@@ -1,0 +1,15 @@
+# 内部設計
+
+[English](ARCHITECTURE.md) · [現状調査と移行設計](design/FAULT_SYSTEM.ja.md)
+
+Effectsが13 FAULT・8地点・操作項目・適用順・RAW対応を管理します。EffectParametersはFAULTごとに項目数が異なる名前付き操作値と64bit個体seedを保持します。EffectStateは不変の選択経路です。LEVELを各故障機構へ変換し、共通strengthの物理制約を設けません。
+
+FaultModelはカメラフレームごとに一度だけ時間を進めます。FaultNodeにIDENTITY・MOTION・EVENTと名前付き機構パラメータを固定し、読み取りで再抽選しません。構造・drift・事故の乱数領域は独立しています。LIVEは既存の端末入力取得を結合するだけで、固有の時間変化は各FAULT自身が持ちます。
+
+GlitchEngineは実ソース解像度で一度処理し、表示とエンコーダーに同じSignalBufferを渡します。FrameHistoryの3枠で表示待ち／表示済み画像を保持し、TextureViewが受け取った表示時刻tokenを確認し、対応する元のcamera timestampを保持します。カメラとEGLの時計の一致は仮定しません。シャッターはGLキューに送る前に対象枠を予約するため、後続フレームが上書きできません。画面が遅れる場合は表示更新を待ち、録画用scratchは独立して同じ時間進行を記録できます。
+
+JPEGは予約した画像を読み出して保存し、EXIFへ時刻・FAULT状態を記録します。別露光の再処理はしません。編集はドラフト／適用／キャンセルを維持し、録画中のドラフト開始を防ぎます。調整中に音量キーで撮る場合は、見えているドラフトの画像を保存します。
+
+RawGlitchは同じFaultNodeのRAW16アダプターです。DNGは別露光であり、RGBプレビューと同一とはしません。原本RAW動画の有界キューや保存処理は維持します。Frame.through(Point)で途中信号記録のための因果順prefixを表します。
+
+旧FAULT設定だけを新スキーマへ初期化し、撮影設定・言語・位置情報・アプリIDは保持します。全コア機能をsrc/mainに置き、依存追加はありません。[検証](VALIDATION.md)

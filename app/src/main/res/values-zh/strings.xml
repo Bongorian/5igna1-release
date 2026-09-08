@@ -5,8 +5,8 @@
     <string name="ui_open_the_last_saved_photo" formatted="false">"打开最近保存的照片"</string>
     <string name="ui_open_the_last_saved_raw_video_zip" formatted="false">"打开最近保存的 RAW 视频 ZIP"</string>
     <string name="ui_select_an_option_then_apply" formatted="false">"选择后应用"</string>
-    <string name="ui_photo_full_resolution" formatted="false">"照片 · 全分辨率"</string>
-    <string name="ui_processed_jpeg" formatted="false">"处理后的 JPEG"</string>
+    <string name="ui_photo_full_resolution" formatted="false">"照片 · 信号记录"</string>
+    <string name="ui_processed_jpeg" formatted="false">"JPEG · 已显示信号"</string>
     <string name="ui_raw_dng_original" formatted="false">"RAW / DNG 原片"</string>
     <string name="ui_raw_dng_sensor_processing" formatted="false">"RAW / DNG 传感器数据处理"</string>
     <string name="ui_save_format" formatted="false">"保存格式"</string>
@@ -73,10 +73,10 @@
     <string name="ui_camera_preview_tap_to_focus" formatted="false">"相机预览。轻触对焦。"</string>
     <string name="ui_adjust" formatted="false">"调整"</string>
     <string name="ui_chain" formatted="false">"＋ 链"</string>
-    <string name="ui_live_fault_current_chain" formatted="false">"LIVE FAULT · 当前效果链"</string>
-    <string name="ui_strength" formatted="false">"强度"</string>
-    <string name="ui_random" formatted="false">"随机"</string>
-    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"轻触随机选择效果，长按随机选择效果链。"</string>
+    <string name="ui_live_fault_current_chain" formatted="false">"FAULT STATE"</string>
+    <string name="ui_strength" formatted="false">"LEVEL"</string>
+    <string name="ui_random" formatted="false">"RESEED"</string>
+    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"重新生成所选故障的特征，保留路径和参数。"</string>
     <string name="ui_toggle_live_fault" formatted="false">"切换 LIVE FAULT"</string>
     <string name="ui_live_fault_settings" formatted="false">"LIVE FAULT 设置"</string>
     <string name="ui_photo" formatted="false">"照片"</string>
@@ -91,12 +91,9 @@
     <string name="ui_edits_discarded_because_the_capture_mode_changed" formatted="false">"拍摄模式已改变，调整已取消"</string>
     <string name="ui_original_sensor_data_no_effects" formatted="false">"传感器原始数据 / 不应用效果"</string>
     <string name="ui_raw_preview" formatted="false">"RAW 近似预览 / "</string>
-    <string name="ui_global_strength" formatted="false">"整体强度 "</string>
-    <string name="ui_effective_strength_per_stage" formatted="false">"%\n\n各阶段实际强度\n"</string>
     <string name="ui_stages" formatted="false">" 阶段 · "</string>
     <string name="ui_tap_to_view_the_full_chain" formatted="false">" · 轻触查看完整效果链"</string>
     <string name="ui_original_raw_is_not_processed" formatted="false">"RAW 原片不进行处理"</string>
-    <string name="ui_stage_chain" formatted="false">" 阶段效果链"</string>
     <string name="ui_start_video_recording" formatted="false">"开始录制视频"</string>
     <string name="ui_video_is_unavailable_on_this_camera" formatted="false">"此相机不支持视频"</string>
     <string name="ui_apply_or_discard_your_edits_before_capturing" formatted="false">"拍摄前请应用或取消调整"</string>
@@ -154,70 +151,6 @@
     <string name="ui_acquiring_location_gps_reception_may_be_weak_indoors" formatted="false">"正在获取位置。室内 GPS 信号可能较弱，请在窗边或室外重新尝试。"</string>
     <string name="ui_no_location_service_is_available_check_your_device" formatted="false">"没有可用的定位服务，请检查设备的位置设置。"</string>
     <string name="ui_an_available_location_is_saved_in_photo_and" formatted="false">"\n\n获取到的位置会保存到照片和视频的位置标签中。未定位时不添加位置标签。"</string>
-    <string name="ui_capture_without_effects" formatted="false">"不应用效果拍摄。"</string>
-    <string name="ui_simulates_dead_pixels_columns_and_bright_pixels" formatted="false">"模拟坏点、坏列和亮点。"</string>
-    <string name="ui_simulates_exposure_bands_and_flicker" formatted="false">"模拟曝光条带与闪烁。"</string>
-    <string name="ui_shifts_image_rows_horizontally" formatted="false">"沿水平方向移动图像行。"</string>
-    <string name="ui_drops_rows_or_repeats_the_previous_row" formatted="false">"丢弃图像行或重复前一行。"</string>
-    <string name="ui_flips_pixel_bits_to_alter_color_and_tone" formatted="false">"翻转像素位以改变色彩与色阶。"</string>
-    <string name="ui_shifts_byte_positions_to_disrupt_color" formatted="false">"偏移字节位置以打乱色彩。"</string>
-    <string name="ui_shifts_cfa_data_locally_to_create_false_color" formatted="false">"局部偏移 CFA 数据以产生伪色。"</string>
-    <string name="ui_changes_the_bayer_phase_to_alter_color" formatted="false">"改变 Bayer 相位以改变色彩。"</string>
-    <string name="ui_simulates_demosaicing_errors_and_false_color_rgb_approximation" formatted="false">"模拟插值错误和伪色（RGB 近似）。"</string>
-    <string name="ui_offsets_rgb_channels_to_create_colored_edges" formatted="false">"偏移 RGB 通道以产生彩色边缘。"</string>
-    <string name="ui_remaps_colors_based_on_brightness" formatted="false">"根据亮度重新映射色彩。"</string>
-    <string name="ui_reduces_chroma_resolution_into_blocks" formatted="false">"降低色度分辨率以产生块状效果。"</string>
-    <string name="ui_disrupts_image_blocks_and_color_data" formatted="false">"打乱图像块的位置与色彩数据。"</string>
-    <string name="ui_drops_or_repeats_parts_of_the_image" formatted="false">"丢弃或重复部分图像。"</string>
-    <string name="ui_simulates_horizontal_jitter_color_shifts_and_tape_noise" formatted="false">"模拟水平抖动、色偏与磁带噪点。"</string>
-    <string name="ui_adds_scanlines_and_noise_to_a_green_display" formatted="false">"在绿色显示效果中添加扫描线与噪点。"</string>
-    <string name="ui_1f_s" formatted="false">"%.1f 秒"</string>
-    <string name="ui_2f_s" formatted="false">"%.2f 秒"</string>
-    <string name="ui_event_interval" formatted="false">"变化间隔"</string>
-    <string name="ui_occurrence_rate" formatted="false">"发生概率"</string>
-    <string name="ui_event_duration" formatted="false">"持续时间"</string>
-    <string name="ui_parameter_variation" formatted="false">"参数变化幅度"</string>
-    <string name="ui_smoothness" formatted="false">"平滑程度"</string>
-    <string name="ui_allow_chain_switching" formatted="false">"允许切换效果链"</string>
-    <string name="ui_keep_original_display_stages_vhs_terminal" formatted="false">"保留原显示阶段（VHS / TERMINAL）"</string>
-    <string name="ui_random_chain_size_total" formatted="false">"随机效果链数量（总数）"</string>
-    <string name="ui_minimum" formatted="false">"最小"</string>
-    <string name="ui_maximum" formatted="false">"最大"</string>
-    <string name="ui_minimum_stage_count" formatted="false">"最少阶段数"</string>
-    <string name="ui_maximum_stage_count" formatted="false">"最多阶段数"</string>
-    <string name="ui_more_stages_increase_processing_load_the_count_is" formatted="false">"阶段越多，处理负载越高。数量不会超过可用效果数，也不会少于保留的显示阶段数。只有原效果链包含 SENSOR FAIL 时，它才会进入候选。关闭显示阶段保留后，VHS / TERMINAL 也会重新随机选择。\n变化结束后恢复手动设置。LIVE FAULT 启动时默认关闭。"</string>
-    <string name="ui_live_fault_auto_variation" formatted="false">"LIVE FAULT / 自动变化"</string>
-    <string name="ui_varies_effects_at_the_chosen_interval_and_probability" formatted="false">"即使设备静止，也会按设定的间隔与概率改变效果。"</string>
-    <string name="ui_defect_shape_pixels_columns" formatted="false">"故障形状 · 点 → 列"</string>
-    <string name="ui_defect_value_dark_bright" formatted="false">"故障值 · 暗点 → 亮点"</string>
-    <string name="ui_band_density" formatted="false">"条带密度"</string>
-    <string name="ui_flow_speed" formatted="false">"流动速度"</string>
-    <string name="ui_row_band_height" formatted="false">"行条带高度"</string>
-    <string name="ui_shift_width" formatted="false">"偏移宽度"</string>
-    <string name="ui_dropped_or_repeated_band_height" formatted="false">"丢弃或重复条带的高度"</string>
-    <string name="ui_drop_repeat" formatted="false">"丢弃 → 重复"</string>
-    <string name="ui_bit_position_low_high" formatted="false">"翻转位 · 低位 → 高位"</string>
-    <string name="ui_block_size" formatted="false">"块大小"</string>
-    <string name="ui_data_shift_0_31_bytes" formatted="false">"数据偏移 · 0–31 字节"</string>
-    <string name="ui_tile_size" formatted="false">"图块大小"</string>
-    <string name="ui_phase_pattern" formatted="false">"相位模式"</string>
-    <string name="ui_cfa_phase_horizontal_vertical_both" formatted="false">"CFA 相位 · 水平 / 垂直 / 双向"</string>
-    <string name="ui_affected_area_size" formatted="false">"作用区域大小"</string>
-    <string name="ui_interpolation_error_scale" formatted="false">"插值错误尺度"</string>
-    <string name="ui_false_color_amount" formatted="false">"伪色强度"</string>
-    <string name="ui_shift_direction_horizontal_vertical" formatted="false">"偏移方向 · 水平 → 垂直"</string>
-    <string name="ui_tear_width" formatted="false">"撕裂宽度"</string>
-    <string name="ui_palette_period" formatted="false">"调色板周期"</string>
-    <string name="ui_hue_phase" formatted="false">"色相相位"</string>
-    <string name="ui_chroma_block_width" formatted="false">"色度块宽度"</string>
-    <string name="ui_vertical_coarseness" formatted="false">"垂直粗糙度"</string>
-    <string name="ui_color_data_corruption" formatted="false">"色彩数据损坏"</string>
-    <string name="ui_packet_size" formatted="false">"数据包大小"</string>
-    <string name="ui_missing_data_fill_black_repeat" formatted="false">"丢失数据填充 · 黑色 → 重复"</string>
-    <string name="ui_tracking_error" formatted="false">"磁带循迹偏差"</string>
-    <string name="ui_tape_noise" formatted="false">"磁带噪点"</string>
-    <string name="ui_scanline_density" formatted="false">"扫描线密度"</string>
-    <string name="ui_noise" formatted="false">"噪点"</string>
     <string name="ui_no_permission" formatted="false">"未授权"</string>
     <string name="ui_recorded_audio" formatted="false">"录制音频"</string>
     <string name="ui_unavailable_220" formatted="false">"不可用"</string>
@@ -232,25 +165,9 @@
     <string name="ui_readout_1f_ms" formatted="false">"读出 %.1f 毫秒"</string>
     <string name="ui_readout" formatted="false">"读出 —"</string>
     <string name="ui_clear_selection" formatted="false">"清除选择"</string>
-    <string name="ui_stage_strength" formatted="false">"阶段强度"</string>
     <string name="ui_reset" formatted="false">"恢复默认"</string>
-    <string name="ui_reseed" formatted="false">"更换分布 ↝"</string>
-    <string name="ui_effect_adjust" formatted="false">"EFFECT / 调整"</string>
-    <string name="ui_chain_effects" formatted="false">"CHAIN / 效果"</string>
-    <string name="ui_preview_applying_also_changes_the_recording" formatted="false">"预览 · 应用后也会影响录制"</string>
+    <string name="ui_reseed" formatted="false">"RESEED"</string>
     <string name="ui_preview_apply_to_save_back_to_discard" formatted="false">"预览 · 应用以保存，返回以取消"</string>
-    <string name="ui_off_enable_to_apply" formatted="false">"OFF · 开启后应用"</string>
-    <string name="ui_global_strength_is_0" formatted="false">"整体强度为 0%"</string>
-    <string name="ui_this_stage_has_0_strength" formatted="false">"此阶段强度为 0%"</string>
-    <string name="ui_shift_is_0_rows_stay_in_place" formatted="false">"偏移宽度为 0% · 行位置不变"</string>
-    <string name="ui_0_bytes_data_positions_stay_unchanged" formatted="false">"0 字节 · 数据位置不变"</string>
-    <string name="ui_false_color_is_0_no_interpolation_error_applied" formatted="false">"伪色强度为 0% · 不应用插值错误"</string>
-    <string name="ui_adjust_while_watching_the_preview" formatted="false">"观看预览并调整"</string>
-    <string name="ui_horizontal" formatted="false">"水平"</string>
-    <string name="ui_vertical" formatted="false">"垂直"</string>
-    <string name="ui_diagonal" formatted="false">"斜向"</string>
-    <string name="ui_low" formatted="false">" · 低位"</string>
-    <string name="ui_high" formatted="false">" · 高位"</string>
     <string name="ui_back" formatted="false">"返回"</string>
     <string name="ui_apply" formatted="false">"应用"</string>
     <string name="ui_frames_dropped_253" formatted="false">" 帧 / 丢帧 "</string>
@@ -279,7 +196,6 @@
     <string name="ui_retrying_with_a_compatible_lower_resolution" formatted="false">"正在使用兼容的较低分辨率重试…"</string>
     <string name="ui_could_not_reconfigure_the_camera" formatted="false">"无法重新配置相机"</string>
     <string name="ui_could_not_apply_camera_settings" formatted="false">"无法应用相机设置"</string>
-    <string name="ui_automatic_variation_0f" formatted="false">"自动变化 %.0f%%"</string>
     <string name="ui_image_processing_error" formatted="false">"图像处理错误"</string>
     <string name="ui_capturing_at_full_resolution" formatted="false">"正在以全分辨率拍摄…"</string>
     <string name="ui_could_not_capture_the_photo_try_lower_settings" formatted="false">"无法拍摄照片，请降低设置。"</string>
@@ -287,7 +203,7 @@
     <string name="ui_could_not_capture" formatted="false">"无法拍摄"</string>
     <string name="ui_could_not_read_raw_frames" formatted="false">"无法读取 RAW 帧"</string>
     <string name="ui_could_not_read_capture_data" formatted="false">"无法读取拍摄数据"</string>
-    <string name="ui_saving_full_resolution_effects" formatted="false">"正在保存全分辨率效果…"</string>
+    <string name="ui_saving_full_resolution_effects" formatted="false">"正在保存已显示信号…"</string>
     <string name="ui_saving_raw_data" formatted="false">"正在保存 RAW 数据…"</string>
     <string name="ui_no_location_fix_saved_without_gps" formatted="false">"未定位，已保存但不含 GPS。"</string>
     <string name="ui_could_not_save_the_photo" formatted="false">"无法保存照片"</string>
@@ -308,4 +224,69 @@
     <string name="language_summary">"语言"</string>
     <string name="camera_settings_unavailable">"允许使用相机后可显示拍摄设置。您可以在此更改应用语言。"</string>
     <string name="ui_open_source_licenses">"开源许可证"</string>
+    <string name="fault_points" formatted="false">"FAULT POINTS"</string>
+    <string name="fault_live_title" formatted="false">"LIVE FAULT · 设备联动"</string>
+    <string name="fault_live_description" formatted="false">"每种故障保持自身特征和时间变化。LIVE将设备状态接入故障系统，不可用的输入不产生影响。"</string>
+    <string name="fault_motion" formatted="false">"运动 → 读出 / 磁带循迹"</string>
+    <string name="fault_timing" formatted="false">"相机时序 → 曝光 / 读出"</string>
+    <string name="fault_thermal" formatted="false">"温度状态 → 传感器活动"</string>
+    <string name="fault_cpu" formatted="false">"处理压力 → 数据 / 视频流故障"</string>
+    <string name="fault_audio" formatted="false">"音量 → 磁带时基"</string>
+    <string name="fault_sensitivity" formatted="false">"设备联动灵敏度"</string>
+    <string name="fault_mains_60" formatted="false">"照明电源频率 60 Hz（关闭：50 Hz）"</string>
+    <string name="fault_incident" formatted="false">"瞬时故障"</string>
+    <string name="fault_edit_after_recording" formatted="false">"停止录制后可预览故障调整。"</string>
+    <string name="fault_capture_signal" formatted="false">"正在保存已显示的信号…"</string>
+    <string name="fault_signal_photo_note" formatted="false">"JPEG以所选实时分辨率保存已显示的相机信号。RAW来自另一次传感器曝光，RGB预览为近似效果。"</string>
+    <string name="fault_live_resolution" formatted="false">"标准实时信号（最高2 MP）"</string>
+    <string name="fault_live_max" formatted="false">"支持的最大实时信号"</string>
+    <string name="fault_recording_draft" formatted="false">"请先应用或取消调整，再开始录制。"</string>
+    <string name="fault_control_density" formatted="false">"坏点密度"</string>
+    <string name="fault_control_hot" formatted="false">"暗点 → 亮点"</string>
+    <string name="fault_control_columns" formatted="false">"列故障"</string>
+    <string name="fault_control_depth" formatted="false">"曝光损失"</string>
+    <string name="fault_control_rate" formatted="false">"曝光相位速度"</string>
+    <string name="fault_control_bands" formatted="false">"条带大小"</string>
+    <string name="fault_control_displacement" formatted="false">"读出偏移"</string>
+    <string name="fault_control_loss" formatted="false">"丢失故障"</string>
+    <string name="fault_control_concealment" formatted="false">"黑色 → 已采集样本复用"</string>
+    <string name="fault_control_activity" formatted="false">"故障活动量"</string>
+    <string name="fault_control_bit" formatted="false">"位位置：低 → 高"</string>
+    <string name="fault_control_burst_size" formatted="false">"突发区域"</string>
+    <string name="fault_control_offset" formatted="false">"字节地址偏移"</string>
+    <string name="fault_control_region" formatted="false">"故障区域大小"</string>
+    <string name="fault_control_coverage" formatted="false">"影响范围"</string>
+    <string name="fault_control_phase" formatted="false">"CFA相位：横 → 纵 → 双向"</string>
+    <string name="fault_control_interpolation" formatted="false">"错误邻点插值"</string>
+    <string name="fault_control_sampling" formatted="false">"采样粗糙度"</string>
+    <string name="fault_control_separation" formatted="false">"色度偏移"</string>
+    <string name="fault_control_direction" formatted="false">"色度方向"</string>
+    <string name="fault_control_palette" formatted="false">"调色板相位"</string>
+    <string name="fault_control_cycles" formatted="false">"调色板周期"</string>
+    <string name="fault_control_mix" formatted="false">"色彩映射混合"</string>
+    <string name="fault_control_quantization" formatted="false">"量化损失"</string>
+    <string name="fault_control_block_size" formatted="false">"块大小"</string>
+    <string name="fault_control_misaddress" formatted="false">"块地址误读"</string>
+    <string name="fault_control_bandwidth" formatted="false">"磁带带宽损失 · 媒体特性"</string>
+    <string name="fault_control_tracking" formatted="false">"循迹不稳定 · 故障"</string>
+    <string name="fault_control_dropout" formatted="false">"磁带信号丢失 · 故障"</string>
+    <string name="fault_control_noise" formatted="false">"磁带噪声 · 故障"</string>
+    <string name="fault_control_scan" formatted="false">"扫描线 · 显示特性"</string>
+    <string name="fault_control_phosphor" formatted="false">"彩色 → 绿色荧光 · 显示特性"</string>
+    <string name="fault_control_convergence" formatted="false">"会聚偏移 · 故障"</string>
+    <string name="fault_control_sync" formatted="false">"同步漂移 · 故障"</string>
+    <string name="fault_description_0" formatted="false">"无故障。相机信号。"</string>
+    <string name="fault_description_1" formatted="false">"固定暗点、亮点和故障列，活动量可变化。"</string>
+    <string name="fault_description_2" formatted="false">"行曝光损失与移动曝光相位。"</string>
+    <string name="fault_description_3" formatted="false">"脆弱读出条带、偏移与短暂行丢失。"</string>
+    <string name="fault_description_4" formatted="false">"已采集分量的位翻转与突发错误。"</string>
+    <string name="fault_description_5" formatted="false">"字节错位与分量、地址误读。"</string>
+    <string name="fault_description_6" formatted="false">"Bayer相位误读；RGB路径使用合成马赛克近似。"</string>
+    <string name="fault_description_7" formatted="false">"对相机RGB重建马赛克，以错误邻点插值。"</string>
+    <string name="fault_description_8" formatted="false">"色度偏移与粗色度采样。"</string>
+    <string name="fault_description_9" formatted="false">"将相机亮度映射为伪彩色。"</string>
+    <string name="fault_description_10" formatted="false">"解码图像的块量化与地址错误模型。"</string>
+    <string name="fault_description_11" formatted="false">"解码区域丢失与复用模型，不修改实际数据包。"</string>
+    <string name="fault_description_12" formatted="false">"磁带响应特性，以及循迹、滑移和信号丢失。"</string>
+    <string name="fault_description_13" formatted="false">"扫描、荧光显示特性，以及会聚和同步故障。"</string>
 </resources>

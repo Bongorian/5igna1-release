@@ -6,5 +6,6 @@ import org.junit.Test;
 public final class CoreBehaviorTest {
     @Test public void immutableStateAndRawRows() { EffectStateCheck.main(new String[0]); }
     @Test public void pipelineFixtures() { PipelineCheck.main(new String[0]); }
+    @Test public void displayedFrameCapture() { FrameHistoryCheck.main(new String[0]); }
     @Test public void liveFaultBehavior() { FaultModelCheck.main(new String[0]); }
 }

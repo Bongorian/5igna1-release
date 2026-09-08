@@ -10,13 +10,13 @@ Allow camera access in Android's app permissions. Close another app that may be 
 
 ## An effect does nothing
 
-Check that you are not in CLEAN or original RAW. In a chain, the stage must be enabled and both its strength and the overall strength must be above zero. Some controls also have a no-change value, such as a DATA SHIFT offset of 0 bytes. The adjustment screen explains inactive stages.
+Check that you are not in CLEAN or original RAW. In a chain, the stage must be enabled and LEVEL and its relevant fault controls must be above zero. Some controls also have a no-change value, such as a ADDRESS ERROR offset of 0 bytes. STREAM ERROR can be quiet between incidents.
 
 Choose **Apply** to keep an edit. Back, tapping outside, or leaving the app cancels the previewed changes.
 
 ## An effect disappears when I change modes
 
-PACKET LOSS is video-only. Processed RAW supports eight sensor/data/CFA effects. Switching modes removes incompatible stages, and returning does not automatically restore them. Per-effect adjustment values are remembered separately.
+STREAM ERROR is available for both photos and videos. Processed RAW supports six sensor/readout/data/CFA faults. Switching modes removes incompatible stages, and returning does not automatically restore them. Per-effect adjustment values are remembered separately.
 
 ## RAW is unavailable
 
@@ -42,7 +42,7 @@ Keep 5igna1 in the foreground with the screen on. Check free space, reduce resol
 
 ## LIVE FAULT does not react to sound or movement
 
-LIVE FAULT uses internal randomness and time, not microphone or motion input. It starts off each time the app launches. Make sure it is on, the probability and change amount are above zero, and the selected mode allows processing. CLEAN, original RAW, and RAW video bypass it.
+LIVE couples measured input to the selected faults. Turn it on, enable the relevant source and choose a fault that uses it (motion for ROW ERROR, audio for VHS). Audio needs microphone permission; unavailable sensors contribute no input. Intrinsic fault motion continues even with LIVE off. CLEAN and original RAW taps bypass fault processing.
 
 ## Android says the app cannot be installed or updated
 

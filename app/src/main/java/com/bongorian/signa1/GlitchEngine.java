@@ -36,15 +36,21 @@ final class GlitchEngine {
     SurfaceTexture cameraTexture;Surface cameraSurface,displaySurface,encoderSurface;ImageReader stillReader;
     EGLDisplay display=EGL14.EGL_NO_DISPLAY;EGLContext eglContext=EGL14.EGL_NO_CONTEXT;
     EGLSurface window=EGL14.EGL_NO_SURFACE,encoder=EGL14.EGL_NO_SURFACE;EGLConfig eglConfig;
-    EffectChain previewChain,recordChain;
+    EffectChain previewChain,blitChain;
+    final FrameHistory<SignalBuffer> presentedFrames=new FrameHistory<>(3,SignalBuffer::new);
+    final SignalBuffer encoderScratch=new SignalBuffer();
+    final EffectState.Frame cleanFrame=EffectState.defaults().snapshot(true,0);
+    static final float[] IDENTITY={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
+    int signalW,signalH;
+    final LinkedHashMap<Long,TotalCaptureResult> signalMetadata=new LinkedHashMap<>();
     final FaultModel faults=new FaultModel();final FaultInputs faultInputs;
     FaultConfig faultConfig=FaultConfig.defaults();boolean recorderAudio;
     volatile String faultStatus="LIVE FAULT OFF";
     long faultUiNs,liveUiNs;int liveUiMask=-1;
-    void setFaultConfig(FaultConfig next){gl.post(()->{faultConfig=next;faults.reset();faultInputs.configure(next,attached,recorderAudio);});}
-    EffectState.Frame faultFrame(EffectState state){EffectState.Frame frame=faults.apply(rawVideoMode()?state.snapshot(false,1):state.snapshot(videoMode,settings.photoFormat),faultConfig,seconds(),Effects.choices(videoMode,!videoMode&&settings.photoFormat==2));int[] ids=java.util.Arrays.stream(frame.ids).filter(id->Effects.available(id,videoMode,!videoMode&&settings.photoFormat==2)).toArray();return new EffectState.Frame(ids,frame.amount,frame.parameters,frame.live,frame.time);}
+    void setFaultConfig(FaultConfig next){gl.post(()->{faultConfig=next;faultInputs.configure(next,attached,recorderAudio);});}
+    EffectState.Frame faultFrame(EffectState state){return faults.apply(rawVideoMode()?state.snapshot(false,1):state.snapshot(videoMode,settings.photoFormat),faultConfig);}
     final CameraCaptureSession.CaptureCallback timingCallback=new CameraCaptureSession.CaptureCallback(){
-        @Override public void onCaptureCompleted(CameraCaptureSession s,CaptureRequest r,TotalCaptureResult result){if(s==session){faultInputs.capture(result);if(rawRecorder!=null)rawRecorder.result(result);if(rawProbe!=null)rawProbe.result(result);}}
+        @Override public void onCaptureCompleted(CameraCaptureSession s,CaptureRequest r,TotalCaptureResult result){if(s==session){faultInputs.capture(result);Long ns=result.get(CaptureResult.SENSOR_TIMESTAMP);if(ns!=null){signalMetadata.put(ns,result);while(signalMetadata.size()>16)signalMetadata.remove(signalMetadata.keySet().iterator().next());}if(rawRecorder!=null)rawRecorder.result(result);if(rawProbe!=null)rawProbe.result(result);}}
     };
     private EffectState effectState=EffectState.defaults(),previewEffects;
     private final java.util.concurrent.atomic.AtomicLong configRevision=new java.util.concurrent.atomic.AtomicLong();
@@ -105,8 +111,9 @@ final class GlitchEngine {
             if(rawVideoMode()||(!videoMode&&settings.photoFormat!=0))zoom=1;
             if(settings.rawVideo&&!options.rawVideoAvailable()){settings.rawVideo=false;status(context.getString(R.string.ui_raw_video_is_unavailable_on_this_camera));}
             rawVideoChoice=options.rawVideo(settings);photoChoice=options.photo(settings);videoChoice=rawVideoMode()&&rawVideoChoice!=null?new CameraOptions.Video(rawVideoChoice.size,Math.min(settings.rawVideoFps,rawVideoChoice.maxFps),false):options.video(settings);if(videoMode?videoChoice==null:photoChoice==null)throw new IllegalStateException("No supported output");
-            Size stream=rawVideoMode()?options.previewFor(new CameraOptions.Photo(rawVideoChoice.size,false)):videoMode?videoChoice.size:options.previewFor(photoChoice);
-            if(sessionFallback&&!videoMode)for(Size candidate:options.map.getOutputSizes(SurfaceTexture.class))if(CameraOptions.area(candidate)<CameraOptions.area(stream))stream=candidate;Size output=videoMode?videoChoice.size:photoChoice.size;
+            Size stream=rawVideoMode()?options.previewFor(new CameraOptions.Photo(rawVideoChoice.size,false)):videoMode?videoChoice.size:settings.photoFormat==0?photoChoice.size:options.previewFor(photoChoice);
+            if(sessionFallback&&!videoMode)for(Size candidate:options.map.getOutputSizes(SurfaceTexture.class))if(CameraOptions.area(candidate)<CameraOptions.area(stream))stream=candidate;Size output=videoMode?videoChoice.size:settings.photoFormat==0?stream:photoChoice.size;
+            signalW=stream.getHeight();signalH=stream.getWidth();
             outW=output.getHeight();outH=output.getWidth();cameraTexture.setDefaultBufferSize(stream.getWidth(),stream.getHeight());
             Float mz=characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM);maxZoom=mz==null?1:Math.min(4,mz);
             settings.save(context.getSharedPreferences("signal",0));
@@ -124,7 +131,7 @@ final class GlitchEngine {
     void createSession(CameraDevice c,int ticket){try{
         cameraSurface=new Surface(cameraTexture);List<Surface> surfaces=new ArrayList<>();surfaces.add(cameraSurface);
         if(rawVideoMode()){rawFrameSeen=false;rawReader=ImageReader.newInstance(rawVideoChoice.size.getWidth(),rawVideoChoice.size.getHeight(),ImageFormat.RAW_SENSOR,3);rawReader.setOnImageAvailableListener(reader->rawImage(reader,ticket),gl);surfaces.add(rawReader.getSurface());}
-        if(!videoMode){int format=settings.photoFormat==0?ImageFormat.JPEG:ImageFormat.RAW_SENSOR;stillReader=ImageReader.newInstance(photoChoice.size.getWidth(),photoChoice.size.getHeight(),format,2);stillReader.setOnImageAvailableListener(reader->imageAvailable(reader,ticket),gl);surfaces.add(stillReader.getSurface());}
+        if(!videoMode&&settings.photoFormat!=0){int format=ImageFormat.RAW_SENSOR;stillReader=ImageReader.newInstance(photoChoice.size.getWidth(),photoChoice.size.getHeight(),format,2);stillReader.setOnImageAvailableListener(reader->imageAvailable(reader,ticket),gl);surfaces.add(stillReader.getSurface());}
         CameraCaptureSession.StateCallback callback=new CameraCaptureSession.StateCallback(){
             public void onConfigured(CameraCaptureSession s){if(ticket!=generation||camera!=c){s.close();return;}session=s;try{request=c.createCaptureRequest(videoMode?CameraDevice.TEMPLATE_RECORD:CameraDevice.TEMPLATE_PREVIEW);request.addTarget(cameraSurface);if(rawVideoMode()&&rawReader!=null){request.addTarget(rawReader.getSurface());int[] shading=characteristics.get(CameraCharacteristics.STATISTICS_INFO_AVAILABLE_LENS_SHADING_MAP_MODES);if(shading!=null)for(int mode:shading)if(mode==CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE_ON)request.set(CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE,mode);rawProbe=new RawVideoRecorder(GlitchEngine.this,true);}updateRequest();if(rawVideoMode())gl.postDelayed(()->{if(ticket==generation&&!rawFrameSeen)failRawSession(context.getString(R.string.ui_could_not_receive_continuous_raw_frames));},8000);}catch(Exception e){error(context.getString(R.string.ui_could_not_configure_the_preview),e);}}
             public void onConfigureFailed(CameraCaptureSession s){s.close();if(ticket==generation)recoverSession();}
@@ -167,40 +174,78 @@ final class GlitchEngine {
     void initGl(SurfaceTexture target)throws IOException{
         display=EglLease.acquire();int[] attrs={EGL14.EGL_RED_SIZE,8,EGL14.EGL_GREEN_SIZE,8,EGL14.EGL_BLUE_SIZE,8,EGL14.EGL_ALPHA_SIZE,8,EGL14.EGL_RENDERABLE_TYPE,EGL14.EGL_OPENGL_ES2_BIT,EGL14.EGL_SURFACE_TYPE,EGL14.EGL_WINDOW_BIT,0x3142,1,EGL14.EGL_NONE};EGLConfig[] configs=new EGLConfig[1];int[] n=new int[1];
         if(!EGL14.eglChooseConfig(display,attrs,0,configs,0,1,n,0)||n[0]==0)throw new IllegalStateException("EGL config");eglConfig=configs[0];eglContext=EGL14.eglCreateContext(display,eglConfig,EGL14.EGL_NO_CONTEXT,new int[]{EGL14.EGL_CONTEXT_CLIENT_VERSION,2,EGL14.EGL_NONE},0);displaySurface=new Surface(target);window=windowFor(displaySurface);current(window);
-        String shader=PhotoRenderer.shaderSource(context);previewChain=new EffectChain(shader,true);recordChain=new EffectChain(shader,true);
+        String shader=PhotoRenderer.shaderSource(context);previewChain=new EffectChain(shader,true);blitChain=new EffectChain(shader,false);
         GLES20.glGetIntegerv(GLES20.GL_MAX_TEXTURE_SIZE,n,0);maxTexture=n[0];Log.i("Signal","GPU="+GLES20.glGetString(GLES20.GL_RENDERER)+" maxTexture="+maxTexture);initCameraTexture();
     }
     void initCameraTexture(){int[] ids=new int[1];GLES20.glGenTextures(1,ids,0);texture=ids[0];GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,texture);GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,GLES20.GL_TEXTURE_MIN_FILTER,GLES20.GL_LINEAR);GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,GLES20.GL_TEXTURE_MAG_FILTER,GLES20.GL_LINEAR);GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_CLAMP_TO_EDGE);GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);cameraTexture=new SurfaceTexture(texture);cameraTexture.setOnFrameAvailableListener(st->{if(st==cameraTexture)frame();},gl);}
     EGLSurface windowFor(Surface surface){EGLSurface s=EGL14.eglCreateWindowSurface(display,eglConfig,surface,new int[]{EGL14.EGL_NONE},0);if(s==EGL14.EGL_NO_SURFACE)throw new IllegalStateException("EGL surface "+EGL14.eglGetError());return s;}
     void current(EGLSurface surface){if(!EGL14.eglMakeCurrent(display,surface,surface,eglContext))throw new IllegalStateException("EGL current");}
-    float seconds(){return(lastFrameNs%1000000000000L)/1e9f;}
-    void render(int w,int h,EffectState.Frame state){EffectChain chain=recording&&EGL14.eglGetCurrentSurface(EGL14.EGL_DRAW).equals(encoder)?recordChain:previewChain;chain.render(texture,true,matrix,state.ids,state.amount,Float.isNaN(state.time)?seconds():state.time,w,h,outW,outH,0,state.parameters,state.live);}
-
+    void blit(SignalBuffer signal,int w,int h){blitChain.render(signal.texture,false,IDENTITY,cleanFrame,w,h,signal.width,signal.height,0);}
+    void previewPresented(long timestamp){if(presentedFrames.acknowledge(timestamp))gl.post(()->{if(frameSeen&&!photoBusy)ready(!rawVideoMode()||rawFrameSeen);});}
     void frame(){if(!attached||cameraTexture==null||camera==null)return;try{
         current(window);cameraTexture.updateTexImage();cameraTexture.getTransformMatrix(matrix);long timestamp=cameraTexture.getTimestamp();if(timestamp<=lastFrameNs)return;lastFrameNs=timestamp;
         long arrival=SystemClock.elapsedRealtimeNanos();faults.advance(arrival*1e-9,faultInputs.frame(timestamp,arrival,recorder),faultConfig);
-        EffectState.Frame state=faultFrame(effectState);EffectState.Frame displayState=previewEffects==null?state:faultFrame(previewEffects);
-        int shownMask=0;for(int id:displayState.ids)shownMask|=1<<id;
-        if(shownMask!=liveUiMask||arrival-liveUiNs>150_000_000L){liveUiMask=shownMask;liveUiNs=arrival;long revision=appliedRevision;ui.post(()->{if(revision==configRevision.get())listener.liveFrame(displayState);});}
-        if(arrival-faultUiNs>500_000_000L){faultUiNs=arrival;faultStatus=faultConfig.enabled?(faultConfig.internal?String.format(Locale.US,context.getString(R.string.ui_automatic_variation_0f),faults.envelope*100):faultInputs.summary()):"LIVE FAULT OFF";}
-        // Present the preview at 30fps; reserve GPU and encoder throughput for every captured frame.
-        if(lastFrameNs-lastPreviewNs>=30_000_000L||!frameSeen){render(width,height,displayState);EGL14.eglSwapBuffers(display,window);lastPreviewNs=lastFrameNs;}
-        if(!frameSeen){frameSeen=true;ready(!photoBusy&&(!rawVideoMode()||rawFrameSeen));status("LIVE · "+description());fpsStart=lastFrameNs;frameCount=0;}
+        EffectState.Frame state=faultFrame(previewEffects==null?effectState:previewEffects);
+        boolean show=lastFrameNs-lastPreviewNs>=30_000_000L||!frameSeen;
+        if(show||recording&&!rawVideoMode()){
+            FrameHistory.Slot<SignalBuffer> slot=show?presentedFrames.acquire():null;
+            SignalBuffer rendered=slot==null?encoderScratch:slot.value;
+            if(slot!=null||recording&&!rawVideoMode()){
+                try{rendered.allocate(signalW,signalH);previewChain.render(texture,true,matrix,state,signalW,signalH,signalW,signalH,rendered.fbo);rendered.frame=state;}
+                catch(Exception failure){if(slot!=null)presentedFrames.abandon(slot);throw failure;}
+            }
+            if(slot!=null){
+                try{
+                    blit(rendered,width,height);rendered.presentedAt=System.currentTimeMillis();
+                    // Camera clocks may differ from EGL's monotonic clock. The presentation token
+                    // identifies this buffer; the immutable payload retains the original cameraNs.
+                    long presentationNs=System.nanoTime();presentedFrames.publish(slot,presentationNs);
+                    if(!EGLExt.eglPresentationTimeANDROID(display,window,presentationNs)||!EGL14.eglSwapBuffers(display,window))throw new IllegalStateException("Preview presentation");
+                }catch(Exception failure){presentedFrames.abandon(slot);throw failure;}
+                lastPreviewNs=lastFrameNs;
+                int shownMask=0;for(int id:state.ids())shownMask|=1<<id;
+                if(shownMask!=liveUiMask||arrival-liveUiNs>150_000_000L){liveUiMask=shownMask;liveUiNs=arrival;long revision=appliedRevision;ui.post(()->{if(revision==configRevision.get())listener.liveFrame(state);});}
+            }
+            if(recording&&!rawVideoMode()){
+                current(encoder);blit(rendered,outW,outH);
+                if(encoderTimeOffset==Long.MIN_VALUE)encoderTimeOffset=System.nanoTime()-lastFrameNs;
+                EGLExt.eglPresentationTimeANDROID(display,encoder,lastFrameNs+encoderTimeOffset);
+                if(!EGL14.eglSwapBuffers(display,encoder))throw new IllegalStateException("Encoder surface");current(window);
+            }
+        }
+        if(arrival-faultUiNs>500_000_000L){faultUiNs=arrival;faultStatus=faultConfig.enabled?faultInputs.summary():"LIVE FAULT OFF";}
+        if(!frameSeen){frameSeen=true;ready(presentedFrames.acknowledged()>0&&!photoBusy&&(!rawVideoMode()||rawFrameSeen));status("LIVE · "+description());fpsStart=lastFrameNs;frameCount=0;}
         frameCount++;long elapsed=lastFrameNs-fpsStart;if(elapsed>=2_000_000_000L){float measured=frameCount*1e9f/elapsed;ui.post(()->listener.fps(measured));frameCount=0;fpsStart=lastFrameNs;}
-        if(recording&&!rawVideoMode()){current(encoder);render(outW,outH,state);if(encoderTimeOffset==Long.MIN_VALUE)encoderTimeOffset=System.nanoTime()-lastFrameNs;EGLExt.eglPresentationTimeANDROID(display,encoder,lastFrameNs+encoderTimeOffset);if(!EGL14.eglSwapBuffers(display,encoder))throw new IllegalStateException("Encoder surface");current(window);}
     }catch(Exception e){if(recording)stopVideo();error(context.getString(R.string.ui_image_processing_error),e);}}
     static final class PendingPhoto {
-        final CameraCharacteristics cameraInfo;final CaptureSettings settings;final CameraOptions.Photo choice;final int rotation;final int[] effects;final float[] parameters,live;final float power,time;final boolean front;final Location location;final long taken=System.currentTimeMillis();
-        byte[] bytes;TotalCaptureResult result;boolean dispatched;
-        PendingPhoto(GlitchEngine e){cameraInfo=e.characteristics;settings=new CaptureSettings(e.settings);choice=e.photoChoice;EffectState.Frame state=e.faultFrame(e.effectState);effects=state.ids;parameters=state.parameters;live=state.live;power=state.amount;time=state.time;front=e.front;rotation=e.sensorRotation;location=settings.location?e.position.get():null;}
-        String description(){return BuildConfig.APP_NAME+" "+BuildConfig.VERSION_NAME+" | "+(settings.photoFormat==1?"RAW ORIGINAL":Effects.chainName(effects)+" "+Math.round(power*100)+"%"+EffectParameters.describe(effects,parameters))+" | "+(settings.photoFormat==2?"RAW sensor samples modified":"Processed capture");}
+        final CameraCharacteristics cameraInfo;final CaptureSettings settings;final CameraOptions.Photo choice;
+        final int rotation;final EffectState.Frame frame;final boolean front;final Location location;final long taken;
+        byte[] bytes;Bitmap signal;TotalCaptureResult result;boolean dispatched;
+        PendingPhoto(GlitchEngine e,SignalBuffer displayed){cameraInfo=e.characteristics;settings=new CaptureSettings(e.settings);choice=e.photoChoice;
+            frame=displayed.frame;front=e.front;rotation=e.sensorRotation;location=settings.location?e.position.get():null;
+            taken=settings.photoFormat==0?displayed.presentedAt:System.currentTimeMillis();
+        }
+        String description(){return BuildConfig.APP_NAME+" "+BuildConfig.VERSION_NAME+" | "+(settings.photoFormat==1?"RAW ORIGINAL":Effects.chainName(frame.ids())+" | "+frame.describe())+" | "+(settings.photoFormat==0?"Displayed RGB signal":settings.photoFormat==1?"Separate RAW exposure":"Separate RAW exposure, latched fault state; RGB preview approximate");}
     }
-    void photo(){gl.post(()->{
-        if(!frameSeen||photoBusy||videoMode||stillReader==null)return;photoBusy=true;ready(false);PendingPhoto shot=new PendingPhoto(this);pending=shot;status(context.getString(R.string.ui_capturing_at_full_resolution));
-        try{CaptureRequest.Builder still=camera.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);still.addTarget(stillReader.getSurface());applyControls(still,true);still.set(CaptureRequest.JPEG_ORIENTATION,sensorRotation);still.set(CaptureRequest.JPEG_QUALITY,(byte)100);if(shot.location!=null)still.set(CaptureRequest.JPEG_GPS_LOCATION,shot.location);if(photoChoice.maximumPixelMode)still.set(CaptureRequest.SENSOR_PIXEL_MODE,CaptureRequest.SENSOR_PIXEL_MODE_MAXIMUM_RESOLUTION);
+    void photo(){photo(presentedFrames.acknowledged());}
+    void photo(long displayedTimestamp){
+        FrameHistory.Lease<SignalBuffer> lease=presentedFrames.reserve(displayedTimestamp);
+        gl.post(()->{
+        if(!frameSeen||photoBusy||videoMode||!presentedFrames.valid(lease)||(settings.photoFormat!=0&&stillReader==null)){presentedFrames.release(lease);ready(frameSeen&&!photoBusy&&presentedFrames.acknowledged()>0);return;}
+        photoBusy=true;ready(false);PendingPhoto shot=new PendingPhoto(this,lease.value);pending=shot;
+        try{
+            if(settings.photoFormat==0){
+                current(window);shot.signal=lease.value.read();shot.result=signalMetadata.get(shot.frame.cameraNs);
+                shot.dispatched=true;pending=null;status(context.getString(R.string.fault_capture_signal));files.execute(()->savePhoto(shot));return;
+            }
+            status(context.getString(R.string.ui_capturing_at_full_resolution));
+            CaptureRequest.Builder still=camera.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);still.addTarget(stillReader.getSurface());applyControls(still,true);
+            if(photoChoice.maximumPixelMode)still.set(CaptureRequest.SENSOR_PIXEL_MODE,CaptureRequest.SENSOR_PIXEL_MODE_MAXIMUM_RESOLUTION);
             session.capture(still.build(),new CameraCaptureSession.CaptureCallback(){public void onCaptureCompleted(CameraCaptureSession s,CaptureRequest r,TotalCaptureResult result){if(pending==shot){shot.result=result;dispatchPhoto(shot);}}public void onCaptureFailed(CameraCaptureSession s,CaptureRequest r,CaptureFailure failure){if(pending==shot){pending=null;photoBusy=false;ready(frameSeen);status(context.getString(R.string.ui_could_not_capture_the_photo_try_lower_settings));}}},gl);
             gl.postDelayed(()->{if(pending==shot&&!shot.dispatched){pending=null;photoBusy=false;ready(frameSeen);status(context.getString(R.string.ui_photo_capture_timed_out));}},20000);
-        }catch(Exception e){pending=null;photoBusy=false;ready(frameSeen);error(context.getString(R.string.ui_could_not_capture),e);}
+        }catch(Exception e){if(shot.signal!=null)shot.signal.recycle();pending=null;photoBusy=false;ready(frameSeen);error(context.getString(R.string.ui_could_not_capture),e);}
+        catch(OutOfMemoryError e){if(shot.signal!=null)shot.signal.recycle();pending=null;photoBusy=false;ready(frameSeen);status(context.getString(R.string.ui_not_enough_memory_to_process_the_photo_lower));}
+        finally{presentedFrames.release(lease);}
     });}
     void rawImage(ImageReader reader,int ticket){try(Image image=reader.acquireNextImage()){
         if(image==null||ticket!=generation)return;
@@ -215,10 +260,10 @@ final class GlitchEngine {
     void dispatchPhoto(PendingPhoto shot){if(shot.bytes==null||shot.result==null||shot.dispatched)return;shot.dispatched=true;pending=null;status(shot.settings.photoFormat==0?context.getString(R.string.ui_saving_full_resolution_effects):context.getString(R.string.ui_saving_raw_data));files.execute(()->savePhoto(shot));}
     void savePhoto(PendingPhoto shot){Uri uri=null;File temp=null;Bitmap bitmap=null;try{
         boolean raw=shot.settings.photoFormat!=0;int w,h;
-        if(!raw){bitmap=PhotoRenderer.render(context,shot.bytes,shot.front,shot.effects,shot.power,shot.time,shot.parameters,shot.live);w=bitmap.getWidth();h=bitmap.getHeight();temp=File.createTempFile("signal-photo-",".jpg",context.getCacheDir());try(OutputStream out=new FileOutputStream(temp)){if(!bitmap.compress(Bitmap.CompressFormat.JPEG,shot.settings.jpegQuality,out))throw new IOException("JPEG compress");}bitmap.recycle();bitmap=null;PhotoMetadata.write(temp,shot.bytes,shot.result,shot.taken,w,h,shot.location,shot.description());uri=createMedia("jpg",shot.taken);try(InputStream in=new FileInputStream(temp);OutputStream out=context.getContentResolver().openOutputStream(uri)){copy(in,out);}}
-        else{w=shot.choice.size.getWidth();h=shot.choice.size.getHeight();Integer white=shot.cameraInfo.get(CameraCharacteristics.SENSOR_INFO_WHITE_LEVEL);BlackLevelPattern blacks=shot.cameraInfo.get(CameraCharacteristics.SENSOR_BLACK_LEVEL_PATTERN);int black=blacks==null?0:blacks.getOffsetForIndex(0,0);byte[] data=shot.settings.photoFormat==2?RawGlitch.chain(shot.bytes,w,h,white==null?65535:white,black,shot.effects,shot.power,(int)(shot.time*1000),shot.parameters,shot.live):shot.bytes;
+        if(!raw){bitmap=shot.signal;shot.signal=null;w=bitmap.getWidth();h=bitmap.getHeight();temp=File.createTempFile("signal-photo-",".jpg",context.getCacheDir());try(OutputStream out=new FileOutputStream(temp)){if(!bitmap.compress(Bitmap.CompressFormat.JPEG,shot.settings.jpegQuality,out))throw new IOException("JPEG compress");}bitmap.recycle();bitmap=null;PhotoMetadata.write(temp,shot.bytes,shot.result,shot.taken,w,h,shot.location,shot.description());uri=createMedia("jpg",shot.taken);try(InputStream in=new FileInputStream(temp);OutputStream out=context.getContentResolver().openOutputStream(uri)){copy(in,out);}}
+        else{w=shot.choice.size.getWidth();h=shot.choice.size.getHeight();Integer white=shot.cameraInfo.get(CameraCharacteristics.SENSOR_INFO_WHITE_LEVEL);BlackLevelPattern blacks=shot.cameraInfo.get(CameraCharacteristics.SENSOR_BLACK_LEVEL_PATTERN);int black=blacks==null?0:blacks.getOffsetForIndex(0,0);byte[] data=shot.settings.photoFormat==2?RawGlitch.chain(shot.bytes,w,h,white==null?65535:white,black,shot.frame):shot.bytes;
             uri=createMedia("dng",shot.taken);try(DngCreator dng=new DngCreator(shot.cameraInfo,shot.result);OutputStream out=context.getContentResolver().openOutputStream(uri)){dng.setDescription(shot.description());dng.setOrientation(shot.front?(shot.rotation==270?5:7):(shot.rotation==90?6:shot.rotation==270?8:1));if(shot.location!=null)dng.setLocation(shot.location);ByteBuffer packed=ByteBuffer.allocateDirect(data.length).order(ByteOrder.nativeOrder());packed.put(data).flip();dng.writeByteBuffer(out,new Size(w,h),packed,0);}}
-        publish(uri,false,shot.taken);Log.i("Signal","Photo saved format="+(raw?"DNG":"JPEG")+" "+w+"x"+h+" GPS="+(shot.location!=null)+" effect="+Effects.chainName(shot.effects)+" power="+shot.power);
+        publish(uri,false,shot.taken);Log.i("Signal","Photo saved format="+(raw?"DNG":"JPEG")+" "+w+"x"+h+" GPS="+(shot.location!=null)+" effect="+Effects.chainName(shot.frame.ids())+" LEVEL="+shot.frame.amount);
         if(shot.settings.location&&shot.location==null)status(context.getString(R.string.ui_no_location_fix_saved_without_gps));
     }catch(Exception e){discard(uri);error(context.getString(R.string.ui_could_not_save_the_photo),e);}catch(OutOfMemoryError e){discard(uri);status(context.getString(R.string.ui_not_enough_memory_to_process_the_photo_lower));}
     finally{if(bitmap!=null)bitmap.recycle();if(temp!=null)temp.delete();gl.post(()->{photoBusy=false;ready(frameSeen&&attached);});}}
@@ -227,7 +272,8 @@ final class GlitchEngine {
     void publish(Uri uri,boolean video,long taken){ContentValues values=new ContentValues();values.put(MediaStore.MediaColumns.IS_PENDING,0);values.put(MediaStore.MediaColumns.DATE_TAKEN,taken);context.getContentResolver().update(uri,values,null,null);Log.i("Signal","Saved "+uri+" video="+video);ui.post(()->listener.saved(uri,video));}
     void discard(Uri uri){if(uri!=null)try{context.getContentResolver().delete(uri,null,null);}catch(Exception e){Log.w("Signal","Cleanup",e);}}
     void toggleVideo(boolean sound){gl.post(()->{if(recording)stopVideo();else startVideo(sound);});}
-    void startVideo(boolean sound){if(!frameSeen||!attached||recording||photoBusy||!videoMode)return;
+    void startVideo(boolean sound){
+        if(previewEffects!=null){status(context.getString(R.string.fault_recording_draft));ready(true);return;}if(!frameSeen||!attached||recording||photoBusy||!videoMode)return;
         if(rawVideoMode()){if(!rawFrameSeen||rawReader==null){status(context.getString(R.string.ui_checking_raw_output));ready(false);return;}rawRecorder=new RawVideoRecorder(this);recording=true;ready(true);ui.post(()->listener.recording(true));gl.post(storageWatch);return;}
         ready(false);try{
         if(sound){faultInputs.stopMic();recorderAudio=true;faultInputs.configure(faultConfig,attached,true);}
@@ -246,6 +292,6 @@ final class GlitchEngine {
         if(rawRecorder!=null){recording=false;photoBusy=true;gl.removeCallbacks(storageWatch);ready(false);RawVideoRecorder completed=rawRecorder;rawRecorder=null;completed.stop();ui.post(()->listener.recording(false));status(context.getString(R.string.ui_finalizing_raw_sequence));return;}
         recording=false;gl.removeCallbacks(storageWatch);ready(false);Uri result=videoUri;long taken=videoTaken;boolean ok=false;try{recorder.stop();ok=true;}catch(Exception e){error(context.getString(R.string.ui_recording_was_too_short_or_could_not_be),e);}finally{releaseRecorder();videoUri=null;ready(frameSeen&&attached);ui.post(()->listener.recording(false));}if(ok)try{publish(result,true,taken);}catch(Exception e){discard(result);error(context.getString(R.string.ui_could_not_save_the_video),e);}else discard(result);}
     void releaseRecorder(){if(display!=EGL14.EGL_NO_DISPLAY&&window!=EGL14.EGL_NO_SURFACE)current(window);if(encoder!=EGL14.EGL_NO_SURFACE){EGL14.eglDestroySurface(display,encoder);encoder=EGL14.EGL_NO_SURFACE;}if(encoderSurface!=null){encoderSurface.release();encoderSurface=null;}if(recorder!=null){recorder.release();recorder=null;}if(videoFd!=null){try{videoFd.close();}catch(IOException ignored){}videoFd=null;}if(nextFd!=null){try{nextFd.close();}catch(IOException ignored){}nextFd=null;}discard(nextUri);nextUri=null;recorderAudio=false;faultInputs.configure(faultConfig,attached,false);}
-    void closeCamera(){if(rawProbe!=null){rawProbe.stop();rawProbe=null;}rawFrameSeen=false;faultInputs.resetTiming();generation++;frameSeen=false;lastFrameNs=0;lastPreviewNs=0;ready(false);if(recording)stopVideo();if(pending!=null){pending=null;photoBusy=false;status(context.getString(R.string.ui_capture_cancelled_because_the_camera_closed_before_completion));}if(session!=null){session.close();session=null;}if(camera!=null){camera.close();camera=null;}if(cameraSurface!=null){cameraSurface.release();cameraSurface=null;}if(stillReader!=null){stillReader.close();stillReader=null;}if(rawReader!=null){rawReader.close();rawReader=null;}request=null;}
-    void close(){displayTarget=null;attached=false;closeCamera();faultInputs.stop();faults.reset();if(cameraTexture!=null){cameraTexture.setOnFrameAvailableListener(null);cameraTexture.release();cameraTexture=null;}if(display!=EGL14.EGL_NO_DISPLAY){EGL14.eglMakeCurrent(display,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_CONTEXT);if(window!=EGL14.EGL_NO_SURFACE)EGL14.eglDestroySurface(display,window);if(eglContext!=EGL14.EGL_NO_CONTEXT)EGL14.eglDestroyContext(display,eglContext);EglLease.release();EGL14.eglReleaseThread();}display=EGL14.EGL_NO_DISPLAY;window=EGL14.EGL_NO_SURFACE;eglContext=EGL14.EGL_NO_CONTEXT;if(displaySurface!=null){displaySurface.release();displaySurface=null;}}
+    void closeCamera(){if(rawProbe!=null){rawProbe.stop();rawProbe=null;}rawFrameSeen=false;faultInputs.resetTiming();generation++;presentedFrames.clear();encoderScratch.frame=null;signalMetadata.clear();frameSeen=false;lastFrameNs=0;lastPreviewNs=0;ready(false);if(recording)stopVideo();if(pending!=null){pending=null;photoBusy=false;status(context.getString(R.string.ui_capture_cancelled_because_the_camera_closed_before_completion));}if(session!=null){session.close();session=null;}if(camera!=null){camera.close();camera=null;}if(cameraSurface!=null){cameraSurface.release();cameraSurface=null;}if(stillReader!=null){stillReader.close();stillReader=null;}if(rawReader!=null){rawReader.close();rawReader=null;}request=null;}
+    void close(){displayTarget=null;attached=false;closeCamera();faultInputs.stop();faults.reset();if(cameraTexture!=null){cameraTexture.setOnFrameAvailableListener(null);cameraTexture.release();cameraTexture=null;}if(display!=EGL14.EGL_NO_DISPLAY){if(eglContext!=EGL14.EGL_NO_CONTEXT&&window!=EGL14.EGL_NO_SURFACE){current(window);for(SignalBuffer buffer:presentedFrames.values())buffer.release();encoderScratch.release();if(previewChain!=null)previewChain.release();if(blitChain!=null)blitChain.release();previewChain=blitChain=null;}EGL14.eglMakeCurrent(display,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_CONTEXT);if(window!=EGL14.EGL_NO_SURFACE)EGL14.eglDestroySurface(display,window);if(eglContext!=EGL14.EGL_NO_CONTEXT)EGL14.eglDestroyContext(display,eglContext);EglLease.release();EGL14.eglReleaseThread();}display=EGL14.EGL_NO_DISPLAY;window=EGL14.EGL_NO_SURFACE;eglContext=EGL14.EGL_NO_CONTEXT;if(displaySurface!=null){displaySurface.release();displaySurface=null;}}
 }

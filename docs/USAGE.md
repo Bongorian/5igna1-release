@@ -1,54 +1,19 @@
 # Controls reference
 
-[All guides](README.md) · [Quick start](GETTING_STARTED.md) · [日本語](USAGE.ja.md)
+[All guides](README.md) · [日本語](USAGE.ja.md)
 
-## Capture and camera controls
+Photo/Video changes capture mode. The center button or a volume key captures a photo or starts/stops recording. Tap the viewfinder to focus; swipe to select a single fault. Zoom offers 1×/2×; RAW uses 1×. The camera switch selects front/back, and the light is available where supported.
 
-Use Photo/Video to change capture mode. The center button or a volume key takes a photo or starts/stops recording. Tap the live image to focus; swipe left/right to select a single effect.
+CLEAN selects no faults. A single selection clears the multi-fault route. FAULT POINTS lets you choose several faults in causal signal order. LEVEL maps to their individual mechanisms. Each adjustment card has a small number of named controls; their count differs by fault.
 
-Digital zoom offers 1×/2×. RAW uses 1×. The bottom-right camera control switches front/back cameras, and a light is available where the camera supports it. Selecting a camera without RAW support returns the photo format to JPEG.
+The background previews a draft. Apply saves it; Back, outside dismissal or leaving the app cancels it. Reset restores that fault's controls while keeping its identity. RESEED changes the identities of selected faults while retaining their controls and route. There is no random chain switch. Draft editing is unavailable during recording; direct committed selections affect subsequent frames. A JPEG always captures the displayed image, including a visible draft if a hardware shutter is used.
 
-The top-right gear opens capture settings. Its first item selects the app language: follow device, Japanese, English, or Simplified Chinese. Unsupported device languages fall back to English. Applying a language change preserves capture settings, effects, and LIVE state.
+Time evolution belongs to each fault. LIVE optionally couples motion, audio, thermal, camera timing and processing pressure to that system. It starts off on cold launch. [LIVE settings](LIVE_FAULT.md).
 
-The bottom-left thumbnail opens the most recently saved item in an external viewer. DNG needs a RAW developer. Use your gallery or file app to browse older captures.
+The gear selects language, format, resolution, quality and optional GPS. JPEG saves the displayed signal at a supported live resolution (standard targets up to 2 MP; the largest offered signal is bounded to 8 MP). RAW original and processed DNG use separate exposures and may differ from the RGB preview. JPEG quality is 85/95/100. [Formats](FORMATS.md).
 
-## Effects and chains
+Normal MP4 recording uses H.264/H.265, device-supported resolution/fps, four quality levels and optional audio. Preview and encoder use the same processed images; the screen can present fewer frames than the encoder at high frame rates. MP4 splits around 3.5 GB and stops on low storage, camera interruption or leaving the foreground. Long multi-hour sessions are not validated. Experimental original RAW video saves silent DNG sequences in bounded queues and ZIP segments. [RAW video](RAW_VIDEO.md).
 
-CLEAN disables processing. Selecting a single effect, including by swiping, clears the chain.
+The bottom-left thumbnail opens the latest saved item in an external viewer. JPEG/DNG photos are in `Pictures/5igna1`, MP4 in `Movies/5igna1`, and RAW sequence ZIPs in `Download/5igna1`.
 
-The chain selector lets you enable several stages in a fixed processing order. Open the adjustment screen for each selected stage to change strength and its parameters. Opening an inactive stage's controls does not enable it.
-
-Effective stage strength is **overall strength × stage strength**. Both controls range from 0–100%. The adjustment screen explains when a stage is off or its effective strength is zero.
-
-## Previewing an edit
-
-While adjusting, the background shows a trial of your changes.
-
-- **Apply** commits and saves the edit. During recording, it affects subsequent recorded frames.
-- **Back, tapping outside, or leaving the app** cancels the edit and restores the committed state.
-- Photos and recorded frames use committed settings, not unconfirmed trial edits. Close the adjustment screen before taking a photo.
-- Reset restores that stage's defaults. Change placement updates the spatial pattern for effects that support it.
-
-Each stage remembers its adjustment values separately from whether it is selected. Mode changes remove incompatible stages, and switching back does not re-enable them automatically. Original RAW keeps settings but bypasses processing.
-
-## Random and LIVE FAULT
-
-Short-press Random for a single random effect. Long-press it for a 2–4-stage chain. These actions also vary parameters; overall strength is chosen between 35% and 85%.
-
-LIVE FAULT adds changes over time. It starts off, and its settings control interval, probability, duration, change amount, smoothing, and optional chain switching. Changes return to the manual state when they end or when you turn LIVE off. [Full LIVE FAULT guide](LIVE_FAULT.md)
-
-## Photo and video settings
-
-Photos can be processed JPEG, original DNG, or processed DNG. JPEG quality choices are 85/95/100. [Choosing a format](FORMATS.md)
-
-Normal video uses AVC/H.264 or HEVC/H.265, with device-supported resolutions and frame rates, four bitrate settings, and optional audio. There is no app-level total recording-duration limit, but recording depends on battery, heat, storage, and camera/OS interruptions. MP4 splits around 3.5 GB; recording stops below 256 MB free space or when the app leaves the foreground/screen turns off. Multi-hour recording has not been validated.
-
-RAW video is an experimental, original and silent DNG sequence saved in ZIP segments. It bypasses effects and LIVE FAULT. [RAW video](RAW_VIDEO.md)
-
-## Location and metadata
-
-GPS tagging starts off. Open GPS, enable capture location, and grant Android location permission. Approximate and precise permission both work. The interface distinguishes permission denied, location services off, acquiring a fix, and an available location. Refresh to request a new fix.
-
-Photos and videos use locations no older than two minutes; video uses the location at recording start. If no fix is available, capture proceeds without GPS. Photos also include metadata such as time, device model, exposure, ISO, focal length, and applied effects.
-
-The app has no Internet permission and requests neither background location nor access to your entire media library. OS location services, galleries, and backup services have their own behavior. [Privacy](PRIVACY.md)
+GPS starts off. Approximate and precise location are supported; if no recent fix is available, capture proceeds without GPS. JPEG records the displayed camera timestamp and fault snapshot in EXIF. Exposure/ISO fields are included only when the matching camera result is available. RAW has its own exposure metadata. There is no Internet permission, tracking or account registration. [Privacy](PRIVACY.md).

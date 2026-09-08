@@ -1,41 +1,19 @@
-# Choosing a format
+# Capture formats
 
-**Start with processed JPEG.** Choose DNG when you want to develop the sensor data yourself.
+[Guides](README.md) · [日本語](FORMATS.ja.md)
 
-[All guides](README.md) · [Controls reference](USAGE.md) · [日本語](FORMATS.ja.md)
+| Format | What is recorded | Relation to the viewfinder |
+|---|---|---|
+| JPEG | Last UI-acknowledged processed camera signal | Same acquired image and fault state, with JPEG compression |
+| MP4 | Interval of canonical processed camera images | Same state progression; display refresh may show fewer frames |
+| Original DNG | A separate camera RAW exposure | RGB viewfinder is an approximation; no fault processing |
+| Processed DNG | Separate RAW exposure with latched fault nodes | Same fault state, different signal/representation and exposure |
+| Experimental RAW video ZIP | Original, silent DNG sequence | Camera-timestamped RAW tap, not rendered RGB video |
 
-## Photographs
+For JPEG, the shutter pins the displayed texture before posting GL work. A later camera callback cannot replace it. A three-slot history retains UI-acknowledged and pending images; if presentation falls behind, it applies backpressure instead of overwriting a displayed image. JPEG is read once from the retained signal, not re-rendered from a future exposure. Its resolution is a supported live camera output: standard targets up to 2 MP, maximum choices are bounded to 8 MP for memory use. Large selections can reduce frame rate.
 
-| Format | Use it for | Effects | Open with |
-|---|---|---|---|
-| Processed JPEG | An image ready to view or share | 15 photo-compatible effects | A normal photo viewer |
-| Original RAW / DNG | Developing unmodified sensor data | Bypassed | A RAW developer |
-| Processed RAW / DNG | Developing sensor, data, or color-array faults | 8 stages, SENSOR FAIL through CFA OFFSET | A RAW developer |
+JPEG includes every selected point, including VHS and CRT. Quality is selectable at 85/95/100. Lossy JPEG and video encoding can change individual pixels; the captured source image/state is shared.
 
-RAW is available only on cameras that report support. Front and back cameras may differ. Switching to an unsupported camera returns to JPEG. RAW capture uses 1× zoom.
+Processed RAW supports PIXEL DAMAGE, EXPOSURE, ROW ERROR, BIT ERROR, ADDRESS ERROR and CFA ERROR. Other stages require reconstructed/component/media/display representations and are not written into Bayer DNG. RAW16 is not a privileged true image. Its developed appearance depends on the RAW developer and differs from the camera's RGB processing. The file description distinguishes the latched preview state from the separate RAW exposure timestamp.
 
-Processed RAW changes the samples in a DNG. Its preview is an approximation on an already processed RGB image, so the developed file can differ in color, orientation, and appearance. This release does not save JPEG plus RAW, or original plus processed RAW, in one capture.
-
-## Normal video
-
-Normal video is saved as **MP4**, with AVC/H.264 or HEVC/H.265. If your playback app cannot open HEVC, try AVC. Audio is optional; enabling it requires microphone permission.
-
-Choose from the resolutions and frame rates offered by the device. If playback or preview is slow, reduce resolution, frame rate, or the number of stages. Keep the app in the foreground with the screen on while recording.
-
-## Experimental RAW video
-
-Supported cameras can save original, silent DNG sequences as a ZIP. Effects and LIVE FAULT are bypassed. Extract the ZIP and use a RAW-compatible workflow to turn the sequence into video; a normal video player cannot play the ZIP directly.
-
-Frames may be dropped when processing or storage cannot keep up. Read [RAW video and its limits](RAW_VIDEO.md) before relying on it for a recording.
-
-## Where the files go
-
-| File | Folder |
-|---|---|
-| JPEG and DNG photos | `Pictures/5igna1` |
-| MP4 videos | `Movies/5igna1` |
-| RAW video ZIPs | `Download/5igna1` |
-
-The bottom-left thumbnail opens the last saved item. Use a gallery or file app for earlier captures. A missing DNG thumbnail does not by itself mean that capture failed.
-
-GPS tagging starts off. If you enable it and a location is available, the file may contain the capture location. Check metadata before sharing if that matters for your image. [Privacy policy](PRIVACY.md)
+Normal video supports H.264/H.265 and optional sound, subject to camera/encoder capabilities. [RAW sequence details](RAW_VIDEO.md). The internal frame model supports causal prefixes ending at a FAULT POINT for future intermediate-signal recording; the initial UI records the final selected RGB route or the existing RAW taps.

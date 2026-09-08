@@ -22,6 +22,6 @@ From your first photograph to a deeper understanding of the signal. These guides
 
 ## Build and maintain
 
-[Build the app](building.md) · [Contribute](../CONTRIBUTING.md) · [Architecture (Japanese)](ARCHITECTURE.md) · [RAW pipeline (Japanese)](raw-pipeline.md)
+[Build the app](building.md) · [Contribute](../CONTRIBUTING.md) · [Architecture](ARCHITECTURE.md) · [RAW pipeline (Japanese)](raw-pipeline.md)
 
 Maintainer records: [Release procedure](RELEASING.md), [launch checklist](LAUNCH_TASKS.md), [F-Droid readiness](FDROID_READINESS.md), [asset provenance](audit/ASSETS.md), and [resolved dependency inventory](audit/dependencies.json). Some maintainer documents are in Japanese.

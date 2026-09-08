@@ -1,37 +1,30 @@
 package com.bongorian.signa1;
 
-import java.util.Arrays;
+import java.util.*;
 
 public final class EffectStateCheck {
     static void check(boolean ok,String label){if(!ok)throw new AssertionError(label);}
     public static void main(String[] args){
-        float[] params=EffectParameters.defaults();params[Effects.SENSOR_FAIL*4+1]=.2f;
-        EffectState state=EffectState.create(Effects.SPECTRUM,(1<<Effects.SENSOR_FAIL)|(1<<Effects.ROW_SHIFT)|(1<<Effects.PACKET_LOSS),2,params);
-        check(state.amount==1,"strength bounds");params[Effects.SENSOR_FAIL*4+1]=1;
-        check(state.parameters()[Effects.SENSOR_FAIL*4+1]==.2f,"input array ownership");
-        float[] copy=state.parameters();copy[Effects.SENSOR_FAIL*4+1]=0;check(state.parameters()[Effects.SENSOR_FAIL*4+1]==.2f,"output array ownership");
-        EffectState single=state.single(Effects.BIT_ROT);check(!single.chained&&single.mask==(1<<Effects.BIT_ROT),"single clears old chain");
-        EffectState clean=state.single(Effects.CLEAN);check(clean.mask==0&&!clean.chained&&clean.ids().length==0,"clean clears all stages");
-        EffectState photo=state.forContext(false,0);check(photo.mask==((1<<Effects.SENSOR_FAIL)|(1<<Effects.ROW_SHIFT)),"photo removes packet loss");
-        check(!photo.forContext(true,0).enabled(Effects.PACKET_LOSS),"switch back does not resurrect removed stage");
-        EffectState raw=state.chain((1<<Effects.SENSOR_FAIL)|(1<<Effects.SPECTRUM)).forContext(false,2);check(raw.mask==(1<<Effects.SENSOR_FAIL),"RAW excludes color processing");
-        check(state.snapshot(false,1).ids.length==0,"RAW original bypass");
-        check(state.forContext(false,1)==state,"RAW original remembers explicit settings without processing");
-        EffectState.Frame frame=state.snapshot(true,0);EffectState after=state.single(Effects.SPECTRUM).amount(.1f);
-        check(frame.ids.length==3&&frame.amount==1&&after.mask==(1<<Effects.SPECTRUM),"frame snapshot survives future edits");frame.parameters[0]=0;check(state.parameters()[0]==1,"frame arrays do not mutate state");
-        EffectState roundtrip=EffectState.decode(state.encode());check(roundtrip.encode().equals(state.encode()),"persistence roundtrip");
-        check(EffectState.create(-1,-1,Float.NaN,null).amount==0,"invalid scalar clamping");
-        try{EffectState.decode("garbage");throw new AssertionError("invalid schema accepted");}catch(IllegalArgumentException expected){}
-        check(state.chain(1<<Effects.CLEAN).mask==0,"CLEAN bit is never a stage");
-        // RAW row movement must not create an accidental Bayer phase shift.
-        int w=128,h=96;byte[] pixels=new byte[w*h*2];for(int y=0;y<h;y++)for(int x=0;x<w;x++)RawGlitch.write(pixels,y*w+x,1000+(x%2)*500+(y%2)*1000);
-        float[] row=EffectParameters.defaults();row[Effects.ROW_SHIFT*4+2]=0;
-        check(Arrays.equals(pixels,RawGlitch.apply(pixels,w,h,4095,0,Effects.ROW_SHIFT,1,1,row)),"RAW width zero bypass");
-        row[Effects.ROW_SHIFT*4+2]=1;byte[] shifted=RawGlitch.apply(pixels,w,h,4095,0,Effects.ROW_SHIFT,1,1,row);int missing=0;
-        for(int y=0;y<h;y++)for(int x=0;x<w;x++){int n=RawGlitch.read(shifted,y*w+x);if(n==0)missing++;else check(n==RawGlitch.read(pixels,y*w+x),"RAW phase preservation");}
-        check(missing>0,"RAW missing edge samples");
-        check(Arrays.equals(shifted,RawGlitch.apply(pixels,w,h,4095,0,Effects.ROW_SHIFT,1,999,row)),"RAW stable readout pattern");
-        for(int i=0;i<1000;i++){int id=i%Effects.NAMES.length;EffectState s=state.single(id).forContext(false,0);check(s.ids().length<=1&&!s.enabled(Effects.PACKET_LOSS),"selection invariant");check(EffectState.decode(s.encode()).encode().equals(s.encode()),"repeated transitions");}
-        System.out.println("PASS immutable snapshots, single/CLEAN cleanup, context filtering, serialization, RAW row stability and Bayer phase");
+        EffectParameters p=EffectParameters.defaults().with(Effects.VHS,"tracking",.2f);
+        EffectState state=EffectState.create(Effects.CLEAN,(1<<Effects.PIXEL_DAMAGE)|(1<<Effects.ROW_ERROR)|(1<<Effects.STREAM_ERROR),1,p);
+        check(Effects.CONTROLS[Effects.VHS].length!=Effects.CONTROLS[Effects.DEMOSAIC_ERROR].length,"variable control counts");
+        EffectParameters changed=p.with(Effects.VHS,"tracking",1);check(p.get(Effects.VHS,"tracking")==.2f&&changed.get(Effects.VHS,"tracking")==1,"immutable controls");
+        long identity=p.identity(Effects.ROW_ERROR);EffectParameters other=p.reseed(Effects.ROW_ERROR,Long.MIN_VALUE);
+        check(p.identity(Effects.ROW_ERROR)==identity&&other.identity(Effects.ROW_ERROR)==Long.MIN_VALUE,"long identity and immutable reseed");
+        check(other.get(Effects.ROW_ERROR,"displacement")==p.get(Effects.ROW_ERROR,"displacement"),"reseed keeps controls");
+        check(other.identity(Effects.VHS)==p.identity(Effects.VHS),"reseed isolates faults");
+        check(state.single(Effects.CLEAN).ids().length==0,"CLEAN empty route");
+        check(state.single(Effects.CRT).ids().length==1,"single selection");
+        check(Arrays.equals(state.forContext(false,0).ids(),state.forContext(true,0).ids()),"photo and video share STREAM ERROR");
+        check(Arrays.equals(state.forContext(false,2).ids(),new int[]{Effects.PIXEL_DAMAGE,Effects.ROW_ERROR}),"RAW representation capability");
+        check(state.snapshot(false,1).ids().length==0&&state.forContext(false,1)==state,"RAW original tap remembers settings");
+        EffectState.Frame frame=state.snapshot(true,0);int[] ids=frame.ids();ids[0]=Effects.CRT;check(frame.ids()[0]==Effects.PIXEL_DAMAGE,"immutable snapshot route");
+        check(EffectState.decode(state.encode()).encode().equals(state.encode()),"named schema roundtrip");
+        check(EffectState.decode(state.edit(true,state.mask,other).encode()).parameters().identity(Effects.ROW_ERROR)==Long.MIN_VALUE,"identity roundtrip");
+        for(String invalid:new String[]{"","2|0|0|.5","3|0|0|NaN|"+p.encode(),state.encode().replace("tracking=0.2","tracking=NaN"),state.encode().replace("tracking=0.2","unknown=0.2")})try{EffectState.decode(invalid);throw new AssertionError("invalid settings accepted");}catch(IllegalArgumentException expected){}
+        try{p.with(Effects.VHS,"strength",.5f);throw new AssertionError("universal physical strength accepted");}catch(IllegalArgumentException expected){}
+        try{new EffectState.Frame(new int[]{Effects.CRT,Effects.VHS},1,p,0,0,Collections.emptyList());throw new AssertionError("Arbitrary stack accepted");}catch(IllegalArgumentException expected){}
+        check(state.chain(1).mask==0,"CLEAN cannot become a pass");
+        System.out.println("PASS named settings, immutable route, identity isolation, schema reset and shared photo/video capabilities");
     }
 }

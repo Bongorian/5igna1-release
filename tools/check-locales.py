@@ -21,9 +21,14 @@ for directory, strings in translations.items():
         assert placeholder.findall(value) == placeholder.findall(base[key]), (directory, key)
 
 arrays = ET.parse(res / "values/effect_strings.xml").getroot()
-expected = {"effect_descriptions": 17, "parameter_labels": 34}
+expected = {"effect_descriptions": 14}
 for array in arrays:
     assert len(array) == expected[array.attrib["name"]]
     for item in array:
         assert item.text == '""' or (item.text.startswith("@string/") and item.text[8:] in base), item.text
 print(f"PASS: {len(base)} translated strings, matching format placeholders and effect arrays")
+
+# Dynamic fault-control labels must exist in every language.
+controls = res.parent / "java/com/bongorian/signa1/Effects.java"
+for key in re.findall(r'c\("([^"\n]+)"', controls.read_text()):
+    assert "fault_control_" + key in base, key

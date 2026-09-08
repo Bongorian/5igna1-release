@@ -5,12 +5,24 @@ import java.nio.*;
 
 /** Ordered GPU passes. Each pass reads the previous result, never its own attachment. */
 final class EffectChain {
-    private final int external,regular;
+    private final String source;private final boolean supportsExternal;
+    private final java.util.Map<Integer,Integer> programs=new java.util.HashMap<>();
+    private final java.util.Map<Integer,java.util.Map<String,Integer>> locations=new java.util.HashMap<>();
+    private final java.util.Map<Integer,Integer> attributes=new java.util.HashMap<>();
     private final int[] textures=new int[2],fbos=new int[2];
     private int width,height;
     private final FloatBuffer vertices=ByteBuffer.allocateDirect(32).order(ByteOrder.nativeOrder()).asFloatBuffer();
     private static final float[] IDENTITY={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
-    EffectChain(String shader,boolean oes){external=oes?PhotoRenderer.program(shader):0;regular=PhotoRenderer.program(shader.replace("#extension GL_OES_EGL_image_external : require","").replace("samplerExternalOES","sampler2D"));vertices.put(new float[]{-1,-1,1,-1,-1,1,1,1}).position(0);}
+    EffectChain(String shader,boolean oes){source=shader;supportsExternal=oes;vertices.put(new float[]{-1,-1,1,-1,-1,1,1,1}).position(0);program(Effects.CLEAN,false);if(oes)program(Effects.CLEAN,true);}
+    private int program(int fault,boolean oes){
+        if(oes&&!supportsExternal)throw new IllegalArgumentException("External signal unsupported");int key=fault*2+(oes?1:0);
+        Integer cached=programs.get(key);if(cached!=null)return cached;
+        // Specialization removes unrelated fault uniforms/branches on small ES2 GPUs.
+        String shader=source.replace("uniform int mode;","const int mode="+fault+";");
+        if(!oes)shader=shader.replace("#extension GL_OES_EGL_image_external : require","").replace("samplerExternalOES","sampler2D");
+        int result=PhotoRenderer.program(shader);programs.put(key,result);locations.put(result,new java.util.HashMap<>());attributes.put(result,GLES20.glGetAttribLocation(result,"p"));return result;
+    }
+    private int uniform(int program,String name){return locations.get(program).computeIfAbsent(name,key->GLES20.glGetUniformLocation(program,key));}
     private void allocate(int w,int h){
         if(width==w&&height==h)return;
         GLES20.glDeleteTextures(2,textures,0);GLES20.glDeleteFramebuffers(2,fbos,0);
@@ -25,28 +37,24 @@ final class EffectChain {
         }
         width=w;height=h;
     }
-    void render(int texture,boolean oes,float[] transform,int[] modes,float amount,float time,int w,int h,int sourceW,int sourceH,int target,float[] parameters){
-        render(texture,oes,transform,modes,amount,time,w,h,sourceW,sourceH,target,parameters,null);
-    }
-    void render(int texture,boolean oes,float[] transform,int[] modes,float amount,float time,int w,int h,int sourceW,int sourceH,int target,float[] parameters,float[] live){
-        int count=amount==0?0:modes.length;
+    void render(int texture,boolean oes,float[] transform,EffectState.Frame frame,int w,int h,int sourceW,int sourceH,int target){
+        int count=frame.nodes.size();
         if(count>1)allocate(w,h);
         int input=texture;
         for(int i=0;i<Math.max(1,count);i++){
             boolean first=i==0,last=i==Math.max(1,count)-1;
             GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,last?target:fbos[i%2]);
-            GLES20.glViewport(0,0,w,h);int program=first&&oes?external:regular;GLES20.glUseProgram(program);
+            FaultNode node=count==0?null:frame.nodes.get(i);
+            GLES20.glViewport(0,0,w,h);int program=program(node==null?Effects.CLEAN:node.id,first&&oes);GLES20.glUseProgram(program);
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);GLES20.glBindTexture(first&&oes?GLES11Ext.GL_TEXTURE_EXTERNAL_OES:GLES20.GL_TEXTURE_2D,input);
-            GLES20.glUniform1i(GLES20.glGetUniformLocation(program,"cam"),0);
-            GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(program,"st"),1,false,first?transform:IDENTITY,0);
-            int id=count==0?Effects.CLEAN:modes[i];
-            int at=id*4;GLES20.glUniform4f(GLES20.glGetUniformLocation(program,"live"),live==null?0:live[at],live==null?0:live[at+1],live==null?0:live[at+2],live==null?0:live[at+3]);
-            GLES20.glUniform3f(GLES20.glGetUniformLocation(program,"detail"),EffectParameters.get(parameters,id,1),EffectParameters.get(parameters,id,2),EffectParameters.get(parameters,id,3));
-            GLES20.glUniform1f(GLES20.glGetUniformLocation(program,"a"),EffectParameters.unit(amount)*EffectParameters.get(parameters,id,0));GLES20.glUniform1f(GLES20.glGetUniformLocation(program,"t"),time);
-            GLES20.glUniform1i(GLES20.glGetUniformLocation(program,"mode"),count==0?Effects.CLEAN:modes[i]);GLES20.glUniform2f(GLES20.glGetUniformLocation(program,"sourceSize"),sourceW,sourceH);
-            vertices.position(0);int p=GLES20.glGetAttribLocation(program,"p");GLES20.glEnableVertexAttribArray(p);GLES20.glVertexAttribPointer(p,2,GLES20.GL_FLOAT,false,0,vertices);GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP,0,4);
+            GLES20.glUniform1i(uniform(program,"cam"),0);
+            GLES20.glUniformMatrix4fv(uniform(program,"st"),1,false,first?transform:IDENTITY,0);
+            if(node!=null){node.profile.forEach((key,value)->GLES20.glUniform1f(uniform(program,key),value));node.mechanism.forEach((key,value)->GLES20.glUniform1f(uniform(program,key),value));}
+            GLES20.glUniform2f(uniform(program,"sourceSize"),sourceW,sourceH);
+            vertices.position(0);int p=attributes.get(program);GLES20.glEnableVertexAttribArray(p);GLES20.glVertexAttribPointer(p,2,GLES20.GL_FLOAT,false,0,vertices);GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP,0,4);
             if(!last)input=textures[i%2];
         }
-        if(GLES20.glGetError()!=GLES20.GL_NO_ERROR)throw new IllegalStateException("Chain GPU draw failed");
+        if(GLES20.glGetError()!=GLES20.GL_NO_ERROR)throw new IllegalStateException("Fault GPU draw failed");
     }
+    void release(){GLES20.glDeleteTextures(2,textures,0);GLES20.glDeleteFramebuffers(2,fbos,0);for(int program:programs.values())GLES20.glDeleteProgram(program);programs.clear();locations.clear();attributes.clear();width=height=0;}
 }

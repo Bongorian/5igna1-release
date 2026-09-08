@@ -1,60 +1,45 @@
 package com.bongorian.signa1;
 
-import java.util.Arrays;
+import java.util.*;
 
-/** One immutable effect transaction. UI, GL and capture never observe partial edits. */
+/** A committed route and its controls. Rendering never mutates settings. */
 final class EffectState {
-    private static final int VALID_MASK=((1<<Effects.NAMES.length)-1)&~(1<<Effects.CLEAN);
-    final boolean chained;
-    final int mask;
-    final float amount;
-    private final float[] parameters;
-
-    private EffectState(boolean chained,int mask,float amount,float[] parameters){
-        this.mask=mask&VALID_MASK;
-        this.chained=chained&&this.mask!=0;
-        if(!this.chained&&Integer.bitCount(this.mask)>1)throw new IllegalArgumentException("Single effect has multiple stages");
-        this.amount=EffectParameters.unit(amount);
-        float[] values=EffectParameters.defaults();
-        if(parameters!=null)for(int i=0;i<Math.min(values.length,parameters.length);i++)values[i]=Float.isFinite(parameters[i])?EffectParameters.unit(parameters[i]):values[i];
-        this.parameters=values;
+    private static final int VALID_MASK=((1<<Effects.NAMES.length)-1)&~1;
+    final boolean chained;final int mask;final float amount;private final EffectParameters parameters;
+    private EffectState(boolean chained,int mask,float amount,EffectParameters parameters){
+        this.mask=mask&VALID_MASK;this.chained=chained&&this.mask!=0;
+        if(!this.chained&&Integer.bitCount(this.mask)>1)throw new IllegalArgumentException("Single fault has multiple stages");
+        this.amount=EffectParameters.unit(amount);this.parameters=parameters==null?EffectParameters.defaults():parameters;
     }
     static EffectState defaults(){return new EffectState(false,0,.55f,null);}
-    static EffectState create(int selected,int chainMask,float amount,float[] parameters){
-        int valid=chainMask&VALID_MASK;
-        return new EffectState(valid!=0,valid!=0?valid:bit(selected),amount,parameters);
-    }
-    private static int bit(int id){return id>=0&&id<Effects.NAMES.length&&id!=Effects.CLEAN?1<<id:0;}
-    int selected(){for(int id:Effects.ORDER)if((mask&bit(id))!=0)return id;return Effects.CLEAN;}
-    int[] ids(){return Arrays.stream(Effects.ORDER).filter(id->(mask&bit(id))!=0).toArray();}
+    static EffectState create(int selected,int mask,float level,EffectParameters parameters){int valid=mask&VALID_MASK;return new EffectState(valid!=0,valid!=0?valid:bit(selected),level,parameters);}
+    private static int bit(int id){return id>0&&id<Effects.NAMES.length?1<<id:0;}
+    int selected(){for(int id:Effects.ORDER)if(enabled(id))return id;return Effects.CLEAN;}
+    int[] ids(){return Effects.ordered(mask,false);}
     boolean enabled(int id){return (mask&bit(id))!=0;}
-    float[] parameters(){return parameters.clone();}
+    EffectParameters parameters(){return parameters;}
     EffectState single(int id){return new EffectState(false,bit(id),amount,parameters);}
     EffectState chain(int mask){return new EffectState(true,mask,amount,parameters);}
     EffectState amount(float value){return new EffectState(chained,mask,value,parameters);}
-    EffectState edit(boolean chain,int mask,float[] values){return new EffectState(chain,mask,amount,values);}
-    EffectState random(boolean chain,int mask,float amount,float[] values){return new EffectState(chain,mask,amount,values);}
-
-    /** Unsupported stages are removed, not kept in a hidden secondary selection. RAW original is a bypass. */
-    EffectState forContext(boolean video,int photoFormat){
-        if(!video&&photoFormat==1)return this;
-        int allowed=0;for(int id:ids())if(Effects.available(id,video,!video&&photoFormat==2))allowed|=bit(id);
+    EffectState edit(boolean chain,int mask,EffectParameters p){return new EffectState(chain,mask,amount,p);}
+    EffectState forContext(boolean video,int format){
+        if(!video&&format==1)return this;int allowed=0;for(int id:ids())if(Effects.available(id,video,!video&&format==2))allowed|=bit(id);
         return allowed==mask?this:new EffectState(chained,allowed,amount,parameters);
     }
-    Frame snapshot(boolean video,int photoFormat){
-        EffectState valid=forContext(video,photoFormat);
-        return new Frame(!video&&photoFormat==1?new int[0]:valid.ids(),valid.amount,valid.parameters.clone());
-    }
+    Frame snapshot(boolean video,int format){EffectState valid=forContext(video,format);return new Frame(!video&&format==1?new int[0]:valid.ids(),amount,parameters,0,0,Collections.emptyList());}
     static final class Frame {
-        final int[] ids;final float amount;final float[] parameters,live;final float time;
-        private Frame(int[] ids,float amount,float[] parameters){this(ids,amount,parameters,null,Float.NaN);}
-        Frame(int[] ids,float amount,float[] parameters,float[] live,float time){this.ids=ids;this.amount=amount;this.parameters=parameters;this.live=live;this.time=time;}
+        private final int[] route;final float amount;final EffectParameters parameters;
+        final long cameraNs;final double time;final List<FaultNode> nodes;
+        Frame(int[] ids,float amount,EffectParameters parameters,long cameraNs,double time,List<FaultNode> nodes){
+            int previous=0;for(int id:ids){if(id<=previous||id>=Effects.NAMES.length)throw new IllegalArgumentException("Non-causal fault route");previous=id;}
+            previous=0;for(FaultNode n:nodes){if(n.id<=previous||Arrays.binarySearch(ids,n.id)<0)throw new IllegalArgumentException("Fault node outside route");previous=n.id;}
+            this.route=ids.clone();this.amount=amount;this.parameters=parameters;this.cameraNs=cameraNs;this.time=time;this.nodes=Collections.unmodifiableList(new ArrayList<>(nodes));
+        }
+        int[] ids(){return route.clone();}
+        // Recordable causal prefix; profile/representation after the chosen point is explicit.
+        Frame through(Effects.Point point){int[] prefix=Arrays.stream(route).filter(id->Effects.point(id).ordinal()<=point.ordinal()).toArray();List<FaultNode> selected=new ArrayList<>();for(FaultNode n:nodes)if(Effects.point(n.id).ordinal()<=point.ordinal())selected.add(n);return new Frame(prefix,amount,parameters,cameraNs,time,selected);}
+        String describe(){StringBuilder s=new StringBuilder("cameraNs=").append(cameraNs).append(" t=").append(time).append(" LEVEL=").append(amount).append(parameters.describe(route));for(FaultNode n:nodes)s.append(" | ").append(n.describe());return s.toString();}
     }
-    String encode(){StringBuilder s=new StringBuilder("2|").append(chained?1:0).append('|').append(mask).append('|').append(amount);for(float value:parameters)s.append('|').append(value);return s.toString();}
-    static EffectState decode(String encoded){
-        String[] pieces=encoded.split("\\|",-1);int length=Effects.NAMES.length*EffectParameters.STRIDE;
-        if(pieces.length!=4+length||!pieces[0].equals("2")||!(pieces[1].equals("0")||pieces[1].equals("1")))throw new IllegalArgumentException("Effect state schema");
-        float[] values=EffectParameters.defaults();for(int i=0;i<length;i++)values[i]=Float.parseFloat(pieces[i+4]);
-        return new EffectState(pieces[1].equals("1"),Integer.parseInt(pieces[2]),Float.parseFloat(pieces[3]),values);
-    }
+    String encode(){return "3|"+(chained?1:0)+"|"+mask+"|"+amount+"|"+parameters.encode();}
+    static EffectState decode(String text){String[] p=text.split("\\|",-1);if(p.length!=5||!p[0].equals("3")||!(p[1].equals("0")||p[1].equals("1")))throw new IllegalArgumentException("Fault schema");int mask=Integer.parseInt(p[2]);float level=Float.parseFloat(p[3]);if((mask&~VALID_MASK)!=0||!Float.isFinite(level)||level<0||level>1)throw new IllegalArgumentException("Fault settings");return new EffectState(p[1].equals("1"),mask,level,EffectParameters.decode(p[4]));}
 }

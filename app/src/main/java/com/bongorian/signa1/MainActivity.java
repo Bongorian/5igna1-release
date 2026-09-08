@@ -114,7 +114,7 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity imple
         LinearLayout tools=row();LinearLayout.LayoutParams toolP=new LinearLayout.LayoutParams(-1,dp(44));toolP.topMargin=dp(3);toolP.bottomMargin=dp(7);effects.addView(tools,toolP);
         TextView random=button(getString(R.string.ui_random));random.setTextSize(11);random.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_shuffle,0,0,0);random.setCompoundDrawablePadding(dp(6));random.setContentDescription(getString(R.string.ui_tap_to_randomize_an_effect_hold_to_randomize));
         LinearLayout.LayoutParams rp=new LinearLayout.LayoutParams(0,-1,1.5f);rp.rightMargin=dp(8);tools.addView(random,rp);
-        random.setOnClickListener(v->randomize(false));random.setOnLongClickListener(v->{randomize(true);return true;});
+        random.setOnClickListener(v->reseed());
         LinearLayout live=row();live.setBackground(bg(PANEL,14,0));tools.addView(live,new LinearLayout.LayoutParams(0,-1,1));
         faultSwitch=new ToggleButton(this);faultSwitch.setTextOn("LIVE FAULT · ON");faultSwitch.setTextOff("LIVE FAULT · OFF");faultSwitch.setTextSize(10);faultSwitch.setAllCaps(false);faultSwitch.setBackgroundColor(Color.TRANSPARENT);faultSwitch.setPadding(dp(8),0,0,0);faultSwitch.setChecked(faultConfig.enabled);faultSwitch.setTextColor(faultConfig.enabled?LIME:MUTED);faultSwitch.setContentDescription(getString(R.string.ui_toggle_live_fault));live.addView(faultSwitch,new LinearLayout.LayoutParams(0,-1,1));
         ImageView reactions=iconButton(R.drawable.ic_tune,getString(R.string.ui_live_fault_settings));reactions.setPadding(dp(11),dp(11),dp(11),dp(11));live.addView(reactions,new LinearLayout.LayoutParams(dp(42),-1));reactions.setOnClickListener(v->FaultDialog.show(this));
@@ -134,7 +134,7 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity imple
     }
     boolean rawOriginal(){return videoMode?settings.rawVideo:settings.photoFormat==1;}
     int[] availableEffects(){return Effects.choices(videoMode,!videoMode&&settings.photoFormat==2);}
-    int[] uiEffects(){return rawOriginal()?new int[0]:effectState.snapshot(videoMode,settings.photoFormat).ids;}
+    int[] uiEffects(){return rawOriginal()?new int[0]:effectState.snapshot(videoMode,settings.photoFormat).ids();}
     int nextAvailable(int delta){int[] ids=availableEffects();for(int n=0;n<ids.length;n++)if(ids[n]==effectState.selected())return ids[Math.floorMod(n+delta,ids.length)];return Effects.CLEAN;}
     void chooseEffect(int id){commitEffects(effectState.single(id));}
     void commitEffects(EffectState next){
@@ -162,24 +162,22 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity imple
         }
         strength.setProgress(Math.round(effectState.amount*100));strengthValue.setText(strength.getProgress()+"%");boolean processing=!original&&active.length>0;strength.setEnabled(processing);strength.setAlpha(processing?1:.35f);if(effectPreview!=null)tag.setText(getString(R.string.ui_preview_editing));
     }
-    String liveChainDetails(EffectState.Frame frame){StringBuilder text=new StringBuilder(getString(R.string.ui_global_strength)).append(Math.round(frame.amount*100)).append(getString(R.string.ui_effective_strength_per_stage));for(int id:frame.ids)text.append(Effects.name(id)).append(" · ").append(Math.round(frame.amount*frame.parameters[id*4]*100)).append("%\n");return text.toString();}
+    String liveChainDetails(EffectState.Frame frame){StringBuilder text=new StringBuilder(Effects.chainName(frame.ids()));for(FaultNode n:frame.nodes)text.append("\n").append(Effects.name(n.id)).append(" · ").append(getString(R.string.fault_incident)).append(" ").append(Math.round(n.event.envelope*100)).append("%");return text.toString();}
     public void liveFrame(EffectState.Frame frame){
         shownLiveFrame=frame;if(liveChainDialog!=null&&liveChainDialog.isShowing())liveChainDialog.setMessage(liveChainDetails(frame));if(liveChainStatus==null)return;boolean visible=faultConfig.enabled&&!rawOriginal()&&effectPreview==null;
         liveChainStatus.setVisibility(visible?View.VISIBLE:View.GONE);if(!visible)return;
-        String label="LIVE · "+frame.ids.length+getString(R.string.ui_stages)+Math.round(frame.amount*100)+"%  /  "+Effects.chainName(frame.ids);
+        String label="LIVE · "+frame.ids().length+getString(R.string.ui_stages)+Math.round(frame.amount*100)+"%  /  "+Effects.chainName(frame.ids());
         if(!label.contentEquals(liveChainStatus.getText()))liveChainStatus.setText(label);liveChainStatus.setContentDescription(label+getString(R.string.ui_tap_to_view_the_full_chain));
-        TextView tag=viewfinder.findViewWithTag("fx");tag.setText("  LIVE / "+frame.ids.length+" STAGES  ");
-        for(int id=0;id<MODES.length;id++){final int candidate=id;boolean active=java.util.Arrays.stream(frame.ids).anyMatch(v->v==candidate)||(id==0&&frame.ids.length==0);presets[id].setTextColor(active?BG:MUTED);presets[id].setBackground(bg(active?LIME:BG,18,active?0:PANEL));}
+        TextView tag=viewfinder.findViewWithTag("fx");tag.setText("  LIVE / "+frame.ids().length+" STAGES  ");
+        for(int id=0;id<MODES.length;id++){final int candidate=id;boolean active=java.util.Arrays.stream(frame.ids()).anyMatch(v->v==candidate)||(id==0&&frame.ids().length==0);presets[id].setTextColor(active?BG:MUTED);presets[id].setBackground(bg(active?LIME:BG,18,active?0:PANEL));}
     }
-    void showChain(){if(rawOriginal()){Toast.makeText(this,getString(R.string.ui_original_raw_is_not_processed),Toast.LENGTH_SHORT).show();return;}new EffectDialog(this,false).show();}
-    void showParameters(){if(rawOriginal()||effectState.mask==0){showChain();return;}new EffectDialog(this,true).show();}
-    void randomize(boolean chain){
-        if(rawOriginal()){Toast.makeText(this,getString(R.string.ui_original_raw_is_not_processed),Toast.LENGTH_SHORT).show();return;}
-        java.util.ArrayList<Integer> ids=new java.util.ArrayList<>();for(int id:availableEffects())if(id!=Effects.CLEAN&&(chain||id!=effectState.selected()))ids.add(id);if(ids.isEmpty())return;
-        java.util.Collections.shuffle(ids);int count=chain?Math.min(ids.size(),2+(int)(Math.random()*3)):1,mask=0;float[] parameters=effectState.parameters();
-        for(int n=0;n<count;n++){int id=ids.get(n);mask|=1<<id;parameters[id*4]=.5f+(float)Math.random()*.5f;for(int slot=1;slot<4;slot++)parameters[id*4+slot]=(float)Math.random();}
-        commitEffects(effectState.random(chain,mask,(35+(int)(Math.random()*51))/100f,parameters));effectTitle.performHapticFeedback(HapticFeedbackConstants.CONFIRM);
-        if(chain){Toast toast=Toast.makeText(this,count+getString(R.string.ui_stage_chain),Toast.LENGTH_SHORT);toast.show();handler.postDelayed(toast::cancel,650);}
+    void showChain(){if(rawOriginal()){Toast.makeText(this,getString(R.string.ui_original_raw_is_not_processed),Toast.LENGTH_SHORT).show();return;}if(recording){Toast.makeText(this,R.string.fault_edit_after_recording,Toast.LENGTH_SHORT).show();return;}new EffectDialog(this,false).show();}
+    void showParameters(){if(rawOriginal()||effectState.mask==0){showChain();return;}if(recording){Toast.makeText(this,R.string.fault_edit_after_recording,Toast.LENGTH_SHORT).show();return;}new EffectDialog(this,true).show();}
+    void reseed(){
+        if(rawOriginal())return;
+        EffectParameters p=effectState.parameters();java.security.SecureRandom random=new java.security.SecureRandom();
+        for(int id:effectState.ids())if(id!=Effects.COLOR_MAP)p=p.reseed(id,random.nextLong());
+        commitEffects(effectState.edit(effectState.chained,effectState.mask,p));effectTitle.performHapticFeedback(HapticFeedbackConstants.CONFIRM);
     }
     void renderCaptureMode(){boolean value=videoMode;photoTab.setTextColor(!value?LIME:MUTED);videoTab.setTextColor(value?LIME:MUTED);photoTab.setBackground(bg(!value?PANEL:BG,10,0));videoTab.setBackground(bg(value?PANEL:BG,10,0));capture.setContentDescription(value?getString(R.string.ui_start_video_recording):getString(R.string.ui_take_a_photo));capture.invalidate();}
     void setVideo(boolean value){
@@ -198,7 +196,7 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity imple
         if(!ready){if(checkSelfPermission(Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED)requestPermissions(new String[]{Manifest.permission.CAMERA},1);else Toast.makeText(this,getString(R.string.ui_preparing_the_camera),Toast.LENGTH_SHORT).show();return;}
         capture.performHapticFeedback(HapticFeedbackConstants.CONFIRM);
         if(videoMode){ if(!recording && sound && !settings.rawVideo && checkSelfPermission(Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},2);return;}ready(false);engine.toggleVideo(sound&&!settings.rawVideo); }
-        else {ready(false);engine.photo();overlay.flash=true;overlay.invalidate();handler.postDelayed(()->{overlay.flash=false;overlay.invalidate();},90);}
+        else {ready(false);engine.photo(preview.getSurfaceTexture()==null?0:preview.getSurfaceTexture().getTimestamp());overlay.flash=true;overlay.invalidate();handler.postDelayed(()->{overlay.flash=false;overlay.invalidate();},90);}
     }
     void openGallery(){if(recording||engine.photoBusy)return;cancelEffectPreview();if(latest==null){Toast.makeText(this,getString(R.string.ui_open_your_captured_photos_and_videos_here),Toast.LENGTH_SHORT).show();return;}try{Intent i=new Intent(Intent.ACTION_VIEW).setDataAndType(latest,getContentResolver().getType(latest)).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);startActivity(i);}catch(Exception e){Toast.makeText(this,getString(R.string.ui_photos_are_in_pictures_videos_in_movies_and),Toast.LENGTH_LONG).show();}}
     public void status(String s){if(!recording)status.setText(s);if(s.contains(getString(R.string.ui_failed))||s.contains(getString(R.string.ui_could_not))||s.contains(getString(R.string.ui_error)))Toast.makeText(this,s,Toast.LENGTH_LONG).show();}
@@ -212,7 +210,7 @@ public class MainActivity extends androidx.appcompat.app.AppCompatActivity imple
     public void onSurfaceTextureAvailable(SurfaceTexture s,int w,int h){if(resumed && checkSelfPermission(Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED)engine.attach(s,w,h);}
     public void onSurfaceTextureSizeChanged(SurfaceTexture s,int w,int h){engine.resize(w,h);}
     public boolean onSurfaceTextureDestroyed(SurfaceTexture s){engine.releaseSurface(s);return false;}
-    public void onSurfaceTextureUpdated(SurfaceTexture s){}
+    public void onSurfaceTextureUpdated(SurfaceTexture s){engine.previewPresented(s.getTimestamp());}
     void renderGeo(){if(geoButton!=null){geoButton.setText(geo.label());geoButton.setTextColor(geo.enabled&&geo.snapshot()!=null?LIME:MUTED);geoButton.setContentDescription(getString(R.string.ui_capture_location_settings)+geo.label());}}
     void setLocationEnabled(boolean value){settings.location=value;settings.save(getSharedPreferences("signal",0));geo.setEnabled(value);engine.setLocationEnabled(value);renderGeo();}
     void requestLocationAccess(){

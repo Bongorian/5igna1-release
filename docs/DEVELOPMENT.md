@@ -55,6 +55,10 @@ javac -d build/state-check \
   app/src/main/java/com/bongorian/signa1/EffectParameters.java \
   app/src/main/java/com/bongorian/signa1/EffectState.java \
   app/src/main/java/com/bongorian/signa1/RawGlitch.java \
+  app/src/main/java/com/bongorian/signa1/FaultConfig.java \
+  app/src/main/java/com/bongorian/signa1/FaultNode.java \
+  app/src/main/java/com/bongorian/signa1/FaultModel.java \
+  app/src/main/java/com/bongorian/signa1/FrameHistory.java \
   tools/EffectStateCheck.java \
   tools/PipelineCheck.java
 java -cp build/state-check com.bongorian.signa1.EffectStateCheck
@@ -83,7 +87,7 @@ adb -s DEVICE shell am instrument -w -e action state \
   com.bongorian.signa1.debug.test/com.bongorian.signa1.DeviceChecks
 ```
 
-`effects` は追加4種のGPU、P1/P2、ゼロ強度、固定配置、チェーン、旧IDのリセットを検証します。`compatibility` はカタログ、VGA写真、動画非対応時の写真プレビュー、前後切替を検証します。`state` は実機カメラを起動し、状態の確定／キャンセル、保存値、GPU描画とROW SHIFTのパラメータを確認します。テストは撮影設定を一時変更し、終了時に復元します。`metadata` はEXIF・RAW・GPUの検査です。
+`effects` は13 FAULTのGPU、全名前付き操作値、LEVELゼロ、snapshot再読、因果順、旧ID初期化を検証します。`capture-contract` は表示済み画像を確保した後にカメラと設定を進め、保存JPEGの画素・時刻が確保した画像と一致することを検証します。`compatibility` はカタログ、VGA写真、動画非対応時の写真プレビュー、前後切替を検証します。`state` は実機カメラを起動し、状態の確定／キャンセル、保存値、GPU描画とFAULTの描画を確認します。テストは撮影設定を一時変更し、終了時に復元します。`metadata` はEXIF・RAW・GPUの検査です。
 
 保存経路を変更したときだけ、短い撮影検査を行います：
 

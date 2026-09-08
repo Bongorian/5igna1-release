@@ -5,8 +5,8 @@
     <string name="ui_open_the_last_saved_photo" formatted="false">"最後に保存した写真を開く"</string>
     <string name="ui_open_the_last_saved_raw_video_zip" formatted="false">"最後に保存したRAW動画のZIPを開く"</string>
     <string name="ui_select_an_option_then_apply" formatted="false">"選択して適用"</string>
-    <string name="ui_photo_full_resolution" formatted="false">"写真 · フル解像度"</string>
-    <string name="ui_processed_jpeg" formatted="false">"加工JPEG"</string>
+    <string name="ui_photo_full_resolution" formatted="false">"写真 · 信号の記録"</string>
+    <string name="ui_processed_jpeg" formatted="false">"JPEG · 表示した信号"</string>
     <string name="ui_raw_dng_original" formatted="false">"RAW / DNG 原本"</string>
     <string name="ui_raw_dng_sensor_processing" formatted="false">"RAW / DNG センサーデータ加工"</string>
     <string name="ui_save_format" formatted="false">"保存形式"</string>
@@ -73,10 +73,10 @@
     <string name="ui_camera_preview_tap_to_focus" formatted="false">"撮影プレビュー。タップでフォーカス"</string>
     <string name="ui_adjust" formatted="false">"調整"</string>
     <string name="ui_chain" formatted="false">"＋ チェーン"</string>
-    <string name="ui_live_fault_current_chain" formatted="false">"LIVE FAULT · 現在のチェーン"</string>
-    <string name="ui_strength" formatted="false">"強度"</string>
-    <string name="ui_random" formatted="false">"ランダム"</string>
-    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"短押しでエフェクトをランダム、長押しでチェーンをランダム"</string>
+    <string name="ui_live_fault_current_chain" formatted="false">"FAULT STATE"</string>
+    <string name="ui_strength" formatted="false">"LEVEL"</string>
+    <string name="ui_random" formatted="false">"RESEED"</string>
+    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"選択したFAULTの個体差を再生成します。経路と操作値は保持します。"</string>
     <string name="ui_toggle_live_fault" formatted="false">"LIVE FAULTを切り替える"</string>
     <string name="ui_live_fault_settings" formatted="false">"LIVE FAULTの自動変化設定"</string>
     <string name="ui_photo" formatted="false">"写真"</string>
@@ -91,12 +91,9 @@
     <string name="ui_edits_discarded_because_the_capture_mode_changed" formatted="false">"撮影状態が変わったため調整を破棄しました"</string>
     <string name="ui_original_sensor_data_no_effects" formatted="false">"センサー原本 / 加工なし"</string>
     <string name="ui_raw_preview" formatted="false">"RAW近似 / "</string>
-    <string name="ui_global_strength" formatted="false">"全体強度 "</string>
-    <string name="ui_effective_strength_per_stage" formatted="false">"%\n\n各段の実効強度\n"</string>
     <string name="ui_stages" formatted="false">"段 · "</string>
     <string name="ui_tap_to_view_the_full_chain" formatted="false">" · タップで全体を表示"</string>
     <string name="ui_original_raw_is_not_processed" formatted="false">"RAW原本は加工しません"</string>
-    <string name="ui_stage_chain" formatted="false">"段のチェーン"</string>
     <string name="ui_start_video_recording" formatted="false">"動画の録画を開始"</string>
     <string name="ui_video_is_unavailable_on_this_camera" formatted="false">"このカメラでは動画を利用できません"</string>
     <string name="ui_apply_or_discard_your_edits_before_capturing" formatted="false">"調整を適用するか戻ってから撮影してください"</string>
@@ -154,70 +151,6 @@
     <string name="ui_acquiring_location_gps_reception_may_be_weak_indoors" formatted="false">"現在地を取得しています。屋内ではGPSが届きにくい場合があります。再取得するか、窓際・屋外でお試しください。"</string>
     <string name="ui_no_location_service_is_available_check_your_device" formatted="false">"利用できる測位サービスがありません。端末の位置情報設定を確認してください。"</string>
     <string name="ui_an_available_location_is_saved_in_photo_and" formatted="false">"\n\n取得できた位置を写真・動画の位置タグに保存します。未取得時は位置タグなしで保存します。"</string>
-    <string name="ui_capture_without_effects" formatted="false">"加工せずに撮影。"</string>
-    <string name="ui_simulates_dead_pixels_columns_and_bright_pixels" formatted="false">"画素や列の欠損・輝点を再現。"</string>
-    <string name="ui_simulates_exposure_bands_and_flicker" formatted="false">"帯状の露光むらとフリッカーを再現。"</string>
-    <string name="ui_shifts_image_rows_horizontally" formatted="false">"行ごとに画像を横方向へずらす。"</string>
-    <string name="ui_drops_rows_or_repeats_the_previous_row" formatted="false">"行を欠落させる、または直前の行を反復。"</string>
-    <string name="ui_flips_pixel_bits_to_alter_color_and_tone" formatted="false">"画素値のビットを反転し、色と階調を変える。"</string>
-    <string name="ui_shifts_byte_positions_to_disrupt_color" formatted="false">"データのバイト位置をずらして色を崩す。"</string>
-    <string name="ui_shifts_cfa_data_locally_to_create_false_color" formatted="false">"CFAデータを局所的にずらし、偽色を作る。"</string>
-    <string name="ui_changes_the_bayer_phase_to_alter_color" formatted="false">"Bayer配列の位相を変更して色を変える。"</string>
-    <string name="ui_simulates_demosaicing_errors_and_false_color_rgb_approximation" formatted="false">"色補間の乱れと偽色を再現（RGB近似）。"</string>
-    <string name="ui_offsets_rgb_channels_to_create_colored_edges" formatted="false">"RGBの位置をずらして色の縁を作る。"</string>
-    <string name="ui_remaps_colors_based_on_brightness" formatted="false">"明るさに応じて色を置き換える。"</string>
-    <string name="ui_reduces_chroma_resolution_into_blocks" formatted="false">"色差の解像度を下げてブロック化。"</string>
-    <string name="ui_disrupts_image_blocks_and_color_data" formatted="false">"画像ブロックの位置と色を崩す。"</string>
-    <string name="ui_drops_or_repeats_parts_of_the_image" formatted="false">"画像の一部を欠落させる、または反復。"</string>
-    <string name="ui_simulates_horizontal_jitter_color_shifts_and_tape_noise" formatted="false">"横揺れ・色ずれ・テープノイズを再現。"</string>
-    <string name="ui_adds_scanlines_and_noise_to_a_green_display" formatted="false">"緑色の表示に走査線とノイズを加える。"</string>
-    <string name="ui_1f_s" formatted="false">"%.1f秒"</string>
-    <string name="ui_2f_s" formatted="false">"%.2f秒"</string>
-    <string name="ui_event_interval" formatted="false">"変化を試みる間隔"</string>
-    <string name="ui_occurrence_rate" formatted="false">"発生率"</string>
-    <string name="ui_event_duration" formatted="false">"変化の持続時間"</string>
-    <string name="ui_parameter_variation" formatted="false">"パラメータの変化量"</string>
-    <string name="ui_smoothness" formatted="false">"なめらかさ"</string>
-    <string name="ui_allow_chain_switching" formatted="false">"チェーンの切り替えを許可"</string>
-    <string name="ui_keep_original_display_stages_vhs_terminal" formatted="false">"元の表示段を維持（VHS / TERMINAL）"</string>
-    <string name="ui_random_chain_size_total" formatted="false">"ランダムチェーンの段数（合計）"</string>
-    <string name="ui_minimum" formatted="false">"最小"</string>
-    <string name="ui_maximum" formatted="false">"最大"</string>
-    <string name="ui_minimum_stage_count" formatted="false">"最小段数"</string>
-    <string name="ui_maximum_stage_count" formatted="false">"最大段数"</string>
-    <string name="ui_more_stages_increase_processing_load_the_count_is" formatted="false">"左が最小、右が最大。段数を増やすと処理負荷が上がります。候補が少ない場合は候補数まで、維持する表示段が多い場合はその段数まで調整します。SENSOR FAILは元のチェーンにある場合だけ候補になります。表示段の維持をOFFにするとVHS / TERMINALも再選択します。\n変化が終わると手動設定に戻ります。起動時はOFFです。"</string>
-    <string name="ui_live_fault_auto_variation" formatted="false">"LIVE FAULT / 自動変化"</string>
-    <string name="ui_varies_effects_at_the_chosen_interval_and_probability" formatted="false">"端末を動かさなくても、設定した周期と確率で変化します。"</string>
-    <string name="ui_defect_shape_pixels_columns" formatted="false">"故障形状 · 点 → 列"</string>
-    <string name="ui_defect_value_dark_bright" formatted="false">"故障値 · 暗点 → 輝点"</string>
-    <string name="ui_band_density" formatted="false">"バンドの密度"</string>
-    <string name="ui_flow_speed" formatted="false">"流れる速さ"</string>
-    <string name="ui_row_band_height" formatted="false">"行バンドの高さ"</string>
-    <string name="ui_shift_width" formatted="false">"ずれ幅"</string>
-    <string name="ui_dropped_or_repeated_band_height" formatted="false">"欠落・反復する帯の高さ"</string>
-    <string name="ui_drop_repeat" formatted="false">"欠落 → 反復"</string>
-    <string name="ui_bit_position_low_high" formatted="false">"反転ビット · 下位 → 上位"</string>
-    <string name="ui_block_size" formatted="false">"ブロックサイズ"</string>
-    <string name="ui_data_shift_0_31_bytes" formatted="false">"データずれ · 0〜31 byte"</string>
-    <string name="ui_tile_size" formatted="false">"タイルサイズ"</string>
-    <string name="ui_phase_pattern" formatted="false">"位相パターン"</string>
-    <string name="ui_cfa_phase_horizontal_vertical_both" formatted="false">"CFA位相 · 横 / 縦 / 両方"</string>
-    <string name="ui_affected_area_size" formatted="false">"発生領域サイズ"</string>
-    <string name="ui_interpolation_error_scale" formatted="false">"補間破損スケール"</string>
-    <string name="ui_false_color_amount" formatted="false">"偽色量"</string>
-    <string name="ui_shift_direction_horizontal_vertical" formatted="false">"ずれ方向 · 横 → 縦"</string>
-    <string name="ui_tear_width" formatted="false">"裂け幅"</string>
-    <string name="ui_palette_period" formatted="false">"パレットの周期"</string>
-    <string name="ui_hue_phase" formatted="false">"色相の位相"</string>
-    <string name="ui_chroma_block_width" formatted="false">"色差ブロックの幅"</string>
-    <string name="ui_vertical_coarseness" formatted="false">"縦方向の粗さ"</string>
-    <string name="ui_color_data_corruption" formatted="false">"色データの破損"</string>
-    <string name="ui_packet_size" formatted="false">"パケットサイズ"</string>
-    <string name="ui_missing_data_fill_black_repeat" formatted="false">"欠落の補間 · 黒 → 反復"</string>
-    <string name="ui_tracking_error" formatted="false">"トラッキングの乱れ"</string>
-    <string name="ui_tape_noise" formatted="false">"テープノイズ"</string>
-    <string name="ui_scanline_density" formatted="false">"走査線の密度"</string>
-    <string name="ui_noise" formatted="false">"ノイズ"</string>
     <string name="ui_no_permission" formatted="false">"権限なし"</string>
     <string name="ui_recorded_audio" formatted="false">"録画音声"</string>
     <string name="ui_unavailable_220" formatted="false">"取得不可"</string>
@@ -232,25 +165,9 @@
     <string name="ui_readout_1f_ms" formatted="false">"読出し %.1fms"</string>
     <string name="ui_readout" formatted="false">"読出し —"</string>
     <string name="ui_clear_selection" formatted="false">"選択をクリア"</string>
-    <string name="ui_stage_strength" formatted="false">"段の強度"</string>
     <string name="ui_reset" formatted="false">"標準に戻す"</string>
-    <string name="ui_reseed" formatted="false">"配置を変える ↝"</string>
-    <string name="ui_effect_adjust" formatted="false">"EFFECT / 調整"</string>
-    <string name="ui_chain_effects" formatted="false">"CHAIN / エフェクト"</string>
-    <string name="ui_preview_applying_also_changes_the_recording" formatted="false">"試し表示 · 適用すると録画にも反映"</string>
+    <string name="ui_reseed" formatted="false">"RESEED"</string>
     <string name="ui_preview_apply_to_save_back_to_discard" formatted="false">"試し表示 · 適用で保存 / 戻るで元に戻す"</string>
-    <string name="ui_off_enable_to_apply" formatted="false">"OFF · ONにすると映像へ反映"</string>
-    <string name="ui_global_strength_is_0" formatted="false">"全体強度が0%です"</string>
-    <string name="ui_this_stage_has_0_strength" formatted="false">"この段の強度が0%です"</string>
-    <string name="ui_shift_is_0_rows_stay_in_place" formatted="false">"ずれ幅0% · 行の位置は変わりません"</string>
-    <string name="ui_0_bytes_data_positions_stay_unchanged" formatted="false">"0 byte · データ位置は変わりません"</string>
-    <string name="ui_false_color_is_0_no_interpolation_error_applied" formatted="false">"偽色量0% · 補間破損は適用しません"</string>
-    <string name="ui_adjust_while_watching_the_preview" formatted="false">"映像を見ながら調整"</string>
-    <string name="ui_horizontal" formatted="false">"横"</string>
-    <string name="ui_vertical" formatted="false">"縦"</string>
-    <string name="ui_diagonal" formatted="false">"斜め"</string>
-    <string name="ui_low" formatted="false">" · 下位"</string>
-    <string name="ui_high" formatted="false">" · 上位"</string>
     <string name="ui_back" formatted="false">"戻る"</string>
     <string name="ui_apply" formatted="false">"適用"</string>
     <string name="ui_frames_dropped_253" formatted="false">"枚 / 欠落 "</string>
@@ -279,7 +196,6 @@
     <string name="ui_retrying_with_a_compatible_lower_resolution" formatted="false">"互換性のある低解像度設定で再試行しています…"</string>
     <string name="ui_could_not_reconfigure_the_camera" formatted="false">"カメラを再構成できません"</string>
     <string name="ui_could_not_apply_camera_settings" formatted="false">"カメラ設定に失敗しました"</string>
-    <string name="ui_automatic_variation_0f" formatted="false">"自動変化 %.0f%%"</string>
     <string name="ui_image_processing_error" formatted="false">"映像処理エラー"</string>
     <string name="ui_capturing_at_full_resolution" formatted="false">"フル解像度で撮影中…"</string>
     <string name="ui_could_not_capture_the_photo_try_lower_settings" formatted="false">"静止画の取得に失敗しました。設定を下げてください"</string>
@@ -287,7 +203,7 @@
     <string name="ui_could_not_capture" formatted="false">"撮影できません"</string>
     <string name="ui_could_not_read_raw_frames" formatted="false">"RAWフレームを読み出せません"</string>
     <string name="ui_could_not_read_capture_data" formatted="false">"撮影データを取得できません"</string>
-    <string name="ui_saving_full_resolution_effects" formatted="false">"高解像度エフェクトを保存中…"</string>
+    <string name="ui_saving_full_resolution_effects" formatted="false">"表示した信号を保存中…"</string>
     <string name="ui_saving_raw_data" formatted="false">"RAWデータを保存中…"</string>
     <string name="ui_no_location_fix_saved_without_gps" formatted="false">"位置を取得できなかったためGPSなしで保存しました"</string>
     <string name="ui_could_not_save_the_photo" formatted="false">"写真を保存できません"</string>
@@ -308,4 +224,69 @@
     <string name="language_summary">"言語"</string>
     <string name="camera_settings_unavailable">"撮影設定はカメラの使用を許可すると表示されます。アプリの言語はここで変更できます。"</string>
     <string name="ui_open_source_licenses">"オープンソースライセンス"</string>
+    <string name="fault_points" formatted="false">"FAULT POINTS"</string>
+    <string name="fault_live_title" formatted="false">"LIVE FAULT · 端末との結合"</string>
+    <string name="fault_live_description" formatted="false">"各FAULTの個体差と固有の時間変化を保ち、端末状態を結合します。取得できない入力は影響しません。"</string>
+    <string name="fault_motion" formatted="false">"動き → 読み出し・tracking"</string>
+    <string name="fault_timing" formatted="false">"カメラの時間情報 → 露光・読み出し"</string>
+    <string name="fault_thermal" formatted="false">"温度状態 → センサーの活動"</string>
+    <string name="fault_cpu" formatted="false">"処理負荷 → data・streamの事故"</string>
+    <string name="fault_audio" formatted="false">"音量 → テープの時間軸"</string>
+    <string name="fault_sensitivity" formatted="false">"端末入力の感度"</string>
+    <string name="fault_mains_60" formatted="false">"照明の電源周波数 60 Hz（OFF: 50 Hz）"</string>
+    <string name="fault_incident" formatted="false">"事故"</string>
+    <string name="fault_edit_after_recording" formatted="false">"FAULTの試し編集は録画停止後に行えます。"</string>
+    <string name="fault_capture_signal" formatted="false">"表示した信号を記録中…"</string>
+    <string name="fault_signal_photo_note" formatted="false">"JPEGは選択したライブ解像度で、表示したカメラ信号を保存します。RAWは別のセンサー露光を取得し、RGBプレビューは近似です。"</string>
+    <string name="fault_live_resolution" formatted="false">"標準ライブ信号（2 MPまで）"</string>
+    <string name="fault_live_max" formatted="false">"対応する最大ライブ信号"</string>
+    <string name="fault_recording_draft" formatted="false">"編集を適用またはキャンセルしてから録画してください。"</string>
+    <string name="fault_control_density" formatted="false">"故障画素の密度"</string>
+    <string name="fault_control_hot" formatted="false">"暗点 → 輝点"</string>
+    <string name="fault_control_columns" formatted="false">"列の故障"</string>
+    <string name="fault_control_depth" formatted="false">"露光の欠落"</string>
+    <string name="fault_control_rate" formatted="false">"露光位相の速度"</string>
+    <string name="fault_control_bands" formatted="false">"帯の大きさ"</string>
+    <string name="fault_control_displacement" formatted="false">"読み出しのずれ"</string>
+    <string name="fault_control_loss" formatted="false">"欠落事故"</string>
+    <string name="fault_control_concealment" formatted="false">"黒 → 取得済みサンプルの再利用"</string>
+    <string name="fault_control_activity" formatted="false">"故障の活動量"</string>
+    <string name="fault_control_bit" formatted="false">"bit位置: 下位 → 上位"</string>
+    <string name="fault_control_burst_size" formatted="false">"burstの範囲"</string>
+    <string name="fault_control_offset" formatted="false">"byteアドレスのずれ"</string>
+    <string name="fault_control_region" formatted="false">"故障領域の大きさ"</string>
+    <string name="fault_control_coverage" formatted="false">"影響する範囲"</string>
+    <string name="fault_control_phase" formatted="false">"CFA位相: 横 → 縦 → 両方"</string>
+    <string name="fault_control_interpolation" formatted="false">"誤った近傍からの補間"</string>
+    <string name="fault_control_sampling" formatted="false">"サンプリングの粗さ"</string>
+    <string name="fault_control_separation" formatted="false">"色差のずれ"</string>
+    <string name="fault_control_direction" formatted="false">"色差の方向"</string>
+    <string name="fault_control_palette" formatted="false">"パレットの位相"</string>
+    <string name="fault_control_cycles" formatted="false">"パレットの周期数"</string>
+    <string name="fault_control_mix" formatted="false">"COLOR MAPの混合"</string>
+    <string name="fault_control_quantization" formatted="false">"量子化の欠落"</string>
+    <string name="fault_control_block_size" formatted="false">"ブロックサイズ"</string>
+    <string name="fault_control_misaddress" formatted="false">"ブロック誤読の事故"</string>
+    <string name="fault_control_bandwidth" formatted="false">"テープの帯域損失 · 媒体特性"</string>
+    <string name="fault_control_tracking" formatted="false">"trackingの不安定さ · 故障"</string>
+    <string name="fault_control_dropout" formatted="false">"テープのdropout · 故障"</string>
+    <string name="fault_control_noise" formatted="false">"テープのnoise · 故障"</string>
+    <string name="fault_control_scan" formatted="false">"走査線 · 表示特性"</string>
+    <string name="fault_control_phosphor" formatted="false">"カラー → 緑蛍光体 · 表示特性"</string>
+    <string name="fault_control_convergence" formatted="false">"convergenceのずれ · 故障"</string>
+    <string name="fault_control_sync" formatted="false">"同期のdrift · 故障"</string>
+    <string name="fault_description_0" formatted="false">"FAULTなし。カメラ信号。"</string>
+    <string name="fault_description_1" formatted="false">"固定された暗点・輝点・故障列。活動量は変化します。"</string>
+    <string name="fault_description_2" formatted="false">"行ごとの露光欠落と、移動する露光位相。"</string>
+    <string name="fault_description_3" formatted="false">"弱い読み出し帯、ずれ、一時的な行の欠落。"</string>
+    <string name="fault_description_4" formatted="false">"取得した成分のbit反転と突発的なburst。"</string>
+    <string name="fault_description_5" formatted="false">"byte境界のずれと、成分・アドレスの誤読。"</string>
+    <string name="fault_description_6" formatted="false">"Bayer位相の誤読。RGB経路は再モザイクによる近似。"</string>
+    <string name="fault_description_7" formatted="false">"カメラRGBの再モザイクから、誤った近傍で補間。"</string>
+    <string name="fault_description_8" formatted="false">"色差のずれと、粗い色差サンプリング。"</string>
+    <string name="fault_description_9" formatted="false">"カメラ由来の輝度を疑似色へ変換。"</string>
+    <string name="fault_description_10" formatted="false">"復号画像のブロック量子化・アドレス誤読モデル。"</string>
+    <string name="fault_description_11" formatted="false">"復号画像領域の欠落・再利用モデル。実packetは破壊しません。"</string>
+    <string name="fault_description_12" formatted="false">"テープの媒体特性と、tracking・slip・dropout。"</string>
+    <string name="fault_description_13" formatted="false">"走査・蛍光体の表示特性と、convergence・同期の故障。"</string>
 </resources>

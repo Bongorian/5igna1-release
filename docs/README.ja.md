@@ -17,7 +17,7 @@
 
 ## もう少し深く
 
-- [16エフェクトの仕様と適用順](EFFECTS.ja.md)
+- [13 FAULTとFAULT POINTの仕様](EFFECTS.ja.md)
 - [LIVE FAULTの自動変化](LIVE_FAULT.ja.md)
 - [実験的なRAW動画](RAW_VIDEO.ja.md)
 - [プライバシーポリシー](PRIVACY.ja.md)

@@ -1,38 +1,19 @@
 # LIVE FAULT
 
-A changing layer over your manual settings. LIVE FAULT uses internal random values and time; it does not need movement or read the microphone, motion sensors, temperature, or CPU load.
+[Faults](EFFECTS.md) · [日本語](LIVE_FAULT.ja.md)
 
-[All guides](README.md) · [Creative recipes](RECIPES.md) · [日本語](LIVE_FAULT.ja.md)
+Each fault has its own time behavior, even when LIVE is off. A weak row can drift and a tape can suffer a brief dropout while their underlying identities stay fixed. LIVE adds a connection to the physical device; it is not a randomization mode.
 
-## Start and return
-
-LIVE FAULT is off at launch. Turn it on from the capture screen. A temporary change returns to your manual settings when it ends; turning LIVE off does the same. Manual selections and values are not overwritten by the automatic changes.
-
-If you open a saved capture in an external viewer and return, the previous ON/OFF state is retained and processing resumes. The app remembers configuration values, but a fresh launch still starts with LIVE off.
-
-## Controls
-
-| Control | What it changes |
+| Input | Connection |
 |---|---|
-| Interval | Checks for a new change every 0.5–10 seconds. |
-| Probability | Chance per check. 0% never triggers; 100% triggers at every check. |
-| Duration | Holds a change for 0.15–5 seconds. A new event can replace its target. |
-| Change amount | How far the automatic target moves from the manual values. 0% keeps them unchanged. |
-| Smoothing | Transition into and out of a change. 0% switches immediately. |
-| Chain switching | When allowed, selects a temporary compatible chain. Off keeps the manually selected stages. |
+| Motion / rotation | Readout shear, tape tracking, CRT sync |
+| Camera exposure / skew / timing | Exposure phase and integration, readout instability |
+| Thermal state | Hot-pixel activity and sensor noise |
+| CPU / camera timing pressure | Probability and impact of data/stream incidents |
+| Audio amplitude | Tape timebase motion |
 
-Start with chain switching off to learn what the selected effects do over time.
+Open the control next to LIVE to choose input sources, sensitivity and 50/60 Hz lighting. LIVE starts off on a cold launch. Audio coupling is optional and requests microphone permission; denying it leaves the other sources usable. During audio recording, the existing recorder supplies the amplitude measurement instead of opening another microphone. Inputs are acquired only while the camera is in the foreground. Availability and measured values depend on the device.
 
-## Temporary chains
+The route and manual controls remain unchanged. Fixed identities use structural random seeds; continuous motion uses slow drift; incidents use separate event randomness. A new session can produce different accidents with the same saved character. RESEED makes a different individual with the same controls. There is no ordinary random chain switching or generic parameter interpolation.
 
-Minimum and maximum chain length can be set from 1–16 stages, defaulting to 2–4. The available effect count limits the actual length. More stages increase GPU work and can reduce frame rate.
-
-SENSOR FAIL enters the random candidate set only when it is already in the manual chain. “Keep original display stages” starts on: an existing VHS/TERMINAL stage remains and another display stage is not added. Their parameters may still vary. Turning this option off lets the display stage be selected again with the rest of the chain.
-
-Preserved display stages can take precedence over a lower configured stage-count maximum.
-
-## What gets saved
-
-The LIVE row shows the actual chain, stage count, and overall strength. Tap it to inspect the chain. The manual strength slider keeps its baseline value.
-
-Preview and normal video share the values for a frame. A photo takes a snapshot of the values at capture. CLEAN, original RAW, and RAW video bypass processing. Processed RAW applies only its supported stages, so its chain can be shorter.
+Preview and ordinary video are fed from one canonical processed camera image for each camera timestamp. JPEG pins the displayed image at shutter time. RAW is a separate representation and exposure; see [formats](FORMATS.md).

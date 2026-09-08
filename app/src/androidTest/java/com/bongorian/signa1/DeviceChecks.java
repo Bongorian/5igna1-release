@@ -28,20 +28,21 @@ public final class DeviceChecks extends Instrumentation {
         if(args.getString("liveFault","false").equals("true"))runOnMainSync(()->activity.applyFaultConfig(new FaultConfig(true,true,true,true,true,true,.5f,50)));
         String action=args.getString("action","photo");
         if(action.equals("screenshots")){checkStoreScreenshots();result.putString("result","PASS captured current Japanese and English UI screenshots");}
+        else if(action.equals("capture-contract")){checkCaptureContract();result.putString("result","PASS displayed timestamp pin, later camera frames, JPEG pixel equality and snapshot metadata");}
         else if(action.equals("language")){checkLanguage();result.putString("result","PASS Japanese, English, Chinese, system default, locale recreation, camera recovery and retained settings/effects/LIVE/count");}
         else if(action.equals("raw-video-caps")){checkRawCaps(result);}
         else if(action.equals("raw-video")){checkRawVideo(result);}
-        else if(action.equals("live-selection")){checkLiveSelection();result.putString("result","PASS live chain UI, sensor candidate exclusion, selectable stage count and display retention");}
+        else if(action.equals("live-selection")){checkLiveSelection();result.putString("result","PASS stable selected route and LIVE state UI");}
         else if(action.equals("return")){checkPreviewReturn();result.putString("result","PASS three external preview round trips, effect/config preservation, camera recovery and capture after return");}
         else if(action.equals("faults")){checkFaults();result.putString("result","PASS LIVE FAULT GPU snapshots, recoverable bypass, chain invariance, microphone handoff prerequisites and foreground cleanup");}
         else if(action.equals("geo")){checkGeo();result.putString("result","PASS location checks for the current permission/service state");}
         else if(action.equals("compatibility")){checkCompatibility();result.putString("result","PASS camera catalogs, low-resolution selection, JPEG without encoder, session recovery, front/back startup");}
-        else if(action.equals("effects")){checkGpu();checkNewEffects();result.putString("result","PASS four new GPU effects, parameters, bypass, deterministic layout and chain");}
+        else if(action.equals("effects")){checkGpu();checkNewEffects();result.putString("result","PASS all 13 fault shaders, every named control, snapshot replay, bypass and causal composition");}
         else if(action.equals("metadata")){checkMetadata();checkGpu();result.putString("result","PASS JPEG EXIF/GPS, RAW invariants, GPU chain composition/orientation/zero strength");}
-        else if(action.equals("state")){checkState();checkGpu();result.putString("result","PASS state commit/cancel/cleanup and ROW SHIFT parameters");}
+        else if(action.equals("state")){checkState();checkGpu();result.putString("result","PASS state commit/cancel/cleanup and fault GPU behavior");}
         else{
             CaptureSettings chosen=new CaptureSettings(original);chosen.rawVideo=false;chosen.location=args.getString("gps","false").equals("true");chosen.jpegQuality=Integer.parseInt(args.getString("quality","100"));chosen.videoQuality=Integer.parseInt(args.getString("bitrate","3"));chosen.codec=args.getString("codec",original.codec);chosen.videoKey=args.getString("videoKey","");chosen.photoSize=args.getString("photoSize","auto");chosen.photoFormat=action.equals("raw")?2:action.equals("raw-original")?1:0;
-            boolean recording=action.equals("video")||action.equals("segment");boolean requestedSound=!args.getString("sound","true").equals("false");int preset=Integer.parseInt(args.getString("effect",Integer.toString(chosen.photoFormat==2?Effects.ROW_SHIFT:Effects.CLEAN)));int power=Integer.parseInt(args.getString("power","70"));int previous=activity.engine.generation;
+            boolean recording=action.equals("video")||action.equals("segment");boolean requestedSound=!args.getString("sound","true").equals("false");int preset=Integer.parseInt(args.getString("effect",Integer.toString(chosen.photoFormat==2?Effects.ROW_ERROR:Effects.CLEAN)));int power=Integer.parseInt(args.getString("power","70"));int previous=activity.engine.generation;
             runOnMainSync(()->{activity.videoMode=recording;activity.applySettings(chosen);int mask=Integer.parseInt(args.getString("chainMask","0"));EffectState selected=activity.effectState.single(preset);if(mask!=0)selected=selected.chain(mask);activity.commitEffects(selected.amount(power/100f));});
             await("configured",()->activity.engine.generation>previous&&activity.engine.frameSeen&&activity.ready,20000);SystemClock.sleep(1000);
             if(recording&&!chosen.videoKey.isEmpty()&&!activity.engine.videoChoice.key().equals(chosen.videoKey))throw new AssertionError("Requested video mode not selected: "+activity.engine.videoChoice.key());
@@ -71,8 +72,8 @@ public final class DeviceChecks extends Instrumentation {
             for(String language:new String[]{"ja","en"}){
                 changeLanguage(language);
                 runOnMainSync(()->activity.commitEffects(EffectState.defaults()));SystemClock.sleep(2000);languageScreenshot("store-"+language+"-01-camera");
-                runOnMainSync(()->activity.commitEffects(EffectState.defaults().single(Effects.ROW_SHIFT).amount(.8f)));SystemClock.sleep(2000);languageScreenshot("store-"+language+"-02-row-shift");
-                runOnMainSync(()->activity.commitEffects(EffectState.defaults().chain((1<<Effects.ROW_SHIFT)|(1<<Effects.CHROMA)|(1<<Effects.VHS)).amount(.65f)));SystemClock.sleep(2000);languageScreenshot("store-"+language+"-03-chain");
+                runOnMainSync(()->activity.commitEffects(EffectState.defaults().single(Effects.ROW_ERROR).amount(.8f)));SystemClock.sleep(2000);languageScreenshot("store-"+language+"-02-row-shift");
+                runOnMainSync(()->activity.commitEffects(EffectState.defaults().chain((1<<Effects.ROW_ERROR)|(1<<Effects.CHROMA_ERROR)|(1<<Effects.VHS)).amount(.65f)));SystemClock.sleep(2000);languageScreenshot("store-"+language+"-03-chain");
                 runOnMainSync(()->new EffectDialog(activity,true).show());SystemClock.sleep(750);languageScreenshot("store-"+language+"-04-adjust");sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK);
                 runOnMainSync(()->AboutDialog.showLicenses(activity));SystemClock.sleep(500);languageScreenshot("store-"+language+"-licenses");sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK);
             }
@@ -115,10 +116,11 @@ public final class DeviceChecks extends Instrumentation {
         result.putString("result","PASS queried RAW capture capabilities");result.putString("rawVideo",caps.toString());
     }
     void checkLiveSelection()throws Exception{
-        FaultConfig config=new FaultConfig(true,false,false,false,false,false,.5f,50,true,true,0,1,1,1,0,true,5,5);
-        runOnMainSync(()->{activity.commitEffects(EffectState.defaults().chain((1<<Effects.VHS)|(1<<Effects.CHROMA)));activity.applyFaultConfig(config);});
-        await("live UI frame",()->activity.shownLiveFrame!=null&&activity.shownLiveFrame.ids.length==5,5000);
-        runOnMainSync(()->{EffectState.Frame shown=activity.shownLiveFrame;if(Arrays.stream(shown.ids).anyMatch(id->id==Effects.SENSOR_FAIL)||Arrays.stream(shown.ids).noneMatch(id->id==Effects.VHS))throw new AssertionError("Live selection constraints lost");if(!activity.liveChainStatus.getText().toString().contains(Effects.chainName(shown.ids)))throw new AssertionError("Actual live chain is not displayed");});
+        EffectState selected=EffectState.defaults().chain((1<<Effects.VHS)|(1<<Effects.CHROMA_ERROR));
+        runOnMainSync(()->{activity.commitEffects(selected);activity.applyFaultConfig(FaultConfig.defaults().enabled(true));});
+        await("live UI frame",()->activity.shownLiveFrame!=null&&Arrays.equals(activity.shownLiveFrame.ids(),selected.ids()),5000);
+        SystemClock.sleep(1800);
+        runOnMainSync(()->{if(!Arrays.equals(activity.shownLiveFrame.ids(),selected.ids()))throw new AssertionError("Route changed during LIVE");if(!activity.liveChainStatus.getText().toString().contains(Effects.chainName(selected.ids())))throw new AssertionError("Actual route is not displayed");});
     }
     void checkRawVideo(Bundle result)throws Exception{
         if(!activity.cameraOptions.rawVideoAvailable()){result.putString("result","UNAVAILABLE: "+activity.cameraOptions.rawVideoReason(activity));return;}
@@ -142,7 +144,7 @@ public final class DeviceChecks extends Instrumentation {
     }
     void checkPreviewReturn() throws Exception {
         if(activity.latest==null)throw new AssertionError("Capture a photo before return test");
-        runOnMainSync(()->{activity.commitEffects(EffectState.defaults().chain((1<<Effects.VHS)|(1<<Effects.CHROMA)).amount(.7f));activity.applyFaultConfig(FaultConfig.defaults().enabled(true));});
+        runOnMainSync(()->{activity.commitEffects(EffectState.defaults().chain((1<<Effects.VHS)|(1<<Effects.CHROMA_ERROR)).amount(.7f));activity.applyFaultConfig(FaultConfig.defaults().enabled(true));});
         String encoded=activity.effectState.encode();Uri saved=activity.latest;
         for(int n=0;n<3;n++){
             runOnMainSync(()->activity.openGallery());await("external preview pause",()->!activity.resumed,10000);
@@ -161,20 +163,9 @@ public final class DeviceChecks extends Instrumentation {
         FaultModel.Inputs inputs=new FaultModel.Inputs();inputs.motionAvailable=true;inputs.ax=15;inputs.jitter=1;
         model.advance(1,inputs,config);model.advance(1.04,inputs,config);
         EffectState selected=EffectState.defaults().single(Effects.VHS).amount(.8f);
-        EffectState.Frame live=model.apply(selected.snapshot(true,0),config,1.04f);
-        Bitmap source=Bitmap.createBitmap(96,128,Bitmap.Config.ARGB_8888);
-        for(int y=0;y<128;y++)for(int x=0;x<96;x++)source.setPixel(x,y,Color.rgb(x*255/96,y*255/128,(x/8%2)*255));
-        ByteArrayOutputStream out=new ByteArrayOutputStream();source.compress(Bitmap.CompressFormat.JPEG,100,out);source.recycle();byte[] jpeg=out.toByteArray();
-        Bitmap first=PhotoRenderer.render(getTargetContext(),jpeg,false,live.ids,live.amount,live.time,live.parameters,live.live);
-        Bitmap same=PhotoRenderer.render(getTargetContext(),jpeg,false,live.ids,live.amount,live.time,live.parameters,live.live);
-        if(!first.sameAs(same))throw new AssertionError("Snapshot changed between preview and saved rendering");
-        Bitmap frozen=PhotoRenderer.render(getTargetContext(),jpeg,false,live.ids,live.amount,0,selected.parameters());
-        if(first.sameAs(frozen))throw new AssertionError("Physical VHS snapshot did not alter pixels");first.recycle();same.recycle();frozen.recycle();
-        FaultModel stable=new FaultModel();EffectState packets=EffectState.defaults().single(Effects.PACKET_LOSS);
-        EffectState.Frame recovered=stable.apply(packets.snapshot(true,0),config,3);
-        Bitmap clear=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[0],1,0);
-        Bitmap bypass=PhotoRenderer.render(getTargetContext(),jpeg,false,recovered.ids,recovered.amount,3,recovered.parameters,recovered.live);
-        if(!clear.sameAs(bypass)||recovered.ids.length!=1)throw new AssertionError("Zero strength must bypass pixels and retain stage");clear.recycle();bypass.recycle();
+        EffectState.Frame live=model.apply(selected.snapshot(true,0),config);
+        byte[] jpeg=fixture();Bitmap first=PhotoRenderer.render(getTargetContext(),jpeg,false,live),same=PhotoRenderer.render(getTargetContext(),jpeg,false,live);
+        if(!first.sameAs(same))throw new AssertionError("Snapshot replay changed pixels");first.recycle();same.recycle();
         String before=activity.effectState.encode();
         runOnMainSync(()->activity.applyFaultConfig(config));
         await("fault microphone",()->activity.engine.faultInputs.microphone!=null,5000);
@@ -237,85 +228,82 @@ public final class DeviceChecks extends Instrumentation {
         runOnMainSync(()->{activity.videoMode=false;activity.applySettings(jpeg);});
         await("JPEG context",()->activity.engine.generation>previous&&activity.ready,20000);
         runOnMainSync(()->{
-            activity.commitEffects(EffectState.defaults().chain((1<<Effects.SENSOR_FAIL)|(1<<Effects.ROW_SHIFT)).amount(.7f));EffectState base=activity.effectState;
+            activity.commitEffects(EffectState.defaults().chain((1<<Effects.PIXEL_DAMAGE)|(1<<Effects.ROW_ERROR)).amount(.7f));EffectState base=activity.effectState;
             String persisted=activity.getSharedPreferences("signal",0).getString(EffectStateStore.KEY,"");
-            MainActivity.EffectPreview edit=activity.beginEffectPreview();EffectState draft=base.single(Effects.ROW_SHIFT).amount(.2f);activity.previewEffectEdit(edit,draft);
+            MainActivity.EffectPreview edit=activity.beginEffectPreview();EffectState draft=base.single(Effects.ROW_ERROR).amount(.2f);activity.previewEffectEdit(edit,draft);
             if(activity.effectState!=base||!persisted.equals(activity.getSharedPreferences("signal",0).getString(EffectStateStore.KEY,"")))throw new AssertionError("Preview leaked to committed state");
             activity.finishEffectEdit(edit,draft,false);if(activity.effectState!=base)throw new AssertionError("Cancel did not restore base");
             edit=activity.beginEffectPreview();activity.previewEffectEdit(edit,draft);activity.finishEffectEdit(edit,draft,true);
-            if(activity.effectState.chained||activity.effectState.mask!=(1<<Effects.ROW_SHIFT)||activity.effectState.amount!=.2f)throw new AssertionError("Apply was not atomic");
+            if(activity.effectState.chained||activity.effectState.mask!=(1<<Effects.ROW_ERROR)||activity.effectState.amount!=.2f)throw new AssertionError("Apply was not atomic");
             edit=activity.beginEffectPreview();activity.chooseEffect(Effects.CLEAN);activity.finishEffectEdit(edit,base,true);
             if(activity.effectState.mask!=0||activity.effectState.chained)throw new AssertionError("Stale editor resurrected chain");
-            activity.commitEffects(base.chain((1<<Effects.SENSOR_FAIL)|(1<<Effects.PACKET_LOSS)));if(activity.effectState.mask!=(1<<Effects.SENSOR_FAIL))throw new AssertionError("Photo retained hidden PACKET LOSS");
+            activity.commitEffects(base.chain((1<<Effects.PIXEL_DAMAGE)|(1<<Effects.STREAM_ERROR)));if(activity.effectState.mask!=((1<<Effects.PIXEL_DAMAGE)|(1<<Effects.STREAM_ERROR)))throw new AssertionError("Photo lost stream model");
             String before=activity.effectState.encode();activity.renderEffects();if(!before.equals(activity.effectState.encode()))throw new AssertionError("Redraw mutated effect state");
         });
     }
+    void checkCaptureContract()throws Exception{
+        CaptureSettings settings=new CaptureSettings(activity.settings);settings.photoFormat=0;settings.rawVideo=false;settings.photoSize="auto";settings.jpegQuality=100;
+        int generation=activity.engine.generation;
+        runOnMainSync(()->{activity.videoMode=false;activity.applySettings(settings);activity.commitEffects(EffectState.defaults().chain((1<<Effects.ROW_ERROR)|(1<<Effects.VHS)|(1<<Effects.CRT)).amount(.8f));});
+        await("live signal",()->activity.engine.generation>generation&&activity.ready&&activity.engine.presentedFrames.acknowledged()>0,20000);
+        SystemClock.sleep(500);
+        FrameHistory.Lease<SignalBuffer> displayed=activity.engine.presentedFrames.reserve();if(displayed==null)throw new AssertionError("No acknowledged image");
+        long capturedCameraNs=displayed.value.frame.cameraNs;
+        Bitmap[] reference=new Bitmap[1];Throwable[] problem=new Throwable[1];java.util.concurrent.CountDownLatch read=new java.util.concurrent.CountDownLatch(1);
+        activity.engine.gl.post(()->{try{activity.engine.current(activity.engine.window);reference[0]=displayed.value.read();}catch(Throwable failure){problem[0]=failure;}finally{read.countDown();}});
+        if(!read.await(5,java.util.concurrent.TimeUnit.SECONDS)||problem[0]!=null)throw new AssertionError("Reference readback",problem[0]);
+        // Simulate delayed GL shutter handling while new camera states arrive. The old image is pinned.
+        await("later camera signal",()->activity.engine.lastFrameNs>displayed.value.frame.cameraNs+150_000_000L,5000);
+        Uri before=activity.latest;activity.engine.photo(displayed.timestamp);activity.engine.presentedFrames.release(displayed);
+        runOnMainSync(()->activity.commitEffects(EffectState.defaults().single(Effects.COLOR_MAP)));
+        await("latched JPEG",()->activity.latest!=null&&!activity.latest.equals(before)&&!activity.engine.photoBusy,30000);
+        Bitmap actual;try(InputStream in=getTargetContext().getContentResolver().openInputStream(activity.latest)){actual=BitmapFactory.decodeStream(in);}
+        ByteArrayOutputStream encoded=new ByteArrayOutputStream();reference[0].compress(Bitmap.CompressFormat.JPEG,100,encoded);Bitmap expected=BitmapFactory.decodeByteArray(encoded.toByteArray(),0,encoded.size());reference[0].recycle();
+        if(actual==null||!actual.sameAs(expected))throw new AssertionError("Saved JPEG is not the pinned displayed signal");actual.recycle();expected.recycle();
+        try(InputStream in=getTargetContext().getContentResolver().openInputStream(activity.latest)){String description=new ExifInterface(in).getAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION);if(description==null||!description.contains("cameraNs="+capturedCameraNs)||!description.contains("VHS"))throw new AssertionError("Capture lost timestamp/state metadata");}
+    }
     void checkNewEffects()throws Exception{
         android.content.SharedPreferences prefs=getTargetContext().getSharedPreferences("effect-schema-check",0);
-        prefs.edit().clear().putString("effect_state_v1","1|0|256|0.73").putInt("effect",8).putInt("chainMask",256).commit();
-        if(EffectStateStore.load(prefs).mask!=0)throw new AssertionError("Old effect IDs were reinterpreted");
-        android.content.SharedPreferences.Editor editor=prefs.edit();EffectStateStore.write(editor,EffectState.defaults().single(Effects.DEMOSAIC));editor.commit();
-        if(EffectStateStore.load(prefs).selected()!=Effects.DEMOSAIC||prefs.contains("effect_state_v1"))throw new AssertionError("New state persistence/reset");
-        prefs.edit().clear().commit();
-        Bitmap source=Bitmap.createBitmap(96,128,Bitmap.Config.ARGB_8888);
-        for(int y=0;y<128;y++)for(int x=0;x<96;x++)source.setPixel(x,y,Color.rgb((x*13+y*3)%256,(y*17)%256,((x/7+y/9)%2)*255));
-        ByteArrayOutputStream out=new ByteArrayOutputStream();source.compress(Bitmap.CompressFormat.JPEG,100,out);source.recycle();byte[] jpeg=out.toByteArray();
-        Bitmap clean=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[0],1,3);
-        for(int id:new int[]{Effects.DATA_SHIFT,Effects.LINE_LOSS,Effects.CFA_OFFSET,Effects.DEMOSAIC}){
-            float[] p=EffectParameters.defaults();p[id*4+1]=.2f;p[id*4+2]=.2f;
-            Bitmap effect=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{id},.65f,3,p);
-            Bitmap later=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{id},.65f,9,p);
-            if(clean.sameAs(effect)||!effect.sameAs(later))throw new AssertionError("New effect output/stability: "+id);
-            later.recycle();
-            p[id*4+1]=1;Bitmap shape=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{id},.65f,3,p);
-            if(effect.sameAs(shape))throw new AssertionError("P1 ignored: "+id);shape.recycle();
-            p[id*4+1]=.2f;p[id*4+2]=0;Bitmap character=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{id},.65f,3,p);
-            if(effect.sameAs(character))throw new AssertionError("P2 ignored: "+id);character.recycle();
-            p[id*4]=0;Bitmap bypass=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{id},.65f,3,p);
-            if(!clean.sameAs(bypass))throw new AssertionError("Stage zero: "+id);bypass.recycle();effect.recycle();
-        }
-        float[] zero=EffectParameters.defaults();zero[Effects.DATA_SHIFT*4+1]=0;
-        Bitmap aligned=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.DATA_SHIFT},1,3,zero);
-        if(!clean.sameAs(aligned))throw new AssertionError("DATA SHIFT zero bytes");aligned.recycle();
-        int[] chain={Effects.LINE_LOSS,Effects.DATA_SHIFT,Effects.CFA_OFFSET,Effects.DEMOSAIC};
-        Bitmap combined=PhotoRenderer.render(getTargetContext(),jpeg,false,chain,.7f,3);
-        Bitmap last=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.DEMOSAIC},.7f,3);
-        if(combined.sameAs(last)||combined.sameAs(clean))throw new AssertionError("New chain composition");
-        combined.recycle();last.recycle();clean.recycle();
+        prefs.edit().clear().putString("effect_state_v2","2|0|256|0.73").putInt("effect",8).commit();
+        if(EffectStateStore.load(prefs).mask!=0)throw new AssertionError("Old IDs reinterpreted");
+        android.content.SharedPreferences.Editor editor=prefs.edit();EffectStateStore.write(editor,EffectState.defaults().single(Effects.DEMOSAIC_ERROR));editor.commit();
+        if(EffectStateStore.load(prefs).selected()!=Effects.DEMOSAIC_ERROR||prefs.contains("effect_state_v2"))throw new AssertionError("New schema migration");prefs.edit().clear().commit();
     }
+    byte[] fixture(){Bitmap input=Bitmap.createBitmap(192,256,Bitmap.Config.ARGB_8888);for(int y=0;y<256;y++)for(int x=0;x<192;x++)input.setPixel(x,y,Color.rgb((x*13+y*3)%256,y,((x/7+y/9)%2)*255));ByteArrayOutputStream bytes=new ByteArrayOutputStream();input.compress(Bitmap.CompressFormat.JPEG,100,bytes);input.recycle();return bytes.toByteArray();}
+    EffectState.Frame evaluated(EffectState state,double time){FaultModel model=new FaultModel(5);FaultModel.Inputs input=new FaultModel.Inputs();model.advance(0,input,FaultConfig.defaults());input.sensorNs=(long)(time*1e9);model.advance(time,input,FaultConfig.defaults());return model.apply(state.snapshot(true,0),FaultConfig.defaults());}
     void checkGpu()throws Exception{
-        Bitmap input=Bitmap.createBitmap(96,128,Bitmap.Config.ARGB_8888);
-        for(int y=0;y<128;y++)for(int x=0;x<96;x++)input.setPixel(x,y,Color.rgb(x*255/95,y*255/127,(x+y)%256));
-        ByteArrayOutputStream bytes=new ByteArrayOutputStream();input.compress(Bitmap.CompressFormat.JPEG,100,bytes);input.recycle();byte[] jpeg=bytes.toByteArray();
-        Bitmap clean=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[0],1,3);
-        Bitmap zero=PhotoRenderer.render(getTargetContext(),jpeg,false,Effects.ordered(-1,false),0,3);
-        Bitmap multi=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.EXPOSURE_BAND,Effects.CHROMA_LOSS,Effects.PACKET_LOSS},1,3);
-        Bitmap last=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.PACKET_LOSS},1,3);
-        if(!clean.sameAs(zero))throw new AssertionError("GPU zero strength");
-        if(multi.sameAs(last)||multi.sameAs(clean))throw new AssertionError("GPU stages not composed");
-        if(Color.green(clean.getPixel(48,10))>=Color.green(clean.getPixel(48,118)))throw new AssertionError("GPU image inverted");
-        float[] parameters=EffectParameters.defaults();parameters[Effects.SENSOR_FAIL*4+1]=1;parameters[Effects.SENSOR_FAIL*4+2]=0;
-        Bitmap dark=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.SENSOR_FAIL},1,3,parameters);
-        parameters[Effects.SENSOR_FAIL*4+2]=1;Bitmap bright=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.SENSOR_FAIL},1,3,parameters);
-        if(dark.sameAs(bright))throw new AssertionError("Sensor character parameter ignored");
-        parameters[Effects.SENSOR_FAIL*4]=0;Bitmap bypass=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.SENSOR_FAIL},1,3,parameters);
-        if(!clean.sameAs(bypass))throw new AssertionError("Stage zero strength");
-        if(Effects.available(Effects.PACKET_LOSS,false,false)||!Effects.available(Effects.PACKET_LOSS,true,false))throw new AssertionError("Video-only packet loss");
-        if(Effects.active(Effects.PACKET_LOSS,1<<Effects.PACKET_LOSS,false,false).length!=0)throw new AssertionError("Packet loss leaked into photo");
-        float[] rowParameters=EffectParameters.defaults();rowParameters[Effects.ROW_SHIFT*4+2]=0;
-        Bitmap noShift=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.ROW_SHIFT},1,3,rowParameters);
-        if(!clean.sameAs(noShift))throw new AssertionError("ROW SHIFT width zero");
-        rowParameters[Effects.ROW_SHIFT*4+2]=1;Bitmap rows=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.ROW_SHIFT},1,3,rowParameters);
-        Bitmap later=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.ROW_SHIFT},1,9,rowParameters);
-        if(rows.sameAs(clean)||!rows.sameAs(later))throw new AssertionError("ROW SHIFT displacement/stability");
-        rowParameters[Effects.ROW_SHIFT*4+1]=1;Bitmap tall=PhotoRenderer.render(getTargetContext(),jpeg,false,new int[]{Effects.ROW_SHIFT},1,3,rowParameters);
-        if(rows.sameAs(tall))throw new AssertionError("ROW SHIFT band height ignored");
-        noShift.recycle();rows.recycle();later.recycle();tall.recycle();
-        dark.recycle();bright.recycle();bypass.recycle();
-        clean.recycle();zero.recycle();multi.recycle();last.recycle();
+        byte[] jpeg=fixture();Bitmap clean=PhotoRenderer.render(getTargetContext(),jpeg,false,evaluated(EffectState.defaults(),0));
+        Bitmap zero=PhotoRenderer.render(getTargetContext(),jpeg,false,evaluated(EffectState.defaults().chain(-1).amount(0),4));if(!zero.sameAs(clean))throw new AssertionError("LEVEL zero bypass");zero.recycle();
+        if(Color.green(clean.getPixel(80,10))>=Color.green(clean.getPixel(80,240)))throw new AssertionError("GPU orientation");
+        File dir=new File(getTargetContext().getFilesDir(),"verification");dir.mkdirs();
+        for(int id:Effects.ORDER){if(id==0)continue;EffectState selected=EffectState.defaults().single(id).amount(1);EffectState.Frame frame=null;
+            for(int i=1;i<200;i++){frame=evaluated(selected,i*.05);if(id!=Effects.STREAM_ERROR||frame.nodes.get(0).event.envelope>.5)break;}
+            Bitmap image=PhotoRenderer.render(getTargetContext(),jpeg,false,frame),again=PhotoRenderer.render(getTargetContext(),jpeg,false,frame);
+            if(!image.sameAs(again))throw new AssertionError("Snapshot replay: "+Effects.name(id));
+            if(image.sameAs(clean))throw new AssertionError("Fault has no visible mechanism: "+Effects.name(id));
+            try(OutputStream out=new FileOutputStream(new File(dir,"fault-"+id+".png"))){image.compress(Bitmap.CompressFormat.PNG,100,out);}image.recycle();again.recycle();
+            double incidentTime=.08;
+            for(int step=1;step<=1200;step++){FaultNode probe=evaluated(selected,step*.05).nodes.get(0);if(probe.event.envelope>.5&&probe.event.position>.03){incidentTime=step*.05;break;}if(probe.event.serial<0)break;}
+            for(Effects.Control control:Effects.CONTROLS[id]){
+                boolean responds=false;
+                for(double time:new double[]{incidentTime,.08,1.18,2.78,5.48,8.18}){
+                    EffectParameters p=selected.parameters();
+                    Bitmap low=PhotoRenderer.render(getTargetContext(),jpeg,false,evaluated(selected.edit(false,selected.mask,p.with(id,control.key,0)),time));
+                    Bitmap high=PhotoRenderer.render(getTargetContext(),jpeg,false,evaluated(selected.edit(false,selected.mask,p.with(id,control.key,1)),time));
+                    responds=!low.sameAs(high);low.recycle();high.recycle();if(responds)break;
+                }
+                if(!responds)throw new AssertionError("Control has no visible effect: "+Effects.name(id)+" / "+control.key);
+            }
+        }
+        EffectState chain=EffectState.defaults().chain((1<<Effects.EXPOSURE)|(1<<Effects.CHROMA_ERROR)|(1<<Effects.CRT));
+        Bitmap composed=PhotoRenderer.render(getTargetContext(),jpeg,false,evaluated(chain,3)),last=PhotoRenderer.render(getTargetContext(),jpeg,false,evaluated(chain.single(Effects.CRT),3));
+        if(composed.sameAs(last)||composed.sameAs(clean))throw new AssertionError("Causal chain composition");composed.recycle();last.recycle();clean.recycle();
     }
     void checkMetadata()throws Exception{
         Bitmap b=Bitmap.createBitmap(64,96,Bitmap.Config.ARGB_8888);b.eraseColor(Color.GREEN);File file=new File(getTargetContext().getCacheDir(),"metadata-check.jpg");try(OutputStream out=new FileOutputStream(file)){b.compress(Bitmap.CompressFormat.JPEG,95,out);}b.recycle();Location fake=new Location("gps");fake.setLatitude(-12.345678);fake.setLongitude(123.456789);fake.setAltitude(42.5);fake.setAccuracy(3);fake.setTime(System.currentTimeMillis());fake.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());PhotoMetadata.write(file,null,null,System.currentTimeMillis(),64,96,fake,"SIGNAL METADATA CHECK");ExifInterface exif=new ExifInterface(file);float[] latlong=new float[2];if(!exif.getLatLong(latlong)||Math.abs(latlong[0]+12.345678)>.00001||Math.abs(latlong[1]-123.456789)>.00002)throw new AssertionError("GPS roundtrip");if(exif.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)==null||exif.getAttribute(ExifInterface.TAG_SOFTWARE)==null||exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,0)!=1)throw new AssertionError("EXIF fields");file.delete();
-        int w=128,h=96;byte[] samples=new byte[w*h*2];for(int i=0;i<w*h;i++)RawGlitch.write(samples,i,256+(i%3500));float[] rawParameters=EffectParameters.defaults();rawParameters[Effects.CFA_TEAR*4+1]=.1f;for(int mode:Effects.ordered(-1,true)){byte[] untouched=RawGlitch.apply(samples,w,h,4095,256,mode,0,17,rawParameters);if(!Arrays.equals(samples,untouched))throw new AssertionError("RAW zero amount");byte[] corrupt=RawGlitch.apply(samples,w,h,4095,256,mode,1,17,rawParameters);if(Arrays.equals(samples,corrupt))throw new AssertionError("RAW no mutation "+mode);if(!Arrays.equals(corrupt,RawGlitch.apply(samples,w,h,4095,256,mode,1,17,rawParameters)))throw new AssertionError("RAW nondeterministic");for(int i=0;i<w*h;i++)if(RawGlitch.read(corrupt,i)>4095)throw new AssertionError("RAW sample out of bounds");}
+        int w=128,h=96;byte[] samples=new byte[w*h*2];for(int i=0;i<w*h;i++)RawGlitch.write(samples,i,256+i%3500);
+        EffectState.Frame frame=evaluated(EffectState.defaults().chain(-1),.1);
+        byte[] first=RawGlitch.chain(samples,w,h,4095,256,frame),same=RawGlitch.chain(samples,w,h,4095,256,frame);
+        if(!Arrays.equals(first,same))throw new AssertionError("RAW snapshot replay");for(int i=0;i<w*h;i++)if(RawGlitch.read(first,i)>4095)throw new AssertionError("RAW bounds");
     }
 }

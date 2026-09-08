@@ -39,10 +39,10 @@ final class CameraOptions {
     CameraOptions(String cameraId,CameraCharacteristics cc,int maxTexture) {
         id=cameraId;characteristics=cc;map=cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
         if(map==null)throw new IllegalArgumentException("Camera has no stream configuration");
-        addPhotos(photos,map,ImageFormat.JPEG,false,maxTexture);
+        Size[] signals=map.getOutputSizes(SurfaceTexture.class);if(signals!=null)for(Size size:signals)if(Math.max(size.getWidth(),size.getHeight())<=maxTexture&&area(size)<=8_388_608L)photos.add(new Photo(size,false));
         addPhotos(raws,map,ImageFormat.RAW_SENSOR,false,Integer.MAX_VALUE);
         StreamConfigurationMap full=cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP_MAXIMUM_RESOLUTION);
-        if(full!=null){addPhotos(photos,full,ImageFormat.JPEG,true,maxTexture);addPhotos(raws,full,ImageFormat.RAW_SENSOR,true,Integer.MAX_VALUE);}
+        if(full!=null){addPhotos(raws,full,ImageFormat.RAW_SENSOR,true,Integer.MAX_VALUE);}
         photos.sort((a,b)->Long.compare(area(b.size),area(a.size)));raws.sort((a,b)->Long.compare(area(b.size),area(a.size)));
         for(MediaCodecInfo ci:new MediaCodecList(MediaCodecList.REGULAR_CODECS).getCodecInfos()) {
             if(!ci.isEncoder())continue;
@@ -94,7 +94,7 @@ final class CameraOptions {
         return false;
     }
     List<Video> videosFor(String codec){List<Video> out=new ArrayList<>();for(Video v:videos)if(supports(v,codec))out.add(v);return out;}
-    Photo photo(CaptureSettings s){List<Photo> list=s.photoFormat==0?photos:raws;if(list.isEmpty())return null;for(Photo p:list)if(p.key().equals(s.photoSize))return p;if("max".equals(s.photoSize))return list.get(0);for(Photo p:list)if(!p.maximumPixelMode&&area(p.size)<=12_000_000)return p;return list.get(list.size()-1);}
+    Photo photo(CaptureSettings s){List<Photo> list=s.photoFormat==0?photos:raws;if(list.isEmpty())return null;for(Photo p:list)if(p.key().equals(s.photoSize))return p;if("max".equals(s.photoSize))return list.get(0);for(Photo p:list)if(!p.maximumPixelMode&&area(p.size)<=(s.photoFormat==0?2_073_600:12_000_000))return p;return list.get(list.size()-1);}
     Video video(CaptureSettings s){List<Video> list=videosFor(s.codec);if(list.isEmpty())return null;for(Video v:list)if(v.key().equals(s.videoKey))return v;for(Video v:list)if(area(v.size)<=1920L*1080&&v.fps==30)return v;return list.get(list.size()-1);}
     int bitrate(Video v,CaptureSettings settings) {
         double pixels=area(v.size); double bpp=settings.videoQuality==0?.10:settings.videoQuality==1?.22:.48;
