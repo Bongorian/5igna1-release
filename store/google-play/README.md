@@ -1,6 +1,6 @@
 # Google Play 配布準備
 
-現行ソースは1.1.0 / versionCode 9の次回提出準備版です。2026-09-08の開発者報告では、提出済み1.0.0 / versionCode 8はクローズドテスト審査待ちです。提出済み成果物は維持します。アプリIDは **com.bongorian.signa1**。F-Droid/GitHubとの署名関係は[共通リリース手順](../../docs/RELEASING.md)を先に確認してください。
+2026-09-09に1.1.0 / versionCode 9を既存のクローズドテストAlphaへ審査送信しました。1.0.0 / code 8はテスターへ公開済みです。テスター設定・対象国を維持した更新です。[提出記録](../../docs/PLAY_1_1_0.md)を参照してください。アプリIDは **com.bongorian.signa1**。F-Droid/GitHubとの署名関係は[共通リリース手順](../../docs/RELEASING.md)を先に確認してください。
 
 ## 成果物
 
@@ -17,9 +17,9 @@ AABは `app/build/outputs/bundle/playRelease/app-play-release.aab`。包装後�
 ## 素材
 
 - `fastlane/metadata/android/ja-JP` と `en-US`：名称、短い説明、詳細説明、`changelogs/9.txt`（8.txtは初回版の記録として保持）。
-- アイコン512×512、feature graphic 1024×500、各言語の1.0.0 UIスクリーンショット1080×1920を4枚。
+- アイコン512×512、feature graphic 1024×500、各言語の1.1.0 UIスクリーンショット1080×1920を4枚。
 - 広告用feature graphicは生成アートです。実機の撮影結果ではありません。[作成記録](asset-provenance.md)と[素材監査](../../docs/audit/ASSETS.md)参照。
-- スクリーンショットはエミュレーターのテストパターンを写した実行画面。1.1.0の提出前に新UIで撮り直してください。プライバシーHTMLは現行実装へ更新済みですが、このソース更新だけでは公開サイトへ反映されません。
+- スクリーンショットはエミュレーターのテストパターンを写した実行画面。2026-09-09に1.1.0の新UIで撮り直し、日英4枚ずつを確認済みです。プライバシーHTMLは現行実装へ更新し、公開サイトでも3言語すべての一致を確認済みです。
 
 ## Console側の作業
 

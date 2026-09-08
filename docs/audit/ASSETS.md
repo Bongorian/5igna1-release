@@ -9,7 +9,7 @@
 | `ic_settings.xml` | Google Material Design Icons 3.0.1のsettings形状をAndroid vectorへ変換・簡略化・配色変更 | Apache-2.0。Googleの帰属と変更をソース・NOTICEへ記載 |
 | 各言語の `images/icon.png` | 上記のロゴベクターから512×512 PNGへ書き出し | 元ロゴと同じ。問題なし |
 | 各言語の `images/featureGraphic.png` と `store/google-play/source/feature-graphic.png` | 2026-09-07に所有者の依頼でImageGen生成。元プロンプトを保存。1024×500への出力版と生成元 | 所有者が持つ権利についてApache-2.0。生成物の利用条件は下記。生成モデル・学習素材のライセンスをアプリへ持ち込むSDK依存はない |
-| 各言語の `images/phoneScreenshots/*.png`（現在の版） | 2026-09-08、Android Emulator API 37、`-camera-back emulated`、1080×1920。現在のfdroidDebug UIを日本語/英語で実行して画面をそのまま取得 | プロジェクトUI＋Apache-2.0のAOSPテストシーン。UI合成・画像の描き足しなし。問題なし |
+| 各言語の `images/phoneScreenshots/*.png`（現在の版） | 2026-09-09、Android Emulator API 37、`-camera-back emulated`、1080×1920。1.1.0のfdroidDebug UIを日本語/英語で実行して画面をそのまま取得 | プロジェクトUI＋Apache-2.0のAOSPテストシーン。UI合成・画像の描き足しなし。問題なし |
 | 外部フォント、音声、写真、テクスチャ、機械学習モデル、presetデータ | アプリの追跡ファイルとAPKを点検。該当なし | 同梱なし。フォントはOS標準を利用 |
 
 ## 現在のスクリーンショット
@@ -33,3 +33,7 @@
 ### Development UI utility icons — 2026-09-08
 
 `ic_flash.xml`, `ic_location.xml`, `ic_mic.xml` and `ic_mic_off.xml` are original vector paths created for this project with Codex, under the project Apache-2.0 license. Input: compact 24-unit outline lightning bolt, location pin and microphone (including a muted variant), 1.6-unit stroke, matching the existing controls. No external source image or icon library was used.
+
+### Play 1.1.0 screenshot refresh — 2026-09-09
+
+Replaced the eight Japanese/English phone screenshots with unedited captures of 1.1.0-debug on the API 37 emulator, using the same AOSP-generated camera pattern and 1080×1920 display. Scenes: CLEAN, ROW ERROR, three-fault chain and its adjustment panel. No private camera imagery or simulated UI is used. The icon and feature graphic are unchanged.

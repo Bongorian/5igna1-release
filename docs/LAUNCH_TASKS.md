@@ -52,3 +52,7 @@ Billing products and Sponsors setup are optional future work, not prerequisites 
 ## Publication verification — 2026-09-08
 
 The initial public history has one root commit and no imported parent commits. APK and checksum downloads were fetched without authentication and matched the local files. The tagged app source was readable publicly; the previous private repository returned 404 without authentication. [Initial Ubuntu/macOS CI](https://github.com/Bongorian/5igna1-release/actions/runs/34147880216) passed both jobs. Obtainium’s on-device import/install remains a follow-up check.
+
+## Play closed-test update — 2026-09-09
+
+Console confirmed code 8 / 1.0.0 published to Alpha. Code 9 / 1.1.0, Japanese/English descriptions and eight new UI screenshots were submitted to review on the same track. Tester and country configuration were retained. The Console placed the five changes under In review, with pre-review quick checks still running. Managed publishing remains enabled; publish after approval to deliver the update. [Submission record](PLAY_1_1_0.md).

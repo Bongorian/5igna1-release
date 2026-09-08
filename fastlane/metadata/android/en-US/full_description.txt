@@ -6,8 +6,11 @@ PIXEL DAMAGE, EXPOSURE, ROW ERROR, BIT ERROR, ADDRESS ERROR, CFA ERROR, DEMOSAIC
 A CHARACTER THAT PERSISTS
 Each fault has its own motion and incidents. RESEED changes identities while preserving controls and the route. LIVE optionally couples motion, camera timing, thermal state, processing pressure and audio amplitude to meaningful fault states. It starts off. Ordinary time progression never shuffles the chain.
 
+COMBINE AND ADJUST
+Generate 2–5 faults and their controls with Random Chain, then adjust them in the live preview. ADVANCED exposes internal parameters as AUTO or fixed values. Device recommendations and automatic workload control help manage preview work; EXPERT optionally removes app-level workload limits. Actual speed depends on the device.
+
 CAPTURE THE SIGNAL
-JPEG saves the displayed camera image and its fault state, at a supported live resolution. Preview and ordinary video use the same processed images. Select H.264/H.265 and device-supported video settings; sound is optional. Original and processed DNG use separate RAW exposures and can differ from the RGB preview. Six sensor/readout/data/CFA faults support RAW16 processing.
+JPEG saves the displayed camera image and its fault state, at a supported live resolution. Preview and ordinary video use the same processed images. Select H.264/H.265 and device-supported video settings; sound is optional. Original and processed DNG use separate RAW exposures and can differ from the RGB preview. Six sensor/readout/data/CFA faults support RAW16 processing. Browse photos and videos together inside the app, with photo zoom, video playback and seeking, sideways browsing and downward dismissal.
 
 EXPERIMENTAL RAW VIDEO
 Compatible cameras can save original, silent DNG sequences in ZIP with timestamps. Extract and develop them in RAW software. This is not a playable MP4; processing is bypassed and frames can be dropped under load.

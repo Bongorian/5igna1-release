@@ -56,23 +56,23 @@
   },
   {
     "path": "fastlane/metadata/android/en-US/images/phoneScreenshots/01-camera.png",
-    "sha256": "830fedf6e9167f39d4f599d6c6bec87dc5950e3b353f470bcb4c3bf373ec077e",
-    "bytes": 98675
+    "sha256": "0efe27f631f297573739b0923562eaab4c46dc72f4932fd131713284b0999934",
+    "bytes": 79093
   },
   {
     "path": "fastlane/metadata/android/en-US/images/phoneScreenshots/02-row-shift.png",
-    "sha256": "0de2f22edbd6711b58c27b8590872cf620ba8360ab3954538aae21c3e3bde660",
-    "bytes": 109229
+    "sha256": "9c9f3b7ee3e4a0124c2a3676f09417e01e8d0317ce6685fedaa1c6f003fd9784",
+    "bytes": 89235
   },
   {
     "path": "fastlane/metadata/android/en-US/images/phoneScreenshots/03-chain.png",
-    "sha256": "793673d57a7a6bf65c5c6c28851115bf850615ddae491ea4ee4cabd04178a780",
-    "bytes": 772338
+    "sha256": "becee042041b605222afb7675aa4f0a4cc99caeb16e682d15c0ef63781e3a0c0",
+    "bytes": 581559
   },
   {
     "path": "fastlane/metadata/android/en-US/images/phoneScreenshots/04-adjust.png",
-    "sha256": "852f3cd642c208c9c4ba8b4611d886f15f2595c81c28f46f5ae0e5d3bea6eeca",
-    "bytes": 317782
+    "sha256": "6d868f3ebe14ae9dd3ca51a45e70a1d5fedf38f8d717ae28ce5db3b5efe4c81e",
+    "bytes": 299520
   },
   {
     "path": "fastlane/metadata/android/ja-JP/images/featureGraphic.png",
@@ -86,27 +86,47 @@
   },
   {
     "path": "fastlane/metadata/android/ja-JP/images/phoneScreenshots/01-camera.png",
-    "sha256": "da6ecbc6d731b9d69b4a8d5548cf2117db98477f60a9e089d55070395bcacd79",
-    "bytes": 97877
+    "sha256": "68770ba575159a8369a374b5c2acb48c3fece5f2d8645cfc48c79103a677d57a",
+    "bytes": 83206
   },
   {
     "path": "fastlane/metadata/android/ja-JP/images/phoneScreenshots/02-row-shift.png",
-    "sha256": "a280e54ac7f2631552026f07e3c270c508016608b650a557b5727f149e910a6e",
-    "bytes": 111765
+    "sha256": "96fea9465bc5a032cbe3300d89a68d179db5fb68a9c4a8909d82be0edeedd248",
+    "bytes": 90997
   },
   {
     "path": "fastlane/metadata/android/ja-JP/images/phoneScreenshots/03-chain.png",
-    "sha256": "7f6ec14c01fe13f1d13d5f38c2f110d4dee458ee6c2c01fedf54fea462e2803b",
-    "bytes": 760366
+    "sha256": "9b7ffb7afc24943ba2dbd87b164ea70c2a8e0c4de3d5bfb8ce0544476d82e3ca",
+    "bytes": 577333
   },
   {
     "path": "fastlane/metadata/android/ja-JP/images/phoneScreenshots/04-adjust.png",
-    "sha256": "3330d1a783f2567a88b5b265f2905b3cb48076a37a2142a869159de28c9635da",
-    "bytes": 327918
+    "sha256": "e622f43beef815786ef586dfdd6e74c09dae8ef742b292c70d6f0b50154076e3",
+    "bytes": 304049
   },
   {
     "path": "store/google-play/source/feature-graphic.png",
     "sha256": "cdbacc6a7b80dec6b557a5624fd4929e17dd1105f1fb10ee7ce1126611b26a7e",
     "bytes": 533815
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_flash.xml",
+    "sha256": "c482648fbae32546eb2874585893d3d3f5948b0311973de4e51bf2f2fa7333e5",
+    "bytes": 409
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_location.xml",
+    "sha256": "4d0d8c36515d92bee54a69257f30afd38c208013a8ea37d0595dea59e6dc9d20",
+    "bytes": 464
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_mic.xml",
+    "sha256": "d826c94a2ccf49f11de9d7113524363b3e0a860c91eb6abf844fc0e246a962e2",
+    "bytes": 476
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_mic_off.xml",
+    "sha256": "d563362360cd03bcc5a1d62087bd01f714ec088942cbaf0ada8c9513158b1a0f",
+    "bytes": 488
   }
 ]

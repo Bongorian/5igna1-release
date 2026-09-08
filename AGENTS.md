@@ -26,3 +26,8 @@
 - The owner reports F-Droid submission awaiting merge and Google Play closed testing awaiting approval. Keep those submitted candidates stable; do not submit replacements as part of routine debugging.
 - Owner authorized merging the completed redesign into main and advancing the version on 2026-09-08. Continue development in /Users/bongorian/Documents/ChatGPT/Apps/5igna1-fault-system; main now prepares 1.1.0 / versionCode 9. Use debug builds (com.bongorian.signa1.debug, 5igna1 DEV) for device testing; keep the release application and its data intact.
 - Before the next store submission, allocate a higher versionCode and an appropriate new versionName; do not reuse published release identity for changed code.
+
+## Owner direction — Play update, 2026-09-09
+
+- The owner explicitly requested applying the current 1.1.0 source to Google Play and reports nine testers currently using 1.0.0. This authorizes a 1.1.0 / code 9 update to the existing closed-test Alpha track and the matching store materials. Preserve its tester group and country settings.
+- Continue preserving the original 1.0.0 artifacts, v1.0.0 tag and signing keys. F-Droid remains on its existing submission; this Play update does not authorize changing that submission or publishing a GitHub release.
