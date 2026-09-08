@@ -1,21 +1,21 @@
-5igna1 is a glitch camera inspired by failures along the imaging pipeline, from the sensor to the display. Preview distortions, color shifts and missing data while framing photos and videos.
+5igna1 is a camera for finding images in a damaged signal. Choose fault points from the sensor to the display, keep their identities, and capture the brief glitches that occur inside that system.
 
-16 EFFECTS
-SENSOR FAIL, EXPOSURE BAND, ROW SHIFT, LINE LOSS, BIT ROT, DATA SHIFT, CFA TEAR, CFA OFFSET, DEMOSAIC, CHROMA, SPECTRUM, CHROMA LOSS, CORRUPT, PACKET LOSS, VHS and TERMINAL. CLEAN captures without effects. Available effects depend on the capture mode; PACKET LOSS is video-only.
+13 FAULTS / 8 POINTS
+PIXEL DAMAGE, EXPOSURE, ROW ERROR, BIT ERROR, ADDRESS ERROR, CFA ERROR, DEMOSAIC ERROR, CHROMA ERROR, COLOR MAP, BLOCK ERROR, STREAM ERROR, VHS and CRT. CLEAN is an empty route. Faults follow causal signal order. VHS/CRT profiles are separate from tracking, dropout, convergence and sync faults. STREAM ERROR models decoded-region loss/reuse; it does not edit real packets.
 
-CHAINS AND LIVE FAULT
-Combine effects in processing order. Adjust intensity, shape and placement, preview changes, then apply or cancel. LIVE FAULT varies parameters automatically, with controls for interval, occurrence rate, duration and chain size. It starts off and does not require device movement.
+A CHARACTER THAT PERSISTS
+Each fault has its own motion and incidents. RESEED changes identities while preserving controls and the route. LIVE optionally couples motion, camera timing, thermal state, processing pressure and audio amplitude to meaningful fault states. It starts off. Ordinary time progression never shuffles the chain.
 
-PHOTOS AND VIDEO
-Save processed JPEGs, original RAW or processed DNG on supported cameras, and GPU-processed videos. Select H.264 or H.265, resolution, frame rate and quality according to camera and encoder capabilities. Audio recording is optional.
+CAPTURE THE SIGNAL
+JPEG saves the displayed camera image and its fault state, at a supported live resolution. Preview and ordinary video use the same processed images. Select H.264/H.265 and device-supported video settings; sound is optional. Original and processed DNG use separate RAW exposures and can differ from the RGB preview. Six sensor/readout/data/CFA faults support RAW16 processing.
 
 EXPERIMENTAL RAW VIDEO
-Compatible cameras can save original, silent DNG frames in a ZIP with timestamps. Extract it and develop the sequence in RAW software; it is not a directly playable MP4. Effects and LIVE FAULT are not applied. Frame rate depends on the device and storage speed; frames may be dropped under load.
+Compatible cameras can save original, silent DNG sequences in ZIP with timestamps. Extract and develop them in RAW software. This is not a playable MP4; processing is bypassed and frames can be dropped under load.
 
 ON YOUR DEVICE
-No ads, accounts, trackers or analytics SDKs. Captures are processed and saved locally. Optional location tagging starts off. The same core features are available in every distribution, with no paid feature gates.
+Every scene sample starts with the camera. No semantic scene generation or completion. No ads, accounts, trackers or analytics SDKs. Optional location tagging starts off. All distribution variants share the same core features.
 
-Japanese, English and Simplified Chinese interfaces. The default follows your device language. Requires Android 12 or later and a Camera2-compatible camera. RAW, resolutions and processing speed vary by device. RAW previews and DEMOSAIC are RGB approximations and can differ from developed sensor RAW.
+Japanese, English and Simplified Chinese. Android 12+, Camera2 and OpenGL ES required. RAW support, resolutions and processing speed depend on the device. RGB reconstruction and decoded-block faults are explicit approximations.
 
 Open source under Apache-2.0.
 Support: dennosamurai@gmail.com

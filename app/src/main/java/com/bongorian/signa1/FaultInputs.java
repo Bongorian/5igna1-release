@@ -21,15 +21,15 @@ final class FaultInputs implements SensorEventListener {
     AudioRecord microphone;Thread micThread;
     FaultInputs(Context context,Handler handler){this.context=context;this.handler=handler;sensors=(SensorManager)context.getSystemService(Context.SENSOR_SERVICE);}
     void configure(FaultConfig next,boolean foreground,boolean recordingAudio){
-        boolean changed=active!=(foreground&&next.enabled&&!next.internal)||config.motion!=next.motion;
+        boolean changed=active!=(foreground&&next.enabled)||config.motion!=next.motion;
         config=next;recorderAudio=recordingAudio;
-        if(changed){stopSensors();active=foreground&&next.enabled&&!next.internal;if(active&&config.motion){
+        if(changed){stopSensors();active=foreground&&next.enabled;if(active&&config.motion){
             Sensor accel=sensors==null?null:sensors.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             Sensor gyro=sensors==null?null:sensors.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
             if(accel!=null)hasAccel=sensors.registerListener(this,accel,20_000,handler);
             if(gyro!=null)hasGyro=sensors.registerListener(this,gyro,20_000,handler);
         }}
-        active=foreground&&next.enabled&&!next.internal;
+        active=foreground&&next.enabled;
         handler.removeCallbacks(poll);
         if(active){poll.run();}else{values.cpu=values.heat=values.jitter=0;lastFrame=lastArrival=0;framePeriod=0;}
         boolean wanted=active&&config.audio&&!recorderAudio&&context.checkSelfPermission(Manifest.permission.RECORD_AUDIO)==PackageManager.PERMISSION_GRANTED;

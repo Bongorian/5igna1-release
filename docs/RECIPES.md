@@ -1,39 +1,23 @@
-# Creative recipes
+# Creative starting points
 
-Treat these as starting points. Light, movement, and the subject change what a setting becomes. Watch the preview and adjust one stage at a time.
+[Guides](README.md) · [日本語](RECIPES.ja.md)
 
-[All guides](README.md) · [Effect models](EFFECTS.md) · [日本語](RECIPES.ja.md)
+## A drifting outline
 
-## Unravel an outline
+Choose **ROW ERROR → CHROMA ERROR**. Set a moderate readout displacement and low chroma separation. Watch a vertical outline as the same weak rows wander. Raise loss only when you want brief interruptions. Both JPEG and ordinary video use this route.
 
-**ROW SHIFT → CHROMA** / processed JPEG or normal video
+## An unstable tape monitor
 
-Select both effects in the chain. ROW SHIFT displaces rows; CHROMA separates color boundaries. Keep CHROMA subtle at first, and tune ROW SHIFT until the subject is still legible. Vertical lines make it easier to see the displacement.
+Choose **VHS → CRT**. First adjust tape bandwidth and the CRT scan/phosphor profiles. Then add tracking and dropout, followed by a small convergence error. This lets you distinguish the apparatus from its faults. Enable LIVE motion or optional audio coupling to influence the timebase while preserving the identities. Wait for a slip rather than randomizing the chain.
 
-For processed RAW, only ROW SHIFT in this recipe is available.
+## A misread sensor representation
 
-## Layer an unstable picture
+On a RAW-capable camera, choose processed DNG with **ADDRESS ERROR → CFA ERROR**. Begin with a small byte offset and limited CFA coverage. The RGB preview is an approximation; inspect the developed DNG too. RAW uses a separate exposure.
 
-**LINE LOSS → VHS** / processed JPEG or normal video
+## Another individual, the same system
 
-Remove or repeat rows with LINE LOSS, then add tracking disturbance and noise with VHS. Increase the line-band height gradually so it does not hide more of the subject than you intend.
+Keep a route you like and press RESEED. The settings remain while the fault sites and biases change. Let that new individual run for a while before changing it again. The app saves your current route, controls and identities; named presets are not implemented.
 
-For video, turn LIVE FAULT on with chain switching disabled. The two selected stages remain in place while their settings vary. Turn LIVE FAULT off to return to the manual state.
+If a fault seems absent, check LEVEL, enablement and its own neutral controls. STREAM ERROR is intentionally quiet between incidents. [Controls](USAGE.md) · [Fault models](EFFECTS.md).
 
-## Develop a damaged signal
-
-**DATA SHIFT → CFA OFFSET** / a camera that supports processed RAW
-
-Choose processed RAW and select both stages. DATA SHIFT displaces the underlying byte stream; CFA OFFSET changes the color-array phase. Start gently, save one DNG, and open it in a RAW developer before adjusting further.
-
-The RAW preview is an approximation. Judge the developed DNG as well as the screen. If you want an original for comparison, switch to original RAW and take a separate photograph; this release does not save original and processed RAW simultaneously.
-
-## Meet something unexpected
-
-Long-press **Random** to get a 2–4-stage chain. When a combination interests you, open each stage and reduce its strength to discover what it is doing.
-
-Named preset saving is not available in this release. Keep a note of the chain and values if you want to return to them. The app remembers per-effect adjustments, but changing modes removes effects that the new mode cannot use.
-
-## Nothing seems to change?
-
-Check the overall strength and the stage strength. Effective strength is **overall × stage**. An off stage, zero strength, CLEAN, or original RAW can explain an unchanged image. [Troubleshooting](TROUBLESHOOTING.md)
+Use LIVE to set how the current fault state evolves, with second-based periods and update intervals. [Time controls](LIVE_FAULT.md). Enable [ADVANCED MODE](ADVANCED_MODE.md) in Settings to directly fix model values.

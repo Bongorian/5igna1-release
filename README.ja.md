@@ -12,48 +12,36 @@ Androidのためのグリッチカメラ。行のずれ、色の裂け、読み�
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 ![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84.svg)
 
-## 撮る前から、像を崩す
+## 同じ壊れた系から、その瞬間を撮る
 
-5igna1は、カメラの中で信号が画像になる過程を、表現の入口にした作品です。センサーから読み出し、色処理、表示まで。どこを崩すかを選び、ライブプレビューを見ながら強さを探れます。
+このソースは**1.1.0（versionCode 9）の公開準備版**です。ダウンロードは公開済み1.0.0で、操作やストア画像は本ガイドと異なります。更新時は新しいFAULTモデルに合わせて旧エフェクト設定を初期化し、保存済みの作品は保持します。
 
-- **一つの乱れから始める。** CLEANと16エフェクト。単体でも、処理順に重ねるチェーンでも。
-- **変化する瞬間を撮る。** LIVE FAULTで強度やパラメータを自動変化させ、気になった瞬間を保存。
-- **データまで触れる。** JPEG・MP4に加え、対応カメラではRAW原本と加工DNGを保存。
+個体差は保持し、読み出しのdrift、露光位相、一時的な欠落が時間とともに変化します。選択した経路と個体を通常の時間進行で入れ替えません。実カメラ由来の信号だけを扱い、被写体の意味推論による生成・補完はしません。RAW／RGB／色差／媒体・表示後の信号は異なる表現であり、RAWだけを唯一の真とは扱いません。
 
-画像処理は端末内で完結します。広告・トラッキング・アカウント登録はありません。
+| FAULT POINT | FAULT |
+|---|---|
+| SENSOR | PIXEL DAMAGE · EXPOSURE |
+| READOUT | ROW ERROR |
+| DATA | BIT ERROR · ADDRESS ERROR |
+| CFA / RECONSTRUCTION | CFA ERROR · DEMOSAIC ERROR |
+| COLOR | CHROMA ERROR · COLOR MAP |
+| CODEC / STREAM | BLOCK ERROR · STREAM ERROR |
+| MEDIA | VHS |
+| DISPLAY | CRT |
 
-## アプリの実画面
+CLEANはFAULTなし。各FAULTの少数の操作値から、固有の故障パラメータへ変換します。「ランダムチェーン」は組み合わせと操作値を生成し、長押しでは設定を保って故障個体だけを変えます。LIVEは今この瞬間のFAULTの時間進行・変化の形・秒単位の間隔と端末入力を設定します。一時停止・故障の発生・時間リセットを操作できます。ADVANCED MODEでは全FAULTの内部パラメータと時間・事故の生成値をAUTO／固定値で操作できます。VHS／CRTは媒体・表示特性と内部故障を区別します。STREAM ERRORは復号画像領域の欠落・再利用モデルで、実packetは破壊しません。
 
-<table>
-  <tr>
-    <td><img src="fastlane/metadata/android/ja-JP/images/phoneScreenshots/01-camera.png" alt="CLEAN。加工前の撮影画面" width="260"></td>
-    <td><img src="fastlane/metadata/android/ja-JP/images/phoneScreenshots/02-row-shift.png" alt="ROW SHIFT。行ごとに横へずれたプレビュー" width="260"></td>
-    <td><img src="fastlane/metadata/android/ja-JP/images/phoneScreenshots/03-chain.png" alt="ROW SHIFT、CHROMA、VHSを重ねたチェーン画面" width="260"></td>
-  </tr>
-  <tr><td>CLEAN / 加工前</td><td>ROW SHIFT / 行のずれ</td><td>CHAIN / 乱れを重ねる</td></tr>
-</table>
-
-Android Emulator上の実際のUIです。被写体はAOSPのテストパターン。上のタイトル画像は作品紹介用アートで、撮影サンプルとは別です。[素材の出典](docs/audit/ASSETS.md)
+[FAULT一覧](docs/EFFECTS.ja.md) · [LIVE](docs/LIVE_FAULT.ja.md) · [ADVANCED MODE](docs/ADVANCED_MODE.ja.md) · [調査・移行設計](docs/design/FAULT_SYSTEM.ja.md)
 
 ## 最初の一枚
 
-1. **写真・加工JPEG**で始めます。カメラの使用を許可してください。
-2. **ROW SHIFT**を選び、強度を動かしてプレビューの変化を見ます。「調整」で編集したら「適用」で確定します。
-3. 中央の撮影ボタンで保存。左下のサムネイルから、できた写真を開けます。
+1. 写真モードで「JPEG · 表示した信号」を選びます。
+2. ROW ERRORを選び、ずれと欠落を調整して適用します。同じ弱い行が時間とともに動く様子を観察します。
+3. 気になった瞬間にシャッターを押し、サムネイルから保存画像を開きます。
 
-次はCHROMAやVHSを重ねてみてください。[はじめての撮影](docs/GETTING_STARTED.ja.md)には操作を、[表現のレシピ](docs/RECIPES.ja.md)には組み合わせの出発点をまとめました。
+JPEGは画面が受け取った画像を撮影操作時に確保し、後続フレームや設定変更で置き換わらないよう保存します。通常動画も同じ処理画像を使います。JPEGの解像度は対応ライブ信号の解像度です。RAWは別露光・別表現であり、RGB画面そのものではありません。[形式と制約](docs/FORMATS.ja.md)
 
-## 表現の入口
-
-| したいこと | 試すエフェクト |
-|---|---|
-| 形を横へ引きずる、行を抜く | ROW SHIFT · LINE LOSS |
-| 色を裂く、色数や色の境界を変える | CHROMA · SPECTRUM · CHROMA LOSS |
-| 点や帯、データの乱れを加える | SENSOR FAIL · EXPOSURE BAND · BIT ROT · DATA SHIFT |
-| 色配列や補間の崩れを作る | CFA TEAR · CFA OFFSET · DEMOSAIC |
-| ブロックや古い表示の揺らぎを重ねる | CORRUPT · PACKET LOSS · VHS · TERMINAL |
-
-PACKET LOSSは動画専用です。加工RAWにはセンサー〜CFAの8効果を使えます。[全エフェクトと適用順](docs/EFFECTS.ja.md)
+次はCHROMA ERRORやVHSを加えてみてください。[撮影ガイド](docs/GETTING_STARTED.ja.md) · [表現の出発点](docs/RECIPES.ja.md)
 
 ## ダウンロードと更新
 
@@ -73,11 +61,11 @@ https://github.com/Bongorian/5igna1-release
 
 ### Google Play
 
-Developer登録中です。掲載後にここへ公式ストアURLを追加します。
+2026-09-08時点でクローズドテストの審査待ちです（開発者報告）。正式公開後にストアリンクを掲載します。
 
 ### F-Droid
 
-FOSS構成と提出用メタデータを用意しています。公式リポジトリへの掲載はこれからです。[提出準備の状況](docs/FDROID_READINESS.md)
+2026-09-08時点で1.0.0の提出はマージ待ちです（開発者報告）。公式リポジトリにはまだ掲載されていません。[提出準備の状況](docs/FDROID_READINESS.md)
 
 Play / F-Droid / GitHub版で主要機能は共通です。配布元をまたぐ更新には署名の一致が必要です。
 
@@ -85,8 +73,8 @@ Play / F-Droid / GitHub版で主要機能は共通です。配布元をまたぐ
 
 | 出力 | 保存先 |
 |---|---|
-| JPEG・DNG写真 | `Pictures/5igna1` |
-| MP4動画 | `Movies/5igna1` |
+| JPEG・DNG写真 | `DCIM/5igna1` |
+| MP4動画 | `DCIM/5igna1` |
 | RAW動画のDNG連番ZIP（実験的） | `Download/5igna1` |
 
 GPSは初期OFF、動画の録音は任意です。DNGには現像アプリが必要で、RAWプレビューと現像結果は同一にはなりません。
@@ -110,3 +98,7 @@ JDK 17とAndroid SDK 36 / Build Tools 35.0.0でビルドできます。
 ## License
 
 5igna1 by **Bongorian**。コード本体は[Apache License 2.0](LICENSE)です。[NOTICE](NOTICE)と[第三者ライセンス](THIRD_PARTY_LICENSES.md)をご確認ください。
+
+開発版には端末に合わせた推奨設定と、プレビュー負荷の自動調整があります。[発熱・負荷対策](docs/PERFORMANCE.ja.md)。
+
+設定の「モード」にADVANCEDとEXPERTをまとめています。ADVANCEDは内部値の表示、EXPERTはアプリの更新頻度制限・冷却休止を外して速度を優先するモードです。[動作モード](docs/PERFORMANCE.ja.md)。

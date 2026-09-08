@@ -1,68 +1,41 @@
-# 内部設計
+# Architecture
 
-## 状態の所有と更新
+[Redesign and release audit](design/FAULT_SYSTEM.md) · [日本語](ARCHITECTURE.ja.md)
 
-[EffectState](../app/src/main/java/com/bongorian/signa1/EffectState.java)が選択・チェーン・全体強度・各段のパラメータをまとめた不変の状態です。パラメータ配列はコピーして受け渡し、外部の配列操作で確定状態が変わらないようにします。
+## Settings, time and pixels
 
-MainActivityはUIスレッドから状態を一括更新します。再描画は状態を読むだけで、選択変更や保存を行いません。GlitchEngineへはGLスレッドのキューで状態ごと渡し、複数フィールドの更新途中を描画が読むことを防ぎます。
+`Effects` owns the thirteen fault IDs, eight causal points, control descriptors, RAW capability and generated shader definitions. `EffectParameters` stores immutable named controls and independent 64-bit identity seeds. The number of controls varies by fault. `EffectState` stores the selected route and user LEVEL macro; schema 3 deliberately resets release 1.0 effect settings.
 
-EffectStateStoreは状態を一つの保存値として書き込みます。現在のIDは処理段階順で、保存キーは `effect_state_v2`、スキーマは `2` です。旧エフェクト設定は初期化し、保存時に旧キーを削除します。撮影設定には触れません。
+`FaultModel.advance` runs once for each acquired camera frame. Its double-precision clock, camera timestamp and filtered device measurements feed a pure snapshot compiler. `FaultNode` contains an immutable identity, motion and event, with separate unrestricted maps for device profiles and named fault parameters. The renderer has no common strength/param1/param2/seed ABI. Structural, drift and event random domains are independent; event randomness includes a per-session salt. Snapshot reads do not draw randomness or advance the clock. LIVE only enables measured coupling and does not own intrinsic time evolution.
 
-## 確定状態と試し表示
+`FaultInputs` retains the release's foreground-bound motion, audio, thermal, CPU and capture-timing acquisition. Audio recording reuses recorder amplitude and releases the separate analysis microphone. Disabled LIVE coupling contributes zero. Closing the camera resets input integration without changing stored identities.
 
-```mermaid
-flowchart LR
-    A[確定済み EffectState] --> P[写真のスナップショット]
-    A --> V[録画のフレーム処理]
-    A --> D[編集ドラフト]
-    D --> W[プレビューだけに試し表示]
-    D -->|適用| A
-    D -->|キャンセル・離脱| X[ドラフト破棄]
-```
+## Canonical GPU signal and shutter handoff
 
-EffectDialogは編集開始時の確定状態を保持し、編集セッションがまだ有効な場合だけ試し表示・適用を受け付けます。古い画面のイベントで新しい状態を上書きしません。
+`GlitchEngine` acquires Camera2's SurfaceTexture once, evaluates one state and processes it at the actual source resolution. `EffectChain` follows causal order using ping-pong intermediates. It specializes/caches shaders per fault and caches uniform locations, so unrelated fault branches and uniforms can be optimized away. All pass buffers and programs are released with their GL context.
 
-キャンセル、外側タップ、アプリ離脱で試し表示を解除します。録画中の編集でも、エンコーダーには適用済みの状態だけを渡します。写真は撮影時に確定状態をスナップショットし、保存ワーカーが後のUI操作に影響されないようにします。
+A `SignalBuffer` is a camera-derived processed texture plus immutable frame metadata. Preview and encoder blit that same texture; neither evaluates the fault model again. The preview can present fewer frames than a high-fps encoder.
 
-CLEANは対象ゼロ、単体は1段だけです。非対応の段はコンテキスト切り替え時に選択から除きます。RAW原本は設定を保持しつつ全加工をバイパスします。各段の調整値を記憶することと、その段を有効にすることは別です。
+`FrameHistory` bounds the preview handoff to three slots. Each submission carries a monotonic presentation token through EGL, mapped to the original camera timestamp in its immutable payload. TextureView acknowledges that token on the UI thread. Camera clocks are not assumed to be identical to EGL clocks. A shutter synchronously reserves the corresponding slot before queuing GL readback. Until released, later camera frames cannot overwrite it. Unacknowledged submissions and the last acknowledged image are also retained; if the UI stalls, preview applies backpressure. An encoder scratch buffer can continue recording while the screen is behind. Camera lifecycle changes invalidate outstanding leases.
 
-## カメラとGPU
+JPEG reads the reserved signal once, with striped readback to bound extra memory, and saves it on the existing file worker. Its resolution is a selected live output, not a later still exposure. EXIF records the displayed timestamp, named controls, identity, event and compiled state. Camera exposure metadata is attached only from the matching bounded capture-result lookup.
 
-GlitchEngineがCamera2、SurfaceTexture、EGL、プレビューSurface、録画Surfaceを管理します。カメラ能力はCameraOptionsから読み取ります。構成コールバックは世代・要求番号を確認し、古い構成の応答を除外します。
+## Editing, RAW and recording taps
 
-EffectsがGPU向けのID定義も生成し、PhotoRendererがシェーダーのマーカーへ挿入します。JavaとGLSLのIDを別々に管理しません。
+Draft edits leave committed settings unchanged. Apply commits; dismiss/pause cancels. The draft uses the same running timeline. Draft editing cannot start through the camera UI while recording, and recording refuses an active draft, so preview and encoder keep a common route. Both on-screen and volume-key capture require applying or discarding an active effect or LIVE draft first.
 
-EffectChainは中間テクスチャ2枚を交互に使用します。各段が前段の結果を読み、同じ描画先を読み書きしない構成です。通常のプレビューと録画はそれぞれ中間バッファを持ちます。
+`RawGlitch` adapts the same immutable nodes to RAW16. Readout movement/reuse preserves Bayer parity; CFA ERROR and byte-address errors can intentionally change interpretation. DNG photos use a separate RAW exposure with the latched state and explicitly disclose that difference. Original DNG and original RAW video bypass faults. `RawVideoRecorder` retains its bounded queue, timestamp matching, interruption handling and ZIP packaging.
 
-- JPEG：静止画出力をPhotoRendererの専用GLコンテキストで加工し、EXIFを付けてMediaStoreへ保存。
-- DNG：RAW16を必要に応じてRawGlitchで加工し、DngCreatorで保存。
-- 動画：GPUからMediaRecorderの入力Surfaceへ描画。音声、分割保存、空き容量監視を含む。
+`Frame.through(Point)` selects a causal prefix for intermediate recording extensions. It cannot reorder a route. Current user-facing taps are final processed RGB (including media/display), processed RAW and original RAW. There is no second still-only or video-only fault generator.
 
-## 主なファイル
+## Migration and distribution
 
-| ファイル | 責務 |
-|---|---|
-| MainActivity | UI、確定状態の更新、編集セッション |
-| EffectState / EffectStateStore | 不変状態と保存・移行 |
-| EffectDialog / SignalSheet | 編集ドラフトと共通シート |
-| GlitchEngine | カメラ、GLスレッド、撮影・録画 |
-| EffectChain / PhotoRenderer | GPUチェーン、静止画加工 |
-| RawGlitch | RAW16の破損模擬 |
-| CameraOptions / CaptureSettings | 対応能力と撮影設定 |
-| GeoTags / PhotoMetadata | 位置情報とメタデータ |
+`fault_state_v3` and `fault.v3.*` preferences replace old effect/AUTO values. Camera quality, language, GPS and application ID remain unchanged. No dependencies or proprietary services are added. All code remains in `src/main` for FOSS and Play variants. [Validation](VALIDATION.md).
 
-## 参照資料
+## Capture workspace and media preview
 
-- [Camera2 characteristics](https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics)
-- [DngCreator](https://developer.android.com/reference/android/hardware/camera2/DngCreator)
-- [高速撮影セッション](https://developer.android.com/reference/android/hardware/camera2/CameraConstrainedHighSpeedCaptureSession)
-- [MediaRecorder](https://developer.android.com/reference/android/media/MediaRecorder)
-- [LibRaw C API](https://www.libraw.org/docs/API-C.html)
+`SignalSheet.anchoredPick` positions the format choices directly under their trigger. Light, GPS and video-audio controls share the top toolbar; audio remains visible in photo mode. `FaultStateDialog` retains ordered event-meter rows while live values update and reserves space below the camera preview.
 
-## 配布と共通機能
+`MediaPreview` scans readable image/video entries in the app capture folders and presents a single mixed sequence. It decodes photos on one worker (up to 2048 pixels on the long edge) and uses the system thumbnail for DNG. Only the current video has a MediaPlayer/Surface. A GL queue barrier confirms camera release before video preparation. Dismissal cancels pending UI work, releases playback/audio focus and then reattaches the camera; stale decode and player callbacks are generation-guarded. Backgrounding closes the viewer. External viewing is explicit and uses a separate document task.
 
-`distribution` dimensionに `play` と `fdroid` を定義します。現在、UI・カメラ・GPU・RAW・Export・設定はすべて `src/main` にあり、flavor固有コードやSDKはありません。Play Billingなどを将来追加するときだけ `src/play` と `playImplementation` を使い、コア機能を制限しません。GitHub APKはfdroidReleaseを署名して配布します。
-
-AppLanguageはAndroidXの標準アプリ言語APIを使い、Androidの翻訳リソースを選択します。ライセンス本文と第三者通知はビルド時に共通assetsへ同期し、アプリ内からオフラインで閲覧できます。名前付きプリセットや独立したpresetファイル形式は未実装で、直前のEffectState/CaptureSettingsをSharedPreferencesに保存します。
-
-[RAWパイプライン](raw-pipeline.md) · [ビルド](building.md) · [署名と配布](RELEASING.md)
+The camera watches for unacknowledged preview delivery for six seconds and makes up to three reconnect attempts outside capture or cooling pauses. Error/disconnection callbacks use the same recovery path; leaving the foreground cancels it. Capture settings and effect selection are retained.

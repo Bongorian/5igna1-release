@@ -19,4 +19,4 @@ See [tested scope](VALIDATION.md) for build, behavior, device, and RAW limits. R
 
 ## Next steps
 
-[Launch tasks](LAUNCH_TASKS.md) is the current checklist. GitHub distribution comes first. Play registration, F-Droid server build/submission, optional CI signing Secrets, and an offline copy of the key backup remain separate work.
+[Launch tasks](LAUNCH_TASKS.md) is the current checklist. GitHub distribution comes first. This report records the initial 1.0.0 publication. The owner subsequently reported Play closed-test review and F-Droid merge pending on 2026-09-08; see the launch checklist for current status. Optional CI signing Secrets and an offline copy of the key backup remain separate work.

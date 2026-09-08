@@ -1,74 +1,46 @@
 package com.bongorian.signa1;
 
-/** Corrupts RAW16 samples; keeps the container and sample bounds valid. */
+/** RAW16 representation adapter for the SAME immutable fault nodes as RGB/video. */
 final class RawGlitch {
-    static int mix(int x){x^=x>>>16;x*=0x7feb352d;x^=x>>>15;x*=0x846ca68b;x^=x>>>16;return x;}
-    static float random(int x){return (mix(x)&0x7fffffff)/2147483648f;}
     static int read(byte[] data,int index){int p=index*2;return (data[p]&255)|((data[p+1]&255)<<8);}
     static void write(byte[] data,int index,int value){int p=index*2;data[p]=(byte)value;data[p+1]=(byte)(value>>>8);}
-    static byte[] chain(byte[] input,int w,int h,int white,int black,int[] modes,float power,int seed){return chain(input,w,h,white,black,modes,power,seed,EffectParameters.defaults());}
-    static byte[] chain(byte[] input,int w,int h,int white,int black,int[] modes,float power,int seed,float[] parameters){
-        return chain(input,w,h,white,black,modes,power,seed,parameters,null);
+    static byte[] chain(byte[] input,int w,int h,int white,int black,EffectState.Frame frame){
+        if(w<=0||h<=0||input.length!=(long)w*h*2||white<1||white>65535||black<0||black>white)throw new IllegalArgumentException("RAW dimensions/levels");
+        byte[] output=input.clone();for(FaultNode node:frame.nodes)if(Effects.raw(node.id))output=apply(output,w,h,white,black,node);return output;
     }
-    static byte[] chain(byte[] input,int w,int h,int white,int black,int[] modes,float power,int seed,float[] parameters,float[] live){
-        byte[] result=input;for(int mode:modes)if(Effects.raw(mode))result=apply(result,w,h,white,black,mode,power,seed,parameters,live);return result;
-    }
-    static byte[] apply(byte[] input,int w,int h,int white,int black,int mode,float power,int seed){return apply(input,w,h,white,black,mode,power,seed,EffectParameters.defaults());}
-    static byte[] apply(byte[] input,int w,int h,int white,int black,int mode,float power,int captureSeed,float[] parameters){
-        return apply(input,w,h,white,black,mode,power,captureSeed,parameters,null);
-    }
-    static byte[] apply(byte[] input,int w,int h,int white,int black,int mode,float power,int captureSeed,float[] parameters,float[] live){
-        if(w<=0||h<=0||input.length!=(long)w*h*2)throw new IllegalArgumentException("RAW dimensions");
-        byte[] output=input.clone();power=EffectParameters.unit(power)*EffectParameters.get(parameters,mode,0);if(power==0||!Effects.raw(mode))return output;
-        float shape=EffectParameters.get(parameters,mode,1),character=EffectParameters.get(parameters,mode,2);
-        int seed=(int)(EffectParameters.get(parameters,mode,3)*1000003),bits=32-Integer.numberOfLeadingZeros(Math.max(1,white));
-        int rows=(int)(240-shape*228),tile=Math.max(8,(int)(8+shape*248)),bitBlock=Math.max(2,(int)(2+character*126));
-        for(int y=0;y<h;y++){
-            int rowSeed=seed+(int)((long)(y&~1)*rows/h)*193;boolean band=random(rowSeed)<power;
-            int shift=band?Math.round((random(rowSeed+21)-.5f)*w*character*.6f*power/2)*2:0;
-            float exposure=1-power*(.5f+.5f*(float)Math.sin(y*(12+shape*168.0)/h+captureSeed*.001*character+seed));
-            int at=mode*4;
-            if(live!=null&&live[at]>0){
-                if(mode==Effects.ROW_SHIFT)shift+=Math.round((y/(float)h-.5f)*live[at+1]*w*power/2)*2;
-                if(mode==Effects.EXPOSURE_BAND)exposure=1-power*(.5f+.5f*live[at+3]*(float)Math.sin(y/(float)h*live[at+2]+live[at+1]));
+    private static float hash(long seed,int x,int y){return FaultModel.random(seed^FaultModel.mix(((long)x<<32)^(y&0xffffffffL)));}
+    static byte[] apply(byte[] input,int w,int h,int white,int black,FaultNode n){
+        byte[] out=input.clone();long seed=n.identity.seed;int bits=32-Integer.numberOfLeadingZeros(white);
+        for(int y=0;y<h;y++)for(int x=0;x<w;x++){
+            int sx=x,sy=y,index=y*w+x;float gain=1;int value=read(input,index);
+            switch(n.id){
+                case Effects.PIXEL_DAMAGE:
+                    if(hash(seed,x,0)<n.get("columnDensity"))value=hash(seed+71,x,0)<n.get("hotFraction")?black+Math.round((white-black)*n.get("hotValue")):black;
+                    else if(hash(seed,x,y+1)<n.get("pixelDensity"))value=hash(seed+71,x,y+1)<n.get("hotFraction")?black+Math.round((white-black)*n.get("hotValue")):black;
+                    value+=Math.round((hash(seed^(long)n.get("grainSeed"),x,y)-.5f)*n.get("sensorNoise")*(white-black));break;
+                case Effects.EXPOSURE:
+                    gain=1-n.get("exposureDepth")*(.5f+.5f*n.get("integration")*(float)Math.sin(y/(float)h*n.get("scanPhase")+n.get("exposurePhase")));
+                    value=black+Math.round((value-black)*gain);break;
+                case Effects.ROW_ERROR:
+                    int row=(int)((y&~1)/(float)h*n.get("rowGroups"));
+                    float displacement=hash(seed,row,0)<n.get("weakRows")?(hash(seed+17,row,0)-.5f)*n.get("rowOffset"):0;
+                    displacement+=((y&~1)/(float)h-.5f)*n.get("readoutShear");sx+=Math.round(displacement*w/2)*2;
+                    value=sx<0||sx>=w?black:read(input,y*w+sx);
+                    int start=(int)(n.get("linePosition")*h/2)*2;
+                    if(y>=start&&y<start+n.get("lineHeight")*h){int previous=start-2+(y&1);int retained=previous<0||sx<0||sx>=w?black:read(input,previous*w+sx);retained=black+Math.round((retained-black)*n.get("lineRetention"));value=Math.round(value*(1-n.get("lineLoss"))+retained*n.get("lineLoss"));}break;
+                case Effects.BIT_ERROR:
+                    int block=Math.max(2,(int)n.get("bitBlock"));
+                    if(hash(seed^(long)n.event.pattern,x/block,y/Math.max(1,block/2))<n.get("bitProbability"))value^=1<<Math.round(n.get("bitIndex")*(bits-1));break;
+                case Effects.ADDRESS_ERROR:
+                    int bytes=Math.max(2,(int)n.get("addressRegion")),offset=(int)n.get("byteOffset"),address=index*2;
+                    if(offset>0&&hash(seed,address/bytes,0)<n.get("addressProbability")){int src=address+offset;value=src+1<input.length?(input[src]&255)|((input[src+1]&255)<<8):black;}break;
+                case Effects.CFA_ERROR:
+                    int region=Math.max(2,(int)n.get("cfaRegion"));
+                    if(hash(seed,x/region,y/region)<n.get("cfaCoverage")){int phase=(int)n.get("cfaPhase");sx=phase==1?x:x^1;sy=phase==0?y:y^1;if(sx<w&&sy<h)value=read(input,sy*w+sx);}break;
+                default:break;
             }
-            for(int x=0;x<w;x++){
-                int sx=x,sy=y;
-                if(mode==Effects.ROW_SHIFT)sx=x+shift;
-                if(mode==Effects.CFA_TEAR){int block=seed+(x/tile)*71+(y/Math.max(1,tile/2))*137;if(random(block)<power*.88f){if(character<.25f||character>=.75f)sx=(x+1)%w;if(character>=.25f)sy=(y+1)%h;}}
-                // Repeat whole Bayer row pairs so LINE LOSS never becomes CFA OFFSET.
-                if(mode==Effects.LINE_LOSS){
-                    int bandHeight=2*(1+Math.round(shape*63)),start=(y/bandHeight)*bandHeight;
-                    if(random(seed+(y/bandHeight)*193)<power){
-                        int previous=start-2+(y&1);
-                        int repeated=previous<0?black:read(input,previous*w+x);
-                        write(output,y*w+x,Math.max(0,Math.min(white,black+Math.round((repeated-black)*character))));continue;
-                    }
-                }
-                if(mode==Effects.CFA_OFFSET){
-                    int size=2*(1+Math.round(character*127));
-                    if(random(seed+(x/size)*71+(y/size)*137)<power){
-                        int phase=Math.round(shape*2);
-                        sx=phase==1?x:x^1;sy=phase==0?y:y^1;
-                        // Odd-sized borders have no partner; retain the original sample.
-                        if(sx>=w||sy>=h){sx=x;sy=y;}
-                    }
-                }
-                if(mode==Effects.DATA_SHIFT){
-                    int bytes=2*(2+Math.round(character*254)),offset=Math.round(shape*31),index=(y*w+x)*2;
-                    if(offset>0&&random(seed+(index/bytes)*733)<power){
-                        int src=index+offset;
-                        int value=src+1<input.length?(input[src]&255)|((input[src+1]&255)<<8):black;
-                        write(output,y*w+x,Math.max(0,Math.min(white,value)));continue;
-                    }
-                }
-                int value=sx<0||sx>=w?black:read(input,sy*w+sx);
-                if(mode==Effects.BIT_ROT){int block=seed+(x/bitBlock)*733+(y/Math.max(1,bitBlock/2))*97;if(random(block)<power*.8f)value^=1<<Math.round(shape*(bits-1));}
-                if(mode==Effects.SENSOR_FAIL){float col=random(seed+x*4099),point=random(seed+x*37+y*701);if(col<power*.06f*shape)value=random(seed+x*4099+71)<character?white:black;else if(point<power*.006f*(1-shape))value=random(seed+x*37+y*701+71)<character?white:black;}
-                if(mode==Effects.EXPOSURE_BAND)value=black+Math.round((value-black)*exposure);
-                write(output,y*w+x,Math.max(0,Math.min(white,value)));
-            }
+            write(out,index,Math.max(0,Math.min(white,value)));
         }
-        return output;
+        return out;
     }
 }

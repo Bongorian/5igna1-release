@@ -20,13 +20,8 @@ final class PhotoRenderer {
         if(front)transform.postScale(-1,1);
         Bitmap upright=Bitmap.createBitmap(decoded,0,0,decoded.getWidth(),decoded.getHeight(),transform,false);if(upright!=decoded)decoded.recycle();return upright;
     }
-    static Bitmap render(Context context,byte[] jpeg,boolean front,int[] modes,float amount,float time)throws IOException {
-        return render(context,jpeg,front,modes,amount,time,EffectParameters.defaults());
-    }
-    static Bitmap render(Context context,byte[] jpeg,boolean front,int[] modes,float amount,float time,float[] parameters)throws IOException {
-        return render(context,jpeg,front,modes,amount,time,parameters,null);
-    }
-    static Bitmap render(Context context,byte[] jpeg,boolean front,int[] modes,float amount,float time,float[] parameters,float[] live)throws IOException {
+    /** Offline/replay adapter. Live JPEG capture reads SignalBuffer and never re-renders. */
+    static Bitmap render(Context context,byte[] jpeg,boolean front,EffectState.Frame frame)throws IOException {
         Bitmap source=orient(jpeg,front);Bitmap output=null;
         EGLDisplay display=EglLease.acquire();EGLContext egl=EGL14.EGL_NO_CONTEXT;EGLSurface surface=EGL14.EGL_NO_SURFACE;
         try {
@@ -45,10 +40,8 @@ final class PhotoRenderer {
             if(GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER)!=GLES20.GL_FRAMEBUFFER_COMPLETE)throw new IOException("Photo GPU memory");
             float[] matrix={1,0,0,0,0,-1,0,0,0,0,1,0,0,1,0,1};
             EffectChain chain=new EffectChain(shaderSource(context),false);
-            chain.render(textures[0],false,matrix,modes,amount,time,width,height,width,height,fbo[0],parameters,live);
-            output=Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);int stripe=64;ByteBuffer bytes=ByteBuffer.allocateDirect(width*stripe*4).order(ByteOrder.LITTLE_ENDIAN);int[] pixels=new int[width*stripe];
-            for(int y=0;y<height;y+=stripe){int rows=Math.min(stripe,height-y);bytes.clear();GLES20.glReadPixels(0,y,width,rows,GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,bytes);bytes.rewind();for(int r=0;r<rows;r++)for(int x=0;x<width;x++){int rgba=bytes.getInt();pixels[(rows-r-1)*width+x]=(rgba&0xff00ff00)|((rgba&255)<<16)|((rgba>>>16)&255);}output.setPixels(pixels,0,width,0,height-y-rows,width,rows);}
-            if(GLES20.glGetError()!=GLES20.GL_NO_ERROR)throw new IOException("Photo GL readback");return output;
+            chain.render(textures[0],false,matrix,frame,width,height,width,height,fbo[0]);
+            output=SignalBuffer.readPixels(width,height);chain.release();return output;
         }catch(IOException|RuntimeException e){if(output!=null)output.recycle();throw e;}
         finally{if(source!=null)source.recycle();EGL14.eglMakeCurrent(display,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_CONTEXT);if(surface!=EGL14.EGL_NO_SURFACE)EGL14.eglDestroySurface(display,surface);if(egl!=EGL14.EGL_NO_CONTEXT)EGL14.eglDestroyContext(display,egl);EglLease.release();EGL14.eglReleaseThread();}
     }

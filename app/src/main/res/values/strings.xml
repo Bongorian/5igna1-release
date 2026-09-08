@@ -5,15 +5,15 @@
     <string name="ui_open_the_last_saved_photo" formatted="false">"Open the last saved photo"</string>
     <string name="ui_open_the_last_saved_raw_video_zip" formatted="false">"Open the last saved RAW video ZIP"</string>
     <string name="ui_select_an_option_then_apply" formatted="false">"Select an option, then apply"</string>
-    <string name="ui_photo_full_resolution" formatted="false">"Photo · Full resolution"</string>
-    <string name="ui_processed_jpeg" formatted="false">"Processed JPEG"</string>
+    <string name="ui_photo_full_resolution" formatted="false">"Photo · signal capture"</string>
+    <string name="ui_processed_jpeg" formatted="false">JPG</string>
     <string name="ui_raw_dng_original" formatted="false">"RAW / DNG original"</string>
-    <string name="ui_raw_dng_sensor_processing" formatted="false">"RAW / DNG sensor processing"</string>
+    <string name="ui_raw_dng_sensor_processing" formatted="false">RAW</string>
     <string name="ui_save_format" formatted="false">"Save format"</string>
     <string name="ui_standard_prefer_12_mp_or_less" formatted="false">"Standard (prefer 12 MP or less)"</string>
     <string name="ui_maximum_camera_resolution" formatted="false">"Maximum camera resolution"</string>
     <string name="ui_photo_resolution" formatted="false">"Photo resolution"</string>
-    <string name="ui_jpeg_quality" formatted="false">"JPEG quality"</string>
+    <string name="ui_jpeg_quality" formatted="false">"JPG quality"</string>
     <string name="ui_85_smaller_files" formatted="false">"85 · Smaller files"</string>
     <string name="ui_95_high_quality" formatted="false">"95 · High quality"</string>
     <string name="ui_100_best_quality" formatted="false">"100 · Best quality"</string>
@@ -44,7 +44,7 @@
     <string name="ui_photo_format" formatted="false">"Photo format\n"</string>
     <string name="ui_photo_resolution_42" formatted="false">"Photo resolution\n"</string>
     <string name="ui_unavailable_on_this_camera" formatted="false">"Unavailable on this camera"</string>
-    <string name="ui_jpeg_quality_44" formatted="false">"JPEG quality\n"</string>
+    <string name="ui_jpeg_quality_44" formatted="false">"JPG quality\n"</string>
     <string name="ui_raw_quality_uncompressed_sensor_data" formatted="false">"RAW quality\nUncompressed sensor data"</string>
     <string name="ui_video_codec_46" formatted="false">"Video codec\n"</string>
     <string name="ui_video_resolution_fps_47" formatted="false">"Video resolution / fps\n"</string>
@@ -73,10 +73,10 @@
     <string name="ui_camera_preview_tap_to_focus" formatted="false">"Camera preview. Tap to focus."</string>
     <string name="ui_adjust" formatted="false">"Adjust"</string>
     <string name="ui_chain" formatted="false">"＋ Chain"</string>
-    <string name="ui_live_fault_current_chain" formatted="false">"LIVE FAULT · Current chain"</string>
-    <string name="ui_strength" formatted="false">"Strength"</string>
-    <string name="ui_random" formatted="false">"Random"</string>
-    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"Tap to randomize an effect. Hold to randomize the chain."</string>
+    <string name="ui_live_fault_current_chain" formatted="false">"FAULT STATE"</string>
+    <string name="ui_strength" formatted="false">"LEVEL"</string>
+    <string name="ui_random" formatted="false">"RESEED"</string>
+    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"Generate a random chain and controls. Hold to reseed the current chain."</string>
     <string name="ui_toggle_live_fault" formatted="false">"Toggle LIVE FAULT"</string>
     <string name="ui_live_fault_settings" formatted="false">"LIVE FAULT settings"</string>
     <string name="ui_photo" formatted="false">"Photo"</string>
@@ -91,25 +91,22 @@
     <string name="ui_edits_discarded_because_the_capture_mode_changed" formatted="false">"Edits discarded because the capture mode changed"</string>
     <string name="ui_original_sensor_data_no_effects" formatted="false">"Original sensor data / No effects"</string>
     <string name="ui_raw_preview" formatted="false">"RAW preview / "</string>
-    <string name="ui_global_strength" formatted="false">"Global strength "</string>
-    <string name="ui_effective_strength_per_stage" formatted="false">"%\n\nEffective strength per stage\n"</string>
     <string name="ui_stages" formatted="false">" stages · "</string>
     <string name="ui_tap_to_view_the_full_chain" formatted="false">" · Tap to view the full chain"</string>
     <string name="ui_original_raw_is_not_processed" formatted="false">"Original RAW is not processed"</string>
-    <string name="ui_stage_chain" formatted="false">"-stage chain"</string>
     <string name="ui_start_video_recording" formatted="false">"Start video recording"</string>
     <string name="ui_video_is_unavailable_on_this_camera" formatted="false">"Video is unavailable on this camera"</string>
     <string name="ui_apply_or_discard_your_edits_before_capturing" formatted="false">"Apply or discard your edits before capturing"</string>
     <string name="ui_preparing_the_camera" formatted="false">"Preparing the camera"</string>
     <string name="ui_open_your_captured_photos_and_videos_here" formatted="false">"Open your captured photos and videos here"</string>
-    <string name="ui_photos_are_in_pictures_videos_in_movies_and" formatted="false">"Photos are in Pictures, videos in Movies, and RAW video ZIPs in Download / 5igna1. Extract DNG sequences and open them in RAW-compatible software."</string>
+    <string name="ui_photos_are_in_pictures_videos_in_movies_and" formatted="false">Photos and MP4 videos are in DCIM / 5igna1. RAW video ZIPs are in Download / 5igna1.</string>
     <string name="ui_failed" formatted="false">"failed"</string>
     <string name="ui_could_not" formatted="false">"Could not"</string>
     <string name="ui_error" formatted="false">"error"</string>
     <string name="ui_stop_recording" formatted="false">"Stop recording"</string>
     <string name="ui_raw_video_saved_to_download_5igna1" formatted="false">"RAW video saved to Download / 5igna1"</string>
-    <string name="ui_video_saved_to_movies_5igna1" formatted="false">"Video saved to Movies / 5igna1"</string>
-    <string name="ui_photo_saved_to_pictures_5igna1" formatted="false">"Photo saved to Pictures / 5igna1"</string>
+    <string name="ui_video_saved_to_movies_5igna1" formatted="false">"Video saved to DCIM / 5igna1"</string>
+    <string name="ui_photo_saved_to_pictures_5igna1" formatted="false">"Photo saved to DCIM / 5igna1"</string>
     <string name="ui_audio_reaction_is_off_live_fault_can_use" formatted="false">"Audio reaction is off. LIVE FAULT can use other inputs."</string>
     <string name="ui_tap_capture_to_allow_camera_access" formatted="false">"Tap capture to allow camera access"</string>
     <string name="ui_camera_access_is_required_to_capture_if_the" formatted="false">"Camera access is required to capture. If the permission prompt does not appear, allow access in Settings."</string>
@@ -154,70 +151,6 @@
     <string name="ui_acquiring_location_gps_reception_may_be_weak_indoors" formatted="false">"Acquiring location. GPS reception may be weak indoors. Try again near a window or outdoors."</string>
     <string name="ui_no_location_service_is_available_check_your_device" formatted="false">"No location service is available. Check your device location settings."</string>
     <string name="ui_an_available_location_is_saved_in_photo_and" formatted="false">"\n\nAn available location is saved in photo and video tags. Captures without a location fix have no location tag."</string>
-    <string name="ui_capture_without_effects" formatted="false">"Capture without effects."</string>
-    <string name="ui_simulates_dead_pixels_columns_and_bright_pixels" formatted="false">"Simulates dead pixels, columns and bright pixels."</string>
-    <string name="ui_simulates_exposure_bands_and_flicker" formatted="false">"Simulates exposure bands and flicker."</string>
-    <string name="ui_shifts_image_rows_horizontally" formatted="false">"Shifts image rows horizontally."</string>
-    <string name="ui_drops_rows_or_repeats_the_previous_row" formatted="false">"Drops rows or repeats the previous row."</string>
-    <string name="ui_flips_pixel_bits_to_alter_color_and_tone" formatted="false">"Flips pixel bits to alter color and tone."</string>
-    <string name="ui_shifts_byte_positions_to_disrupt_color" formatted="false">"Shifts byte positions to disrupt color."</string>
-    <string name="ui_shifts_cfa_data_locally_to_create_false_color" formatted="false">"Shifts CFA data locally to create false color."</string>
-    <string name="ui_changes_the_bayer_phase_to_alter_color" formatted="false">"Changes the Bayer phase to alter color."</string>
-    <string name="ui_simulates_demosaicing_errors_and_false_color_rgb_approximation" formatted="false">"Simulates demosaicing errors and false color (RGB approximation)."</string>
-    <string name="ui_offsets_rgb_channels_to_create_colored_edges" formatted="false">"Offsets RGB channels to create colored edges."</string>
-    <string name="ui_remaps_colors_based_on_brightness" formatted="false">"Remaps colors based on brightness."</string>
-    <string name="ui_reduces_chroma_resolution_into_blocks" formatted="false">"Reduces chroma resolution into blocks."</string>
-    <string name="ui_disrupts_image_blocks_and_color_data" formatted="false">"Disrupts image blocks and color data."</string>
-    <string name="ui_drops_or_repeats_parts_of_the_image" formatted="false">"Drops or repeats parts of the image."</string>
-    <string name="ui_simulates_horizontal_jitter_color_shifts_and_tape_noise" formatted="false">"Simulates horizontal jitter, color shifts and tape noise."</string>
-    <string name="ui_adds_scanlines_and_noise_to_a_green_display" formatted="false">"Adds scanlines and noise to a green display."</string>
-    <string name="ui_1f_s" formatted="false">"%.1f s"</string>
-    <string name="ui_2f_s" formatted="false">"%.2f s"</string>
-    <string name="ui_event_interval" formatted="false">"Event interval"</string>
-    <string name="ui_occurrence_rate" formatted="false">"Occurrence rate"</string>
-    <string name="ui_event_duration" formatted="false">"Event duration"</string>
-    <string name="ui_parameter_variation" formatted="false">"Parameter variation"</string>
-    <string name="ui_smoothness" formatted="false">"Smoothness"</string>
-    <string name="ui_allow_chain_switching" formatted="false">"Allow chain switching"</string>
-    <string name="ui_keep_original_display_stages_vhs_terminal" formatted="false">"Keep original display stages (VHS / TERMINAL)"</string>
-    <string name="ui_random_chain_size_total" formatted="false">"Random chain size (total)"</string>
-    <string name="ui_minimum" formatted="false">"Minimum"</string>
-    <string name="ui_maximum" formatted="false">"Maximum"</string>
-    <string name="ui_minimum_stage_count" formatted="false">"Minimum stage count"</string>
-    <string name="ui_maximum_stage_count" formatted="false">"Maximum stage count"</string>
-    <string name="ui_more_stages_increase_processing_load_the_count_is" formatted="false">"More stages increase processing load. The count is limited by available effects and cannot be lower than the number of display stages being kept. SENSOR FAIL is eligible only when it is in the original chain. Turn display retention off to reshuffle VHS / TERMINAL too.\nManual settings return when the event ends. LIVE FAULT starts off."</string>
-    <string name="ui_live_fault_auto_variation" formatted="false">"LIVE FAULT / Auto variation"</string>
-    <string name="ui_varies_effects_at_the_chosen_interval_and_probability" formatted="false">"Varies effects at the chosen interval and probability, even with a stationary device."</string>
-    <string name="ui_defect_shape_pixels_columns" formatted="false">"Defect shape · Pixels → Columns"</string>
-    <string name="ui_defect_value_dark_bright" formatted="false">"Defect value · Dark → Bright"</string>
-    <string name="ui_band_density" formatted="false">"Band density"</string>
-    <string name="ui_flow_speed" formatted="false">"Flow speed"</string>
-    <string name="ui_row_band_height" formatted="false">"Row band height"</string>
-    <string name="ui_shift_width" formatted="false">"Shift width"</string>
-    <string name="ui_dropped_or_repeated_band_height" formatted="false">"Dropped or repeated band height"</string>
-    <string name="ui_drop_repeat" formatted="false">"Drop → Repeat"</string>
-    <string name="ui_bit_position_low_high" formatted="false">"Bit position · Low → High"</string>
-    <string name="ui_block_size" formatted="false">"Block size"</string>
-    <string name="ui_data_shift_0_31_bytes" formatted="false">"Data shift · 0–31 bytes"</string>
-    <string name="ui_tile_size" formatted="false">"Tile size"</string>
-    <string name="ui_phase_pattern" formatted="false">"Phase pattern"</string>
-    <string name="ui_cfa_phase_horizontal_vertical_both" formatted="false">"CFA phase · Horizontal / Vertical / Both"</string>
-    <string name="ui_affected_area_size" formatted="false">"Affected area size"</string>
-    <string name="ui_interpolation_error_scale" formatted="false">"Interpolation error scale"</string>
-    <string name="ui_false_color_amount" formatted="false">"False color amount"</string>
-    <string name="ui_shift_direction_horizontal_vertical" formatted="false">"Shift direction · Horizontal → Vertical"</string>
-    <string name="ui_tear_width" formatted="false">"Tear width"</string>
-    <string name="ui_palette_period" formatted="false">"Palette period"</string>
-    <string name="ui_hue_phase" formatted="false">"Hue phase"</string>
-    <string name="ui_chroma_block_width" formatted="false">"Chroma block width"</string>
-    <string name="ui_vertical_coarseness" formatted="false">"Vertical coarseness"</string>
-    <string name="ui_color_data_corruption" formatted="false">"Color data corruption"</string>
-    <string name="ui_packet_size" formatted="false">"Packet size"</string>
-    <string name="ui_missing_data_fill_black_repeat" formatted="false">"Missing data fill · Black → Repeat"</string>
-    <string name="ui_tracking_error" formatted="false">"Tracking error"</string>
-    <string name="ui_tape_noise" formatted="false">"Tape noise"</string>
-    <string name="ui_scanline_density" formatted="false">"Scanline density"</string>
-    <string name="ui_noise" formatted="false">"Noise"</string>
     <string name="ui_no_permission" formatted="false">"No permission"</string>
     <string name="ui_recorded_audio" formatted="false">"Recorded audio"</string>
     <string name="ui_unavailable_220" formatted="false">"Unavailable"</string>
@@ -232,25 +165,9 @@
     <string name="ui_readout_1f_ms" formatted="false">"Readout %.1f ms"</string>
     <string name="ui_readout" formatted="false">"Readout —"</string>
     <string name="ui_clear_selection" formatted="false">"Clear selection"</string>
-    <string name="ui_stage_strength" formatted="false">"Stage strength"</string>
     <string name="ui_reset" formatted="false">"Reset"</string>
-    <string name="ui_reseed" formatted="false">"Reseed ↝"</string>
-    <string name="ui_effect_adjust" formatted="false">"EFFECT / Adjust"</string>
-    <string name="ui_chain_effects" formatted="false">"CHAIN / Effects"</string>
-    <string name="ui_preview_applying_also_changes_the_recording" formatted="false">"Preview · Applying also changes the recording"</string>
+    <string name="ui_reseed" formatted="false">"RESEED"</string>
     <string name="ui_preview_apply_to_save_back_to_discard" formatted="false">"Preview · Apply to save, Back to discard"</string>
-    <string name="ui_off_enable_to_apply" formatted="false">"OFF · Enable to apply"</string>
-    <string name="ui_global_strength_is_0" formatted="false">"Global strength is 0%"</string>
-    <string name="ui_this_stage_has_0_strength" formatted="false">"This stage has 0% strength"</string>
-    <string name="ui_shift_is_0_rows_stay_in_place" formatted="false">"Shift is 0% · Rows stay in place"</string>
-    <string name="ui_0_bytes_data_positions_stay_unchanged" formatted="false">"0 bytes · Data positions stay unchanged"</string>
-    <string name="ui_false_color_is_0_no_interpolation_error_applied" formatted="false">"False color is 0% · No interpolation error applied"</string>
-    <string name="ui_adjust_while_watching_the_preview" formatted="false">"Adjust while watching the preview"</string>
-    <string name="ui_horizontal" formatted="false">"Horizontal"</string>
-    <string name="ui_vertical" formatted="false">"Vertical"</string>
-    <string name="ui_diagonal" formatted="false">"Diagonal"</string>
-    <string name="ui_low" formatted="false">" · Low"</string>
-    <string name="ui_high" formatted="false">" · High"</string>
     <string name="ui_back" formatted="false">"Back"</string>
     <string name="ui_apply" formatted="false">"Apply"</string>
     <string name="ui_frames_dropped_253" formatted="false">" frames / dropped "</string>
@@ -260,7 +177,7 @@
     <string name="ui_could_not_change_capture_settings" formatted="false">"Could not change capture settings"</string>
     <string name="ui_this_camera_has_no_light" formatted="false">"This camera has no light"</string>
     <string name="ui_allow_camera_access" formatted="false">"Allow camera access"</string>
-    <string name="ui_raw_is_unavailable_on_this_camera_switched_to" formatted="false">"RAW is unavailable on this camera. Switched to JPEG."</string>
+    <string name="ui_raw_is_unavailable_on_this_camera_switched_to" formatted="false">"RAW is unavailable on this camera. Switched to JPG."</string>
     <string name="ui_raw_video_is_unavailable_on_this_camera" formatted="false">"RAW video is unavailable on this camera"</string>
     <string name="ui_camera_disconnected_select_your_settings_again" formatted="false">"Camera disconnected. Select your settings again."</string>
     <string name="ui_camera_error" formatted="false">"Camera error "</string>
@@ -279,7 +196,6 @@
     <string name="ui_retrying_with_a_compatible_lower_resolution" formatted="false">"Retrying with a compatible lower resolution…"</string>
     <string name="ui_could_not_reconfigure_the_camera" formatted="false">"Could not reconfigure the camera"</string>
     <string name="ui_could_not_apply_camera_settings" formatted="false">"Could not apply camera settings"</string>
-    <string name="ui_automatic_variation_0f" formatted="false">"Automatic variation %.0f%%"</string>
     <string name="ui_image_processing_error" formatted="false">"Image processing error"</string>
     <string name="ui_capturing_at_full_resolution" formatted="false">"Capturing at full resolution…"</string>
     <string name="ui_could_not_capture_the_photo_try_lower_settings" formatted="false">"Could not capture the photo. Try lower settings."</string>
@@ -287,7 +203,7 @@
     <string name="ui_could_not_capture" formatted="false">"Could not capture"</string>
     <string name="ui_could_not_read_raw_frames" formatted="false">"Could not read RAW frames"</string>
     <string name="ui_could_not_read_capture_data" formatted="false">"Could not read capture data"</string>
-    <string name="ui_saving_full_resolution_effects" formatted="false">"Saving full-resolution effects…"</string>
+    <string name="ui_saving_full_resolution_effects" formatted="false">"Saving the displayed signal…"</string>
     <string name="ui_saving_raw_data" formatted="false">"Saving RAW data…"</string>
     <string name="ui_no_location_fix_saved_without_gps" formatted="false">"No location fix. Saved without GPS."</string>
     <string name="ui_could_not_save_the_photo" formatted="false">"Could not save the photo"</string>
@@ -308,4 +224,160 @@
     <string name="language_summary">"Language"</string>
     <string name="camera_settings_unavailable">"Camera settings are available after camera access is granted. You can change the app language here."</string>
     <string name="ui_open_source_licenses">"Open-source licenses"</string>
+    <string name="fault_points" formatted="false">"FAULT POINTS"</string>
+    <string name="fault_live_title" formatted="false">LIVE FAULT</string>
+    <string name="fault_live_description" formatted="false">"Each fault keeps its identity and its own motion. LIVE couples the device to that system. Unavailable inputs contribute nothing."</string>
+    <string name="fault_motion" formatted="false">Motion &amp; rotation</string>
+    <string name="fault_timing" formatted="false">Camera exposure &amp; readout timing</string>
+    <string name="fault_thermal" formatted="false">Temperature</string>
+    <string name="fault_cpu" formatted="false">Processing pressure</string>
+    <string name="fault_audio" formatted="false">Audio amplitude</string>
+    <string name="fault_sensitivity" formatted="false">"Device coupling sensitivity"</string>
+    <string name="fault_mains_60" formatted="false">"60 Hz lighting (off: 50 Hz)"</string>
+    <string name="fault_incident" formatted="false">"incident"</string>
+    <string name="fault_edit_after_recording" formatted="false">"Stop recording to preview a fault edit."</string>
+    <string name="fault_capture_signal" formatted="false">"Capturing the displayed signal…"</string>
+    <string name="fault_signal_photo_note" formatted="false">"JPG saves the displayed camera signal at the selected live resolution. RAW uses a separate sensor exposure; its RGB preview is an approximation."</string>
+    <string name="fault_live_resolution" formatted="false">"Standard live signal (up to 2 MP)"</string>
+    <string name="fault_live_max" formatted="false">"Largest supported live signal"</string>
+    <string name="fault_recording_draft" formatted="false">"Apply or cancel the edit before recording."</string>
+    <string name="fault_control_density" formatted="false">"Damaged sites"</string>
+    <string name="fault_control_hot" formatted="false">"Dark → hot"</string>
+    <string name="fault_control_columns" formatted="false">"Column defects"</string>
+    <string name="fault_control_depth" formatted="false">"Exposure loss"</string>
+    <string name="fault_control_rate" formatted="false">"Exposure phase speed"</string>
+    <string name="fault_control_bands" formatted="false">"Band size"</string>
+    <string name="fault_control_displacement" formatted="false">"Readout displacement"</string>
+    <string name="fault_control_loss" formatted="false">"Loss incidents"</string>
+    <string name="fault_control_concealment" formatted="false">"Black → acquired sample reuse"</string>
+    <string name="fault_control_activity" formatted="false">"Fault activity"</string>
+    <string name="fault_control_bit" formatted="false">"Bit position: low → high"</string>
+    <string name="fault_control_burst_size" formatted="false">"Burst region"</string>
+    <string name="fault_control_offset" formatted="false">"Byte address offset"</string>
+    <string name="fault_control_region" formatted="false">"Affected region size"</string>
+    <string name="fault_control_coverage" formatted="false">"Affected coverage"</string>
+    <string name="fault_control_phase" formatted="false">"CFA phase: X → Y → XY"</string>
+    <string name="fault_control_interpolation" formatted="false">"Wrong-neighbor contribution"</string>
+    <string name="fault_control_sampling" formatted="false">"Sampling coarseness"</string>
+    <string name="fault_control_separation" formatted="false">"Chroma displacement"</string>
+    <string name="fault_control_direction" formatted="false">"Chroma direction"</string>
+    <string name="fault_control_palette" formatted="false">"Palette phase"</string>
+    <string name="fault_control_cycles" formatted="false">"Palette cycles"</string>
+    <string name="fault_control_mix" formatted="false">"Color map mix"</string>
+    <string name="fault_control_quantization" formatted="false">"Quantization loss"</string>
+    <string name="fault_control_block_size" formatted="false">"Block size"</string>
+    <string name="fault_control_misaddress" formatted="false">"Wrong-block incidents"</string>
+    <string name="fault_control_bandwidth" formatted="false">"Tape bandwidth loss · profile"</string>
+    <string name="fault_control_tracking" formatted="false">"Tracking instability · fault"</string>
+    <string name="fault_control_dropout" formatted="false">"Tape dropout · fault"</string>
+    <string name="fault_control_noise" formatted="false">"Tape noise · fault"</string>
+    <string name="fault_control_scan" formatted="false">"Scanlines · display profile"</string>
+    <string name="fault_control_phosphor" formatted="false">"Color → green phosphor · profile"</string>
+    <string name="fault_control_convergence" formatted="false">"Convergence · fault"</string>
+    <string name="fault_control_sync" formatted="false">"Sync drift · fault"</string>
+    <string name="fault_description_0" formatted="false">"No active faults. Camera signal."</string>
+    <string name="fault_description_1" formatted="false">"Fixed dead/hot pixels and columns; activity can change."</string>
+    <string name="fault_description_2" formatted="false">"Row exposure loss and a moving exposure phase."</string>
+    <string name="fault_description_3" formatted="false">"Weak readout bands, displacement and temporary row loss."</string>
+    <string name="fault_description_4" formatted="false">"Flipped bits in acquired sample components, including bursts."</string>
+    <string name="fault_description_5" formatted="false">"Byte misalignment and component/address misreads."</string>
+    <string name="fault_description_6" formatted="false">"Wrong Bayer phase; the RGB path uses a synthetic mosaic."</string>
+    <string name="fault_description_7" formatted="false">"Wrong-neighbor interpolation on a remosaic of camera RGB."</string>
+    <string name="fault_description_8" formatted="false">"Chroma displacement and coarse chroma sampling."</string>
+    <string name="fault_description_9" formatted="false">"False-color transfer of camera luminance."</string>
+    <string name="fault_description_10" formatted="false">"Decoded-block quantization and address-error model."</string>
+    <string name="fault_description_11" formatted="false">"Decoded-region loss/reuse model; no actual packets are edited."</string>
+    <string name="fault_description_12" formatted="false">"Tape response profile plus tracking, slips and dropout."</string>
+    <string name="fault_description_13" formatted="false">"Scan/phosphor profile plus convergence and sync faults."</string>
+    <string name="ui_random_chain" formatted="false">"RANDOM CHAIN"</string>
+    <string name="fault_chain_editor" formatted="false">"Chain · live preview"</string>
+    <string name="fault_add_remove" formatted="false">"Add / remove"</string>
+    <string name="fault_remove" formatted="false">"Remove"</string>
+    <string name="fault_chain_empty" formatted="false">"Choose faults below"</string>
+    <string name="fault_chain_hint" formatted="false">"Tap to combine. Order follows the signal path. Tap a selected fault above to adjust."</string>
+    <string name="fault_format_original">RAW original</string>
+    <string name="fault_format_processed">RAW</string>
+    <string name="fault_requires_rgb">This effect needs a processed image. Switch the capture format to use it. Your RAW chain is kept.</string>
+    <string name="fault_switch_mp4">Switch to MP4 and use</string>
+    <string name="fault_switch_jpeg">Switch to JPG and use</string>
+    <string name="fault_catalog_hint">Tap to add / remove · Tap a chain chip to adjust</string>
+    <string name="ui_invalid_number">Enter a finite number within the shown range.</string>
+    <string name="ui_advanced_mode">ADVANCED MODE</string>
+    <string name="ui_advanced_hint">AUTO follows the model; FIX holds a value. Tap a number for exact entry.</string>
+    <string name="ui_seed_hint">Signed 64-bit identity seed</string>
+    <string name="ui_advanced_auto_all">Return all internal values to AUTO</string>
+    <string name="ui_advanced_restore_auto">Return to automatic calculation</string>
+    <string name="ui_advanced_fix">Fix this value manually</string>
+    <string name="ui_advanced_time">TIME</string>
+    <string name="ui_advanced_event">EVENT</string>
+    <string name="ui_advanced_profile">PROFILE</string>
+    <string name="ui_advanced_signal">SIGNAL</string>
+    <string name="live_natural">Intrinsic evolution</string>
+    <string name="live_pulse">Periodic variation</string>
+    <string name="live_swell">Accumulation / release</string>
+    <string name="live_burst">Intermittent faults</string>
+    <string name="live_cascade">Progression along chain</string>
+    <string name="live_free">Continuous</string>
+    <string name="live_loop">Loop</string>
+    <string name="live_ping_pong">Ping-pong</string>
+    <string name="live_step">Fixed update interval</string>
+    <string name="live_editor_hint">Set how faults evolve at this moment. These controls change fault time while the camera image continues.</string>
+    <string name="live_enabled">LIVE</string>
+    <string name="live_style">Variation pattern</string>
+    <string name="live_clock">Time progression</string>
+    <string name="live_speed">Evolution speed / reverse</string>
+    <string name="live_tempo">Variation period</string>
+    <string name="live_cycle">Variation / repeat period</string>
+    <string name="live_depth">Variation amount</string>
+    <string name="live_division">Update interval</string>
+    <string name="live_burst_width">Active fraction of period</string>
+    <string name="live_chance">Probability per period</string>
+    <string name="live_hold_hint">Hold or resume the fault state</string>
+    <string name="live_hit_hint">Trigger a temporary fault at the current moment</string>
+    <string name="live_reset_hint">Restart the fault timeline</string>
+    <string name="live_sources">Device inputs</string>
+    <string name="live_mains">Lighting frequency</string>
+    <string name="ui_event_seed_hint">A fixed seed repeats incidents with the same fault time, inputs and settings. AUTO changes each session.</string>
+    <string name="ui_advanced_settings_hint">Show internal parameters for every fault. Switching off preserves fixed values.</string>
+    <string name="live_pause">PAUSE</string>
+    <string name="live_resume">RESUME</string>
+    <string name="live_trigger">TRIGGER</string>
+    <string name="live_reset">RESET TIME</string>
+    <string name="load_recommended">Recommended for this device</string>
+    <string name="load_title">Workload and recommendations</string>
+    <string name="load_hint">Display updates adapt to heat and workload. Recommended JPG is near 1–2 MP; video is HD/FHD at up to 30 fps. At critical heat, recording is saved and the camera pauses to cool.</string>
+    <string name="load_use_recommended">Use recommended photo and video settings</string>
+    <string name="load_cooling">Cooling · camera paused</string>
+    <string name="load_resumed">Camera resumed after cooling</string>
+    <string name="load_preview_rate">preview ≤%d fps</string>
+    <string name="load_auto_prefix">AUTO · </string>
+    <string name="settings_modes">Modes</string>
+    <string name="settings_photo">Photo</string>
+    <string name="settings_video">Standard video</string>
+    <string name="settings_raw_video">RAW video · experimental</string>
+    <string name="settings_metadata">Saved information</string>
+    <string name="settings_app">App</string>
+    <string name="settings_summary">Modes · quality · storage · app</string>
+    <string name="expert_mode">EXPERT MODE</string>
+    <string name="expert_hint">Disables app throttling, cooling pauses and preview frame skipping. Heat and battery use increase. Android and device protections remain active.</string>
+    <string name="expert_active">EXPERT · uncapped</string>
+    <string name="expert_load_hint">EXPERT removes preview pacing limits and renders as fast as processing allows. Photo preview requests the fastest supported capture rate at the selected size. Choose resolution and video fps below.</string>
+    <string name="settings_metadata_hint">Photos include the date, device, exposure, ISO and effects. With location enabled, an available location is added to photo GPS and video location tags. No location tag is added when a fix is unavailable.</string>
+    <string name="settings_raw_enable">Save DNG sequence</string>
+    <string name="capture_gps_on">GPS · ON</string>
+    <string name="capture_gps_off">GPS · OFF</string>
+    <string name="fault_state_hint">Transient event intensity. Fixed faults and intrinsic motion can still be active at 0%.</string>
+    <string name="fault_state_count">%1$d FAULTS</string>
+    <string name="camera_reconnecting">Reconnecting camera…</string>
+    <string name="camera_retry_hint">Preview unavailable · tap the preview to reconnect</string>
+    <string name="capture_record_audio">Video audio recording</string>
+    <string name="media_preview_title">Preview</string>
+    <string name="media_open_external">Open in another app</string>
+    <string name="media_loading">Loading…</string>
+    <string name="media_position">Playback position</string>
+    <string name="media_previous">Previous capture</string>
+    <string name="media_next">Next capture</string>
+    <string name="media_play">Play</string>
+    <string name="media_gestures">Swipe sideways to browse · swipe down to close</string>
+    <string name="media_preview_unavailable">Preview unavailable. Open this file in another app using ↗.</string>
 </resources>

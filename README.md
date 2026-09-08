@@ -12,64 +12,42 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 ![Android 12+](https://img.shields.io/badge/Android-12%2B-3DDC84.svg)
 
-## One encounter, one moment
+## One damaged system, fleeting moments
 
-*Ichigo-ichie* — an encounter that belongs to its moment.
+This source prepares **1.1.0 (versionCode 9), not yet published**. The download below remains 1.0.0; its controls and store screenshots differ from these guides. Upgrading resets legacy effect settings for the new fault model and preserves saved captures.
 
-In 5igna1, the subject, the light, your movement, and the timing of a fault meet in the viewfinder. Some patterns hold their position. LIVE FAULT adds changing strength and parameters. The photograph is the moment you choose from that interaction.
+The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 
-You can keep a setting. You cannot keep the scene from moving on.
+Every scene sample comes from the camera. There is no semantic scene generation or content completion. RAW, camera RGB, luma/chroma and media/display outputs are representations along a route; RAW is not the sole true image. Mechanisms are causal but their ranges serve glitch expression, not engineering simulation.
 
 ## Choose where the signal breaks
 
-5igna1 takes its cues from the behavior of imaging failures: dropped lines, shifted readout data, damaged bits, mismatched color arrays, and unstable displays. Each effect has a place in the path from sensor to image.
-
-The difference from a preset filter workflow is the question you ask. Rather than choosing a finished look, you choose **what goes wrong, where it happens, and how strongly it appears** — while the camera is running.
-
-These are software interpretations. JPEG and video use GPU approximations; processed RAW changes sensor sample data directly. Some effects, such as SPECTRUM and TERMINAL, are deliberately stylized. 5igna1 does not damage the camera or claim to reproduce every physical fault exactly.
-
-[Read the project statement](docs/ABOUT.md) · [Explore the effect models](docs/EFFECTS.md)
-
-## An instrument for live images
-
-- **CLEAN + 16 effects.** Use one fault or combine several in the order they occur along the imaging pipeline.
-- **LIVE FAULT.** Let strength and parameters change over time, then capture an instant or record the change.
-- **JPEG, MP4, and RAW.** Save a finished image, or work with original and processed DNG on supported cameras.
-- **On your device.** No ads, tracking SDKs, or account registration. The app has no Internet permission.
-
-Japanese, English, and Simplified Chinese are available in the app. All distribution flavors share the same core features.
-
-## Through the viewfinder
-
-<table>
-  <tr>
-    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01-camera.png" alt="CLEAN: the camera before applying an effect" width="260"></td>
-    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02-row-shift.png" alt="ROW SHIFT: rows displaced sideways in the live preview" width="260"></td>
-    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03-chain.png" alt="CHAIN: ROW SHIFT, CHROMA and VHS used together" width="260"></td>
-  </tr>
-  <tr><td>CLEAN / Observe</td><td>ROW SHIFT / Displace</td><td>CHAIN / Combine</td></tr>
-</table>
-
-Actual app screens in Android Emulator, with an AOSP test pattern as the subject. The title graphic above is promotional artwork, not a sample photograph. [Asset provenance](docs/audit/ASSETS.md)
-
-## Make your first photograph
-
-1. Start in **Photo** mode with **processed JPEG**, and allow camera access.
-2. Select **ROW SHIFT**. Move the strength control and watch the outline of your subject. Confirm any edits with **Apply**.
-3. Press the center capture button. Open the saved image from the bottom-left thumbnail.
-
-Next, try adding CHROMA or VHS. [Get started](docs/GETTING_STARTED.md), or follow a [creative recipe](docs/RECIPES.md).
-
-## A vocabulary of faults
-
-| What changes | Effects |
+| FAULT POINT | Faults |
 |---|---|
-| Sensor response and readout | SENSOR FAIL · EXPOSURE BAND · ROW SHIFT · LINE LOSS |
-| Data and color array | BIT ROT · DATA SHIFT · CFA TEAR · CFA OFFSET |
-| Interpolation and color | DEMOSAIC · CHROMA · SPECTRUM · CHROMA LOSS |
-| Transport and display | CORRUPT · PACKET LOSS · VHS · TERMINAL |
+| SENSOR | PIXEL DAMAGE · EXPOSURE |
+| READOUT | ROW ERROR |
+| DATA | BIT ERROR · ADDRESS ERROR |
+| CFA / RECONSTRUCTION | CFA ERROR · DEMOSAIC ERROR |
+| COLOR | CHROMA ERROR · COLOR MAP |
+| CODEC / STREAM | BLOCK ERROR · STREAM ERROR |
+| MEDIA | VHS |
+| DISPLAY | CRT |
 
-PACKET LOSS is video-only. Processed RAW supports the eight effects from SENSOR FAIL through CFA OFFSET. [All effects and their controls](docs/EFFECTS.md)
+CLEAN is an empty route. Each fault has a few named controls mapped to its own internal mechanism parameters. RANDOM CHAIN creates a new combination and controls; hold it to reseed identities while keeping the settings. LIVE controls current fault-time progression, variation patterns, second-based intervals and optional device inputs. Pause, trigger and reset act on the fault state. ADVANCED MODE exposes every compiled fault parameter and its time/event generators through AUTO or fixed values. VHS/CRT profiles are distinct from tracking, dropout, convergence and sync faults. STREAM ERROR is an explicit decoded-region loss/reuse model, not actual packet corruption.
+
+[Fault models](docs/EFFECTS.md) · [LIVE time evolution and inputs](docs/LIVE_FAULT.md) · [ADVANCED MODE](docs/ADVANCED_MODE.md) · [Release audit and migration design](docs/design/FAULT_SYSTEM.md)
+
+## Photograph the displayed signal
+
+JPEG pins the UI-acknowledged camera image at shutter time. A later camera frame or settings edit cannot replace it. Preview and ordinary video use the same canonical processed images. JPEG uses a supported live signal resolution, rather than a later full-resolution exposure. RAW photos use separate exposures and cannot be identical to the RGB viewfinder. [Formats and limits](docs/FORMATS.md).
+
+1. Choose Photo and **JPEG · displayed signal**.
+2. Select **ROW ERROR**. Adjust displacement and loss, then Apply. Watch the weak rows drift.
+3. Press the shutter when the image interests you. Open the saved photograph from the thumbnail.
+
+Tap + to add CHROMA ERROR or VHS to explore another part of the signal path. [First photograph](docs/GETTING_STARTED.md) · [Creative starting points](docs/RECIPES.md).
+
+All processing runs on your device. No ads, accounts, analytics or Internet permission. Japanese, English and Simplified Chinese are available, with the same core features in every distribution.
 
 ## Download and update
 
@@ -89,18 +67,18 @@ https://github.com/Bongorian/5igna1-release
 
 ### Google Play
 
-Developer registration is in progress. The official store link will appear here after publication.
+The owner reports closed-test review pending as of 2026-09-08. The official store link will appear here after publication.
 
 ### F-Droid
 
-The FOSS build and submission metadata are prepared. The app is not yet listed in the official repository. [Submission status](docs/FDROID_READINESS.md)
+The 1.0.0 submission is awaiting merge as of 2026-09-08 (owner report). The app is not yet listed in the official repository. [Submission status](docs/FDROID_READINESS.md)
 
 ## Keep what you make
 
 | Output | Saved to |
 |---|---|
-| JPEG and DNG photos | `Pictures/5igna1` |
-| MP4 video | `Movies/5igna1` |
+| JPEG and DNG photos | `DCIM/5igna1` |
+| MP4 video | `DCIM/5igna1` |
 | Experimental RAW video sequences, as ZIP | `Download/5igna1` |
 
 GPS tagging starts off. Audio recording is optional. DNG needs a RAW developer, and its developed appearance can differ from the preview. Your gallery or OS may separately sync media if you enable those services.
@@ -115,8 +93,12 @@ GPS tagging starts off. Audio recording is optional. DNG needs a RAW developer, 
 ./tools/build.sh
 ```
 
-[Building](docs/building.md) · [Architecture (Japanese)](docs/ARCHITECTURE.md) · [Contributing](CONTRIBUTING.md) · [Report an issue](https://github.com/Bongorian/5igna1-release/issues)
+[Building](docs/building.md) · [Architecture](docs/ARCHITECTURE.md) · [Contributing](CONTRIBUTING.md) · [Report an issue](https://github.com/Bongorian/5igna1-release/issues)
 
 ## License
 
 5igna1 by **Bongorian**. Project code is licensed under [Apache License 2.0](LICENSE). See [NOTICE](NOTICE), [third-party licenses](THIRD_PARTY_LICENSES.md), and [asset provenance](docs/audit/ASSETS.md).
+
+The development build includes conservative device recommendations and automatic preview workload reduction. [Heat and workload](docs/PERFORMANCE.md).
+
+Settings groups ADVANCED and EXPERT under Modes. ADVANCED exposes internal values; EXPERT removes app-level preview workload and cooling limits for maximum available speed. [Performance modes](docs/PERFORMANCE.md).

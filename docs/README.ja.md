@@ -1,6 +1,6 @@
 # 5igna1 ガイド
 
-撮るところから、表現を探るところまで。1.0.0の操作と機能を案内します。
+撮るところから、表現を探るところまで。未公開の1.1.0 / code 9の操作と機能を案内します。公開済み1.0.0とは操作が異なります。
 
 [作品の紹介へ](../README.ja.md) · [English quick guide](GETTING_STARTED.md)
 
@@ -17,8 +17,10 @@
 
 ## もう少し深く
 
-- [16エフェクトの仕様と適用順](EFFECTS.ja.md)
-- [LIVE FAULTの自動変化](LIVE_FAULT.ja.md)
+- [13 FAULTとFAULT POINTの仕様](EFFECTS.ja.md)
+- [LIVE FAULTの時間変化・端末入力](LIVE_FAULT.ja.md)
+- [ADVANCED MODEの内部パラメータ](ADVANCED_MODE.ja.md)
+- [発熱・負荷対策と推奨設定](PERFORMANCE.ja.md)
 - [実験的なRAW動画](RAW_VIDEO.ja.md)
 - [プライバシーポリシー](PRIVACY.ja.md)
 - [検証済みの範囲と制限](VALIDATION.md)
