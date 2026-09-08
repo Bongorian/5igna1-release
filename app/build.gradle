@@ -1,4 +1,7 @@
-plugins { id 'com.android.application' }
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
 
 // The existing signing.properties is the Play upload configuration only.
 // F-Droid's build server gets an unsigned APK; GitHub signing is explicit opt-in.
@@ -85,14 +88,14 @@ android {
         }
     }
     // Run existing independent behavior fixtures through Gradle's standard test task.
-    sourceSets { test.java.srcDir(rootProject.file('tools')) }
+    sourceSets { test.kotlin.srcDir(rootProject.file('tools')) }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     // Referenced by the manifest's initializer opt-out; already a runtime dependency of AppCompat.
     implementation 'androidx.startup:startup-runtime:1.1.1'
-    implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.22')
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.2.20'
     testImplementation 'junit:junit:4.13.2'
     // Future Play services use playImplementation; no Billing SDK is needed today.
 }
@@ -107,3 +110,9 @@ android.sourceSets.main.assets.srcDir(layout.buildDirectory.dir('generated/licen
 tasks.named('preBuild').configure { dependsOn(licenseAssets) }
 
 apply from: rootProject.file('gradle/distribution-audit.gradle')
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}

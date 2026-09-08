@@ -2,6 +2,8 @@
 
 [Redesign and release audit](design/FAULT_SYSTEM.md) · [日本語](ARCHITECTURE.ja.md)
 
+The application and tests are Kotlin, with the GPU pipeline in GLSL. `CameraScreen` builds and binds the screen; `MainActivity` coordinates lifecycle and user actions. `CaptureStorage` persists completed captures while `GlitchEngine` owns camera and GL resources. Immutable snapshot collections take defensive copies and reject mutation, including through Java. Existing Android views and platform camera APIs keep the dependency surface small.
+
 ## Settings, time and pixels
 
 `Effects` owns the thirteen fault IDs, eight causal points, control descriptors, RAW capability and generated shader definitions. `EffectParameters` stores immutable named controls and independent 64-bit identity seeds. The number of controls varies by fault. `EffectState` stores the selected route and user LEVEL macro; schema 3 deliberately resets release 1.0 effect settings.

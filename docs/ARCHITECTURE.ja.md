@@ -2,6 +2,8 @@
 
 [English](ARCHITECTURE.md) · [現状調査と移行設計](design/FAULT_SYSTEM.ja.md)
 
+アプリ本体とテストはKotlin、GPU処理はGLSLです。`CameraScreen`が画面構築と操作の結び付け、`MainActivity`がライフサイクルと操作の調整を担当します。`CaptureStorage`が完成した撮影データを保存し、カメラとGLの資源は`GlitchEngine`が所有します。スナップショットのコレクションは防御的コピーを取り、Java経由の変更も拒否します。既存のAndroid Viewと標準カメラAPIを利用します。
+
 Effectsが13 FAULT・8地点・操作項目・適用順・RAW対応を管理します。EffectParametersはFAULTごとに項目数が異なる名前付き操作値と64bit個体seedを保持します。EffectStateは不変の選択経路です。LEVELを各故障機構へ変換し、共通strengthの物理制約を設けません。
 
 FaultModelはカメラフレームごとに一度だけ時間を進めます。FaultNodeにIDENTITY・MOTION・EVENTと名前付き機構パラメータを固定し、読み取りで再抽選しません。構造・drift・事故の乱数領域は独立しています。LIVEは既存の端末入力取得を結合するだけで、固有の時間変化は各FAULT自身が持ちます。
@@ -12,7 +14,7 @@ JPEGは予約した画像を読み出して保存し、EXIFへ時刻・FAULT状�
 
 RawGlitchは同じFaultNodeのRAW16アダプターです。DNGは別露光であり、RGBプレビューと同一とはしません。原本RAW動画の有界キューや保存処理は維持します。Frame.through(Point)で途中信号記録のための因果順prefixを表します。
 
-旧FAULT設定だけを新スキーマへ初期化し、撮影設定・言語・位置情報・アプリIDは保持します。全コア機能をsrc/mainに置き、依存追加はありません。[検証](VALIDATION.md)
+旧FAULT設定だけを新スキーマへ初期化し、撮影設定・言語・位置情報・アプリIDは保持します。全コア機能をsrc/mainに置きます。[検証](VALIDATION.md)
 
 ## 撮影画面と共通プレビュー
 

@@ -1,12 +1,12 @@
 # Third-party licenses
 
-監査日: 2026-09-08。対象は1.0.0のPlay / F-Droid構成です。
+監査日: 2026-09-09。対象はKotlin移行開発版のPlay / F-Droid構成です。
 
 アプリ本体は[Apache-2.0](LICENSE)。第三者の著作権・ライセンスはそのまま維持します。依存コードを本プロジェクトの著作物として再ライセンスするものではありません。
 
 ## Runtime and compile dependencies
 
-`implementation` はAndroidX AppCompat 1.7.1、Startup 1.1.1（manifestで参照）、Kotlin BOM 1.8.22です。両flavorのrelease runtimeグラフは一致します。47モジュール（BOM・メタデータを含む）を選択し、45アーティファクトを解決しました。下表はruntimeアーティファクトのあるモジュールです。compile-only/platformも含む全174件の座標・POMライセンス宣言・親POM・アーティファクトSHA-256は[依存一覧](docs/audit/dependencies.json)に記録しています。
+`implementation` はAndroidX AppCompat 1.7.1、Startup 1.1.1（manifestで参照）、Kotlin標準ライブラリ 2.2.20です。両flavorのrelease runtimeグラフは一致します。46モジュール（BOM・メタデータを含む）を選択し、44アーティファクトを解決しました。下表はruntimeアーティファクトのあるモジュールです。compile-only/platformも含む全194件の座標・POMライセンス宣言・親POM・アーティファクトSHA-256は[依存一覧](docs/audit/dependencies.json)に記録しています。
 
 | Component | Version | Declared license |
 |---|---|---|
@@ -46,15 +46,14 @@
 | [androidx.versionedparcelable:versionedparcelable](https://dl.google.com/dl/android/maven2/androidx/versionedparcelable/versionedparcelable/1.1.1/versionedparcelable-1.1.1.pom) | 1.1.1 | Apache-2.0 |
 | [androidx.viewpager:viewpager](https://dl.google.com/dl/android/maven2/androidx/viewpager/viewpager/1.0.0/viewpager-1.0.0.pom) | 1.0.0 | Apache-2.0 |
 | [com.google.guava:listenablefuture](https://repo.maven.apache.org/maven2/com/google/guava/listenablefuture/1.0/listenablefuture-1.0.pom) | 1.0 | Apache-2.0 |
-| [org.jetbrains.kotlin:kotlin-stdlib-common](https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.8.22/kotlin-stdlib-common-1.8.22.pom) | 1.8.22 | Apache-2.0 |
-| [org.jetbrains.kotlin:kotlin-stdlib-jdk7](https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.22/kotlin-stdlib-jdk7-1.8.22.pom) | 1.8.22 | Apache-2.0 |
-| [org.jetbrains.kotlin:kotlin-stdlib-jdk8](https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.22/kotlin-stdlib-jdk8-1.8.22.pom) | 1.8.22 | Apache-2.0 |
-| [org.jetbrains.kotlin:kotlin-stdlib](https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.8.22/kotlin-stdlib-1.8.22.pom) | 1.8.22 | Apache-2.0 |
+| [org.jetbrains.kotlin:kotlin-stdlib-jdk7](https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.0/kotlin-stdlib-jdk7-1.8.0.pom) | 1.8.0 | Apache-2.0 |
+| [org.jetbrains.kotlin:kotlin-stdlib-jdk8](https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.0/kotlin-stdlib-jdk8-1.8.0.pom) | 1.8.0 | Apache-2.0 |
+| [org.jetbrains.kotlin:kotlin-stdlib](https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.20/kotlin-stdlib-2.2.20.pom) | 2.2.20 | Apache-2.0 |
 | [org.jetbrains.kotlinx:kotlinx-coroutines-android](https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.6.4/kotlinx-coroutines-android-1.6.4.pom) | 1.6.4 | Apache-2.0 |
 | [org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm](https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.6.4/kotlinx-coroutines-core-jvm-1.6.4.pom) | 1.6.4 | Apache-2.0 |
 | [org.jetbrains:annotations](https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.pom) | 13.0 | Apache-2.0 |
 
-Kotlin標準ライブラリの `MathJVM.kt` にはBoost由来コード（BSL-1.0）が含まれます。[上流の例外一覧](https://github.com/JetBrains/kotlin/blob/v1.8.22/license/README.md)も確認し、[全文](licenses/Kotlin-Boost-1.0.txt)と著作権表示を同梱します。GWT / Guava由来の標準ライブラリ部分はApache-2.0です。POMの単一ライセンス宣言だけで組み込みコード全体を判断しないでください。
+Kotlin標準ライブラリの `MathJVM.kt` にはBoost由来コード（BSL-1.0）が含まれます。[上流の例外一覧](https://github.com/JetBrains/kotlin/blob/v2.2.20/license/README.md)も確認し、[全文](licenses/Kotlin-Boost-1.0.txt)と著作権表示を同梱します。GWT / Guava由来の標準ライブラリ部分はApache-2.0です。時刻処理のThreeTen由来コードはBSD-3-Clauseで、[全文と著作権](licenses/Kotlin-ThreeTen-BSD-3-Clause.txt)を同梱します。POMの単一ライセンス宣言だけで組み込みコード全体を判断しないでください。
 
 `androidx.emoji2` はFOSSです。アプリはその自動初期化を無効にしており、絵文字フォントのダウンロードプロバイダを起動しません。OS標準フォントを利用します。AndroidXやApache-2.0のGuavaはGoogle Play Servicesとは異なります。Billing / Firebase / Analytics / AdMob / GMS SDKは含みません。
 
@@ -63,7 +62,9 @@ Kotlin標準ライブラリの `MathJVM.kt` にはBoost由来コード（BSL-1.0
 | Component | License / scope |
 |---|---|
 | Gradle Wrapper 8.11.1 | Apache-2.0。公式配布のSHA-256と照合。唯一のGit管理下JAR |
-| Android Gradle Plugin 8.10.1 / Android tools | Apache-2.0主体。推移依存125件を依存一覧に収録。Android SDKはローカル・CIのビルド環境で使用し、アプリへ同梱しない |
+| Android Gradle Plugin 8.10.1 / Android tools | Apache-2.0主体。ビルド用の選択モジュール146件を依存一覧に収録。Android SDKはローカル・CIのビルド環境で使用し、アプリへ同梱しない |
+| Kotlin Gradle plugin 2.2.20 | Apache-2.0。コンパイラ・ビルド補助はAPKに含まない。選択座標とPOM宣言は依存一覧に記録 |
+| ktfmt 0.64 | Apache-2.0。任意のコード整形ツール。バイナリはリポジトリ・APKに含まない |
 | JUnit 4.13.2 | EPL-1.0。`testImplementation` のみ |
 | Hamcrest Core 1.3 | BSD-3-Clause。JUnitのテスト用推移依存 |
 | JNA 5.6.0 | LGPL-2.1-or-later / Apache-2.0のデュアルライセンス。AGPのビルド用 |

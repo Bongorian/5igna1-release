@@ -37,3 +37,9 @@
 
 - The owner requested first-launch and Settings-accessible tutorials on a development branch, with no physical device connected. Keep this work on `codex/onboarding-tutorial`; use the emulator and debug builds.
 - This feature is not part of the signed Play 1.1.0 / code 9 submission. Preserve that bundle and main; allocate a higher versionCode before any future submission of changed application code.
+
+## Owner direction — Kotlin rewrite, 2026-09-09
+
+- The owner requested a complete, lean Kotlin rewrite. Continue on `codex/kotlin-cleanup`, based on the tutorial development branch. Application and test sources belong in Kotlin source sets; shaders stay GLSL and build/release utilities use their existing suitable languages.
+- Preserve the submitted Play bundle, main, release tags, and signing material. Validate the development rewrite with debug builds and the emulator; this work does not authorize another store submission.
+- Keep migration golden hashes fixed to the pre-rewrite Java output. Do not replace their expected values with Kotlin output to make a refactor pass.
