@@ -29,3 +29,7 @@
 所有者から提示された [Android Emulator Internal Book](https://github.com/aospbooks/android-emulator-internal-book/blob/main/index.md) のApache-2.0表記は書籍への許諾として確認しました。Toren1BD素材自体の許諾をこの記載だけで確定せず、旧素材を含まない現行スナップショットを公開する方針へ変更しています。旧素材はこの公開リポジトリのライセンス監査対象ファイルに含まれません。
 
 アプリに同梱する素材で、非FOSSまたはライセンス不明として残ったものはありません。READMEのタイトルアートは作品紹介用であることを明示し、実機・実UIの撮影サンプルとして扱いません。
+
+### Development UI utility icons — 2026-09-08
+
+`ic_flash.xml`, `ic_location.xml`, `ic_mic.xml` and `ic_mic_off.xml` are original vector paths created for this project with Codex, under the project Apache-2.0 license. Input: compact 24-unit outline lightning bolt, location pin and microphone (including a muted variant), 1.6-unit stroke, matching the existing controls. No external source image or icon library was used.

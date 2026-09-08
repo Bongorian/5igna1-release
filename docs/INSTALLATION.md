@@ -33,7 +33,7 @@ Install a newer release over the existing app, using the same distribution sourc
 
 An app from a different store may have a different signature even if its name and package ID match. Do not uninstall as a first response to a signature error: uninstalling removes app settings. Check the source and [troubleshooting guide](TROUBLESHOOTING.md) first.
 
-The GitHub APK is FOSS. Google Play registration and F-Droid submission are still in progress; no official store listing is available yet.
+The GitHub APK is FOSS. As of 2026-09-08, the owner reports Play closed-test review and F-Droid merge pending; no official store listing is available yet.
 
 ## Check the download
 

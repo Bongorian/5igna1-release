@@ -6,14 +6,14 @@
     <string name="ui_open_the_last_saved_raw_video_zip" formatted="false">"最後に保存したRAW動画のZIPを開く"</string>
     <string name="ui_select_an_option_then_apply" formatted="false">"選択して適用"</string>
     <string name="ui_photo_full_resolution" formatted="false">"写真 · 信号の記録"</string>
-    <string name="ui_processed_jpeg" formatted="false">"JPEG · 表示した信号"</string>
+    <string name="ui_processed_jpeg" formatted="false">JPG</string>
     <string name="ui_raw_dng_original" formatted="false">"RAW / DNG 原本"</string>
-    <string name="ui_raw_dng_sensor_processing" formatted="false">"RAW / DNG センサーデータ加工"</string>
+    <string name="ui_raw_dng_sensor_processing" formatted="false">RAW</string>
     <string name="ui_save_format" formatted="false">"保存形式"</string>
     <string name="ui_standard_prefer_12_mp_or_less" formatted="false">"標準（12MP以下を優先）"</string>
     <string name="ui_maximum_camera_resolution" formatted="false">"カメラの最大解像度"</string>
     <string name="ui_photo_resolution" formatted="false">"写真の解像度"</string>
-    <string name="ui_jpeg_quality" formatted="false">"JPEG画質"</string>
+    <string name="ui_jpeg_quality" formatted="false">"JPG画質"</string>
     <string name="ui_85_smaller_files" formatted="false">"85 · 軽量"</string>
     <string name="ui_95_high_quality" formatted="false">"95 · 高画質"</string>
     <string name="ui_100_best_quality" formatted="false">"100 · 最高画質"</string>
@@ -44,7 +44,7 @@
     <string name="ui_photo_format" formatted="false">"写真形式\n"</string>
     <string name="ui_photo_resolution_42" formatted="false">"写真の解像度\n"</string>
     <string name="ui_unavailable_on_this_camera" formatted="false">"このカメラでは利用できません"</string>
-    <string name="ui_jpeg_quality_44" formatted="false">"JPEG画質\n"</string>
+    <string name="ui_jpeg_quality_44" formatted="false">"JPG画質\n"</string>
     <string name="ui_raw_quality_uncompressed_sensor_data" formatted="false">"RAW画質\n非圧縮センサーデータ"</string>
     <string name="ui_video_codec_46" formatted="false">"動画コーデック\n"</string>
     <string name="ui_video_resolution_fps_47" formatted="false">"動画の解像度 / fps\n"</string>
@@ -76,7 +76,7 @@
     <string name="ui_live_fault_current_chain" formatted="false">"FAULT STATE"</string>
     <string name="ui_strength" formatted="false">"LEVEL"</string>
     <string name="ui_random" formatted="false">"RESEED"</string>
-    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"選択したFAULTの個体差を再生成します。経路と操作値は保持します。"</string>
+    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"ランダムなチェーンと値を生成。長押しで現在のチェーンの個体差を再生成。"</string>
     <string name="ui_toggle_live_fault" formatted="false">"LIVE FAULTを切り替える"</string>
     <string name="ui_live_fault_settings" formatted="false">"LIVE FAULTの自動変化設定"</string>
     <string name="ui_photo" formatted="false">"写真"</string>
@@ -99,14 +99,14 @@
     <string name="ui_apply_or_discard_your_edits_before_capturing" formatted="false">"調整を適用するか戻ってから撮影してください"</string>
     <string name="ui_preparing_the_camera" formatted="false">"カメラを準備しています"</string>
     <string name="ui_open_your_captured_photos_and_videos_here" formatted="false">"撮影した写真・動画がここから開けます"</string>
-    <string name="ui_photos_are_in_pictures_videos_in_movies_and" formatted="false">"写真はPictures、動画はMovies、RAW動画のZIPはDownload / 5igna1に保存済みです。DNG連番は展開してRAW対応ソフトで開いてください"</string>
+    <string name="ui_photos_are_in_pictures_videos_in_movies_and" formatted="false">写真とMP4動画はDCIM / 5igna1、RAW動画のZIPはDownload / 5igna1に保存されます。</string>
     <string name="ui_failed" formatted="false">"失敗"</string>
     <string name="ui_could_not" formatted="false">"できません"</string>
     <string name="ui_error" formatted="false">"エラー"</string>
     <string name="ui_stop_recording" formatted="false">"録画を停止"</string>
     <string name="ui_raw_video_saved_to_download_5igna1" formatted="false">"RAW動画を Download / 5igna1 に保存しました"</string>
-    <string name="ui_video_saved_to_movies_5igna1" formatted="false">"動画を Movies / 5igna1 に保存しました"</string>
-    <string name="ui_photo_saved_to_pictures_5igna1" formatted="false">"写真を Pictures / 5igna1 に保存しました"</string>
+    <string name="ui_video_saved_to_movies_5igna1" formatted="false">"動画を DCIM / 5igna1 に保存しました"</string>
+    <string name="ui_photo_saved_to_pictures_5igna1" formatted="false">"写真を DCIM / 5igna1 に保存しました"</string>
     <string name="ui_audio_reaction_is_off_live_fault_can_use" formatted="false">"音反応はOFFです。他の入力でLIVE FAULTを使用できます"</string>
     <string name="ui_tap_capture_to_allow_camera_access" formatted="false">"撮影ボタンからカメラを許可してください"</string>
     <string name="ui_camera_access_is_required_to_capture_if_the" formatted="false">"撮影にはカメラの許可が必要です。許可画面が出ない場合は設定から許可できます。"</string>
@@ -177,7 +177,7 @@
     <string name="ui_could_not_change_capture_settings" formatted="false">"設定変更に失敗しました"</string>
     <string name="ui_this_camera_has_no_light" formatted="false">"このカメラにはライトがありません"</string>
     <string name="ui_allow_camera_access" formatted="false">"カメラの使用を許可してください"</string>
-    <string name="ui_raw_is_unavailable_on_this_camera_switched_to" formatted="false">"このカメラはRAW非対応のためJPEGに切り替えました"</string>
+    <string name="ui_raw_is_unavailable_on_this_camera_switched_to" formatted="false">"このカメラはRAW非対応のためJPGに切り替えました"</string>
     <string name="ui_raw_video_is_unavailable_on_this_camera" formatted="false">"RAW動画はこのカメラでは利用できません"</string>
     <string name="ui_camera_disconnected_select_your_settings_again" formatted="false">"カメラが切断されました。設定を選び直してください"</string>
     <string name="ui_camera_error" formatted="false">"カメラエラー "</string>
@@ -225,19 +225,19 @@
     <string name="camera_settings_unavailable">"撮影設定はカメラの使用を許可すると表示されます。アプリの言語はここで変更できます。"</string>
     <string name="ui_open_source_licenses">"オープンソースライセンス"</string>
     <string name="fault_points" formatted="false">"FAULT POINTS"</string>
-    <string name="fault_live_title" formatted="false">"LIVE FAULT · 端末との結合"</string>
+    <string name="fault_live_title" formatted="false">LIVE FAULT</string>
     <string name="fault_live_description" formatted="false">"各FAULTの個体差と固有の時間変化を保ち、端末状態を結合します。取得できない入力は影響しません。"</string>
-    <string name="fault_motion" formatted="false">"動き → 読み出し・tracking"</string>
-    <string name="fault_timing" formatted="false">"カメラの時間情報 → 露光・読み出し"</string>
-    <string name="fault_thermal" formatted="false">"温度状態 → センサーの活動"</string>
-    <string name="fault_cpu" formatted="false">"処理負荷 → data・streamの事故"</string>
-    <string name="fault_audio" formatted="false">"音量 → テープの時間軸"</string>
+    <string name="fault_motion" formatted="false">動き・回転</string>
+    <string name="fault_timing" formatted="false">露光・読み出しタイミング</string>
+    <string name="fault_thermal" formatted="false">温度</string>
+    <string name="fault_cpu" formatted="false">処理負荷</string>
+    <string name="fault_audio" formatted="false">音量</string>
     <string name="fault_sensitivity" formatted="false">"端末入力の感度"</string>
     <string name="fault_mains_60" formatted="false">"照明の電源周波数 60 Hz（OFF: 50 Hz）"</string>
     <string name="fault_incident" formatted="false">"事故"</string>
     <string name="fault_edit_after_recording" formatted="false">"FAULTの試し編集は録画停止後に行えます。"</string>
     <string name="fault_capture_signal" formatted="false">"表示した信号を記録中…"</string>
-    <string name="fault_signal_photo_note" formatted="false">"JPEGは選択したライブ解像度で、表示したカメラ信号を保存します。RAWは別のセンサー露光を取得し、RGBプレビューは近似です。"</string>
+    <string name="fault_signal_photo_note" formatted="false">"JPGは選択したライブ解像度で、表示したカメラ信号を保存します。RAWは別のセンサー露光を取得し、RGBプレビューは近似です。"</string>
     <string name="fault_live_resolution" formatted="false">"標準ライブ信号（2 MPまで）"</string>
     <string name="fault_live_max" formatted="false">"対応する最大ライブ信号"</string>
     <string name="fault_recording_draft" formatted="false">"編集を適用またはキャンセルしてから録画してください。"</string>
@@ -289,4 +289,95 @@
     <string name="fault_description_11" formatted="false">"復号画像領域の欠落・再利用モデル。実packetは破壊しません。"</string>
     <string name="fault_description_12" formatted="false">"テープの媒体特性と、tracking・slip・dropout。"</string>
     <string name="fault_description_13" formatted="false">"走査・蛍光体の表示特性と、convergence・同期の故障。"</string>
+    <string name="ui_random_chain" formatted="false">"ランダムチェーン"</string>
+    <string name="fault_chain_editor" formatted="false">"チェーン · ライブプレビュー"</string>
+    <string name="fault_add_remove" formatted="false">"追加・削除"</string>
+    <string name="fault_remove" formatted="false">"外す"</string>
+    <string name="fault_chain_empty" formatted="false">"下から効果を選んで追加"</string>
+    <string name="fault_chain_hint" formatted="false">"タップで組み合わせ。処理順は自動です。上の選択済み効果をタップすると調整できます。"</string>
+    <string name="fault_format_original">RAW原本</string>
+    <string name="fault_format_processed">RAW</string>
+    <string name="fault_requires_rgb">この効果には現像後の画像が必要です。撮影形式を切り替えると使えます。RAWのチェーン設定は保持されます。</string>
+    <string name="fault_switch_mp4">MP4に切り替えて使う</string>
+    <string name="fault_switch_jpeg">JPGに切り替えて使う</string>
+    <string name="fault_catalog_hint">タップで追加・解除 · チェーンの効果をタップして調整</string>
+    <string name="ui_invalid_number">表示範囲内の数値を入力してください。</string>
+    <string name="ui_advanced_mode">ADVANCED MODE</string>
+    <string name="ui_advanced_hint">AUTOはモデルによる更新、FIXは手動固定。数値をタップして直接入力します。</string>
+    <string name="ui_seed_hint">個体を決める64ビット整数（負数も可）</string>
+    <string name="ui_advanced_auto_all">内部パラメータをすべてAUTOに戻す</string>
+    <string name="ui_advanced_restore_auto">自動計算に戻す</string>
+    <string name="ui_advanced_fix">この値を手動固定する</string>
+    <string name="ui_advanced_time">時間</string>
+    <string name="ui_advanced_event">発生・事故</string>
+    <string name="ui_advanced_profile">表示・媒体</string>
+    <string name="ui_advanced_signal">描画値</string>
+    <string name="live_natural">固有の変化</string>
+    <string name="live_pulse">周期的な増減</string>
+    <string name="live_swell">蓄積・解消</string>
+    <string name="live_burst">断続的な発生</string>
+    <string name="live_cascade">チェーン内の推移</string>
+    <string name="live_free">連続</string>
+    <string name="live_loop">ループ</string>
+    <string name="live_ping_pong">往復</string>
+    <string name="live_step">一定間隔で更新</string>
+    <string name="live_editor_hint">今この瞬間のFAULTがどう変化するかを設定します。時間操作はFAULTに作用し、カメラ映像は進み続けます。</string>
+    <string name="live_enabled">LIVE</string>
+    <string name="live_style">変化の形</string>
+    <string name="live_clock">時間の進み方</string>
+    <string name="live_speed">変化速度・逆行</string>
+    <string name="live_tempo">変化周期</string>
+    <string name="live_cycle">変化・反復の周期</string>
+    <string name="live_depth">変化量</string>
+    <string name="live_division">更新間隔</string>
+    <string name="live_burst_width">発生が続く割合</string>
+    <string name="live_chance">周期ごとの発生確率</string>
+    <string name="live_hold_hint">FAULTの状態を止める・再開する</string>
+    <string name="live_hit_hint">今この時点で一時的な故障を発生させる</string>
+    <string name="live_reset_hint">FAULTの時間を先頭に戻す</string>
+    <string name="live_sources">端末入力の影響</string>
+    <string name="live_mains">照明の電源周波数</string>
+    <string name="ui_event_seed_hint">固定すると同じFAULT時間・入力・設定で事故の系列を再現します。AUTOは起動ごとに変化します。</string>
+    <string name="ui_advanced_settings_hint">全FAULTの内部パラメータを表示します。OFFにしても固定済みの値は保持されます。</string>
+    <string name="live_pause">一時停止</string>
+    <string name="live_resume">再開</string>
+    <string name="live_trigger">故障を発生</string>
+    <string name="live_reset">時間リセット</string>
+    <string name="load_recommended">端末に合わせた推奨設定</string>
+    <string name="load_title">負荷と推奨設定</string>
+    <string name="load_hint">温度と処理負荷に応じて表示更新を調整します。推奨はJPG約1〜2MP、動画HD／FHD・最大30fps。高温の限界状態では録画を保存して冷却休止します。</string>
+    <string name="load_use_recommended">写真・動画を端末の推奨設定にする</string>
+    <string name="load_cooling">冷却中 · カメラ休止</string>
+    <string name="load_resumed">温度が下がったためカメラを再開しました</string>
+    <string name="load_preview_rate">表示 最大%d fps</string>
+    <string name="load_auto_prefix">自動 · </string>
+    <string name="settings_modes">モード</string>
+    <string name="settings_photo">写真</string>
+    <string name="settings_video">通常動画</string>
+    <string name="settings_raw_video">RAW動画（実験的）</string>
+    <string name="settings_metadata">保存する情報</string>
+    <string name="settings_app">アプリ</string>
+    <string name="settings_summary">モード・画質・保存・アプリ</string>
+    <string name="expert_mode">EXPERT MODE</string>
+    <string name="expert_hint">アプリの自動減速・冷却休止・プレビュー間引きを解除します。発熱と電池消費が増えます。Androidや端末本体の保護は継続します。</string>
+    <string name="expert_active">EXPERT · 上限なし</string>
+    <string name="expert_load_hint">プレビューの間引きを解除し、処理できる最大の頻度で描画します。写真は選んだサイズで対応する最大撮像頻度を要求します。解像度と動画fpsは下で選べます。</string>
+    <string name="settings_metadata_hint">写真に日時・機種・露出・ISO・加工内容を記録。位置情報ONでは、取得できた現在地を写真のGPSと動画の位置タグに保存します。測位できない場合はGPSなしで保存します。</string>
+    <string name="settings_raw_enable">DNG連番を保存</string>
+    <string name="capture_gps_on">GPS · ON</string>
+    <string name="capture_gps_off">GPS · OFF</string>
+    <string name="fault_state_hint">突発的な故障の発生量。0%でも固定加工や固有の変化は続きます。</string>
+    <string name="fault_state_count">%1$d FAULTS</string>
+    <string name="camera_reconnecting">カメラに再接続中…</string>
+    <string name="camera_retry_hint">プレビューをタップして再接続</string>
+    <string name="capture_record_audio">動画の音声録音</string>
+    <string name="media_preview_title">プレビュー</string>
+    <string name="media_open_external">他のアプリで開く</string>
+    <string name="media_loading">読み込み中…</string>
+    <string name="media_position">再生位置</string>
+    <string name="media_previous">前の撮影</string>
+    <string name="media_next">次の撮影</string>
+    <string name="media_play">再生</string>
+    <string name="media_gestures">左右で切り替え · 下スワイプで閉じる</string>
+    <string name="media_preview_unavailable">このファイルは表示できません。右上の↗から対応アプリで開けます。</string>
 </resources>

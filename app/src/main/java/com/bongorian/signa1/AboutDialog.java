@@ -1,6 +1,6 @@
 package com.bongorian.signa1;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.util.Linkify;
@@ -25,14 +25,11 @@ final class AboutDialog {
         LinearLayout content=new LinearLayout(activity);content.setOrientation(LinearLayout.VERTICAL);
         TextView licenses=activity.button(activity.getString(R.string.ui_open_source_licenses));licenses.setOnClickListener(v->showLicenses(activity));
         content.addView(licenses,new LinearLayout.LayoutParams(-1,activity.dp(48)));content.addView(text);
-        ScrollView scroll=new ScrollView(activity);scroll.addView(content);
-        new AlertDialog.Builder(activity).setTitle(BuildConfig.APP_NAME+" · "+BuildConfig.VERSION_NAME)
-            .setView(scroll).setPositiveButton(activity.getString(R.string.ui_close),null)
-            .setNeutralButton(activity.getString(R.string.ui_contact),(dialog,which)->{
+        SignalSheet.content(activity,BuildConfig.APP_NAME+" · "+BuildConfig.VERSION_NAME,content,R.string.ui_contact,()->{
                 Intent intent=new Intent(Intent.ACTION_SENDTO,Uri.parse("mailto:dennosamurai@gmail.com"));
                 intent.putExtra(Intent.EXTRA_SUBJECT,"5igna1 support");
                 try{activity.startActivity(intent);}catch(Exception unavailable){android.widget.Toast.makeText(activity,activity.getString(R.string.ui_contact_dennosamurai_gmail_com),android.widget.Toast.LENGTH_LONG).show();}
-            }).show();
+            },.87f);
     }
     static void showLicenses(MainActivity activity){
         StringBuilder legal=new StringBuilder();
@@ -43,7 +40,6 @@ final class AboutDialog {
             }catch(Exception error){legal.append(name).append(": ").append(activity.getString(R.string.ui_unavailable)).append('\n');}
         }
         TextView text=activity.text(legal.toString(),12,MainActivity.WHITE);text.setTextIsSelectable(true);text.setPadding(activity.dp(20),activity.dp(12),activity.dp(20),activity.dp(16));
-        ScrollView scroll=new ScrollView(activity);scroll.addView(text);
-        new AlertDialog.Builder(activity).setTitle(activity.getString(R.string.ui_open_source_licenses)).setView(scroll).setPositiveButton(activity.getString(R.string.ui_close),null).show();
+        SignalSheet.content(activity,activity.getString(R.string.ui_open_source_licenses),text,0,null,.87f);
     }
 }

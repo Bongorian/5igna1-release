@@ -2,7 +2,20 @@
 
 ## [Unreleased]
 
-Changes for the next release will be recorded here.
+Changes after 1.1.0 will be recorded here.
+
+## [1.1.0] — unreleased
+
+Version name: 1.1.0. Version code: 9. Prepared on 2026-09-08; no new public release or store submission yet.
+
+- Rebuild the signal path around 13 causal faults, stable identities, named controls, and optional LIVE device inputs. The old 1.0.0 effect IDs/settings are reset during migration; saved captures remain intact.
+- Add random chains and controls, a two-column fault catalog, and ADVANCED parameter editing with AUTO/fixed values.
+- Preserve the selected chain across format changes; RAW applies its six supported faults.
+- Save JPEG from the displayed signal, with conservative device recommendations, adaptive preview workload, and an optional EXPERT mode.
+- Refine the capture layout, top light/GPS/audio controls, anchored format menu, and FAULT STATE meters.
+- Browse photos and videos together inside the app, with photo zoom, video playback/seek, sideways browsing and downward dismissal. Improve camera recovery and viewer lifecycle cleanup.
+- Store new photos and MP4 videos in DCIM/5igna1; existing files stay in place. RAW ZIP remains in Download/5igna1.
+- Update English/Japanese guides, all three in-app privacy translations, and store preparation documents.
 
 ## [1.0.0] — 2026-09-08
 

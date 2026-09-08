@@ -6,14 +6,14 @@
     <string name="ui_open_the_last_saved_raw_video_zip" formatted="false">"打开最近保存的 RAW 视频 ZIP"</string>
     <string name="ui_select_an_option_then_apply" formatted="false">"选择后应用"</string>
     <string name="ui_photo_full_resolution" formatted="false">"照片 · 信号记录"</string>
-    <string name="ui_processed_jpeg" formatted="false">"JPEG · 已显示信号"</string>
+    <string name="ui_processed_jpeg" formatted="false">JPG</string>
     <string name="ui_raw_dng_original" formatted="false">"RAW / DNG 原片"</string>
-    <string name="ui_raw_dng_sensor_processing" formatted="false">"RAW / DNG 传感器数据处理"</string>
+    <string name="ui_raw_dng_sensor_processing" formatted="false">RAW</string>
     <string name="ui_save_format" formatted="false">"保存格式"</string>
     <string name="ui_standard_prefer_12_mp_or_less" formatted="false">"标准（优先使用 1200 万像素及以下）"</string>
     <string name="ui_maximum_camera_resolution" formatted="false">"相机最高分辨率"</string>
     <string name="ui_photo_resolution" formatted="false">"照片分辨率"</string>
-    <string name="ui_jpeg_quality" formatted="false">"JPEG 画质"</string>
+    <string name="ui_jpeg_quality" formatted="false">"JPG 画质"</string>
     <string name="ui_85_smaller_files" formatted="false">"85 · 小文件"</string>
     <string name="ui_95_high_quality" formatted="false">"95 · 高画质"</string>
     <string name="ui_100_best_quality" formatted="false">"100 · 最高画质"</string>
@@ -44,7 +44,7 @@
     <string name="ui_photo_format" formatted="false">"照片格式\n"</string>
     <string name="ui_photo_resolution_42" formatted="false">"照片分辨率\n"</string>
     <string name="ui_unavailable_on_this_camera" formatted="false">"此相机不可用"</string>
-    <string name="ui_jpeg_quality_44" formatted="false">"JPEG 画质\n"</string>
+    <string name="ui_jpeg_quality_44" formatted="false">"JPG 画质\n"</string>
     <string name="ui_raw_quality_uncompressed_sensor_data" formatted="false">"RAW 画质\n未压缩的传感器数据"</string>
     <string name="ui_video_codec_46" formatted="false">"视频编码\n"</string>
     <string name="ui_video_resolution_fps_47" formatted="false">"视频分辨率 / fps\n"</string>
@@ -76,7 +76,7 @@
     <string name="ui_live_fault_current_chain" formatted="false">"FAULT STATE"</string>
     <string name="ui_strength" formatted="false">"LEVEL"</string>
     <string name="ui_random" formatted="false">"RESEED"</string>
-    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"重新生成所选故障的特征，保留路径和参数。"</string>
+    <string name="ui_tap_to_randomize_an_effect_hold_to_randomize" formatted="false">"生成随机效果链和参数。长按重新生成当前效果链的特征。"</string>
     <string name="ui_toggle_live_fault" formatted="false">"切换 LIVE FAULT"</string>
     <string name="ui_live_fault_settings" formatted="false">"LIVE FAULT 设置"</string>
     <string name="ui_photo" formatted="false">"照片"</string>
@@ -99,14 +99,14 @@
     <string name="ui_apply_or_discard_your_edits_before_capturing" formatted="false">"拍摄前请应用或取消调整"</string>
     <string name="ui_preparing_the_camera" formatted="false">"正在准备相机"</string>
     <string name="ui_open_your_captured_photos_and_videos_here" formatted="false">"在此打开拍摄的照片和视频"</string>
-    <string name="ui_photos_are_in_pictures_videos_in_movies_and" formatted="false">"照片保存在 Pictures，视频保存在 Movies，RAW 视频 ZIP 保存在 Download / 5igna1。请解压 DNG 序列并使用支持 RAW 的软件打开。"</string>
+    <string name="ui_photos_are_in_pictures_videos_in_movies_and" formatted="false">照片与 MP4 视频保存在 DCIM / 5igna1，RAW 视频 ZIP 保存在 Download / 5igna1。</string>
     <string name="ui_failed" formatted="false">"失败"</string>
     <string name="ui_could_not" formatted="false">"无法"</string>
     <string name="ui_error" formatted="false">"错误"</string>
     <string name="ui_stop_recording" formatted="false">"停止录制"</string>
     <string name="ui_raw_video_saved_to_download_5igna1" formatted="false">"RAW 视频已保存到 Download / 5igna1"</string>
-    <string name="ui_video_saved_to_movies_5igna1" formatted="false">"视频已保存到 Movies / 5igna1"</string>
-    <string name="ui_photo_saved_to_pictures_5igna1" formatted="false">"照片已保存到 Pictures / 5igna1"</string>
+    <string name="ui_video_saved_to_movies_5igna1" formatted="false">"视频已保存到 DCIM / 5igna1"</string>
+    <string name="ui_photo_saved_to_pictures_5igna1" formatted="false">"照片已保存到 DCIM / 5igna1"</string>
     <string name="ui_audio_reaction_is_off_live_fault_can_use" formatted="false">"声音响应已关闭，LIVE FAULT 可使用其他输入。"</string>
     <string name="ui_tap_capture_to_allow_camera_access" formatted="false">"轻触拍摄按钮以允许访问相机"</string>
     <string name="ui_camera_access_is_required_to_capture_if_the" formatted="false">"拍摄需要相机权限。若未显示权限提示，请在设置中允许访问。"</string>
@@ -177,7 +177,7 @@
     <string name="ui_could_not_change_capture_settings" formatted="false">"无法更改拍摄设置"</string>
     <string name="ui_this_camera_has_no_light" formatted="false">"此相机没有补光灯"</string>
     <string name="ui_allow_camera_access" formatted="false">"请允许访问相机"</string>
-    <string name="ui_raw_is_unavailable_on_this_camera_switched_to" formatted="false">"此相机不支持 RAW，已切换到 JPEG。"</string>
+    <string name="ui_raw_is_unavailable_on_this_camera_switched_to" formatted="false">"此相机不支持 RAW，已切换到 JPG。"</string>
     <string name="ui_raw_video_is_unavailable_on_this_camera" formatted="false">"此相机不支持 RAW 视频"</string>
     <string name="ui_camera_disconnected_select_your_settings_again" formatted="false">"相机已断开连接，请重新选择设置。"</string>
     <string name="ui_camera_error" formatted="false">"相机错误 "</string>
@@ -225,19 +225,19 @@
     <string name="camera_settings_unavailable">"允许使用相机后可显示拍摄设置。您可以在此更改应用语言。"</string>
     <string name="ui_open_source_licenses">"开源许可证"</string>
     <string name="fault_points" formatted="false">"FAULT POINTS"</string>
-    <string name="fault_live_title" formatted="false">"LIVE FAULT · 设备联动"</string>
+    <string name="fault_live_title" formatted="false">LIVE FAULT</string>
     <string name="fault_live_description" formatted="false">"每种故障保持自身特征和时间变化。LIVE将设备状态接入故障系统，不可用的输入不产生影响。"</string>
-    <string name="fault_motion" formatted="false">"运动 → 读出 / 磁带循迹"</string>
-    <string name="fault_timing" formatted="false">"相机时序 → 曝光 / 读出"</string>
-    <string name="fault_thermal" formatted="false">"温度状态 → 传感器活动"</string>
-    <string name="fault_cpu" formatted="false">"处理压力 → 数据 / 视频流故障"</string>
-    <string name="fault_audio" formatted="false">"音量 → 磁带时基"</string>
+    <string name="fault_motion" formatted="false">运动与旋转</string>
+    <string name="fault_timing" formatted="false">曝光与读出时序</string>
+    <string name="fault_thermal" formatted="false">温度</string>
+    <string name="fault_cpu" formatted="false">处理负载</string>
+    <string name="fault_audio" formatted="false">音量</string>
     <string name="fault_sensitivity" formatted="false">"设备联动灵敏度"</string>
     <string name="fault_mains_60" formatted="false">"照明电源频率 60 Hz（关闭：50 Hz）"</string>
     <string name="fault_incident" formatted="false">"瞬时故障"</string>
     <string name="fault_edit_after_recording" formatted="false">"停止录制后可预览故障调整。"</string>
     <string name="fault_capture_signal" formatted="false">"正在保存已显示的信号…"</string>
-    <string name="fault_signal_photo_note" formatted="false">"JPEG以所选实时分辨率保存已显示的相机信号。RAW来自另一次传感器曝光，RGB预览为近似效果。"</string>
+    <string name="fault_signal_photo_note" formatted="false">"JPG以所选实时分辨率保存已显示的相机信号。RAW来自另一次传感器曝光，RGB预览为近似效果。"</string>
     <string name="fault_live_resolution" formatted="false">"标准实时信号（最高2 MP）"</string>
     <string name="fault_live_max" formatted="false">"支持的最大实时信号"</string>
     <string name="fault_recording_draft" formatted="false">"请先应用或取消调整，再开始录制。"</string>
@@ -289,4 +289,95 @@
     <string name="fault_description_11" formatted="false">"解码区域丢失与复用模型，不修改实际数据包。"</string>
     <string name="fault_description_12" formatted="false">"磁带响应特性，以及循迹、滑移和信号丢失。"</string>
     <string name="fault_description_13" formatted="false">"扫描、荧光显示特性，以及会聚和同步故障。"</string>
+    <string name="ui_random_chain" formatted="false">"随机效果链"</string>
+    <string name="fault_chain_editor" formatted="false">"效果链 · 实时预览"</string>
+    <string name="fault_add_remove" formatted="false">"添加 / 移除"</string>
+    <string name="fault_remove" formatted="false">"移除"</string>
+    <string name="fault_chain_empty" formatted="false">"从下方选择效果"</string>
+    <string name="fault_chain_hint" formatted="false">"点击组合效果，按信号路径自动排序。点击上方已选效果即可调整。"</string>
+    <string name="fault_format_original">RAW 原始</string>
+    <string name="fault_format_processed">RAW</string>
+    <string name="fault_requires_rgb">此效果需要处理后的图像。切换拍摄格式即可使用，RAW 效果链设置会保留。</string>
+    <string name="fault_switch_mp4">切换至 MP4 并使用</string>
+    <string name="fault_switch_jpeg">切换至 JPG 并使用</string>
+    <string name="fault_catalog_hint">点按添加或移除 · 点按效果链中的效果进行调整</string>
+    <string name="ui_invalid_number">请输入显示范围内的有限数值。</string>
+    <string name="ui_advanced_mode">ADVANCED MODE</string>
+    <string name="ui_advanced_hint">AUTO随模型更新，FIX固定数值。点击数字可直接输入。</string>
+    <string name="ui_seed_hint">决定个体特征的 64 位有符号整数</string>
+    <string name="ui_advanced_auto_all">将全部内部参数恢复为 AUTO</string>
+    <string name="ui_advanced_restore_auto">恢复自动计算</string>
+    <string name="ui_advanced_fix">手动固定此数值</string>
+    <string name="ui_advanced_time">时间</string>
+    <string name="ui_advanced_event">事件</string>
+    <string name="ui_advanced_profile">显示与介质</string>
+    <string name="ui_advanced_signal">绘制参数</string>
+    <string name="live_natural">固有变化</string>
+    <string name="live_pulse">周期变化</string>
+    <string name="live_swell">积累与消退</string>
+    <string name="live_burst">间歇故障</string>
+    <string name="live_cascade">沿链变化</string>
+    <string name="live_free">连续</string>
+    <string name="live_loop">循环</string>
+    <string name="live_ping_pong">往返</string>
+    <string name="live_step">固定间隔更新</string>
+    <string name="live_editor_hint">设置此刻故障如何随时间变化。时间操作作用于故障，摄像画面持续更新。</string>
+    <string name="live_enabled">LIVE</string>
+    <string name="live_style">变化形态</string>
+    <string name="live_clock">时间推进方式</string>
+    <string name="live_speed">变化速度与逆行</string>
+    <string name="live_tempo">变化周期</string>
+    <string name="live_cycle">变化与重复周期</string>
+    <string name="live_depth">变化幅度</string>
+    <string name="live_division">更新间隔</string>
+    <string name="live_burst_width">持续比例</string>
+    <string name="live_chance">每周期发生概率</string>
+    <string name="live_hold_hint">暂停或继续故障状态</string>
+    <string name="live_hit_hint">在此刻触发临时故障</string>
+    <string name="live_reset_hint">将故障时间轴返回起点</string>
+    <string name="live_sources">设备输入的影响</string>
+    <string name="live_mains">照明电源频率</string>
+    <string name="ui_event_seed_hint">固定后，在相同故障时间、输入和设置下重现事件序列。AUTO 每次启动变化。</string>
+    <string name="ui_advanced_settings_hint">显示所有故障的内部参数。关闭后保留已固定的值。</string>
+    <string name="live_pause">暂停</string>
+    <string name="live_resume">继续</string>
+    <string name="live_trigger">触发故障</string>
+    <string name="live_reset">重置时间</string>
+    <string name="load_recommended">适合此设备的推荐设置</string>
+    <string name="load_title">负载与推荐设置</string>
+    <string name="load_hint">根据温度和负载调整显示更新。推荐JPG约1–2MP，视频为HD／FHD、最高30fps。临界高温时保存录像并暂停摄像冷却。</string>
+    <string name="load_use_recommended">照片和视频使用推荐设置</string>
+    <string name="load_cooling">冷却中 · 摄像已暂停</string>
+    <string name="load_resumed">温度下降，摄像已恢复</string>
+    <string name="load_preview_rate">预览最高%d fps</string>
+    <string name="load_auto_prefix">自动 · </string>
+    <string name="settings_modes">模式</string>
+    <string name="settings_photo">照片</string>
+    <string name="settings_video">普通视频</string>
+    <string name="settings_raw_video">RAW视频（实验性）</string>
+    <string name="settings_metadata">保存的信息</string>
+    <string name="settings_app">应用</string>
+    <string name="settings_summary">模式 · 画质 · 保存 · 应用</string>
+    <string name="expert_mode">EXPERT MODE</string>
+    <string name="expert_hint">关闭应用的自动降速、冷却暂停和预览跳帧。发热与耗电会增加。Android及设备本身的保护仍然生效。</string>
+    <string name="expert_active">EXPERT · 不限帧率</string>
+    <string name="expert_load_hint">EXPERT取消预览限速，尽可能快速渲染。照片预览请求所选尺寸支持的最高采集频率。可在下方选择分辨率和视频帧率。</string>
+    <string name="settings_metadata_hint">照片记录日期、设备、曝光、ISO 和效果信息。启用位置后，会将已获取的位置写入照片 GPS 和视频位置标签。未定位时不添加位置标签。</string>
+    <string name="settings_raw_enable">保存DNG序列</string>
+    <string name="capture_gps_on">GPS · ON</string>
+    <string name="capture_gps_off">GPS · OFF</string>
+    <string name="fault_state_hint">突发故障的强度。即使为0%，固定处理和固有变化也可能继续。</string>
+    <string name="fault_state_count">%1$d FAULTS</string>
+    <string name="camera_reconnecting">正在重新连接相机…</string>
+    <string name="camera_retry_hint">点按预览以重新连接</string>
+    <string name="capture_record_audio">视频录音</string>
+    <string name="media_preview_title">预览</string>
+    <string name="media_open_external">在其他应用中打开</string>
+    <string name="media_loading">正在加载…</string>
+    <string name="media_position">播放位置</string>
+    <string name="media_previous">上一项</string>
+    <string name="media_next">下一项</string>
+    <string name="media_play">播放</string>
+    <string name="media_gestures">左右滑动切换 · 向下滑动关闭</string>
+    <string name="media_preview_unavailable">无法预览此文件。请点击右上角↗在兼容应用中打开。</string>
 </resources>

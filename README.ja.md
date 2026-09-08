@@ -14,7 +14,7 @@ Androidのためのグリッチカメラ。行のずれ、色の裂け、読み�
 
 ## 同じ壊れた系から、その瞬間を撮る
 
-このブランチはrelease 1.0.0（`7dd83a7`）を基準にした**未公開のFAULT再設計版**です。下のダウンロードは公開済みreleaseで、操作や画面はこのブランチと異なります。
+このソースは**1.1.0（versionCode 9）の公開準備版**です。ダウンロードは公開済み1.0.0で、操作やストア画像は本ガイドと異なります。更新時は新しいFAULTモデルに合わせて旧エフェクト設定を初期化し、保存済みの作品は保持します。
 
 個体差は保持し、読み出しのdrift、露光位相、一時的な欠落が時間とともに変化します。選択した経路と個体を通常の時間進行で入れ替えません。実カメラ由来の信号だけを扱い、被写体の意味推論による生成・補完はしません。RAW／RGB／色差／媒体・表示後の信号は異なる表現であり、RAWだけを唯一の真とは扱いません。
 
@@ -29,9 +29,9 @@ Androidのためのグリッチカメラ。行のずれ、色の裂け、読み�
 | MEDIA | VHS |
 | DISPLAY | CRT |
 
-CLEANはFAULTなし。各FAULTの少数の操作値から、固有の故障パラメータへ変換します。RESEEDは設定を保って故障個体を変えます。LIVEは動き・時間情報・温度・音量・処理負荷を故障状態へ結合します。VHS／CRTは媒体・表示特性と内部故障を区別します。STREAM ERRORは復号画像領域の欠落・再利用モデルで、実packetは破壊しません。
+CLEANはFAULTなし。各FAULTの少数の操作値から、固有の故障パラメータへ変換します。「ランダムチェーン」は組み合わせと操作値を生成し、長押しでは設定を保って故障個体だけを変えます。LIVEは今この瞬間のFAULTの時間進行・変化の形・秒単位の間隔と端末入力を設定します。一時停止・故障の発生・時間リセットを操作できます。ADVANCED MODEでは全FAULTの内部パラメータと時間・事故の生成値をAUTO／固定値で操作できます。VHS／CRTは媒体・表示特性と内部故障を区別します。STREAM ERRORは復号画像領域の欠落・再利用モデルで、実packetは破壊しません。
 
-[FAULT一覧](docs/EFFECTS.ja.md) · [LIVE](docs/LIVE_FAULT.ja.md) · [調査・移行設計](docs/design/FAULT_SYSTEM.ja.md)
+[FAULT一覧](docs/EFFECTS.ja.md) · [LIVE](docs/LIVE_FAULT.ja.md) · [ADVANCED MODE](docs/ADVANCED_MODE.ja.md) · [調査・移行設計](docs/design/FAULT_SYSTEM.ja.md)
 
 ## 最初の一枚
 
@@ -61,11 +61,11 @@ https://github.com/Bongorian/5igna1-release
 
 ### Google Play
 
-Developer登録中です。掲載後にここへ公式ストアURLを追加します。
+2026-09-08時点でクローズドテストの審査待ちです（開発者報告）。正式公開後にストアリンクを掲載します。
 
 ### F-Droid
 
-FOSS構成と提出用メタデータを用意しています。公式リポジトリへの掲載はこれからです。[提出準備の状況](docs/FDROID_READINESS.md)
+2026-09-08時点で1.0.0の提出はマージ待ちです（開発者報告）。公式リポジトリにはまだ掲載されていません。[提出準備の状況](docs/FDROID_READINESS.md)
 
 Play / F-Droid / GitHub版で主要機能は共通です。配布元をまたぐ更新には署名の一致が必要です。
 
@@ -73,8 +73,8 @@ Play / F-Droid / GitHub版で主要機能は共通です。配布元をまたぐ
 
 | 出力 | 保存先 |
 |---|---|
-| JPEG・DNG写真 | `Pictures/5igna1` |
-| MP4動画 | `Movies/5igna1` |
+| JPEG・DNG写真 | `DCIM/5igna1` |
+| MP4動画 | `DCIM/5igna1` |
 | RAW動画のDNG連番ZIP（実験的） | `Download/5igna1` |
 
 GPSは初期OFF、動画の録音は任意です。DNGには現像アプリが必要で、RAWプレビューと現像結果は同一にはなりません。
@@ -98,3 +98,7 @@ JDK 17とAndroid SDK 36 / Build Tools 35.0.0でビルドできます。
 ## License
 
 5igna1 by **Bongorian**。コード本体は[Apache License 2.0](LICENSE)です。[NOTICE](NOTICE)と[第三者ライセンス](THIRD_PARTY_LICENSES.md)をご確認ください。
+
+開発版には端末に合わせた推奨設定と、プレビュー負荷の自動調整があります。[発熱・負荷対策](docs/PERFORMANCE.ja.md)。
+
+設定の「モード」にADVANCEDとEXPERTをまとめています。ADVANCEDは内部値の表示、EXPERTはアプリの更新頻度制限・冷却休止を外して速度を優先するモードです。[動作モード](docs/PERFORMANCE.ja.md)。

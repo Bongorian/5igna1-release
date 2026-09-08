@@ -22,7 +22,7 @@ JPEG reads the reserved signal once, with striped readback to bound extra memory
 
 ## Editing, RAW and recording taps
 
-Draft edits leave committed settings unchanged. Apply commits; dismiss/pause cancels. The draft uses the same running timeline. Draft editing cannot start through the camera UI while recording, and recording refuses an active draft, so preview and encoder keep a common route. Hardware-shutter JPEGs capture a visible draft because they capture the displayed signal.
+Draft edits leave committed settings unchanged. Apply commits; dismiss/pause cancels. The draft uses the same running timeline. Draft editing cannot start through the camera UI while recording, and recording refuses an active draft, so preview and encoder keep a common route. Both on-screen and volume-key capture require applying or discarding an active effect or LIVE draft first.
 
 `RawGlitch` adapts the same immutable nodes to RAW16. Readout movement/reuse preserves Bayer parity; CFA ERROR and byte-address errors can intentionally change interpretation. DNG photos use a separate RAW exposure with the latched state and explicitly disclose that difference. Original DNG and original RAW video bypass faults. `RawVideoRecorder` retains its bounded queue, timestamp matching, interruption handling and ZIP packaging.
 
@@ -31,3 +31,11 @@ Draft edits leave committed settings unchanged. Apply commits; dismiss/pause can
 ## Migration and distribution
 
 `fault_state_v3` and `fault.v3.*` preferences replace old effect/AUTO values. Camera quality, language, GPS and application ID remain unchanged. No dependencies or proprietary services are added. All code remains in `src/main` for FOSS and Play variants. [Validation](VALIDATION.md).
+
+## Capture workspace and media preview
+
+`SignalSheet.anchoredPick` positions the format choices directly under their trigger. Light, GPS and video-audio controls share the top toolbar; audio remains visible in photo mode. `FaultStateDialog` retains ordered event-meter rows while live values update and reserves space below the camera preview.
+
+`MediaPreview` scans readable image/video entries in the app capture folders and presents a single mixed sequence. It decodes photos on one worker (up to 2048 pixels on the long edge) and uses the system thumbnail for DNG. Only the current video has a MediaPlayer/Surface. A GL queue barrier confirms camera release before video preparation. Dismissal cancels pending UI work, releases playback/audio focus and then reattaches the camera; stale decode and player callbacks are generation-guarded. Backgrounding closes the viewer. External viewing is explicit and uses a separate document task.
+
+The camera watches for unacknowledged preview delivery for six seconds and makes up to three reconnect attempts outside capture or cooling pauses. Error/disconnection callbacks use the same recovery path; leaving the foreground cancels it. Capture settings and effect selection are retained.

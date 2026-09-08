@@ -19,3 +19,10 @@
 - Repository visibility, store submissions and publication of a draft release are release-owner actions; preparation does not authorize publishing them.
 
 - Keep README and public user guides in English, with a linked Japanese edition. Treat README as the project’s public presentation: explain the creative intent, actual behavior, and first-use path without unverified claims. Preserve the distinction between fixed fault patterns, LIVE time variation, RGB approximations, and RAW sample processing.
+
+## Owner direction — 2026-09-08, submissions pending
+
+- Preserve the submitted 1.0.0 / versionCode 8 artifacts, existing upload and distribution signing keys, and the published v1.0.0 tag (6954138585d55af161d62196e77b941531780855). Never overwrite, regenerate, delete, or retarget them during development.
+- The owner reports F-Droid submission awaiting merge and Google Play closed testing awaiting approval. Keep those submitted candidates stable; do not submit replacements as part of routine debugging.
+- Owner authorized merging the completed redesign into main and advancing the version on 2026-09-08. Continue development in /Users/bongorian/Documents/ChatGPT/Apps/5igna1-fault-system; main now prepares 1.1.0 / versionCode 9. Use debug builds (com.bongorian.signa1.debug, 5igna1 DEV) for device testing; keep the release application and its data intact.
+- Before the next store submission, allocate a higher versionCode and an appropriate new versionName; do not reuse published release identity for changed code.

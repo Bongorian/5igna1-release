@@ -5,7 +5,7 @@
 | 項目 | 値 |
 |---|---|
 | デバッグ版アプリID | `com.bongorian.signa1.debug` |
-| debug versionName / versionCode | 1.0.0-debug / 8 |
+| debug versionName / versionCode | 1.1.0-debug / 9 |
 | minSdk | 31（Android 12） |
 | compileSdk / targetSdk | 36 |
 | Android Gradle Plugin | 8.10.1 |
@@ -58,6 +58,7 @@ javac -d build/state-check \
   app/src/main/java/com/bongorian/signa1/FaultConfig.java \
   app/src/main/java/com/bongorian/signa1/FaultNode.java \
   app/src/main/java/com/bongorian/signa1/FaultModel.java \
+  app/src/main/java/com/bongorian/signa1/FaultParameters.java \
   app/src/main/java/com/bongorian/signa1/FrameHistory.java \
   tools/EffectStateCheck.java \
   tools/PipelineCheck.java
@@ -133,7 +134,7 @@ SDKパス、認証情報、署名鍵、端末アドレス・ペアリングコ�
 
 Android 12以降、Camera2プレビュー/JPEGとOpenGL ES 2.0が必要です。メーカー・モデル・CPU ABIで制限しません。マイク、GPS、AF、背面カメラは任意です。
 
-- 初期設定は標準JPEG（通常センサーモードの12MP以下を優先）、AVC/H.264、1080p以下の30fpsを優先。対応しなければ実際の候補から選びます。
+- 初期設定は端末メモリと対応出力に合わせた約1〜2MPの推奨JPEG、AVC/H.264、HD/FHDの30fps以下を優先。対応しなければ実際の候補から選びます。
 - RAW非対応カメラではJPEGへ切り替えます。HEVC非対応ならAVCへ切り替えます。動画候補がなくても写真を起動でき、動画操作を無効にします。
 - VGAなど小さい写真・動画サイズも候補です。ソフトウェアエンコーダーも利用できますが、実時間処理速度は端末次第です。
 - セッション構成が拒否された場合、低解像度の設定で1回再試行します。

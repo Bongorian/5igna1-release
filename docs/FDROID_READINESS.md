@@ -1,12 +1,14 @@
-# F-Droid readiness — Almost Ready
+# F-Droid readiness — submission awaiting merge
 
 Audit date: 2026-09-08. Candidate: **5igna1 1.0.0 / versionCode 8**.
 
-The current source builds as FOSS. Candidate metadata lint and a scan of the new public source snapshot passed with zero source errors or warnings. This repository starts from the audited current source, with a new Git history and the old development screenshots excluded. Acceptance into F-Droid remains a separate process.
+Status reported by the owner on 2026-09-08: the 1.0.0 submission is awaiting merge. This audit describes that submitted candidate; the current development source is 1.1.0 / code 9. The candidate metadata continues to pin v1.0.0.
+
+The audited 1.0.0 source builds as FOSS. Candidate metadata lint and a scan of the new public source snapshot passed with zero source errors or warnings. This repository starts from the audited current source, with a new Git history and the old development screenshots excluded. Acceptance into F-Droid remains a separate process.
 
 ## Remaining work
 
-1. Validate the public v1.0.0 tag with `fdroid build --test` in F-Droid's Linux environment, then submit and respond to review.
+1. Validate the public v1.0.0 tag with `fdroid build --test` in F-Droid's Linux environment, and respond to the pending submission review.
 2. Decide whether ordinary F-Droid signing is sufficient. Cross-source updates are not guaranteed; reproducible builds/signature copying have not been validated.
 3. Complete the publisher's final review of generated promotional artwork and device behavior.
 

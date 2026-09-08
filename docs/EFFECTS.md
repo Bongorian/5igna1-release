@@ -26,7 +26,7 @@ LEVEL is a compact artistic macro. It changes fault-specific quantities such as 
 
 IDENTITY describes fixed defect sites and biases. MOTION is a continuous drift or phase. EVENT is a short accident with a location, pattern and envelope. Some faults only need one or two of these. PIXEL DAMAGE keeps its sites as hot-pixel activity changes; ROW ERROR keeps weak bands as their displacement moves; VHS keeps its tracking bias between slips and dropout. CFA ERROR, DEMOSAIC ERROR and COLOR MAP are structurally stable under time alone.
 
-RESEED changes the identities of the selected faults and preserves the route and controls. COLOR MAP has no random identity to change. Reset restores a fault's control values without reseeding it. Intrinsic time evolution is defined by each fault. [LIVE FAULT](LIVE_FAULT.md) additionally couples device measurements into those states.
+RANDOM CHAIN creates 2–5 faults available in the current format, randomizes their controls, and sets a new overall level. Hold the main random button for RESEED. RESEED changes the identities of the selected faults and preserves the route and controls. COLOR MAP has no random identity to change. Reset restores a fault's control values without reseeding it. Intrinsic time evolution is defined by each fault. [LIVE FAULT](LIVE_FAULT.md) additionally couples device measurements into those states.
 
 ## What the models actually do
 
@@ -43,3 +43,5 @@ These are causal artistic models, not a complete engineering simulation. Their r
 ## Recording the route
 
 JPEG saves the UI-acknowledged, processed camera signal, including VHS and CRT when selected. Ordinary video uses that same processing timeline and canonical images. STREAM ERROR is available for both photos and videos. Processed RAW supports the six faults from PIXEL DAMAGE through CFA ERROR and uses a separate RAW exposure with the latched state; it is not the RGB viewfinder image. [Formats and capture limits](FORMATS.md).
+
+Use LIVE to set how the current fault state evolves, with second-based periods and update intervals. [Time controls](LIVE_FAULT.md). Enable [ADVANCED MODE](ADVANCED_MODE.md) in Settings to directly fix model values.

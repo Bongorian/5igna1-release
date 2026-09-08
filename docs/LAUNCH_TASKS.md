@@ -1,6 +1,6 @@
 # Launch checklist
 
-The public project starts here: **Bongorian/5igna1-release**. Google Play developer registration is in progress, so GitHub Releases / Obtainium comes first.
+The public project starts here: **Bongorian/5igna1-release**. As of 2026-09-08, the owner reports F-Droid submission awaiting merge and Google Play closed testing awaiting review. Both submitted candidates remain 1.0.0 / code 8; current source prepares 1.1.0 / code 9.
 
 ## GitHub / Obtainium
 
@@ -28,15 +28,17 @@ The first release can be signed locally; GitHub Secrets are not needed for that 
 - [x] Prepare FOSS flavors, reviewed dependencies, metadata, and Japanese/English store text.
 - [x] Set the source URL to this clean repository and the candidate tag to v1.0.0.
 - [ ] Run fdroid build --test in the F-Droid Linux environment.
-- [ ] Submit to fdroiddata and respond to review.
+- [x] Submit to fdroiddata (owner report).
+- [ ] Complete review and merge.
 - [ ] Add the actual listing URL after acceptance.
 
-## Google Play — after registration
+## Google Play — closed-test review pending
 
-- [ ] Complete developer registration and identity verification.
+- [ ] Confirm any remaining account verification requirements in Console.
 - [ ] Decide Play App Signing at initial enrollment. To allow updates between GitHub and Play, select the distribution key as the app signing key; the upload key remains separate.
 - [ ] Confirm a public privacy-policy URL, declarations, screenshots, and required testing.
-- [ ] Submit the AAB and complete review.
+- [x] Submit the closed-test candidate (owner report).
+- [ ] Complete closed-test review and required testing.
 - [ ] Add the actual Play listing URL.
 
 Billing products and Sponsors setup are optional future work, not prerequisites for this release.

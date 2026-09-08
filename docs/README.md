@@ -1,6 +1,6 @@
 # 5igna1 field guide
 
-From your first photograph to a deeper understanding of the signal. These guides describe version 1.0.0.
+From your first photograph to a deeper understanding of the signal. These guides describe the unpublished 1.1.0 / code 9 source; published 1.0.0 has different controls.
 
 [The project](../README.md) · [日本語ガイド](README.ja.md)
 
@@ -18,7 +18,7 @@ From your first photograph to a deeper understanding of the signal. These guides
 
 ## Go deeper
 
-[Effect models and processing order](EFFECTS.md) · [LIVE FAULT](LIVE_FAULT.md) · [Experimental RAW video](RAW_VIDEO.md) · [Privacy](PRIVACY.md) · [Tested scope](VALIDATION.md)
+[Effect models and processing order](EFFECTS.md) · [LIVE FAULT](LIVE_FAULT.md) · [ADVANCED MODE](ADVANCED_MODE.md) · [Heat and workload](PERFORMANCE.md) · [Experimental RAW video](RAW_VIDEO.md) · [Privacy](PRIVACY.md) · [Tested scope](VALIDATION.md)
 
 ## Build and maintain
 

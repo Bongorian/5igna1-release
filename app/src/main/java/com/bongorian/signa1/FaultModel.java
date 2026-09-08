@@ -9,11 +9,13 @@ final class FaultModel {
         long sensorNs,exposureNs,skewNs;boolean motionAvailable,timingAvailable;
     }
     private final long sessionSalt;
-    private double lastSeconds=Double.NaN,elapsed;
+    private double lastSeconds=Double.NaN,elapsed,performancePosition,cueAge=Double.POSITIVE_INFINITY;
+    private boolean liveWasEnabled;private long heldSignalNs;
     float displacement,velocity,shock,pressure,temperature,audio,readout,tilt,rotation;
     long sensorNs,exposureNs,skewNs;boolean timingAvailable,motionAvailable;
     FaultModel(){this(new java.security.SecureRandom().nextLong());}
     FaultModel(long sessionSalt){this.sessionSalt=sessionSalt;}
+    FaultModel copy(){FaultModel n=new FaultModel(sessionSalt);n.lastSeconds=lastSeconds;n.elapsed=elapsed;n.performancePosition=performancePosition;n.cueAge=cueAge;n.liveWasEnabled=liveWasEnabled;n.heldSignalNs=heldSignalNs;n.displacement=displacement;n.velocity=velocity;n.shock=shock;n.pressure=pressure;n.temperature=temperature;n.audio=audio;n.readout=readout;n.tilt=tilt;n.rotation=rotation;n.sensorNs=sensorNs;n.exposureNs=exposureNs;n.skewNs=skewNs;n.timingAvailable=timingAvailable;n.motionAvailable=motionAvailable;return n;}
     static long mix(long x){x=(x^(x>>>30))*0xbf58476d1ce4e5b9L;x=(x^(x>>>27))*0x94d049bb133111ebL;return x^(x>>>31);}
     static float random(long seed){return (mix(seed)>>>40)*0x1.0p-24f;}
     static float finite(float x){return Float.isFinite(x)?x:0;}
@@ -21,9 +23,19 @@ final class FaultModel {
     static float follow(float value,float target,float dt,float tau){return target+(value-target)*(float)Math.exp(-dt/tau);}
     static float drift(long seed,double time){long cell=(long)Math.floor(time);float f=(float)(time-cell);f=f*f*(3-2*f);return (random(seed^mix(cell))*(1-f)+random(seed^mix(cell+1))*f)*2-1;}
     void reset(){lastSeconds=Double.NaN;displacement=velocity=shock=pressure=temperature=audio=readout=tilt=rotation=0;timingAvailable=motionAvailable=false;}
+    void hit(){cueAge=0;}
+    void rewind(){performancePosition=0;cueAge=Double.POSITIVE_INFINITY;}
+    double time(FaultConfig config){return config.enabled?config.performance.time(performancePosition):elapsed;}
+    float cue(FaultConfig config){return config.enabled?clamp((float)(1-cueAge/.65),0,1):0;}
     void advance(double now,Inputs input,FaultConfig config){
         if(!Double.isFinite(now)||(!Double.isNaN(lastSeconds)&&now<=lastSeconds))return;
         double delta=Double.isNaN(lastSeconds)?0:now-lastSeconds;lastSeconds=now;elapsed+=delta;
+        if(config.enabled&&!liveWasEnabled)performancePosition=elapsed-delta;
+        liveWasEnabled=config.enabled;sensorNs=input.sensorNs;
+        if(config.enabled&&config.performance.hold)return;
+        heldSignalNs=input.sensorNs;
+        if(config.enabled)performancePosition+=delta*config.performance.speed;
+        cueAge+=delta;
         float dt=(float)Math.min(.25,delta);sensorNs=input.sensorNs;exposureNs=input.exposureNs;skewNs=input.skewNs;
         float gain=.25f+1.75f*config.sensitivity;
         motionAvailable=config.enabled&&config.motion&&input.motionAvailable;
@@ -43,32 +55,49 @@ final class FaultModel {
         // Disabling/unavailable inputs cannot leave a hidden bias coupled into future frames.
         if(!config.enabled){displacement=velocity=shock=pressure=temperature=audio=readout=tilt=rotation=0;}
     }
-    private FaultNode.Event event(long identity,int id,double period,double duration,float probability){
-        long serial=(long)Math.floor(elapsed/period);double age=elapsed-serial*period;
-        long key=mix(identity^sessionSalt^((long)id<<48)^mix(serial)^0x4556454e54L);
+    private FaultNode.Event event(long identity,int id,double time,double period,double duration,float probability,long serial){
+        double age=LivePerformance.wrap(time,period);
+        long key=mix(identity^((long)id<<48)^mix(serial)^0x4556454e54L);
         float gate=random(key)<clamp(probability,0,1)&&age<duration?1:0;
-        // Fast attack, short release; the event is a fault incident, not parameter interpolation.
         float envelope=gate*clamp((float)Math.min(age/.025,(duration-age)/.09),0,1);
-        return new FaultNode.Event(serial,envelope,random(key+1),random(key+2)*997);
+        return new FaultNode.Event(serial,envelope,random(key+1),random(key+2)*997,identity);
     }
     EffectState.Frame apply(EffectState.Frame base,FaultConfig config){
-        List<FaultNode> nodes=new ArrayList<>();if(base.amount>0)for(int id:base.ids())nodes.add(compile(id,base.parameters,base.amount,config));
-        return new EffectState.Frame(base.ids(),base.amount,base.parameters,sensorNs,elapsed,nodes);
+        List<FaultNode> nodes=new ArrayList<>();int[] ids=base.ids();double time=time(config);float cue=cue(config);
+        if(base.amount>0)for(int index=0;index<ids.length;index++){
+            float directed=config.enabled?config.performance.envelope(time,index,ids.length,sessionSalt):1;
+            float level=clamp(base.amount*directed+(1-base.amount*directed)*cue,0,1);
+            // A fully gated stage bypasses its profile as well as its mechanism.
+            if(level>0)nodes.add(compile(ids[index],base.parameters,level,config));
+        }
+        return new EffectState.Frame(ids,base.amount,base.parameters,sensorNs,time,nodes);
     }
+    FaultNode inspect(int id,EffectParameters controls,float level,FaultConfig config){return compile(id,controls,level,config);}
     private FaultNode compile(int id,EffectParameters controls,float level,FaultConfig config){
-        long seed=controls.identity(id);FaultNode.Identity identity=new FaultNode.Identity(seed);
-        // Structural and drift randomness use distinct domains. Only events use a session salt.
-        double speed=id==Effects.VHS?.24:id==Effects.CRT?.16:id==Effects.EXPOSURE?.8:.42;
+        long seed=controls.identity(id);FaultNode.Identity initial=new FaultNode.Identity(seed);
+        FaultNode.Identity identity=new FaultNode.Identity(seed,controls.resolved(id,"identitySeed",initial.spatialSeed),controls.resolved(id,"identityBias",initial.bias));
+        float timeScale=controls.resolved(id,"timeScale",1),timeOffset=controls.resolved(id,"timeOffset",0);
+        double time=controls.manual(id,"time")?controls.resolved(id,"time",0):time(config)*timeScale+timeOffset;
+        float speed=controls.resolved(id,"driftSpeed",id==Effects.VHS?.24f:id==Effects.CRT?.16f:id==Effects.EXPOSURE?.8f:.42f);
         boolean moving=id==Effects.PIXEL_DAMAGE||id==Effects.EXPOSURE||id==Effects.ROW_ERROR||id==Effects.CHROMA_ERROR||id==Effects.BLOCK_ERROR||id==Effects.VHS||id==Effects.CRT;
-        float drift=moving?drift(seed^0x4d4f54494f4eL,elapsed*speed):0;
-        float phase=(float)((elapsed*(id==Effects.EXPOSURE?.5:1.7)+random(seed)*Math.PI*2)%(Math.PI*2));
-        FaultNode.Motion motion=new FaultNode.Motion(elapsed,drift,phase);
+        float drift=controls.resolved(id,"drift",moving?drift(seed^0x4d4f54494f4eL,time*speed):0);
+        float phaseSpeed=controls.resolved(id,"phaseSpeed",id==Effects.EXPOSURE?.5f:1.7f);
+        float phase=controls.resolved(id,"phase",(float)((time*phaseSpeed+random(seed)*Math.PI*2)%(Math.PI*2)));
+        FaultNode.Motion motion=new FaultNode.Motion(time,drift,phase);
         float coupling=config.enabled?1:0;
         float pressure=this.pressure*coupling,heat=temperature*coupling,move=displacement*coupling;
-        double period=id==Effects.VHS?2.3:id==Effects.STREAM_ERROR?1.1:id==Effects.ROW_ERROR?1.7:id==Effects.BIT_ERROR?.6:2.7;
+        float period=controls.resolved(id,"eventPeriod",id==Effects.VHS?2.3f:id==Effects.STREAM_ERROR?1.1f:id==Effects.ROW_ERROR?1.7f:id==Effects.BIT_ERROR?.6f:2.7f);
+        float duration=controls.resolved(id,"eventDuration",id==Effects.VHS?.48f:id==Effects.STREAM_ERROR?.38f:.19f);
         float activity=id==Effects.ROW_ERROR||id==Effects.STREAM_ERROR?controls.get(id,"loss"):id==Effects.VHS?Math.max(controls.get(id,"dropout"),controls.get(id,"tracking")*.5f):id==Effects.BIT_ERROR||id==Effects.ADDRESS_ERROR?controls.get(id,"activity"):id==Effects.BLOCK_ERROR?controls.get(id,"misaddress"):0;
-        boolean incidents=id==Effects.ROW_ERROR||id==Effects.BIT_ERROR||id==Effects.ADDRESS_ERROR||id==Effects.BLOCK_ERROR||id==Effects.STREAM_ERROR||id==Effects.VHS;
-        FaultNode.Event event=incidents?event(seed,id,period,id==Effects.VHS?.48:id==Effects.STREAM_ERROR?.38:.19,activity*.8f+pressure*.5f):new FaultNode.Event(-1,0,0,0);
+        boolean incidents=FaultParameters.incidents(id);
+        float probability=controls.resolved(id,"eventProbability",clamp(activity*.8f+pressure*.5f,0,1));
+        long serial=controls.manual(id,"eventSerial")?Math.round(controls.resolved(id,"eventSerial",0)):(long)Math.floor(time/period);
+        FaultNode.Event automatic=incidents?event(controls.eventIdentity(id,seed^sessionSalt),id,time,period,duration,probability,serial):new FaultNode.Event(-1,0,0,0);
+        FaultNode.Event event=new FaultNode.Event(automatic.serial,controls.resolved(id,"eventEnvelope",Math.max(automatic.envelope,cue(config))),controls.resolved(id,"eventPosition",automatic.position),controls.resolved(id,"eventPattern",automatic.pattern),automatic.identity);
+        Map<String,Float> internal=new LinkedHashMap<>();put(internal,"timeScale",timeScale,"timeOffset",timeOffset,"time",(float)time,"driftSpeed",speed,"drift",drift,"phaseSpeed",phaseSpeed,"phase",phase,"identityBias",identity.bias);
+        if(incidents)put(internal,"eventPeriod",period,"eventDuration",duration,"eventProbability",probability,"eventSerial",(float)event.serial,"eventEnvelope",event.envelope,"eventPosition",event.position,"eventPattern",event.pattern);
+        boolean warped=config.enabled&&(config.performance.clock!=LivePerformance.FREE||config.performance.speed!=1)||timeScale!=1||timeOffset!=0||controls.manual(id,"time");
+        long signalNs=warped?(long)(time*60)*16_666_667L:config.enabled&&config.performance.hold?heldSignalNs:sensorNs;
         Map<String,Float> p=new LinkedHashMap<>(),profile=new LinkedHashMap<>();
         // Domain-specific values, in sample/normalized signal units; no universal strength uniform.
         p.put("identitySeed",identity.spatialSeed);p.put("eventSeed",event.envelope>0?event.pattern:identity.spatialSeed);
@@ -76,11 +105,11 @@ final class FaultModel {
             case Effects.PIXEL_DAMAGE:
                 put(p,"pixelDensity",level*controls.get(id,"density")*.025f,"columnDensity",level*controls.get(id,"columns")*.07f,
                     "hotFraction",controls.get(id,"hot"),"hotValue",clamp(.8f+drift*.12f+heat*.3f,0,1),"sensorNoise",heat*level*.035f);
-                p.put("grainSeed",random(seed^mix(sensorNs))*997);break;
+                p.put("grainSeed",random(seed^mix(signalNs))*997);break;
             case Effects.EXPOSURE:
                 float rate=controls.get(id,"rate"),bands=controls.get(id,"bands");
-                float exposurePhase=(float)((elapsed*rate*18+identity.spatialSeed)%(Math.PI*2)),scan=4+bands*160,integrate=1;
-                if(timingAvailable){double hz=config.mains*2.;exposurePhase=(float)((((sensorNs%1_000_000_000L)*1e-9*hz%1)*Math.PI*2+elapsed*rate*18)%(Math.PI*2));scan=(float)(skewNs*1e-9*hz*Math.PI*2)*(1+bands*8);double x=Math.PI*exposureNs*1e-9*hz;integrate=x<1e-6?1:(float)(Math.sin(x)/x);}
+                float exposurePhase=(float)((time*rate*18+identity.spatialSeed)%(Math.PI*2)),scan=4+bands*160,integrate=1;
+                if(timingAvailable){double hz=config.mains*2.;exposurePhase=(float)((((signalNs%1_000_000_000L)*1e-9*hz%1)*Math.PI*2+time*rate*18)%(Math.PI*2));scan=(float)(skewNs*1e-9*hz*Math.PI*2)*(1+bands*8);double x=Math.PI*exposureNs*1e-9*hz;integrate=x<1e-6?1:(float)(Math.sin(x)/x);}
                 put(p,"exposureDepth",level*controls.get(id,"depth"),"exposurePhase",exposurePhase,"scanPhase",scan,"integration",integrate);break;
             case Effects.ROW_ERROR:
                 float width=controls.get(id,"displacement")*level;
@@ -112,14 +141,15 @@ final class FaultModel {
                 put(p,"trackingOffset",tracking*(identity.bias*.012f+drift*.03f+move*.12f),
                     "trackingWave",tracking*(.003f+audio*coupling*.012f),"trackingPhase",phase,"trackingSlip",tracking*event.envelope*.12f,
                     "tapeDropout",level*controls.get(id,"dropout")*event.envelope,"dropoutPosition",event.position,"tapeNoise",level*controls.get(id,"noise")*.22f);
-                p.put("grainSeed",random(seed^mix(sensorNs)^0x54415045L)*997);break;
+                p.put("grainSeed",random(seed^mix(signalNs)^0x54415045L)*997);break;
             case Effects.CRT:
                 float scanLevel=level*controls.get(id,"scan");
                 put(profile,"scanDepth",scanLevel*.5f,"scanLines",240+controls.get(id,"scan")*760,"phosphorMix",level*controls.get(id,"phosphor"));
                 put(p,"convergenceOffset",level*controls.get(id,"convergence")*(identity.bias*.009f+drift*.003f),"syncOffset",level*controls.get(id,"sync")*(drift*.035f+move*.025f));break;
             default:throw new IllegalArgumentException("Fault ID");
         }
-        return new FaultNode(id,identity,motion,event,profile,p);
+        for(Map.Entry<String,Float> value:controls.overrides(id).entrySet()){if(profile.containsKey(value.getKey()))profile.put(value.getKey(),value.getValue());if(p.containsKey(value.getKey()))p.put(value.getKey(),value.getValue());}
+        return new FaultNode(id,identity,motion,event,profile,p,internal);
     }
     private static void put(Map<String,Float> p,Object... pairs){for(int i=0;i<pairs.length;i+=2)p.put((String)pairs[i],((Number)pairs[i+1]).floatValue());}
 }

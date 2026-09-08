@@ -6,6 +6,8 @@ Start with the symptom below. For a first run, processed JPEG with one effect is
 
 ## The camera is black or will not open
 
+After closing a saved photo or video, the camera resumes automatically. The foreground preview makes up to three reconnect attempts after an interruption or six seconds without a presented frame, outside capture and cooling pauses. Tap the preview to retry if recovery stops.
+
 Allow camera access in Android's app permissions. Close another app that may be using the camera, then reopen 5igna1. Try the other camera or a lower resolution in settings. If it still fails, note the device, Android version, and camera selection when reporting it.
 
 ## An effect does nothing
@@ -16,7 +18,7 @@ Choose **Apply** to keep an edit. Back, tapping outside, or leaving the app canc
 
 ## An effect disappears when I change modes
 
-STREAM ERROR is available for both photos and videos. Processed RAW supports six sensor/readout/data/CFA faults. Switching modes removes incompatible stages, and returning does not automatically restore them. Per-effect adjustment values are remembered separately.
+STREAM ERROR is available for both photos and videos. Processed RAW supports six sensor/readout/data/CFA faults. Switching formats preserves the route and controls. RAW applies only supported stages; the full catalog remains visible, with a format-switch action for RGB-only faults.
 
 ## RAW is unavailable
 
@@ -28,7 +30,7 @@ That is an expected limitation. The preview approximates RAW effects on processe
 
 ## I cannot find a saved capture
 
-Check `Pictures/5igna1` for photos, `Movies/5igna1` for MP4, and `Download/5igna1` for RAW video ZIPs. The bottom-left thumbnail opens only the latest saved item. A gallery may take time to index a file or may not display DNG thumbnails.
+Check `DCIM/5igna1` for photos, `DCIM/5igna1` for MP4, and `Download/5igna1` for RAW video ZIPs. The bottom-left thumbnail opens the latest saved item in the shared photo/video viewer. Swipe sideways to browse readable captures in the current and legacy 5igna1 folders. RAW ZIP opens externally. A gallery may take time to index a file or may not display DNG thumbnails.
 
 ## Video has no sound or will not play
 

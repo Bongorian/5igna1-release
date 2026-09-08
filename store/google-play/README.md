@@ -1,6 +1,6 @@
 # Google Play 配布準備
 
-1.0.0 / versionCode 8の初回公開向け資料です。提出・掲載はまだ行っていません。アプリIDは **com.bongorian.signa1**。F-Droid/GitHubとの署名関係は[共通リリース手順](../../docs/RELEASING.md)を先に確認してください。
+現行ソースは1.1.0 / versionCode 9の次回提出準備版です。2026-09-08の開発者報告では、提出済み1.0.0 / versionCode 8はクローズドテスト審査待ちです。提出済み成果物は維持します。アプリIDは **com.bongorian.signa1**。F-Droid/GitHubとの署名関係は[共通リリース手順](../../docs/RELEASING.md)を先に確認してください。
 
 ## 成果物
 
@@ -12,14 +12,14 @@ python3 tools/package-play.py
 
 Play用署名は未追跡の `signing.properties` または `SIGNAL_PLAY_*` 環境変数から読みます。鍵がなければAABは未署名であり、packagingは失敗します。既存のupload keyを上書き・再生成しないでください。
 
-AABは `app/build/outputs/bundle/playRelease/app-play-release.aab`。包装後は `dist/5igna1-v1.0.0-google-play.zip` です。ZIPにはAAB、日英素材、説明資料、プライバシーHTML、SHA256SUMSを含めます。秘密鍵・署名設定は含めません。GitHubの一般配布APKはこのPlay成果物ではなくfdroidReleaseから作ります。
+AABは `app/build/outputs/bundle/playRelease/app-play-release.aab`。包装後は `dist/5igna1-v1.1.0-google-play.zip` です。ZIPにはAAB、日英素材、説明資料、プライバシーHTML、SHA256SUMSを含めます。秘密鍵・署名設定は含めません。GitHubの一般配布APKはこのPlay成果物ではなくfdroidReleaseから作ります。
 
 ## 素材
 
-- `fastlane/metadata/android/ja-JP` と `en-US`：名称、短い説明、詳細説明、`changelogs/8.txt`。
-- アイコン512×512、feature graphic 1024×500、各言語の現在のUIスクリーンショット1080×1920を4枚。
+- `fastlane/metadata/android/ja-JP` と `en-US`：名称、短い説明、詳細説明、`changelogs/9.txt`（8.txtは初回版の記録として保持）。
+- アイコン512×512、feature graphic 1024×500、各言語の1.0.0 UIスクリーンショット1080×1920を4枚。
 - 広告用feature graphicは生成アートです。実機の撮影結果ではありません。[作成記録](asset-provenance.md)と[素材監査](../../docs/audit/ASSETS.md)参照。
-- スクリーンショットはエミュレーターのテストパターンを写した実行画面。公開前に実機での見え方と表示内容を最終確認してください。
+- スクリーンショットはエミュレーターのテストパターンを写した実行画面。1.1.0の提出前に新UIで撮り直してください。プライバシーHTMLは現行実装へ更新済みですが、このソース更新だけでは公開サイトへ反映されません。
 
 ## Console側の作業
 

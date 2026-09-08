@@ -1,19 +1,37 @@
 # LIVE FAULT
 
-[Faults](EFFECTS.md) · [日本語](LIVE_FAULT.ja.md)
+[日本語](LIVE_FAULT.ja.md) · [Faults](EFFECTS.md) · [ADVANCED MODE](ADVANCED_MODE.md)
 
-Each fault has its own time behavior, even when LIVE is off. A weak row can drift and a tape can suffer a brief dropout while their underlying identities stay fixed. LIVE adds a connection to the physical device; it is not a randomization mode.
+LIVE describes faults evolving at the current moment. Its controls define the fault timeline, the shape of variation and optional influence from device measurements. Intrinsic fault evolution remains available with LIVE off; enabling LIVE applies the selected timeline and modulation. LIVE and pause start off on cold launch; other settings are saved.
 
-| Input | Connection |
+Open the adjustment button beside LIVE. The camera remains visible above the panel. Changes preview immediately in a separate draft; Apply retains the draft state and time, while closing discards it. Configure before recording; the three time controls also work during ordinary recording.
+
+| Setting | Role |
 |---|---|
-| Motion / rotation | Readout shear, tape tracking, CRT sync |
-| Camera exposure / skew / timing | Exposure phase and integration, readout instability |
-| Thermal state | Hot-pixel activity and sensor noise |
-| CPU / camera timing pressure | Probability and impact of data/stream incidents |
-| Audio amplitude | Tape timebase motion |
+| Time progression | Continuous, repeating, forward/backward, or a fixed update interval |
+| Evolution speed / reverse | −4× to +4×; negative values reverse fault time and zero stops its clock |
+| Variation pattern | Intrinsic evolution, periodic variation, accumulation/release, intermittent faults, or progression along the chain |
+| Variation / repeat period | Seconds per cycle, 0.25–32 s; also sets the extent of looping/forward-backward time |
+| Update interval | Seconds between changes for the stepped clock, 0.015625–2 s |
+| Variation amount | How far strength decreases between peaks |
+| Active fraction / probability | Duration within a period and probability per period for intermittent faults |
 
-Open the control next to LIVE to choose input sources, sensitivity and 50/60 Hz lighting. LIVE starts off on a cold launch. Audio coupling is optional and requests microphone permission; denying it leaves the other sources usable. During audio recording, the existing recorder supplies the amplitude measurement instead of opening another microphone. Inputs are acquired only while the camera is in the foreground. Availability and measured values depend on the device.
+Timing is specified directly in seconds. Earlier tempo/beat settings migrate to their equivalent durations. Speed acts on fault time, so periods are measured along that timeline. Camera capture and video timestamps continue forward. These controls do not replay earlier camera images. A loop can differ when device inputs change.
 
-The route and manual controls remain unchanged. Fixed identities use structural random seeds; continuous motion uses slow drift; incidents use separate event randomness. A new session can produce different accidents with the same saved character. RESEED makes a different individual with the same controls. There is no ordinary random chain switching or generic parameter interpolation.
+**PAUSE / RESUME**, **TRIGGER** and **RESET TIME** share an evenly spaced row. Pause freezes fault state and the evaluated influence of inputs while the camera continues. Trigger creates a temporary fault at the current moment; triggering while paused holds it until resume/reset. Reset returns fault time to zero and clears the manual event. The selected chain remains intact. Zero LEVEL bypasses all faults; advanced fixed values retain precedence while a fault is active.
 
-Preview and ordinary video are fed from one canonical processed camera image for each camera timestamp. JPEG pins the displayed image at shutter time. RAW is a separate representation and exposure; see [formats](FORMATS.md).
+## Device-input inventory
+
+| Setting | Measurement | Actual connection |
+|---|---|---|
+| Motion & rotation | Accelerometer/gyroscope, when available | Readout shear, VHS tracking, CRT sync |
+| Audio amplitude | Optional microphone or the active audio recorder | Tape timebase movement and tracking wave |
+| Camera exposure & readout timing | Camera metadata and delivery cadence | Exposure phase/integration; readout and incident pressure |
+| Temperature | Battery temperature and Android thermal status | Hot-pixel level and sensor noise |
+| Processing pressure | This app's CPU time relative to elapsed time | Data/stream incident probability and impact |
+| Sensitivity | Gain for motion, audio, cadence and CPU coupling | Temperature retains its own mapping |
+| Lighting frequency | 50 or 60 Hz | Mains-related exposure phase and integration when metadata is available |
+
+Unavailable measurements do not invent readings. The expanded section shows input availability and measured values. Temperature and CPU are proxies, not direct measurements of an imaginary broken sensor or network link. Audio permission is requested only when applying enabled audio coupling; denial leaves other sources usable. During audio recording, the existing recorder supplies amplitude instead of opening a second microphone. Input ownership ends when the camera leaves the foreground.
+
+Preview and ordinary video share the same processed image for each camera timestamp. JPG pins the displayed image; RAW uses a separate exposure and the applicable sensor-domain faults. Original RAW video ZIPs remain unprocessed. [Formats](FORMATS.md).

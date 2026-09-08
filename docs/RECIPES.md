@@ -12,10 +12,12 @@ Choose **VHS → CRT**. First adjust tape bandwidth and the CRT scan/phosphor pr
 
 ## A misread sensor representation
 
-On a RAW-capable camera, choose processed DNG with **ADDRESS ERROR → CFA ERROR**. Begin with a small byte offset and limited CFA coverage. The RGB preview is an approximation; inspect the developed DNG too. Original RAW is a separate exposure and bypasses faults. Simultaneous original/processed RAW pairs are not implemented.
+On a RAW-capable camera, choose processed DNG with **ADDRESS ERROR → CFA ERROR**. Begin with a small byte offset and limited CFA coverage. The RGB preview is an approximation; inspect the developed DNG too. RAW uses a separate exposure.
 
 ## Another individual, the same system
 
 Keep a route you like and press RESEED. The settings remain while the fault sites and biases change. Let that new individual run for a while before changing it again. The app saves your current route, controls and identities; named presets are not implemented.
 
 If a fault seems absent, check LEVEL, enablement and its own neutral controls. STREAM ERROR is intentionally quiet between incidents. [Controls](USAGE.md) · [Fault models](EFFECTS.md).
+
+Use LIVE to set how the current fault state evolves, with second-based periods and update intervals. [Time controls](LIVE_FAULT.md). Enable [ADVANCED MODE](ADVANCED_MODE.md) in Settings to directly fix model values.

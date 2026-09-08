@@ -1,6 +1,6 @@
 # Releasing 5igna1
 
-Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. [Launch checklist](LAUNCH_TASKS.md)
+Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current source prepares 1.1.0 / code 9; it is not published. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
 
 ## Distribution and identity
 
@@ -35,11 +35,11 @@ python3 tools/release.py package --certificate-sha256 YOUR_CONFIRMED_CERTIFICATE
 
 Replace the fingerprint with the adopted release certificate, recorded in [DISTRIBUTION_CERTIFICATE.md](DISTRIBUTION_CERTIFICATE.md). The packager verifies the signature, certificate, ID, version, non-debug mode, and fdroidRelease metadata. It rejects an unsigned/debug/unexpected certificate or an attempt to replace a different file under an existing name.
 
-Attach exactly these files for version 1.0.0:
+For the next 1.1.0 publication, attach these files after signing and verification:
 
 ```text
-5igna1-v1.0.0.apk
-5igna1-v1.0.0.apk.sha256
+5igna1-v1.1.0.apk
+5igna1-v1.1.0.apk.sha256
 ```
 
 ## Initial or manual release
@@ -70,7 +70,7 @@ The [metadata candidate](fdroid/com.bongorian.signa1.yml) uses this repository, 
 
 ## Google Play
 
-Complete developer registration and decide app signing. The existing ignored `signing.properties` applies only to Play upload signing. Build with `./tools/build.sh bundlePlayRelease`; see [Play submission materials](../store/google-play/README.md). Billing/Supporter Pack is not implemented, so no product creation is needed for launch.
+The owner reports the 1.0.0 closed test awaiting review (2026-09-08). Keep that submitted candidate stable; prepare a later submission separately. The existing ignored `signing.properties` applies only to Play upload signing. Build with `./tools/build.sh bundlePlayRelease`; see [Play submission materials](../store/google-play/README.md). Billing/Supporter Pack is not implemented, so no product creation is needed for launch.
 
 ## Owner checklist
 

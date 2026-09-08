@@ -21,6 +21,13 @@ uniform float streamLoss,streamColumns,concealment;
 uniform float tapeBandwidth,trackingOffset,trackingWave,trackingPhase,trackingSlip,tapeDropout,dropoutPosition,tapeNoise;
 uniform float scanDepth,scanLines,phosphorMix,convergenceOffset,syncOffset;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+// Pixel sites need a bounded hash: mobile sin() loses entropy for large coordinate arguments,
+// turning sparse damage into broad solid regions. RAW has its own integer-domain hash.
+float damageHash(vec2 p){
+    vec3 q=fract(vec3(p.x,p.y,p.x)*.1031);
+    q+=dot(q,q.yzx+33.33);
+    return fract((q.x+q.y)*q.z);
+}
 vec3 sampleAt(vec2 p){p=clamp(p,vec2(.00001),vec2(.99999));return texture2D(cam,(st*vec4(p,0.,1.)).xy).rgb;}
 // Synthetic RGGB mosaic reconstructed from processed RGB, not access to sensor RAW.
 float mosaic(vec2 pixel,vec2 cell){
@@ -52,10 +59,10 @@ vec3 fromYuv(vec3 c){return vec3(c.x+1.13983*c.z,c.x-.39465*c.y-.5806*c.z,c.x+2.
 void main(){
     vec2 p=uv;vec3 clean=sampleAt(p),c=clean;
     if(mode==FX_PIXEL_DAMAGE){
-        vec2 px=floor(p*sourceSize);float col=hash(vec2(px.x,identitySeed)),site=hash(px+identitySeed);
-        if(col<columnDensity)c=hash(vec2(px.x,identitySeed+71.))<hotFraction?vec3(hotValue):vec3(0.);
-        else if(site<pixelDensity)c=hash(px+identitySeed+71.)<hotFraction?vec3(hotValue):vec3(0.);
-        c+=(hash(px+grainSeed)-.5)*sensorNoise;
+        vec2 px=floor(p*sourceSize);float col=damageHash(vec2(px.x,identitySeed)),site=damageHash(px+identitySeed);
+        if(col<columnDensity)c=damageHash(vec2(px.x,identitySeed+71.))<hotFraction?vec3(hotValue):vec3(0.);
+        else if(site<pixelDensity)c=damageHash(px+identitySeed+71.)<hotFraction?vec3(hotValue):vec3(0.);
+        c+=(damageHash(px+grainSeed)-.5)*sensorNoise;
     }else if(mode==FX_EXPOSURE){
         c=clean*(1.-exposureDepth*(.5+.5*integration*sin(p.y*scanPhase+exposurePhase)));
     }else if(mode==FX_ROW_ERROR){
