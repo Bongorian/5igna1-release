@@ -66,3 +66,5 @@ Keep historical measurements, hashes and submitted metadata intact. Label the so
 
 - [UI display polish](audit/UI_DISPLAY_POLISH.md): development rotation, display and diagnostics verification.
 - [Compact capture controls](audit/COMPACT_CAPTURE_UI.md): format cycling, RAW video opt-in, responsive controls and refreshed guide verification.
+
+- [Pixel 9 DNG sizes](audit/PIXEL_9_DNG_SIZES.md): shared RAW size filtering and physical DEV capture verification after 1.6.0.

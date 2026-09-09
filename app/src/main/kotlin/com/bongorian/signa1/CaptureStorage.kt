@@ -67,6 +67,9 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
         } else {
             w = shot.choice!!.size.width
             h = shot.choice.size.height
+            require(DngSizes.accepts(requireNotNull(shot.cameraInfo), shot.choice.size, shot.choice.maximumPixelMode)) {
+                "RAW dimensions are incompatible with DNG metadata: ${w}x${h}"
+            }
             val white = shot.cameraInfo!!.get<Int?>(CameraCharacteristics.SENSOR_INFO_WHITE_LEVEL)
             val blacks =
                 shot.cameraInfo.get<BlackLevelPattern?>(
@@ -120,6 +123,9 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
     } catch (e: Exception) {
         discard(uri)
         error(context.getString(R.string.ui_could_not_save_the_photo), e)
+    } catch (e: AssertionError) {
+        discard(uri)
+        error(context.getString(R.string.ui_could_not_save_the_photo), IllegalStateException("DNG writer rejected the capture", e))
     } catch (e: OutOfMemoryError) {
         discard(uri)
         status(context.getString(R.string.ui_not_enough_memory_to_process_the_photo_lower))

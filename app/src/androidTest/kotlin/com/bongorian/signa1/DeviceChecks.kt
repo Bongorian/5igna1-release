@@ -433,8 +433,16 @@ class DeviceChecks : Instrumentation() {
                         20000,
                     )
                 } else {
-                    await("acknowledged photo frame", { activity!!.engine.previewAcknowledged() > 0 }, 20000)
-                    runOnMainSync { activity!!.engine.photo() }
+                    val captures = args!!.getString("captures", "1")!!.toInt().coerceIn(1, 5)
+                    val savedUris = ArrayList<String>()
+                    for (index in 0 until captures) {
+                        val prior = activity!!.latest
+                        await("acknowledged photo frame", { activity!!.engine.previewAcknowledged() > 0 && activity!!.ready }, 20000)
+                        runOnMainSync { activity!!.engine.photo() }
+                        await("saved capture $index", { activity!!.latest != null && activity!!.latest != prior && !activity!!.engine.photoBusy }, 60000)
+                        savedUris.add(activity!!.latest.toString())
+                    }
+                    result.putString("captureUris", savedUris.joinToString("\n"))
                 }
                 await(
                     "saved",

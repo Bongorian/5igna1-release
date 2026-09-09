@@ -2,7 +2,6 @@ package com.bongorian.signa1
 
 import android.content.Context
 import android.graphics.ImageFormat
-import android.graphics.Rect
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraMetadata
@@ -116,6 +115,7 @@ internal class CameraOptions(val id: String?, cc: CameraCharacteristics, maxText
         if (full != null) {
             addPhotos(raws, full, ImageFormat.RAW_SENSOR, true, Int.MAX_VALUE)
         }
+        raws.removeAll { !DngSizes.accepts(cc, it.size, it.maximumPixelMode) }
         photos.sortWith(
             Comparator { a: Photo?, b: Photo? ->
                 java.lang.Long.compare(
@@ -208,17 +208,7 @@ internal class CameraOptions(val id: String?, cc: CameraCharacteristics, maxText
                 for (size in rawSizes) {
                     // Bound two queued sensor frames to 128 MiB; maximum-resolution-only still
                     // modes are excluded.
-                    val active =
-                        cc.get<Rect?>(
-                            CameraCharacteristics.SENSOR_INFO_PRE_CORRECTION_ACTIVE_ARRAY_SIZE
-                        )
-                    val pixels = cc.get<Size?>(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE)
-                    val dngSize =
-                        (pixels != null && pixels == size) ||
-                            (active != null &&
-                                active.width() == size.width &&
-                                active.height() == size.height)
-                    if (!dngSize || area(size) * 2 > 64L * 1024 * 1024) continue
+                    if (!DngSizes.accepts(cc, size, false) || area(size) * 2 > 64L * 1024 * 1024) continue
                     val duration = map.getOutputMinFrameDuration(ImageFormat.RAW_SENSOR, size)
                     val stall = map.getOutputStallDuration(ImageFormat.RAW_SENSOR, size)
                     if (duration <= 0) continue
