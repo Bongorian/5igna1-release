@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.0] — 2026-09-09
+
+Version name: 1.4.0. Version code: 13.
+
+- Revise recommended photo/video sizes using RAM, available CPU cores and supported camera outputs. Preserve manual selections.
+- Reuse one processed output with ADVANCED OFF, retaining all FAULT processing and immutable capture state. ADVANCED ON keeps precise displayed-frame capture.
+- Add optional resolution-linked mono AAC audio for ordinary video, disabled by default. Device encoder limits can adjust actual audio parameters.
+- Organize current guides, development procedures and dated validation records.
+- Verify 100 JVM test executions, normal/strict capture and short encoded-audio clips on the emulator. Sustained physical-device heat and recording performance remain unmeasured.
+
 ## [1.3.1] — 2026-09-09
 
 Version name: 1.3.1. Version code: 12.

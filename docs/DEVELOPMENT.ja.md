@@ -7,7 +7,7 @@
 | 項目 | 値 |
 |---|---|
 | デバッグ版アプリID | `com.bongorian.signa1.debug` |
-| debug versionName / versionCode | see `app/build.gradle` (currently 1.3.1-debug / 12) |
+| debug versionName / versionCode | see `app/build.gradle` (currently 1.4.0-debug / 13) |
 | minSdk | 31（Android 12） |
 | compileSdk / targetSdk | 36 |
 | Android Gradle Plugin | 8.10.1 |

@@ -75,3 +75,7 @@
 
 - The owner requested free automatic AAB uploads whenever a GitHub release is published. Configure GitHub Actions and the existing Play app for signed Alpha drafts, using the existing Play upload key. This authorizes the required service account, scoped permissions, GitHub environment and integration into main, including the already published 1.3.1 source.
 - Automatic uploads must preserve ongoing reviews, existing releases, tester/country settings and signing identities. Do not automatically submit for review or publish to testers/production. Fail if another draft or review prevents the upload; never cancel review as a fallback.
+
+## Owner direction — 1.4.0 release, 2026-09-09
+
+- The owner requested publishing the adaptive capture/audio update as 1.4.0. Integrate the verified source into main and publish the signed GitHub/Obtainium APK as 1.4.0 / code 13 using the existing distribution key. Preserve existing releases and store submissions. The configured Play automation may attempt an Alpha draft upload; never remove another draft or cancel review to force it through.

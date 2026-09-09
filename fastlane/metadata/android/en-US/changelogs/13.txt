@@ -1,0 +1,1 @@
+Revised device-based photo and video defaults. ADVANCED OFF reduces memory use while preserving fault processing. Added optional resolution-linked recording audio, disabled by default. Updated guides and documentation.

@@ -2,7 +2,7 @@
 
 [Guides](README.md) · [日本語](PERFORMANCE.ja.md)
 
-The current development source starts with **Recommended for this device**. Camera and encoder capabilities select an actual supported output within these initial pixel budgets, preferring video at up to 30 fps:
+Version 1.4.0 starts with **Recommended for this device**. Camera and encoder capabilities select an actual supported output within these initial pixel budgets, preferring video at up to 30 fps:
 
 | Starting tier | JPEG budget | Video budget |
 |---|---:|---:|

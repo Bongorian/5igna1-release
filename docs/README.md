@@ -1,6 +1,6 @@
 # 5igna1 field guide
 
-These guides follow this source checkout. The published baseline is **1.3.1 / code 12**. Current development adds revised device recommendations, normal capture with ADVANCED OFF, and optional resolution-linked audio; these additions have not been released. Use the documentation at a release tag when you need that version’s exact behavior.
+These guides describe **1.4.0 / code 13**: revised device recommendations, normal capture with ADVANCED OFF, and optional resolution-linked audio. For earlier versions, read the documentation at that release tag.
 
 Experimental device response, ADVANCED, EXPERT, linked audio and recording audio start OFF. Saved choices are retained. [Format and audio behavior](FORMATS.md) · [Performance modes](PERFORMANCE.md).
 

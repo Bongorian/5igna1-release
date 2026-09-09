@@ -1,6 +1,6 @@
 # Releasing 5igna1
 
-Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. The latest documented GitHub release is 1.3.1 / code 12, adding the interactive guide and optional experimental device response. Development changes beyond that tag are unreleased even while app/build.gradle retains the baseline version; allocate a higher version/code before packaging them. GitHub 1.1.0 / code 9 retains its original tagged source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
+Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current release source is 1.4.0 / code 13. Changes after its tag require a higher version/code before packaging. GitHub 1.1.0 / code 9 retains its original tagged source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
 
 ## Distribution and identity
 
