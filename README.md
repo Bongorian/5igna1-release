@@ -1,6 +1,6 @@
 # 5igna1 website
 
-Japanese product landing page hosted by GitHub Pages. Static HTML/CSS, without a build dependency or JavaScript. Keep `.nojekyll`.
+Japanese closed-test recruitment page hosted by GitHub Pages. Static HTML/CSS, without a build dependency or JavaScript. Keep `.nojekyll`.
 
 - Landing: https://bongorian.github.io/5igna1-release/
 - Japanese privacy policy: https://bongorian.github.io/5igna1-release/privacy/
@@ -11,6 +11,12 @@ Japanese product landing page hosted by GitHub Pages. Static HTML/CSS, without a
 GitHub Pages continues to deploy `codex/privacy-pages` at `/`. Publish tested website changes to that branch. Keep this separate from application main and release tags. Do not delete the Pages branch during application branch cleanup.
 
 Serve this directory with any static HTTP server to preview. Check all relative links and images before publishing. [Asset provenance](ASSETS.md).
+
+## Recruitment
+
+The page recruits Google Play closed-test participants. Do not describe the product or testing as free, promise eligibility, or replace the application contact with a public APK download. Pricing and participation conditions are provided by the owner.
+
+The public application link is https://docs.google.com/forms/d/e/1FAIpQLSe3DG5H0_nYEP9pk1v1bQU3BytAQWtgAYScoBTCsI9YMPtdsA/viewform. Use this respondent URL, never the form editor URL. Fields: Google Play email (required), device/Android version (optional), notes (optional). Response summaries are not shared with respondents. The policy includes this form use.
 
 ## Play Console privacy URL update
 
