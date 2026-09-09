@@ -48,81 +48,127 @@ internal object RawGlitch {
         )
     }
 
-    fun apply(input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode): ByteArray {
-        if (n.id == Effects.PIXEL_DAMAGE) return pixelDamage(input, w, h, white, black, n)
-        if (n.id == Effects.ROW_ERROR) return rowError(input, w, h, white, black, n)
+    fun apply(input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode): ByteArray =
+        when (n.id) {
+            Effects.PIXEL_DAMAGE -> pixelDamage(input, w, h, white, black, n)
+            Effects.EXPOSURE -> exposure(input, w, h, white, black, n)
+            Effects.ROW_ERROR -> rowError(input, w, h, white, black, n)
+            Effects.BIT_ERROR -> bitError(input, w, h, white, n)
+            Effects.ADDRESS_ERROR -> addressError(input, w, h, white, black, n)
+            Effects.CFA_ERROR -> cfaError(input, w, h, white, n)
+            else -> input.clone().also { out ->
+                for (index in 0..<w * h)
+                    write(out, index, max(0, min(white, read(input, index))))
+            }
+        }
+
+    private fun exposure(
+        input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+    ): ByteArray {
+        val out = input.clone()
+        val depth = n.get("exposureDepth")
+        val integration = n.get("integration")
+        val scanPhase = n.get("scanPhase")
+        val exposurePhase = n.get("exposurePhase")
+        for (y in 0..<h) {
+            // Keep the original Float/Double conversions and multiplication order.
+            val gain = 1 - depth * (.5f + .5f * integration *
+                sin((y / h.toFloat() * scanPhase + exposurePhase).toDouble()).toFloat())
+            for (x in 0..<w) {
+                val index = y * w + x
+                val value = black + Math.round((read(input, index) - black) * gain)
+                write(out, index, max(0, min(white, value)))
+            }
+        }
+        return out
+    }
+
+    private fun bitError(
+        input: ByteArray, w: Int, h: Int, white: Int, n: FaultNode,
+    ): ByteArray {
+        val out = input.clone()
+        val seed = n.identity.seed xor n.event.pattern.toLong()
+        val block = max(2, n.get("bitBlock").toInt())
+        val blockHeight = max(1, block / 2)
+        val probability = n.get("bitProbability")
+        val bits = 32 - Integer.numberOfLeadingZeros(white)
+        val flip = 1 shl Math.round(n.get("bitIndex") * (bits - 1))
+        val affected = BooleanArray((w - 1) / block + 1)
+        var previousGroup = -1
+        for (y in 0..<h) {
+            val group = y / blockHeight
+            if (group != previousGroup) {
+                for (bx in affected.indices) affected[bx] = hash(seed, bx, group) < probability
+                previousGroup = group
+            }
+            for (x in 0..<w) {
+                val index = y * w + x
+                var value = read(input, index)
+                if (affected[x / block]) value = value xor flip
+                write(out, index, max(0, min(white, value)))
+            }
+        }
+        return out
+    }
+
+    private fun addressError(
+        input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+    ): ByteArray {
         val out = input.clone()
         val seed = n.identity.seed
-        val bits = 32 - Integer.numberOfLeadingZeros(white)
-        for (y in 0..<h) for (x in 0..<w) {
-            var sx = x
-            var sy = y
-            val index = y * w + x
-            var gain = 1f
+        val bytes = max(2, n.get("addressRegion").toInt())
+        val offset = n.get("byteOffset").toInt()
+        val probability = n.get("addressProbability")
+        var previousRegion = -1
+        var affected = false
+        for (index in 0..<w * h) {
+            val address = index * 2
+            if (offset > 0) {
+                // Regions are byte-addressed, including odd sizes and row crossings.
+                val region = address / bytes
+                if (region != previousRegion) {
+                    affected = hash(seed, region, 0) < probability
+                    previousRegion = region
+                }
+            }
             var value = read(input, index)
-            when (n.id) {
-                Effects.EXPOSURE -> {
-                    gain =
-                        1 -
-                            n.get("exposureDepth") *
-                                (.5f +
-                                    .5f *
-                                        n.get("integration") *
-                                        sin(
-                                                (y / h.toFloat() * n.get("scanPhase") +
-                                                        n.get("exposurePhase"))
-                                                    .toDouble()
-                                            )
-                                            .toFloat())
-                    value = black + Math.round((value - black) * gain)
-                }
-
-                Effects.BIT_ERROR -> {
-                    val block = max(2, n.get("bitBlock").toInt())
-                    if (
-                        hash(
-                            seed xor n.event.pattern.toLong(),
-                            x / block,
-                            y / max(1, block / 2),
-                        ) < n.get("bitProbability")
-                    )
-                        value = value xor (1 shl Math.round(n.get("bitIndex") * (bits - 1)))
-                }
-
-                Effects.ADDRESS_ERROR -> {
-                    val bytes = max(2, n.get("addressRegion").toInt())
-                    val offset = n.get("byteOffset").toInt()
-                    val address = index * 2
-                    if (
-                        offset > 0 &&
-                            hash(
-                                seed,
-                                address / bytes,
-                                0,
-                            ) < n.get("addressProbability")
-                    ) {
-                        val src = address + offset
-                        value =
-                            if (src + 1 < input.size)
-                                (input[src].toInt() and 255) or
-                                    ((input[src + 1].toInt() and 255) shl 8)
-                            else black
-                    }
-                }
-
-                Effects.CFA_ERROR -> {
-                    val region = max(2, n.get("cfaRegion").toInt())
-                    if (hash(seed, x / region, y / region) < n.get("cfaCoverage")) {
-                        val phase = n.get("cfaPhase").toInt()
-                        sx = if (phase == 1) x else x xor 1
-                        sy = if (phase == 0) y else y xor 1
-                        if (sx < w && sy < h) value = read(input, sy * w + sx)
-                    }
-                }
-
-                else -> {}
+            if (affected) {
+                val src = address + offset
+                value = if (src + 1 < input.size)
+                    (input[src].toInt() and 255) or ((input[src + 1].toInt() and 255) shl 8)
+                else black
             }
             write(out, index, max(0, min(white, value)))
+        }
+        return out
+    }
+
+    private fun cfaError(
+        input: ByteArray, w: Int, h: Int, white: Int, n: FaultNode,
+    ): ByteArray {
+        val out = input.clone()
+        val seed = n.identity.seed
+        val region = max(2, n.get("cfaRegion").toInt())
+        val coverage = n.get("cfaCoverage")
+        val phase = n.get("cfaPhase").toInt()
+        val affected = BooleanArray((w - 1) / region + 1)
+        var previousGroup = -1
+        for (y in 0..<h) {
+            val group = y / region
+            if (group != previousGroup) {
+                for (bx in affected.indices) affected[bx] = hash(seed, bx, group) < coverage
+                previousGroup = group
+            }
+            for (x in 0..<w) {
+                val index = y * w + x
+                var value = read(input, index)
+                if (affected[x / region]) {
+                    val sx = if (phase == 1) x else x xor 1
+                    val sy = if (phase == 0) y else y xor 1
+                    if (sx < w && sy < h) value = read(input, sy * w + sx)
+                }
+                write(out, index, max(0, min(white, value)))
+            }
         }
         return out
     }
