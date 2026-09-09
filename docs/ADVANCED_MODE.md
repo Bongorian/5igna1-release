@@ -4,6 +4,9 @@
 
 Open Settings (gear) and enable **ADVANCED MODE**, then tap any selected chain chip. The preview remains above the editor. The mode controls internal parameter visibility and precise displayed-frame capture. OFF preserves manual values and FAULT processing while reusing one output texture; the captured frame can differ from the last displayed frame. ON retains the three-slot history. See [capture behavior](FORMATS.md). The Settings mode switch saves immediately. In the fault editor, Apply commits the draft; ×, Back or leaving the app discards it.
 
+
+The unreleased LIGHT MODE is mutually exclusive with ADVANCED and EXPERT. Enabling ADVANCED turns LIGHT off and restores full-size displayed-frame retention. [Performance modes](PERFORMANCE.md).
+
 **AUTO** follows the fault model and displays its current compiled value. Tap AUTO to FIX the current value, use its slider, or tap the number for precise input. Each value has a finite allowed range. Tap FIX to return that value to AUTO. ALL AUTO clears all fixed values and the event identity for this fault. Basic controls continue to affect values that are automatic; fixed values take precedence. Reset restores the selected fault's defaults and removes overrides. Random chain clears overrides for newly selected faults; reseed preserves fixed values.
 
 **SEED** is the signed 64-bit structural identity. **EVENT SEED** is available for ROW ERROR, BIT ERROR, ADDRESS ERROR, BLOCK ERROR, STREAM ERROR and VHS. AUTO gets a fresh session identity; a fixed seed reproduces incident scheduling given the same fault time, inputs and settings. It does not reproduce a changing camera image. SIGNAL `identitySeed` and `eventSeed` are reduced RGB rendering values, distinct from these full integer identities. Bayer RAW also uses the structural identity.

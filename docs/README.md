@@ -1,6 +1,6 @@
 # 5igna1 field guide
 
-These guides describe **1.5.1 / code 15**: TAP input, probability-based TIME ECHO, MEDIA/DISPLAY models and SEED controls. For earlier versions, read the documentation at that release tag.
+These guides cover **1.6.0 / code 16**. Sections explicitly marked unreleased describe development additions, including LIGHT MODE. For earlier versions, read the documentation at that release tag.
 
 Keep the capture screen active while recording. Leaving it or locking the device stops and saves the recording. [Recording and permissions](RECORDING.md).
 

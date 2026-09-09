@@ -499,4 +499,7 @@
     <string name="feedback_no_email">メールアプリが見つかりません。下書きをコピーして、お使いのメールサービスから送信してください。</string>
     <string name="format_cycle_hint">%1$s · タップで保存形式を切り替え</string>
     <string name="guide_format_sample">練習：%1$s · タップで切り替え</string>
+    <string name="light_mode">LIGHT MODE</string>
+    <string name="light_hint">プレビューを画面内の表示サイズまで小さく処理します。写真は選んだ保存解像度を維持するため、細部がプレビューと異なる場合があります。ADVANCEDとEXPERTをOFFにし、どちらかをONにするとLIGHTを解除します。</string>
+    <string name="light_load_hint">LIGHTはプレビューを表示領域に合わせます。RGB録画中とNETWORKの保持画像は元の処理解像度を維持します。写真・動画の保存サイズは変えません。</string>
 </resources>

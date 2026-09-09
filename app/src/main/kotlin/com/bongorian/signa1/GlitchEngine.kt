@@ -108,6 +108,13 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     var encoder: EGLSurface? = EGL14.EGL_NO_SURFACE
     var eglConfig: EGLConfig? = null
     var previewChain: EffectChain? = null
+    private var lightPhotoChain: EffectChain? = null
+    private var captureInputTexture = 0
+    private var captureInputExternal = false
+    private val captureInputMatrix = FloatArray(16)
+    private var captureInputWidth = 0
+    private var captureInputHeight = 0
+    private var captureInputNs = 0L
     val foregroundWork = ForegroundWork()
     @Volatile var foreground = true
     /** Stop capture and finalize its file before releasing camera/GL resources. */
@@ -408,7 +415,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             thermal,
             battery,
             headroom,
-            signalW.toLong() * signalH,
+            if (settings.lightMode && encoderScratch.width > 0)
+                encoderScratch.width.toLong() * encoderScratch.height else signalW.toLong() * signalH,
             passes,
             deviceProfile.constrained,
         )
@@ -790,6 +798,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             for (buffer in presentedFrames.values()) buffer.release()
             encoderScratch.release()
             previewChain?.releaseBuffers()
+            lightPhotoChain?.releaseBuffers()
             timeEcho.release()
             if (cameraTexture != null) {
                 cameraTexture!!.setOnFrameAvailableListener(null)
@@ -1509,6 +1518,16 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 timeEcho.disable()
                 null
             }
+            // The GL thread owns these inputs until the next frame. LIGHT JPEG capture can render
+            // the latest source once at the selected output size, without enlarging its preview.
+            if (settings.lightMode) {
+                captureInputTexture = echo?.buffer?.texture ?: inputTexture
+                captureInputExternal = echo == null && inputExternal
+                (if (echo == null) inputMatrix else IDENTITY).copyInto(captureInputMatrix)
+                captureInputWidth = echo?.buffer?.width ?: signalW
+                captureInputHeight = echo?.buffer?.height ?: signalH
+                captureInputNs = echo?.cameraNs ?: timestamp
+            }
             val show = adaptiveLoad.due(lastFrameNs) || !frameSeen
             if (show || recording && !rawVideoMode()) {
                 val renderStarted = System.nanoTime()
@@ -1519,16 +1538,21 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 var didRender = false
                 val slot = if (show && settings.advancedMode) presentedFrames.acquire() else null
                 val rendered: SignalBuffer = (if (slot == null) encoderScratch else slot.value)!!
+                // NETWORK retains processed history. Keep that history at the capture resolution;
+                // a small preview must never replace the full-size stalled frame used for a shot.
+                val renderSize = PreviewSizing.choose(signalW, signalH, width, height,
+                    settings.lightMode, recording && !rawVideoMode(),
+                    state.nodes.any { it.id == Effects.CRT && Math.round(it.profile["transportKind"] ?: 0f) == 2 })
                 if (slot != null || show && !settings.advancedMode || recording && !rawVideoMode()) {
                     try {
-                        rendered.allocate(signalW, signalH)
+                        rendered.allocate(renderSize.width, renderSize.height)
                         previewChain!!.render(
                             echo?.buffer?.texture ?: inputTexture,
                             echo == null && inputExternal,
                             if (echo == null) inputMatrix else IDENTITY,
                             state,
-                            signalW,
-                            signalH,
+                            renderSize.width,
+                            renderSize.height,
                             echo?.buffer?.width ?: signalW,
                             echo?.buffer?.height ?: signalH,
                             rendered.fbo,
@@ -1628,6 +1652,21 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         }
     }
 
+    /** Full-resolution one-shot rendering from the latest GL input; never upscale a LIGHT preview. */
+    internal fun renderLightPhoto(target: SignalBuffer) {
+        check(settings.lightMode && captureInputTexture != 0 && captureInputNs > 0)
+        current(window)
+        val current = faultFrame((previewEffects ?: effectState)!!)
+        val frame = EffectState.Frame(current.ids(), current.amount, current.parameters, captureInputNs,
+            current.time, current.nodes, current.experimental, current.injection)
+        val chain = lightPhotoChain ?: EffectChain(PhotoRenderer.shaderSource(context), true).also { lightPhotoChain = it }
+        target.allocate(outW, outH)
+        chain.render(captureInputTexture, captureInputExternal, captureInputMatrix, frame,
+            outW, outH, captureInputWidth, captureInputHeight, target.fbo, target.texture)
+        target.frame = frame
+        target.presentedAt = System.currentTimeMillis()
+    }
+
     internal class PendingPhoto(e: GlitchEngine, displayed: SignalBuffer) {
         val cameraInfo: CameraCharacteristics?
         val settings: CaptureSettings
@@ -1662,7 +1701,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 (if (settings.photoFormat == 1) "RAW ORIGINAL"
                 else Effects.chainName(frame.ids()) + " | " + frame.describe()) +
                 " | " +
-                (if (settings.photoFormat == 0) if (settings.advancedMode) "Displayed RGB signal" else "Processed RGB capture"
+                (if (settings.photoFormat == 0) if (settings.advancedMode) "Displayed RGB signal" else if (settings.lightMode) "Full-resolution RGB capture (LIGHT)" else "Processed RGB capture"
                 else if (settings.photoFormat == 1) "Separate RAW exposure"
                 else "Separate RAW exposure, latched fault state; RGB preview approximate")
         }
@@ -1688,13 +1727,21 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 photoBusy = true
                 ready(false)
                 // GL serializes this snapshot/readback before any subsequent camera frame.
-                val captured = if (settings.advancedMode) lease!!.value else encoderScratch
-                val shot = PendingPhoto(this, captured)
-                pending = shot
+                val fullResolution = SignalBuffer()
+                var readback: Bitmap? = null
                 try {
+                    var captured = if (settings.advancedMode) lease!!.value else encoderScratch
+                    if (settings.lightMode && settings.photoFormat == 0 &&
+                        (captured.width != outW || captured.height != outH)) {
+                        renderLightPhoto(fullResolution)
+                        captured = fullResolution
+                    }
+                    val shot = PendingPhoto(this, captured)
+                    pending = shot
                     if (settings.photoFormat == 0) {
                         current(window)
                         shot.signal = captured.read()
+                        readback = shot.signal
                         shot.result = signalMetadata.get(shot.frame.cameraNs)
                         shot.dispatched = true
                         pending = null
@@ -1757,13 +1804,13 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         20000,
                     )
                 } catch (e: Exception) {
-                    if (shot.signal != null) shot.signal!!.recycle()
+                    readback?.recycle()
                     pending = null
                     photoBusy = false
                     ready(frameSeen)
                     error(context.getString(R.string.ui_could_not_capture), e)
                 } catch (e: OutOfMemoryError) {
-                    if (shot.signal != null) shot.signal!!.recycle()
+                    readback?.recycle()
                     pending = null
                     photoBusy = false
                     ready(frameSeen)
@@ -1771,6 +1818,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         context.getString(R.string.ui_not_enough_memory_to_process_the_photo_lower)
                     )
                 } finally {
+                    fullResolution.release()
+                    lightPhotoChain?.releaseBuffers()
                     presentedFrames.release(lease)
                 }
             }
@@ -2101,6 +2150,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         normalFirstPublishedNs = 0
         normalAcknowledgedNs = 0
         encoderScratch.frame = null
+        captureInputTexture = 0
+        captureInputNs = 0
         signalMetadata.clear()
         frameSeen = false
         adaptiveLoad.resetClock()
@@ -2164,6 +2215,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 encoderScratch.release()
                 timeEcho.release()
                 if (previewChain != null) previewChain!!.release()
+                lightPhotoChain?.release()
+                lightPhotoChain = null
                 if (blitChain != null) blitChain!!.release()
                 blitChain = null
                 previewChain = blitChain

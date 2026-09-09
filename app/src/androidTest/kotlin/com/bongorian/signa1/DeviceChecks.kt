@@ -170,6 +170,31 @@ class DeviceChecks : Instrumentation() {
             effectsBefore = activity!!.effectState
             faultsBefore = activity!!.faultConfig
             video = activity!!.videoMode
+            if (args!!.getString("action", "") == "light-mode") {
+                result.putString("report", LightModeChecks.run(this).toString())
+                result.putString("result", "PASS LIGHT mode and LED copy optimization")
+                return
+            }
+            if (args!!.getString("action", "") == "gpu-detail") {
+                val dimensions = org.json.JSONObject()
+                runOnMainSync {
+                    activity!!.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    activity!!.engine.gl.post {
+                        val e = activity!!.engine
+                        dimensions.put("viewWidth", e.width).put("viewHeight", e.height)
+                            .put("signalWidth", e.signalW).put("signalHeight", e.signalH)
+                            .put("outputWidth", e.outW).put("outputHeight", e.outH)
+                            .put("advancedMode", e.settings.advancedMode)
+                    }
+                    activity!!.engine.detach()
+                }
+                val closed = java.util.concurrent.CountDownLatch(1)
+                activity!!.engine.gl.post { closed.countDown() }
+                check(closed.await(10, java.util.concurrent.TimeUnit.SECONDS))
+                result.putString("report", FaultRenderChecks.run(targetContext, false, gpuDetail = dimensions))
+                result.putString("result", "PASS GPU detail investigation")
+                return
+            }
             if (args!!.getString("action", "") == "load-investigation") {
                 runOnMainSync { activity!!.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
                 if (args!!.getString("part", "gpu") == "gpu") {
@@ -2000,6 +2025,7 @@ class DeviceChecks : Instrumentation() {
 
     internal fun checkNormalCapture() {
         val next = CaptureSettings(activity!!.settings)
+        next.lightMode = false
         next.advancedMode = false
         next.photoFormat = 0
         next.photoSize = "recommended"

@@ -51,3 +51,5 @@ The bottom-left thumbnail opens the photo/video viewer. Swipe sideways to browse
 JPG, DNG and MP4 are saved in `DCIM/5igna1`; RAW sequence ZIPs are in `Download/5igna1`. Existing files remain in their original folders. Optional GPS metadata is saved only when enabled and a location is available. [Privacy](PRIVACY.md).
 
 If the camera is interrupted or no preview is presented for six seconds, the app attempts to reconnect up to three times while active, outside capture and cooling pauses. Tap the preview to retry after those attempts. Reconnecting never restarts recording. [Troubleshooting](TROUBLESHOOTING.md).
+
+Unreleased development: Settings → Modes → LIGHT MODE reduces display-only processing to the view size. It starts OFF and excludes ADVANCED/EXPERT; saved dimensions remain selected. [Details and exceptions](PERFORMANCE.md).

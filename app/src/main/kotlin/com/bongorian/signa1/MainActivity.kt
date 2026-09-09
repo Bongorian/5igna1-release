@@ -201,6 +201,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             }
         }
         settings = CaptureSettings.load(prefs)
+        advancedMode = settings.advancedMode
         geo = GeoTags(this, Runnable { this.renderGeo() })
         geo.enabled = settings.location
         effectState = EffectStateStore.load(prefs)

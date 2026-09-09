@@ -22,6 +22,16 @@ ADVANCED ON retains the three-slot displayed-frame history and pins the displaye
 
 Settings → **Workload and recommendations** → **Use recommended photo and video settings** restores these selections and standard video quality. Resolution pickers also offer Recommended alongside manual sizes and Maximum. On the first upgrade to this policy, the previous maximum-photo default becomes Recommended; exact saved sizes are retained. A subsequent explicit Maximum choice is retained. Empty legacy video selections resolve to Recommended. A selected JPG size is also the saved JPG size; automatic frame pacing does not change it mid-session. RAW still uses a separate exposure and supported sensor faults.
 
+## LIGHT MODE — unreleased development
+
+Settings → Modes → **LIGHT MODE** caps effect rendering to the physical pixel dimensions of the preview view, preserving aspect ratio and never enlarging a smaller input. It starts OFF and is independent of the ordinary state where ADVANCED and EXPERT are both off. Enabling LIGHT disables both; enabling either disables LIGHT. Existing FAULT values are retained.
+
+JPEG capture renders the latest acquired source once at the selected save resolution before reading the immutable result. It does not enlarge the reduced preview. Fine detail and spatial effects can look different between preview and saved image, and the capture frame need not be the last displayed one. The extra full-size render can add shutter-processing time. Camera input size stays unchanged, so this reduces GPU effect work rather than guaranteeing reduced camera/ISP power.
+
+RGB recording uses full-size processing and resumes the smaller preview after stopping; recorded dimensions and frame cadence stay selected. NETWORK retains its full-resolution processed history, so that route keeps full-size preview processing. RAW capture remains a separate full-resolution sensor exposure. TIME ECHO retains its existing limited-resolution historical input. Window resizing adjusts the display-only budget. Existing automatic frame pacing/thermal behavior remains enabled in LIGHT.
+
+[Measurements and device checks](audit/GPU_DETAIL_LIGHT.md) cover Pixel 9; no power or long-duration heat reduction is claimed.
+
 ## EXPERT MODE
 
 Settings → Modes → **EXPERT MODE** removes app-level thermal pauses, adaptive workload caps and timed preview frame skipping. Photo preview requests the fastest advertised normal capture rate compatible with the chosen stream; video uses its selected fps. Actual throughput remains limited by the camera, GPU, display and retained-frame availability. Resolution choices are preserved, so a smaller manual size can still be faster. EXPERT is independent of ADVANCED (internal parameters and displayed-frame capture), is saved as soon as you toggle it, and starts off by default.

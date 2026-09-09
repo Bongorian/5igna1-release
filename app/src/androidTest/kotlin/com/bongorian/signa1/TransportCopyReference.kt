@@ -8,7 +8,8 @@ import java.nio.FloatBuffer
 import kotlin.math.max
 
 /** Ordered GPU passes. Each pass reads the previous result, never its own attachment. */
-internal class EffectChain(private val source: String, private val supportsExternal: Boolean) {
+/** Frozen pre-LED-copy-omission reference for byte comparisons. */
+internal class TransportCopyReference(private val source: String, private val supportsExternal: Boolean) {
     private class Scalar(val location: Int) {
         var initialized = false
         var bits = 0
@@ -208,14 +209,13 @@ internal class EffectChain(private val source: String, private val supportsExter
     }
 
     private fun renderTransport(texture: Int, oes: Boolean, transform: FloatArray?, frame: EffectState.Frame,
-                                w: Int, h: Int, sourceW: Int, sourceH: Int, target: Int, targetTexture: Int) {
+                                w: Int, h: Int, sourceW: Int, sourceH: Int, target: Int) {
         var input = texture
         var iw = sourceW; var ih = sourceH
         var first = true
         var analog = false
         var nearest = false
         var networkUsed = false
-        var finalWritten = false
         for (node in frame.nodes) {
             val kind = Math.round(node.profile["transportKind"] ?: 0f)
             // Digital media is an exact pass-through: no render or resampling at this stage.
@@ -238,15 +238,6 @@ internal class EffectChain(private val source: String, private val supportsExter
                 val factor = 1f - node.get("transportLoss") * .8f
                 ow = max(16, (w * factor).toInt()); oh = max(16, (h * factor).toInt())
             }
-            // A standalone LED pass already produces w × h RGBA. An owned, unpublished target
-            // needs no extra resampling copy. Unknown/aliased targets keep the original path.
-            if (frame.nodes.size == 1 && node.id == Effects.CRT && kind == 3 &&
-                target != 0 && targetTexture != 0 && targetTexture != texture && targetTexture != input) {
-                drawStage(input, first && oes, if (first) requireNotNull(transform) else IDENTITY,
-                    node, ow, oh, target, ow, oh)
-                finalWritten = true
-                break
-            }
             val buffer = if (network) networkFrame else transportBuffers.first { it.texture != input }
             if (network && (buffer.w != ow || buffer.h != oh || networkIdentity != node.identity.seed)) networkValid = false
             buffer.allocate(ow, oh)
@@ -263,8 +254,7 @@ internal class EffectChain(private val source: String, private val supportsExter
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, input)
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
         }
-        if (!finalWritten)
-            drawStage(input, first && oes, if (first) requireNotNull(transform) else IDENTITY, null, iw, ih, target, w, h)
+        drawStage(input, first && oes, if (first) requireNotNull(transform) else IDENTITY, null, iw, ih, target, w, h)
         if (nearest && !first) GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
         check(GLES20.glGetError() == GLES20.GL_NO_ERROR) { "Transport GPU draw failed" }
     }
@@ -282,7 +272,7 @@ internal class EffectChain(private val source: String, private val supportsExter
         targetTexture: Int = 0,
     ) {
         if (frame.nodes.any { (it.profile["transportKind"] ?: 0f) > 0f || (it.profile["mediaReduce"] ?: 0f) > 0f }) {
-            renderTransport(texture, oes, transform, frame, w, h, sourceW, sourceH, target, targetTexture)
+            renderTransport(texture, oes, transform, frame, w, h, sourceW, sourceH, target)
             return
         }
         if (networkValid) { networkValid = false; networkFrame.release() }

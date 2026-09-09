@@ -499,4 +499,7 @@
     <string name="feedback_no_email">未找到邮件应用。请复制草稿并使用您选择的邮件服务发送。</string>
     <string name="format_cycle_hint">%1$s · 点击切换保存格式</string>
     <string name="guide_format_sample">练习：%1$s · 点击切换</string>
+    <string name="light_mode">LIGHT MODE</string>
+    <string name="light_hint">将预览处理分辨率限制在屏幕中的显示尺寸。照片保持所选保存分辨率，因此细节可能与预览不同。启用后关闭ADVANCED和EXPERT；开启其中任一模式会关闭LIGHT。</string>
+    <string name="light_load_hint">LIGHT根据显示区域缩小预览。RGB录制期间和NETWORK保留画面维持原处理分辨率。照片和视频的保存尺寸不变。</string>
 </resources>

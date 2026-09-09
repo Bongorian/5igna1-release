@@ -499,4 +499,7 @@
     <string name="feedback_no_email">No email app found. Copy the draft and send it using your preferred email service.</string>
     <string name="format_cycle_hint">%1$s · Tap to switch save format</string>
     <string name="guide_format_sample">Practice: %1$s · tap to switch</string>
+    <string name="light_mode">LIGHT MODE</string>
+    <string name="light_hint">Limits preview processing to its on-screen size. Photos keep the selected save resolution, so fine detail may differ from the preview. Turns ADVANCED and EXPERT off; enabling either turns LIGHT off.</string>
+    <string name="light_load_hint">LIGHT reduces preview resolution to fit its view. RGB recording and retained NETWORK frames keep full processing resolution. Saved photo and video sizes stay as selected.</string>
 </resources>

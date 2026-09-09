@@ -13,6 +13,8 @@ Recording stops and saves when you leave the capture screen or lock the device. 
 
 JPEG uses one processed output buffer with ADVANCED OFF. The GL thread snapshots its current image/state when it handles the shutter, before asynchronous saving. ADVANCED ON instead pins the UI-acknowledged texture synchronously and retains a three-slot display history. Both preserve all selected FAULT passes and immutable saved state. Resolution is an actual supported live output; [device recommendations](PERFORMANCE.md) use RAM, available CPU cores and camera/encoder capabilities. Manual sizes and Maximum remain available.
 
+**Unreleased LIGHT MODE:** preview effects may run at a smaller view-sized resolution. JPEG is rendered separately from the latest source at the selected save resolution, so fine detail can differ from the preview. RGB recording and NETWORK history retain full-size processing. LIGHT excludes ADVANCED and EXPERT. [Mode details](PERFORMANCE.md).
+
 JPEG includes every selected point, including VHS and CRT. Quality is selectable at 85/95/100. Lossy JPEG and video encoding can change individual pixels; the captured source image/state is shared.
 
 Processed RAW supports PIXEL DAMAGE, EXPOSURE, ROW ERROR, BIT ERROR, ADDRESS ERROR and CFA ERROR. Other stages require reconstructed/component/media/display representations and are not written into Bayer DNG. RAW16 is not a privileged true image. Its developed appearance depends on the RAW developer and differs from the camera's RGB processing. The file description distinguishes the latched preview state from the separate RAW exposure timestamp.

@@ -16,9 +16,16 @@ internal class CaptureSettings {
     var rawVideoEnabled: Boolean = false
     var rawVideo: Boolean = false
     var expertMode: Boolean = false
+        set(value) { field = value; if (value) lightMode = false }
     var experimentalSignals: Boolean = false
     var resolutionAudio: Boolean = false
     var advancedMode: Boolean = false
+        set(value) { field = value; if (value) lightMode = false }
+    var lightMode: Boolean = false
+        set(value) {
+            field = value
+            if (value) { advancedMode = false; expertMode = false }
+        }
     var rawVideoSize: String = ""
     var rawVideoFps: Int = 12
 
@@ -29,6 +36,7 @@ internal class CaptureSettings {
         resolutionAudio = other.resolutionAudio
         advancedMode = other.advancedMode
         expertMode = other.expertMode
+        lightMode = other.lightMode
         photoFormat = other.photoFormat
         jpegQuality = other.jpegQuality
         videoQuality = other.videoQuality
@@ -48,6 +56,7 @@ internal class CaptureSettings {
             .putBoolean("resolutionAudio", resolutionAudio)
             .putBoolean("advancedMode", advancedMode)
             .putBoolean("expertMode", expertMode)
+            .putBoolean("lightMode", lightMode)
             .putBoolean("loadRecommendationsV1", true)
             .putInt("photoFormat", photoFormat)
             .putInt("jpegQuality", jpegQuality)
@@ -70,6 +79,7 @@ internal class CaptureSettings {
             s.resolutionAudio = p.getBoolean("resolutionAudio", false)
             s.advancedMode = p.getBoolean("advancedMode", false)
             s.expertMode = p.getBoolean("expertMode", false)
+            s.lightMode = p.getBoolean("lightMode", false)
             s.photoFormat = p.getInt("photoFormat", 0)
             if (s.photoFormat == 1) s.photoFormat = 2
             s.jpegQuality = p.getInt("jpegQuality", 95)

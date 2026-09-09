@@ -95,3 +95,8 @@
 ## Owner direction — GitHub Pages with every release, 2026-09-10
 
 - Every app release must include updating the existing GitHub Pages site on `codex/privacy-pages` to current behavior. Review version labels, feature and operation descriptions, guide links, screenshot captions, and all privacy languages against the released source. Publish and verify the public site as part of release completion. Keep the recruitment purpose and distinguish GitHub availability from actual Play publication. This is standing authorization for routine Pages updates accompanying a requested release.
+
+## Owner direction — LIGHT mode and GPU efficiency, 2026-09-10
+
+- The owner requested detailed per-frame CFA/DEMOSAIC GPU measurements and output-preserving calculation/transfer improvements, then authorized view-sized preview processing in a separate LIGHT MODE. LIGHT starts OFF and is mutually exclusive with ADVANCED and EXPERT; merely turning those two off does not enable LIGHT. Preserve saved FAULT values, selected photo/video dimensions, and ADVANCED's exact displayed-frame capture.
+- Work on `codex/gpu-detail-investigation`, using DEV builds and output comparisons. Apply verified non-destructive efficiencies across modes where their conditions hold. Keep unstable shader candidates test-only. This is development authorization, not a new release or store/Pages publication request.

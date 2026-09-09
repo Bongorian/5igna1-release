@@ -6,6 +6,7 @@ This page indexes evidence by source scope. Test results apply to the named buil
 
 | Scope | Evidence |
 |---|---|
+| Unreleased after 1.6.0: LIGHT mode and GPU detail | [Investigation and device checks](audit/GPU_DETAIL_LIGHT.md) |
 | Unreleased after 1.6.0: Pixel 9 RAW/DNG size compatibility | [Pixel 9 DEV verification](audit/PIXEL_9_DNG_SIZES.md) |
 | 1.6.0: adaptive windows, rotation and feedback | [Adaptive windows](audit/ADAPTIVE_WINDOW_FEEDBACK.md) |
 | 1.6.0: SEED, NETWORK/LED and compact capture/guide UI | [Display polish](audit/UI_DISPLAY_POLISH.md), [compact controls](audit/COMPACT_CAPTURE_UI.md) |

@@ -36,3 +36,8 @@ Video parameters include `videoKey` (an advertised `WIDTHxHEIGHT@FPS`), `seconds
 - `action seed`: SEED field refresh, exact integer input, Apply/Cancel, EVENT SEED and recording guard.
 - `action transport`: model UI, settings order, pixel identity, intermediate resolution, network hold/resume and LED gaps.
 - `action tap`: image/video fixtures, injection boundary, playback/recording and stop/save on Home (add `-e leave lock` on an emulator without a secure lock to check screen locking). Requires `files/tap-fixture.mp4` in DEV app storage.
+
+## LIGHT / GPU — unreleased
+
+- `action light-mode`: immediate exclusive mode switches, view-sized preview, unchanged full-resolution JPEG/RAW/video output, live-camera byte comparison, resized view, NETWORK retention and ADVANCED history. Its own saved fixtures are removed.
+- `action gpu-detail`: bounded CFA/DEMOSAIC shader candidates, output comparisons, final-display transfer and view-cap timing. Test-only alternatives are not shipping shaders.

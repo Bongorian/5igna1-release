@@ -39,3 +39,5 @@ The validation index had omitted 1.6.0 UI/display records and the unreleased Pix
 - These records do not establish universal device coverage. Local test logs/captures mentioned in reports are not automatically available from a clean checkout; this stocktake did not rerun historical benchmarks.
 
 - [Load investigation](LOAD_INVESTIGATION.md) / [日本語](LOAD_INVESTIGATION.ja.md), [measurements](load-investigation-results.json): post-1.6.0 investigation-only prototypes; not shipped changes.
+
+- [GPU detail and LIGHT MODE](GPU_DETAIL_LIGHT.md) / [日本語](GPU_DETAIL_LIGHT.ja.md), [measurements](gpu-detail-light-results.json): unreleased implementation and rejected shader variants.

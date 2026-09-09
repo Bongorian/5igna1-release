@@ -66,3 +66,5 @@ Update the relevant reference and its Japanese edition when behavior changes. Ke
 Keep historical measurements, hashes and submitted metadata intact. Label the source/date instead of rewriting old results as current coverage. When moving a document, repair inbound and outbound links. Run the local documentation link/coverage check, locale checks and relevant application tests before committing. Policy-copy changes require a separate site update when the corresponding app version is published; editing this application checkout does not deploy the site.
 
 - [Load investigation](audit/LOAD_INVESTIGATION.md) / [日本語](audit/LOAD_INVESTIGATION.ja.md), [measurements](audit/load-investigation-results.json): post-1.6.0 investigation-only prototypes; not shipped changes.
+
+- [GPU detail and LIGHT MODE](audit/GPU_DETAIL_LIGHT.md) / [日本語](audit/GPU_DETAIL_LIGHT.ja.md), [measurements](audit/gpu-detail-light-results.json): unreleased view-sized preview and common standalone LED optimization.

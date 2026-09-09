@@ -6,6 +6,7 @@
 
 | 対象 | 記録 |
 |---|---|
+| 1.6.0以降・未リリース：LIGHTとGPU詳細 | [調査・実機検証](audit/GPU_DETAIL_LIGHT.ja.md) |
 | 1.6.0以降の未公開修正：Pixel 9のRAW/DNGサイズ適合 | [Pixel 9 DEV検証](audit/PIXEL_9_DNG_SIZES.md) |
 | 1.6.0：可変ウィンドウ・回転・フィードバック | [画面と操作の検証](audit/ADAPTIVE_WINDOW_FEEDBACK.md) |
 | 1.6.0：SEED・NETWORK／LED・小型UIとガイド | [表示改善](audit/UI_DISPLAY_POLISH.md)・[最終UI](audit/COMPACT_CAPTURE_UI.md) |

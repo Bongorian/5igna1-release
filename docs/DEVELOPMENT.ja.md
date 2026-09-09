@@ -138,3 +138,8 @@ Android 12以降、Camera2プレビュー/JPEGとOpenGL ES 2.0が必要です。
 - `action seed`: SEED field refresh, exact integer input, Apply/Cancel, EVENT SEED and recording guard.
 - `action transport`: model UI, settings order, pixel identity, intermediate resolution, network hold/resume and LED gaps.
 - `action tap`: 写真・動画素材、入力位置、再生／録画、ホーム移動時の終了・保存を確認します。安全なロックを設定していないエミュレーターでは`-e leave lock`で画面ロックも確認できます。DEV領域の`files/tap-fixture.mp4`が必要です。
+
+## LIGHT / GPU — unreleased
+
+- `action light-mode`：モードの即時保存・排他、実表示サイズ、JPEG／RAW／動画の保存サイズ、実カメラの全バイト比較、表示サイズ変更、NETWORK保持、ADVANCED履歴を検証。自身が保存したテスト媒体は削除します。
+- `action gpu-detail`：CFA／DEMOSAIC試作、画素比較、表示転送、表示サイズ上限の測定。試作シェーダーはアプリに含めません。

@@ -80,12 +80,19 @@ internal class QualityDialog(a: MainActivity) {
         scroll.addView(content)
         note(activity.getString(R.string.settings_saved_immediately))
         heading(activity.getString(R.string.settings_modes))
+        mode(R.string.light_mode, R.string.light_hint, draft.lightMode, "light-mode") { checked ->
+            if (!syncing) {
+                draft.lightMode = checked
+                syncModes()
+                persist()
+            }
+        }
         mode(
             R.string.ui_advanced_mode,
             R.string.ui_advanced_settings_hint,
             advanced,
             "advanced-mode",
-            Consumer@{ checked: Boolean? -> advanced = checked!!; saveAdvanced() },
+            Consumer@{ checked: Boolean? -> if (!syncing) { advanced = checked!!; saveAdvanced() } },
         )
         mode(
             R.string.expert_mode,
@@ -93,8 +100,11 @@ internal class QualityDialog(a: MainActivity) {
             draft.expertMode,
             "expert-mode",
             Consumer@{ checked: Boolean? ->
-                draft.expertMode = checked!!
-                if (!syncing) persist()
+                if (!syncing) {
+                    draft.expertMode = checked!!
+                    syncModes()
+                    persist()
+                }
             },
         )
         if (options == null) {
@@ -442,14 +452,24 @@ internal class QualityDialog(a: MainActivity) {
 
     fun saveAdvanced() {
         draft.advancedMode = advanced
+        syncModes()
         persist()
+    }
+
+    private fun syncModes() {
+        syncing = true
+        advanced = draft.advancedMode
+        content?.findViewWithTag<SignalToggle>("advanced-mode")?.isChecked = advanced
+        content?.findViewWithTag<SignalToggle>("expert-mode")?.isChecked = draft.expertMode
+        content?.findViewWithTag<SignalToggle>("light-mode")?.isChecked = draft.lightMode
+        syncing = false
     }
 
     fun refresh() {
         if (loadNote != null)
             loadNote!!.setText(
                 activity!!.getString(
-                    if (draft.expertMode) R.string.expert_load_hint else R.string.load_hint
+                    if (draft.lightMode) R.string.light_load_hint else if (draft.expertMode) R.string.expert_load_hint else R.string.load_hint
                 )
             )
         if (languageField != null)
