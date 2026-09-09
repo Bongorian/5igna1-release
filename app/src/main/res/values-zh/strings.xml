@@ -321,7 +321,7 @@
     <string name="live_loop">循环</string>
     <string name="live_ping_pong">往返</string>
     <string name="live_step">固定间隔更新</string>
-    <string name="live_editor_hint">设置此刻故障如何随时间变化。时间操作作用于故障，摄像画面持续更新。</string>
+    <string name="live_editor_hint">设置此刻FAULT的变化。暂停与倒放作用于FAULT时间；实验功能TIME ECHO回放过去的摄像画面。</string>
     <string name="live_enabled">LIVE</string>
     <string name="live_style">变化形态</string>
     <string name="live_clock">时间推进方式</string>
@@ -417,7 +417,7 @@
     <string name="guide_level">练习LEVEL · %1$d%%</string>
     <string name="settings_saved_immediately">选择的设置会立即保存。</string>
     <string name="experimental_signals">实验性设备联动</string>
-    <string name="experimental_signals_hint">启用每个效果的输入灵敏度，以及运动模糊、热噪声和拖影。关闭时保留调整值并旁路新增功能。额外采样可能增加处理负载。</string>
+    <string name="experimental_signals_hint">启用每个效果的输入灵敏度、运动模糊、热噪声、拖影，以及LIVE设置中的可选TIME ECHO。关闭时保留调整值并旁路新增功能。额外采样与画面历史会增加负载。</string>
     <string name="input_sources">设备输入</string>
     <string name="input_sensitivity_hint">开启LIVE后响应。0断开输入，1为标准，最高4倍。AUTO恢复原有联动（未连接的输入为0）。全局输入开关和权限仍然优先。</string>
     <string name="input_motion">设备运动</string>
@@ -437,4 +437,13 @@
     <string name="fault_description_16">根据可用读出时间沿列延伸高光，模拟拖影，不代表此设备实际发生了CCD拖影。</string>
     <string name="resolution_audio">分辨率联动音频（实验）</string>
     <string name="resolution_audio_hint">根据视频分辨率降低AAC录音质量。QVGA：8 kHz／24 kbps；VGA：16 kHz／48 kbps；HD：32 kHz／64 kbps；全高清：48 kHz／128 kbps；更高：48 kHz／192 kbps。参数可能根据设备支持范围调整。仅在开启音频时生效，不适用于RAW视频。</string>
+    <string name="resolution_hold">长按选择分辨率</string>
+    <string name="echo_enabled">TIME ECHO · 实验功能</string>
+    <string name="echo_hint">需开启实验功能与LIVE。每12秒回放过去的2秒画面，也可按ECHO触发。历史画面最高480px、4fps。FAULT与音频保持当前状态。仅限JPEG／MP4。开启后请等待历史画面积累。</string>
+    <string name="echo_delay">%1$d秒前</string>
+    <string name="echo_point">回放起点</string>
+    <string name="echo_trigger">ECHO · 回放过去画面</string>
+    <string name="echo_memory">TIME ECHO已停止：无法分配历史画面内存</string>
+    <string name="echo_wait">ECHO · 正在积累历史画面…</string>
+    <string name="echo_playing">ECHO · 正在回放过去画面</string>
 </resources>

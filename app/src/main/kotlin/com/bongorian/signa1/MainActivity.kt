@@ -82,6 +82,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     var faultStatePanel: FaultStateDialog? = null
     var shownLiveFrame: EffectState.Frame? = null
     var liveEditor: FaultDialog.Editor? = null
+    lateinit var echoButton: TextView
     lateinit var liveTransport: LinearLayout
     lateinit var liveHold: TextView
     var faultConfig: FaultConfig = FaultConfig.defaults()
@@ -402,6 +403,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun renderEffects() {
+        echoButton.visibility = if (settings.experimentalSignals && faultConfig.enabled &&
+            faultConfig.echo.enabled && !rawOriginal() && (videoMode && !settings.rawVideo ||
+            !videoMode && settings.photoFormat == 0) && effectPreview == null && liveEditor == null)
+            View.VISIBLE else View.GONE
         liveTransport.setVisibility(
             if (
                 faultConfig.enabled && !rawOriginal() && effectPreview == null && liveEditor == null
@@ -467,6 +472,13 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun liveFrame(frame: EffectState.Frame) {
+        if (echoButton.visibility == View.VISIBLE) {
+            val echo = engine.timeEcho
+            echoButton.setText(if (echo.failed) R.string.echo_memory else if (echo.replaying)
+                R.string.echo_playing else if (echo.ready) R.string.echo_trigger else R.string.echo_wait)
+            echoButton.isEnabled = echo.ready && !echo.replaying && !echo.failed
+            echoButton.setTextColor(if (echo.replaying) LIME else MUTED)
+        }
         shownLiveFrame = frame
         if (effectEditorOwner is EffectDialog) {
             val controls = (effectEditorOwner as EffectDialog).advancedControls

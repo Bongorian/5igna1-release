@@ -208,16 +208,20 @@ internal class EffectChain(private val source: String, private val supportsExter
         check(GLES20.glGetError() == GLES20.GL_NO_ERROR) { "Fault GPU draw failed" }
     }
 
-    fun release() {
+    fun releaseBuffers() {
         GLES20.glDeleteTextures(2, textures, 0)
         GLES20.glDeleteFramebuffers(2, fbos, 0)
         textures.fill(0)
         fbos.fill(0)
         bufferCount = 0
-        for (program in programs.values) GLES20.glDeleteProgram(program.id)
-        programs.clear()
         height = 0
         width = height
+    }
+
+    fun release() {
+        releaseBuffers()
+        for (program in programs.values) GLES20.glDeleteProgram(program.id)
+        programs.clear()
     }
 
     companion object {

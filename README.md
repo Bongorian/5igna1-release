@@ -104,3 +104,5 @@ GPS tagging starts off. Audio recording is optional. DNG needs a RAW developer, 
 The development build includes conservative device recommendations and automatic preview workload reduction. [Heat and workload](docs/PERFORMANCE.md).
 
 Settings groups ADVANCED and EXPERT under Modes. ADVANCED exposes internal values; EXPERT removes app-level preview workload and cooling limits for maximum available speed. [Performance modes](docs/PERFORMANCE.md).
+
+Development additions: hold PHOTO/VIDEO for resolution; experimental [TIME ECHO](docs/LIVE_FAULT.md#time-echo-experimental) inserts past camera frames using the current FAULT state.

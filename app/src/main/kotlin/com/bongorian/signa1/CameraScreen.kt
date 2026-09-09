@@ -297,6 +297,10 @@ internal fun MainActivity.buildUi() {
     tools.addView(videoTab, LinearLayout.LayoutParams(dp(60f), dp(40f)))
     photoTab.setOnClickListener(OnClickListener@{ v: View? -> setVideo(false) })
     videoTab.setOnClickListener(OnClickListener@{ v: View? -> setVideo(true) })
+    photoTab.setOnLongClickListener { ResolutionPicker.show(this, false); true }
+    videoTab.setOnLongClickListener { ResolutionPicker.show(this, true); true }
+    photoTab.tooltipText = getString(R.string.resolution_hold)
+    videoTab.tooltipText = getString(R.string.resolution_hold)
     tools.addView(Space(this), LinearLayout.LayoutParams(dp(8f), 1))
     val live = row()
     live.setBackground(bg(PANEL, 0))
@@ -347,6 +351,10 @@ internal fun MainActivity.buildUi() {
         }
     )
     rewind.setOnClickListener(OnClickListener@{ v: View? -> engine.rewindFaults() })
+    echoButton = button(getString(R.string.echo_trigger))
+    echoButton.contentDescription = getString(R.string.echo_hint)
+    echoButton.setOnClickListener { engine.triggerEcho() }
+    root.addView(echoButton, LinearLayout.LayoutParams(-1, dp(40f)))
     val controls = row()
     controls.setGravity(Gravity.CENTER)
     root.addView(controls, LinearLayout.LayoutParams(-1, dp(88f)))

@@ -33,12 +33,15 @@ internal object FaultPreferences {
                     60f / p.getFloat("live.tempo", 90f) / p.getFloat("live.division", 4f),
                 ),
             ),
+            echo = EchoConfig(p.getBoolean("live.echo", false), p.getInt("live.echo.delay", 4).coerceIn(2, 6)),
         )
     }
 
     fun save(p: SharedPreferences, c: FaultConfig) {
         val a = c.performance
         p.edit()
+            .putBoolean("live.echo", c.echo.enabled)
+            .putInt("live.echo.delay", c.echo.delaySeconds)
             .putFloat("live.periodSeconds", a.periodSeconds)
             .putFloat("live.stepSeconds", a.stepSeconds)
             .putInt("live.style", a.style)

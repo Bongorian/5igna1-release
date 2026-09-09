@@ -321,7 +321,7 @@
     <string name="live_loop">ループ</string>
     <string name="live_ping_pong">往復</string>
     <string name="live_step">一定間隔で更新</string>
-    <string name="live_editor_hint">今この瞬間のFAULTがどう変化するかを設定します。時間操作はFAULTに作用し、カメラ映像は進み続けます。</string>
+    <string name="live_editor_hint">今この瞬間のFAULTの変化を設定します。一時停止・逆再生はFAULTの時間に作用します。実験機能のTIME ECHOは過去のカメラ映像を再生します。</string>
     <string name="live_enabled">LIVE</string>
     <string name="live_style">変化の形</string>
     <string name="live_clock">時間の進み方</string>
@@ -417,7 +417,7 @@
     <string name="guide_level">練習用LEVEL · %1$d%%</string>
     <string name="settings_saved_immediately">選んだ設定はすぐに保存されます。</string>
     <string name="experimental_signals">実験的な端末連動</string>
-    <string name="experimental_signals_hint">FAULT別の入力感度と、ブレ・熱雑音・スミアを有効にします。OFFでも調整値を保持し、追加機能の作用だけを止めます。画素の参照回数が増えるため処理負荷が上がる場合があります。</string>
+    <string name="experimental_signals_hint">FAULT別の入力感度、ブレ・熱雑音・スミアと、LIVE設定のTIME ECHOを利用可能にします。OFFでも調整値は保持します。追加の画素参照や映像履歴により処理負荷が上がります。</string>
     <string name="input_sources">端末入力</string>
     <string name="input_sensitivity_hint">LIVEをONにすると反応します。0は入力を切断、1は標準、最大4倍。AUTOは既存の連動へ戻します（未接続の入力は0）。全体の入力スイッチと権限は引き続き優先します。</string>
     <string name="input_motion">端末の動き</string>
@@ -437,4 +437,13 @@
     <string name="fault_description_16">取得できる読み出し時間に応じて明部を列方向へ伸ばすスミア風の表現。この端末にCCDのスミアが発生しているという意味ではありません。</string>
     <string name="resolution_audio">解像度連動オーディオ（実験）</string>
     <string name="resolution_audio_hint">動画解像度に応じてAAC録音の品質を下げます。QVGA：8 kHz／24 kbps、VGA：16 kHz／48 kbps、HD：32 kHz／64 kbps、フルHD：48 kHz／128 kbps、それ以上：48 kHz／192 kbps。端末の対応範囲により調整されます。音声ON時のみ有効で、RAW動画には適用されません。</string>
+    <string name="resolution_hold">長押しで解像度を選択</string>
+    <string name="echo_enabled">TIME ECHO · 実験機能</string>
+    <string name="echo_hint">実験機能とLIVEをONにすると、12秒ごとに過去の映像が2秒間割り込みます。ECHOボタンでも発動。履歴は最大480px・4fps。FAULTと音声は現在のままです。JPEG／MP4専用。有効化直後は履歴がたまるまでお待ちください。</string>
+    <string name="echo_delay">%1$d秒前</string>
+    <string name="echo_point">再生を始める過去の時点</string>
+    <string name="echo_trigger">ECHO · 過去の映像を再生</string>
+    <string name="echo_memory">TIME ECHO停止：履歴用メモリを確保できません</string>
+    <string name="echo_wait">ECHO · 履歴をためています…</string>
+    <string name="echo_playing">ECHO · 過去の映像を再生中</string>
 </resources>

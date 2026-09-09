@@ -108,6 +108,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     var encoder: EGLSurface? = EGL14.EGL_NO_SURFACE
     var eglConfig: EGLConfig? = null
     var previewChain: EffectChain? = null
+    val timeEcho = TimeEcho()
+    fun triggerEcho() { gl.post { timeEcho.trigger() } }
     var blitChain: EffectChain? = null
     val presentedFrames: FrameHistory<SignalBuffer> =
         FrameHistory<SignalBuffer>(3, Supplier { SignalBuffer() })
@@ -672,6 +674,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             current(window)
             for (buffer in presentedFrames.values()) buffer.release()
             encoderScratch.release()
+            previewChain?.releaseBuffers()
+            timeEcho.release()
             if (cameraTexture != null) {
                 cameraTexture!!.setOnFrameAvailableListener(null)
                 cameraTexture!!.release()
@@ -1392,11 +1396,33 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                     input,
                     previewFaultConfig!!,
                 )
+            val echoConfig = activeFaultConfig()
+            val echoEnabled = settings.experimentalSignals && echoConfig.enabled && echoConfig.echo.enabled &&
+                !rawVideoMode() && (videoMode || settings.photoFormat == 0)
+            val echo = if (echoEnabled) try {
+                timeEcho.sample(timestamp, echoConfig.echo, signalW, signalH) { buffer ->
+                    previewChain!!.render(texture, true, matrix, cleanFrame, buffer.width, buffer.height,
+                        signalW, signalH, buffer.fbo, buffer.texture)
+                }
+            } catch (error: Exception) {
+                timeEcho.fail()
+                status(context.getString(R.string.echo_memory))
+                null
+            } catch (error: OutOfMemoryError) {
+                timeEcho.fail()
+                status(context.getString(R.string.echo_memory))
+                null
+            } else {
+                timeEcho.disable()
+                null
+            }
             val show = adaptiveLoad.due(lastFrameNs) || !frameSeen
             if (show || recording && !rawVideoMode()) {
                 val renderStarted = System.nanoTime()
-                val state =
-                    faultFrame((if (previewEffects == null) effectState else previewEffects)!!)
+                val currentState = faultFrame((if (previewEffects == null) effectState else previewEffects)!!)
+                val state = if (echo == null) currentState else EffectState.Frame(currentState.ids(),
+                    currentState.amount, currentState.parameters, echo.cameraNs, currentState.time,
+                    currentState.nodes, currentState.experimental)
                 var didRender = false
                 val slot = if (show && settings.advancedMode) presentedFrames.acquire() else null
                 val rendered: SignalBuffer = (if (slot == null) encoderScratch else slot.value)!!
@@ -1404,14 +1430,14 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                     try {
                         rendered.allocate(signalW, signalH)
                         previewChain!!.render(
-                            texture,
-                            true,
-                            matrix,
+                            echo?.buffer?.texture ?: texture,
+                            echo == null,
+                            if (echo == null) matrix else IDENTITY,
                             state,
                             signalW,
                             signalH,
-                            signalW,
-                            signalH,
+                            echo?.buffer?.width ?: signalW,
+                            echo?.buffer?.height ?: signalH,
                             rendered.fbo,
                             rendered.texture,
                         )
@@ -1962,6 +1988,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     }
 
     fun closeCamera() {
+        timeEcho.reset()
         healthySinceMs = 0
         if (rawProbe != null) {
             rawProbe!!.stop()
@@ -2036,6 +2063,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 current(window)
                 for (buffer in presentedFrames.values()) buffer.release()
                 encoderScratch.release()
+                timeEcho.release()
                 if (previewChain != null) previewChain!!.release()
                 if (blitChain != null) blitChain!!.release()
                 blitChain = null

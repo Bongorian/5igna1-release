@@ -35,3 +35,11 @@ Timing is specified directly in seconds. Earlier tempo/beat settings migrate to 
 Unavailable measurements do not invent readings. The expanded section shows input availability and measured values. Temperature and CPU are proxies, not direct measurements of an imaginary broken sensor or network link. Audio permission is requested only when applying enabled audio coupling; denial leaves other sources usable. During audio recording, the existing recorder supplies amplitude instead of opening a second microphone. Input ownership ends when the camera leaves the foreground.
 
 Preview and ordinary video share the same processed image for each camera timestamp. JPG snapshots the current processed image; ADVANCED ON pins the displayed image; RAW uses a separate exposure and the applicable sensor-domain faults. Original RAW video ZIPs remain unprocessed. [Formats](FORMATS.md).
+
+## TIME ECHO (experimental)
+
+Enable **Experimental features** in Settings, then enable **TIME ECHO** in the LIVE editor and Apply. With LIVE on, it automatically inserts a two-second replay every 12 seconds; the separate **ECHO** camera button triggers a replay manually. Choose a starting point 2, 4 or 6 seconds in the past. Allow history to accumulate after enabling or changing cameras. A manual replay restarts the 12-second automatic interval; pressing during a replay does not extend it.
+
+Only the camera image comes from the past. The selected FAULT chain, its current timeline, and current measured inputs process each historical image anew. FAULT pause/reverse do not pause/reverse the replay clock. Video audio continues in the present. JPEG and ordinary MP4 include the replay; RAW photos and RAW ZIP bypass it.
+
+History is held only in memory, at up to 480 pixels on the long side and up to 4 frames per second, then scaled to the chosen output size. At most 33 frames use under 30 MiB of RGBA texture memory. History clears when leaving the camera, reconfiguring capture or disabling the feature; allocation failure disables replay for that session. The feature starts off, respects the Experimental switch and retains its editor settings with Apply/Cancel semantics.

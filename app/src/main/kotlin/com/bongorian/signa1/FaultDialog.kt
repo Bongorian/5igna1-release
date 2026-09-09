@@ -77,6 +77,7 @@ internal object FaultDialog {
         var sources: Boolean = false
         var sensitivity: Float
         var mains: Int
+        var echo: EchoConfig
         var performance: LivePerformance
         var dialog: Dialog? = null
         var child: Dialog? = null
@@ -95,6 +96,7 @@ internal object FaultDialog {
                 sensitivity,
                 mains,
                 performance,
+                echo = echo,
             )
         }
 
@@ -159,6 +161,7 @@ internal object FaultDialog {
             sensitivity = c.sensitivity
             mains = c.mains
             performance = c.performance
+            echo = c.echo
         }
 
         fun toggle(label: Int, value: Boolean, changed: (Boolean) -> Unit) {
@@ -300,6 +303,22 @@ internal object FaultDialog {
                 OnClickListener@{ v: View? -> if (enabled) a.engine.hitFaults() }
             )
             reset.setOnClickListener(OnClickListener@{ v: View? -> a.engine.rewindFaults() })
+            if (a.settings.experimentalSignals) {
+                toggle(R.string.echo_enabled, echo.enabled) { echo = echo.copy(enabled = it) }
+                val echoHint = a.text(a.getString(R.string.echo_hint), 11, MainActivity.MUTED)
+                body!!.addView(echoHint)
+                val echoDelay = a.button(a.getString(R.string.echo_delay, echo.delaySeconds))
+                body!!.addView(echoDelay, LinearLayout.LayoutParams(-1, a.dp(44f)))
+                echoDelay.setOnClickListener {
+                    child = SignalSheet.pick(a, a.getString(R.string.echo_point),
+                        arrayOf(2, 4, 6).map { a.getString(R.string.echo_delay, it) }.toTypedArray(),
+                        arrayOf(2, 4, 6).indexOf(echo.delaySeconds).coerceAtLeast(0)) { n ->
+                        echo = echo.copy(delaySeconds = arrayOf(2, 4, 6)[n])
+                        echoDelay.text = a.getString(R.string.echo_delay, echo.delaySeconds)
+                        preview()
+                    }
+                }
+            }
             val input =
                 SignalControls.field(
                     a,

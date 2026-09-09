@@ -180,7 +180,10 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "pixel-preview") {
+            if (action == "raw-echo") {
+                checkRawEcho()
+                result.putString("result", "PASS full-chain JPEG/RAW switching, resolution long-press, TIME ECHO current FAULT / past camera timestamp, automatic and manual bursts, RAW bypass, JPEG/DNG/MP4 saving and pixel-exact pinned echo JPEG")
+            } else if (action == "pixel-preview") {
                 checkPixelPreview()
                 result.putString(
                     "result",
@@ -2006,7 +2009,103 @@ class DeviceChecks : Instrumentation() {
     }
 
     @Throws(Exception::class)
-    internal fun checkCaptureContract(experimental: Boolean = false) {
+    internal fun checkRawEcho() {
+        val a = activity!!
+        check(a.cameraOptions!!.raws.isNotEmpty()) { "RAW camera required" }
+        for (advanced in listOf(false, true)) for (format in listOf(0, 2, 0, 2)) {
+            val revision = a.engine.generation
+            runOnMainSync {
+                a.videoMode = false
+                a.commitEffects(EffectState.defaults().chain(-1).amount(.8f))
+                a.applyFaultConfig(FaultConfig(true, true, false, true, true, true, .5f, 50))
+                a.applySettings(CaptureSettings(a.settings).apply {
+                    photoFormat = format
+                    photoSize = "recommended"
+                    advancedMode = advanced
+                    experimentalSignals = advanced
+                    expertMode = false
+                })
+            }
+            await("all-chain format $format advanced $advanced", {
+                a.engine.generation > revision && a.engine.frameSeen && a.ready
+            }, 30000)
+            SystemClock.sleep(750)
+            check(a.settings.photoFormat == format)
+        }
+        runOnMainSync { check(a.photoTab.performLongClick()) }
+        SystemClock.sleep(400)
+        check(uiAutomation.rootInActiveWindow.findAccessibilityNodeInfosByText(
+            a.getString(R.string.ui_photo_resolution)).isNotEmpty()) { "Photo long-press picker" }
+        sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK)
+        val modeBefore = a.videoMode
+        runOnMainSync { check(a.videoTab.performLongClick()) }
+        SystemClock.sleep(400)
+        check(uiAutomation.rootInActiveWindow.findAccessibilityNodeInfosByText(
+            a.getString(if (a.settings.rawVideo) R.string.ui_raw_video_resolution else R.string.ui_video_resolution_fps)).isNotEmpty())
+        sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK)
+        check(a.videoMode == modeBefore) { "Long press changed mode" }
+        val revision = a.engine.generation
+        runOnMainSync {
+            a.applySettings(CaptureSettings(a.settings).apply { photoFormat = 0; advancedMode = false; experimentalSignals = true })
+            a.applyFaultConfig(FaultConfig(true, false, false, false, false, false, .5f, 50,
+                echo = EchoConfig(true, 2)))
+        }
+        await("echo camera", { a.engine.generation > revision && a.ready }, 30000)
+        SystemClock.sleep(3000)
+        val before = a.engine.timeEcho.bursts
+        runOnMainSync { a.echoButton.performClick() }
+        await("manual echo", { a.engine.timeEcho.bursts > before && a.engine.timeEcho.replaying }, 5000)
+        val evaluated = java.util.concurrent.CountDownLatch(1)
+        var evaluationError: Throwable? = null
+        a.engine.gl.post {
+            try {
+                val shown = a.engine.encoderScratch.frame!!
+                check(a.engine.lastFrameNs - shown.cameraNs >= 1_750_000_000L) { "Expected past camera image" }
+                check(kotlin.math.abs(shown.time - a.engine.faultFrame(a.effectState).time) < .1) { "FAULT time rewound" }
+            } catch (error: Throwable) { evaluationError = error }
+            finally { evaluated.countDown() }
+        }
+        check(evaluated.await(5, java.util.concurrent.TimeUnit.SECONDS))
+        evaluationError?.let { throw AssertionError("Echo temporal contract", it) }
+        val previousPhoto = a.latest
+        a.engine.photo(a.engine.previewAcknowledged())
+        await("echo JPEG save", { a.latest != previousPhoto && !a.engine.photoBusy }, 30000)
+        languageScreenshot("time-echo-camera")
+        await("echo ends", { !a.engine.timeEcho.replaying }, 5000)
+        await("automatic echo", { a.engine.timeEcho.bursts > before + 1 }, 16000)
+        runOnMainSync { FaultDialog.show(a) }
+        SystemClock.sleep(500)
+        languageScreenshot("time-echo-editor")
+        runOnMainSync { a.liveEditor!!.echo = EchoConfig(false, 6); a.liveEditor!!.preview() }
+        sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK)
+        check(a.faultConfig.echo == EchoConfig(true, 2)) { "Echo cancel mutated committed state" }
+        val rawRevision = a.engine.generation
+        runOnMainSync { a.applySettings(CaptureSettings(a.settings).apply { photoFormat = 2 }) }
+        await("echo RAW bypass", { a.engine.generation > rawRevision && a.ready }, 30000)
+        check(!a.engine.timeEcho.replaying && a.echoButton.visibility == View.GONE)
+        val beforeRaw = a.latest
+        a.engine.photo(a.engine.previewAcknowledged())
+        await("full chain RAW save", { a.latest != beforeRaw && !a.engine.photoBusy }, 30000)
+        val videoRevision = a.engine.generation
+        runOnMainSync {
+            a.videoMode = true
+            a.applySettings(CaptureSettings(a.settings).apply { rawVideo = false; videoKey = "recommended" })
+        }
+        await("echo video ready", { a.engine.generation > videoRevision && a.ready }, 30000)
+        SystemClock.sleep(2500)
+        a.engine.toggleVideo(false)
+        await("echo video recording", { a.engine.recording }, 15000)
+        val videoBursts = a.engine.timeEcho.bursts
+        runOnMainSync { a.echoButton.performClick() }
+        await("echo during MP4", { a.engine.timeEcho.bursts > videoBursts && a.engine.timeEcho.replaying }, 5000)
+        SystemClock.sleep(2300)
+        val beforeVideo = a.latest
+        a.engine.toggleVideo(false)
+        await("echo MP4 saved", { !a.engine.recording && a.latest != beforeVideo }, 30000)
+        checkCaptureContract(true, true)
+    }
+
+    internal fun checkCaptureContract(experimental: Boolean = false, echo: Boolean = false) {
         val settings = CaptureSettings(activity!!.settings)
         settings.advancedMode = true
         settings.photoFormat = 0
@@ -2038,9 +2137,16 @@ class DeviceChecks : Instrumentation() {
             20000,
         )
         SystemClock.sleep(500)
+        if (echo) {
+            await("echo history for pinned capture", { activity!!.engine.timeEcho.ready }, 8000)
+            activity!!.engine.triggerEcho()
+            await("echo pinned capture", { activity!!.engine.timeEcho.replaying }, 5000)
+            SystemClock.sleep(150)
+        }
         val displayed = activity!!.engine.presentedFrames.reserve()
         if (displayed == null) throw AssertionError("No acknowledged image")
         val capturedCameraNs = displayed!!.value.frame!!.cameraNs
+        if (echo) check(activity!!.engine.lastFrameNs - capturedCameraNs >= 1_750_000_000L)
         val reference = arrayOfNulls<Bitmap>(1)
         val problem = arrayOfNulls<Throwable>(1)
         val read = java.util.concurrent.CountDownLatch(1)

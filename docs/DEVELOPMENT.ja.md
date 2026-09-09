@@ -130,3 +130,5 @@ Android 12以降、Camera2プレビュー/JPEGとOpenGL ES 2.0が必要です。
 - 最大解像度・RAW・多段エフェクトの負荷や、同時出力できる組み合わせは端末に依存します。対応OSを満たしていても全機種での動作保証ではありません。
 
 カメラの組み合わせは [CameraDeviceの公式仕様](https://developer.android.com/reference/android/hardware/camera2/CameraDevice)、ビルド要件は [AGP 8.10の公式仕様](https://developer.android.com/build/releases/past-releases/agp-8-10-0-release-notes)を参照してください。
+
+`raw-echo` は接続端末でTIME ECHOとRAW切り替えを検証する追加のInstrumentationアクションです。実際のJPEG・DNG・MP4を保存します。

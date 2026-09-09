@@ -25,6 +25,7 @@ Replace DEVICE with the intended emulator or device. Camera tests save actual me
 | `tutorial`, `tutorial-permission` | Interactive guide, locale/layout, camera suspension and permission order |
 | `video` | Short actual MP4, using `-e resolutionAudio true` to exercise linked audio |
 | `raw`, `raw-video` | Device-dependent DNG/sequence integration |
+| `raw-echo` | Full-chain RAW transitions, mode-tab resolution shortcuts, experimental replay, historical JPEG/MP4 capture and RAW bypass |
 
 Video parameters include `videoKey` (an advertised `WIDTHxHEIGHT@FPS`), `seconds`, `sound`, `bitrate`, `codec`, `resolutionAudio` and `advanced`. Test both audio OFF and linked/ordinary audio on supported sizes. `tools/check-media.py` checks decoded media and timestamps; use ffprobe to inspect audio sample rate. `tools/check-dng.py` validates DNG through LibRaw. Full procedure and Wi-Fi ADB setup are in the Japanese edition.
 

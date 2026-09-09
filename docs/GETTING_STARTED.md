@@ -17,3 +17,5 @@ The shuffle icon creates a combination of 2–5 faults with random controls. Hol
 For a different recording representation, explore [formats](FORMATS.md). RAW is a separate exposure and cannot exactly match the RGB preview. For starting combinations, see [recipes](RECIPES.md).
 
 Use LIVE to set how the current fault state evolves, with second-based periods and update intervals. [Time controls](LIVE_FAULT.md). Enable [ADVANCED MODE](ADVANCED_MODE.md) in Settings to directly fix model values.
+
+Hold **PHOTO** or **VIDEO** to open that mode’s resolution choices directly. The shortcut respects JPEG/RAW and MP4/RAW ZIP formats, saves the selection immediately, and leaves the active mode unchanged.

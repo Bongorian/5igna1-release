@@ -17,3 +17,5 @@
 [保存形式](FORMATS.ja.md) · [表現の出発点](RECIPES.ja.md)
 
 今のFAULTがどう変化するかはLIVEで設定します。周期・更新間隔は秒単位です。[時間変化の操作](LIVE_FAULT.ja.md)。内部値を直接固定するには、設定で [ADVANCED MODE](ADVANCED_MODE.ja.md) を一括ONにします。
+
+**写真**／**動画**ボタンを長押しすると、そのモードの解像度設定が直接開きます。JPEG／RAW、MP4／RAW ZIPの選択に対応し、決定すると即時保存します。撮影モード自体は切り替わりません。

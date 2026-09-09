@@ -104,3 +104,5 @@ JDK 17とAndroid SDK 36 / Build Tools 35.0.0でビルドできます。
 開発版には端末に合わせた推奨設定と、プレビュー負荷の自動調整があります。[発熱・負荷対策](docs/PERFORMANCE.ja.md)。
 
 設定の「モード」にADVANCEDとEXPERTをまとめています。ADVANCEDは内部値の表示と表示フレーム保持、EXPERTはアプリの更新頻度制限・冷却休止を外して速度を優先するモードです。[動作モード](docs/PERFORMANCE.ja.md)。
+
+開発版の追加機能：写真／動画の長押しで解像度設定、実験機能の[TIME ECHO](docs/LIVE_FAULT.ja.md)で過去の映像に現在のFAULTを適用して割り込み再生できます。

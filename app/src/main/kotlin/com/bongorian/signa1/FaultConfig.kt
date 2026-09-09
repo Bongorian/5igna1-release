@@ -13,6 +13,7 @@ constructor(
     mains: Int,
     val performance: LivePerformance = LivePerformance.defaults(),
     val experimental: Boolean = false,
+    val echo: EchoConfig = EchoConfig(),
 ) {
     val sensitivity: Float
     val mains: Int
@@ -34,6 +35,7 @@ constructor(
             mains,
             performance,
             experimental,
+            echo,
         )
     }
 
@@ -49,15 +51,16 @@ constructor(
             mains,
             performance,
             experimental,
+            echo,
         )
     }
 
     fun performance(value: LivePerformance): FaultConfig {
-        return FaultConfig(enabled, motion, audio, timing, thermal, cpu, sensitivity, mains, value, experimental)
+        return FaultConfig(enabled, motion, audio, timing, thermal, cpu, sensitivity, mains, value, experimental, echo)
     }
 
     fun experimental(value: Boolean): FaultConfig =
-        if (value == experimental) this else FaultConfig(enabled, motion, audio, timing, thermal, cpu, sensitivity, mains, performance, value)
+        if (value == experimental) this else FaultConfig(enabled, motion, audio, timing, thermal, cpu, sensitivity, mains, performance, value, echo)
 
     companion object {
         fun defaults(): FaultConfig {

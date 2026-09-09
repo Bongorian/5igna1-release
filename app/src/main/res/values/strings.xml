@@ -321,7 +321,7 @@
     <string name="live_loop">Loop</string>
     <string name="live_ping_pong">Ping-pong</string>
     <string name="live_step">Fixed update interval</string>
-    <string name="live_editor_hint">Set how faults evolve at this moment. These controls change fault time while the camera image continues.</string>
+    <string name="live_editor_hint">Set how faults evolve now. Pause and reverse affect FAULT time; experimental TIME ECHO replays camera images.</string>
     <string name="live_enabled">LIVE</string>
     <string name="live_style">Variation pattern</string>
     <string name="live_clock">Time progression</string>
@@ -417,7 +417,7 @@
     <string name="guide_level">PRACTICE LEVEL · %1$d%%</string>
     <string name="settings_saved_immediately">Selections are saved immediately.</string>
     <string name="experimental_signals">Experimental device coupling</string>
-    <string name="experimental_signals_hint">Enables per-effect input sensitivity and motion blur, thermal noise and smear. OFF preserves adjustments and bypasses these additions. Extra sampling can increase processing load.</string>
+    <string name="experimental_signals_hint">Enables per-effect input sensitivity, motion blur, thermal noise, smear and optional TIME ECHO in LIVE settings. OFF preserves adjustments and bypasses these additions. Extra sampling and frame history increase load.</string>
     <string name="input_sources">DEVICE INPUTS</string>
     <string name="input_sensitivity_hint">LIVE must be ON. 0 disconnects this input; 1 is standard; up to 4 amplifies it. AUTO restores the existing route (0 for unused sources). Global input switches and permissions still apply.</string>
     <string name="input_motion">Motion</string>
@@ -437,4 +437,13 @@
     <string name="fault_description_16">Highlight trails along columns, driven by available readout timing. A smear-like simulation, not a claim that this sensor has CCD smear.</string>
     <string name="resolution_audio">Resolution-linked audio (experimental)</string>
     <string name="resolution_audio_hint">Lowers AAC recording quality with video resolution. QVGA: 8 kHz / 24 kbps; VGA: 16 kHz / 48 kbps; HD: 32 kHz / 64 kbps; Full HD: 48 kHz / 128 kbps; higher: 48 kHz / 192 kbps. Device support may adjust these values. Requires audio ON; does not affect RAW video.</string>
+    <string name="resolution_hold">Hold to choose resolution</string>
+    <string name="echo_enabled">TIME ECHO · experimental</string>
+    <string name="echo_hint">Requires Experimental features and LIVE. Every 12 seconds, replay 2 seconds from the past, or press ECHO. History: up to 480 px, 4 fps. Current FAULT and audio continue. JPEG / MP4 only. Wait for history after enabling.</string>
+    <string name="echo_delay">%1$d seconds ago</string>
+    <string name="echo_point">Replay starting point</string>
+    <string name="echo_trigger">ECHO · replay past frames</string>
+    <string name="echo_memory">TIME ECHO stopped: history memory unavailable</string>
+    <string name="echo_wait">ECHO · gathering history…</string>
+    <string name="echo_playing">ECHO · replaying past frames</string>
 </resources>
