@@ -51,3 +51,8 @@
 ## Owner direction — GitHub releases, 2026-09-09
 
 - The owner explicitly authorized publishing current main as 1.1.0 / code 9, the tutorial branch as 1.2.0 / code 10, and the optimized Kotlin branch as 1.3.0 / code 11. Publish verified GitHub APKs using the existing distribution key, with 1.3.0 as latest. This supersedes earlier development-only restrictions for these GitHub releases. Preserve existing tags, signing keys and submitted store artifacts; this request does not change store submissions.
+
+## Owner direction — Play 1.3.0 update, 2026-09-09
+
+- The owner explicitly requested distributing 1.3.0 on Play while skipping 1.2.0. The existing Alpha track accepted 1.3.0 / code 11 for review, using the existing Play upload key and unchanged tester/country settings. Managed publishing remains on; approval and the subsequent publication action are pending. See docs/PLAY_1_3_0.md.
+- Preserve the submitted code-11 AAB and prior artifacts. Any changed application code in a future submission needs a higher versionCode.
