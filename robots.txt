@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bongorian.github.io/5igna1-release/sitemap.xml

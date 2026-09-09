@@ -1,32 +1,31 @@
-<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>5igna1 プライバシーポリシー</title><style>body{max-width:780px;margin:50px auto;padding:0 24px;font:17px/1.85 system-ui,sans-serif;color:#202520;background:#fafcf7}h1{line-height:1.25}pre{white-space:pre-wrap;font:inherit}a{color:#365b12}</style><main><nav><a href="index.html">日本語</a> · <a href="en.html">English</a> · <a href="zh.html">简体中文</a></nav><h1>5igna1</h1><pre>5igna1 プライバシーポリシー
-最終更新日: 2026年9月8日
-
-提供者: Bongorian
-お問い合わせ: dennosamurai@gmail.com
-対象アプリ: 5igna1（com.bongorian.signa1）
-
-1. 端末内での処理
-5igna1は写真・動画に撮像系の故障を模したエフェクトを適用するカメラアプリです。画像処理と保存は端末内で行います。アプリ独自のサーバー、広告、解析SDK、アカウント登録機能はありません。開発者に写真、動画、音声、位置情報を自動送信しません。
-
-2. カメラ・マイク
-カメラ権限はプレビューと撮影に使用します。音声ONの動画録画、または任意のLIVE音量入力を有効にするときにマイク権限を求めます。音声OFFで無音録画できます。録画はアプリを前面に置いて行い、アプリを離れると停止します。
-
-LIVE FAULTは任意の動き・音量・カメラ時間・温度・処理負荷の入力で故障状態を変化させます。LIVE用のマイク入力は端末内で音量へ変換し、動画の音声記録をONにしない限り音声ファイルとして保存しません。生成されたFAULT状態を撮影メタデータへ含める場合があります。LIVEとは別に、カメラ動作中は温度状態・温度余裕・バッテリー温度・メモリ容量・描画時間を読み、負荷の軽減に使います。これらは端末内で処理し、開発者へ送信しません。
-
-3. 任意の位置情報
-位置情報の保存は初期状態でOFFです。設定でONにし、端末の権限を許可した場合、取得できた撮影位置を写真のGPSメタデータと動画の位置タグに書き込みます。位置取得はアプリを使用している間だけ行います。位置情報は端末OSのサービスを利用するため、そのサービスにはOS提供者の設定・ポリシーが適用されます。
-
-4. 保存データと他のアプリ
-写真はDCIM/5igna1、動画はDCIM/5igna1に保存します。写真には日時、端末機種、露出、ISO、エフェクト内容などのメタデータを記録します。設定をONにした場合は撮影位置も含まれます。写真と動画はアプリ内でプレビューし、5igna1フォルダー内で読み取れる撮影結果を表示します。他のアプリで開く操作やRAW ZIPの閲覧では、選択したビューアへ対象ファイルの閲覧を委ねます。ギャラリーやOSのバックアップ・同期機能を有効にしている場合、保存メディアがそのサービスへ同期される場合があります。共有前に、位置情報などのメタデータと利用先アプリの設定を確認してください。
-
-5. 保持と削除
-撮影メディアは利用者が削除するまで端末の共有メディア領域に残ります。端末の写真・ファイルアプリから削除できます。アプリをアンインストールしても共有メディアは残る場合があります。エフェクト、画質、位置情報のON/OFF、最後に保存したメディアへの参照などの設定はアプリ領域に保存します。端末の設定からアプリデータを消去するか、アンインストールすると削除できます。処理用の一時ファイルは処理終了時に削除しますが、中断時に残るキャッシュはOSの管理またはアプリデータ消去により削除されます。
-
-6. データの保護
-端末OSの権限とアプリ領域の保護を利用します。アプリによる外部ネットワーク通信は行いません。共有メディアは、端末上でアクセスを許可された他のアプリから閲覧できる場合があります。端末のロックや権限設定は利用者が管理してください。
-
-7. お問い合わせと変更
-利用者からメールで問い合わせを受けた場合、連絡内容とメールアドレスを返信・サポートのために取り扱います。不要となった対応記録は削除します。データの取扱いを変更した場合は、このポリシーを更新し、必要に応じてアプリ内でも案内します。
-
-RAW動画は未加工・無音のDNG連番と撮影時刻をZIPとしてDownload / 5igna1へ保存します。位置情報ONの場合は取得済みの位置をDNGへ記録します。対応確認時に1枚のRAW画像を端末内で処理しますが、この確認画像はファイル保存しません。
-</pre></main></html>
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5igna1 — 壊れた信号を、写真にする。</title>
+<meta name="description" content="5igna1はAndroidのためのグリッチカメラ。色のずれ、走査線、映像の欠落を重ね、撮る前の景色を変えていく。無料・オープンソース、画像処理は端末内で。">
+<meta name="theme-color" content="#0b0e0c"><meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://bongorian.github.io/5igna1-release/"><link rel="icon" href="assets/icon.png">
+<meta property="og:type" content="website"><meta property="og:locale" content="ja_JP"><meta property="og:title" content="5igna1 — 壊れた信号を、写真にする。"><meta property="og:description" content="Androidのためのグリッチカメラ。撮る前の景色に、ずれと揺らぎを。"><meta property="og:url" content="https://bongorian.github.io/5igna1-release/">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header class="header wrap"><a class="brand" href="./" aria-label="5igna1 ホーム"><img src="assets/icon.png" width="36" height="36" alt=""><span>5igna1</span></a><nav aria-label="メインナビゲーション"><a href="#how">使い方</a><a href="privacy/">プライバシー</a><a class="nav-download" href="#download">ダウンロード <span aria-hidden="true">↗</span></a></nav></header>
+<main id="main">
+<section class="hero wrap" aria-labelledby="headline">
+<div class="hero-copy"><p class="eyebrow"><span class="signal-dot" aria-hidden="true"></span> GLITCH CAMERA FOR ANDROID</p><h1 id="headline">壊れた信号を、<br><span>写真にする。</span></h1><p class="lead">色のずれ。走査線。ふいに欠ける映像。<br>カメラが捉えた景色に、故障のような揺らぎを重ねる。<br class="wide-only">5igna1は、その一瞬を撮るためのカメラです。</p><div class="hero-actions"><a class="button primary" href="https://github.com/Bongorian/5igna1-release/releases/latest">無料でダウンロード <span aria-hidden="true">↗</span></a><a class="text-link" href="#look">画面を見る <span aria-hidden="true">↓</span></a></div><p class="micro">Android 12+ <span>／</span> オープンソース <span>／</span> 広告なし</p></div>
+<figure class="hero-visual"><div class="capture-label"><span>5IGNA1 / VIEWFINDER</span><span>01 — 03</span></div><img class="hero-screen" src="assets/03-chain.png" width="1080" height="1920" alt="5igna1の撮影画面。ROW ERROR、CHROMA ERROR、VHSを重ねて色と行がずれたテスト映像" fetchpriority="high"><figcaption>撮る前の映像を、その場で変える。</figcaption></figure>
+</section>
+<section class="manifesto wrap" aria-label="5igna1について"><p>あとから飾るだけではない。<br><strong>揺らぐ景色を見ながら、<br class="mobile-only">シャッターを切る。</strong></p><div><p>好きな効果を選び、強さを変え、重ねる。<br>同じ設定でも、時間とともに表情が変わります。</p><p>加工した映像は写真や動画へ。<br>対応するカメラでは、RAWの撮影と加工も。</p></div></section>
+<section id="look" class="look wrap" aria-labelledby="look-title"><div class="section-heading"><div><p class="eyebrow">THE SAME SCENE. DIFFERENT SIGNALS.</p><h2 id="look-title">ひとつの景色に、<br>いくつもの壊れ方。</h2></div><p>まずは、ひとつ。<br>気に入ったら、もうひとつ重ねてみる。</p></div><div class="shots">
+<figure><div class="shot"><img src="assets/01-camera.png" width="1080" height="1920" loading="lazy" alt="効果なしのCLEAN撮影画面。元のテスト映像"></div><figcaption><span class="shot-number">01 / CLEAN</span><h3>まず、素の景色。</h3><p>加工なしから始めて、変化を見比べる。</p></figcaption></figure>
+<figure><div class="shot"><img src="assets/02-row.png" width="1080" height="1920" loading="lazy" alt="ROW ERRORでテスト映像の行をずらした撮影画面"></div><figcaption><span class="shot-number">02 / ROW ERROR</span><h3>読み出しを、ずらす。</h3><p>行のずれや欠落で、輪郭をほどく。</p></figcaption></figure>
+<figure><div class="shot"><img src="assets/03-chain.png" width="1080" height="1920" loading="lazy" alt="ROW ERRORにCHROMA ERRORとVHSを重ねた撮影画面"></div><figcaption><span class="shot-number">03 / CHAIN</span><h3>色も、質感も、重ねる。</h3><p>色のずれとVHSの質感で、違う表情へ。</p></figcaption></figure>
+</div><p class="image-note">画面は1.3.1開発版の実際のUIです。撮影対象にはAndroidエミュレーターのテスト映像を使用しています。</p></section>
+<section id="how" class="how wrap" aria-labelledby="how-title"><div class="section-heading"><div><p class="eyebrow">START WITH ONE FAULT</p><h2 id="how-title">最初の一枚は、<br>3ステップ。</h2></div><a class="text-link" href="https://github.com/Bongorian/5igna1-release/blob/main/docs/GETTING_STARTED.ja.md">詳しい撮影ガイド <span aria-hidden="true">↗</span></a></div><ol class="steps"><li><span class="step-number">01</span><h3>カメラを開く。</h3><p>カメラを許可し、写真モードでJPEGを選択。初回は操作ガイドが案内します。</p></li><li><span class="step-number">02</span><h3>「＋」から、ひとつ。</h3><p>まずはROW ERROR。LEVELを動かして、好みのずれを見つけます。</p></li><li><span class="step-number">03</span><h3>その瞬間を、撮る。</h3><p>中央のシャッターをタップ。保存した写真は左下のサムネイルから開けます。</p></li></ol></section>
+<section class="private wrap" aria-labelledby="private-title"><div><p class="eyebrow">ON YOUR DEVICE</p><h2 id="private-title">作品は、あなたの端末に。</h2></div><div><p>画像処理と保存は端末内で。アカウント登録、広告、解析SDKはありません。アプリから開発者へ写真や動画を自動送信しません。</p><p>位置情報と音声は初期OFF。必要なときだけ有効にできます。OSやギャラリーの同期設定は別途ご確認ください。</p><a class="text-link" href="privacy/">プライバシーポリシーを読む <span aria-hidden="true">↗</span></a></div></section>
+<section id="download" class="download wrap" aria-labelledby="download-title"><p class="eyebrow">FIND YOUR SIGNAL</p><h2 id="download-title">次の一枚を、<br>予想の外へ。</h2><p>無料。主要機能に制限はありません。</p><a class="button primary" href="https://github.com/Bongorian/5igna1-release/releases/latest">GitHubからAPKをダウンロード <span aria-hidden="true">↗</span></a><p class="download-help">Android 12以降に対応。RAW・解像度・フレームレートは端末によって異なります。<br><a href="https://github.com/Bongorian/5igna1-release/blob/main/docs/INSTALLATION.md">インストール手順</a> <span>·</span> <a href="https://github.com/Bongorian/5igna1-release/blob/main/README.ja.md#github-releases--obtainium">Obtainiumで更新</a></p><p class="distribution-note">Google Playはクローズドテスト中です。F-Droid版は掲載準備中です。</p></section>
+</main>
+<footer class="footer wrap"><a class="brand" href="./">5igna1<span class="by">by Bongorian</span></a><nav aria-label="フッターナビゲーション"><a href="privacy/">プライバシーポリシー</a><a href="https://github.com/Bongorian/5igna1-release">ソースコード ↗</a><a href="https://github.com/Bongorian/5igna1-release/issues">お問い合わせ ↗</a></nav><p>© 2026 Bongorian · <a href="https://github.com/Bongorian/5igna1-release/blob/main/LICENSE">Apache-2.0</a></p></footer>
+</body></html>
