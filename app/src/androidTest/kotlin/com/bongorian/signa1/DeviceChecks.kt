@@ -180,7 +180,9 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "transport") {
+            if (action == "seed") {
+                result.putString("result", SeedUiChecks.run(this))
+            } else if (action == "transport") {
                 TransportUiChecks.run(this)
                 result.putString("result", FaultRenderChecks.run(activity!!, false, true))
             } else if (action == "tap") {

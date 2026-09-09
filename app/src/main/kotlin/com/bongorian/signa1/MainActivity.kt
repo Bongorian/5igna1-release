@@ -637,11 +637,17 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     fun reseed() {
         if (rawOriginal()) return
-        var p = effectState.parameters()
-        val random = SecureRandom()
-        for (id in effectState.ids()) if (id != Effects.COLOR_MAP)
-            p = p.reseed(id, random.nextLong())
-        commitEffects(effectState.edit(effectState.chained, effectState.mask, p))
+        if (recording || effectPreview != null || liveEditor != null) {
+            Toast.makeText(this, R.string.fault_edit_after_recording, Toast.LENGTH_SHORT).show()
+            return
+        }
+        val next = EffectRandomizer.reseed(effectState, uiEffects(), SecureRandom())
+        if (next.encode() == effectState.encode()) {
+            Toast.makeText(this, R.string.seed_no_target, Toast.LENGTH_SHORT).show()
+            return
+        }
+        commitEffects(next)
+        Toast.makeText(this, R.string.seed_chain_done, Toast.LENGTH_SHORT).show()
         selectedRoute.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
     }
 

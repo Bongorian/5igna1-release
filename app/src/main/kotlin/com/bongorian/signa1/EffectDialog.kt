@@ -142,6 +142,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         body!!.setOrientation(LinearLayout.VERTICAL)
         scroll!!.addView(body)
         root.addView(scroll, LinearLayout.LayoutParams(-1, 0, 1f))
+        ButtonSpacing.apply(a, root)
         sheet!!.setContentView(root)
         sheet!!.setCanceledOnTouchOutside(true)
         val window = sheet!!.window
@@ -176,6 +177,44 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         a.reserveEffectEditor(this, height)
     }
 
+    private fun refreshSeedControls() {
+        val y = scroll?.scrollY ?: 0
+        renderBody()
+        scroll?.post { scroll?.scrollTo(0, y) }
+        preview()
+    }
+
+    private fun seedControls(id: Int) {
+        if (!EffectRandomizer.supportsSeed(id, draft)) return
+        val row = a.row()
+        val seed = a.button("SEED\n" + draft.identity(id))
+        seed.tag = "identity-seed"
+        seed.textSize = 12f
+        seed.contentDescription = "SEED " + draft.identity(id)
+        row.addView(seed, LinearLayout.LayoutParams(0, a.dp(56f), 1f))
+        val reroll = action(R.string.ui_reseed)
+        reroll.tag = "reseed"
+        reroll.textSize = 12f
+        row.addView(reroll, LinearLayout.LayoutParams(a.dp(96f), a.dp(56f)))
+        body!!.addView(row)
+        seed.setOnClickListener {
+            auxiliary = SignalSheet.number(a, "SEED", a.getString(R.string.ui_seed_hint), draft.identity(id).toString(), true) { value ->
+                draft = draft.reseed(id, value.toLong())
+                refreshSeedControls()
+                true
+            }
+        }
+        reroll.setOnClickListener {
+            draft = EffectRandomizer.reseed(state(), intArrayOf(id), SecureRandom()).parameters()
+            refreshSeedControls()
+        }
+        if (draft.overrides(id).isNotEmpty() || draft.fixedEventIdentity(id)) {
+            val hint = a.text(a.getString(R.string.seed_fixed_hint), 11, MainActivity.MUTED)
+            hint.setPadding(0, a.dp(6f), 0, a.dp(8f))
+            body!!.addView(hint)
+        }
+    }
+
     private fun transportControls(id: Int) {
         if (id != Effects.VHS && id != Effects.CRT) return
         fun choice(key: String, title: Int, labels: Array<String>) {
@@ -203,6 +242,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         if (id == Effects.CRT && kind == 1) choice("upconvert", R.string.transport_upconvert,
             arrayOf(a.getString(R.string.transport_nearest), a.getString(R.string.transport_linear)))
         val hint = a.text(a.getString((if (id == Effects.VHS) intArrayOf(R.string.transport_vhs_hint, R.string.transport_dvd_hint, R.string.transport_digital_media_hint, R.string.transport_analog_hint) else intArrayOf(R.string.transport_crt_hint, R.string.transport_digital_display_hint, R.string.transport_network_hint, R.string.transport_led_hint))[kind]), 12, MainActivity.MUTED)
+        hint.setPadding(0, a.dp(8f), 0, a.dp(8f))
         body!!.addView(hint)
     }
 
@@ -283,6 +323,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 convert.setOnClickListener(OnClickListener@{ v: View? -> switchFormat(id) })
             } else {
                 transportControls(id)
+                seedControls(id)
                 if (a.advancedMode) {
                     advancedControls = AdvancedControls(this, id)
                     advancedControls!!.show(requireNotNull(body))
@@ -294,9 +335,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 }
                 val actions = a.row()
                 val reset = action(R.string.ui_reset)
-                val reseed = action(R.string.ui_reseed)
                 actions.addView(reset, LinearLayout.LayoutParams(0, a.dp(44f), 1f))
-                actions.addView(reseed, LinearLayout.LayoutParams(0, a.dp(44f), 1f))
                 body!!.addView(actions)
                 reset.setOnClickListener(
                     OnClickListener@{ v: View? ->
@@ -305,12 +344,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                         preview()
                     }
                 )
-                reseed.setOnClickListener(
-                    OnClickListener@{ v: View? ->
-                        draft = draft.reseed(id, SecureRandom().nextLong())
-                        preview()
-                    }
-                )
+
             }
         } else {
             val hint =
@@ -376,6 +410,9 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             )
         }
         scroll!!.scrollTo(0, 0)
+        ButtonSpacing.apply(a, body!!)
+        ButtonSpacing.apply(a, route!!)
+        sheet?.findViewById<View>(android.R.id.content)?.let { ButtonSpacing.apply(a, it) }
         resize()
     }
 

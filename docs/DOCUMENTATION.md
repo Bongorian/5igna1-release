@@ -48,7 +48,7 @@ Reviewed against this development checkout on 2026-09-09. User guides describe t
 | [GPU and buffers](audit/FAULT_RENDER_AND_BUFFERS.md) / [日本語](audit/FAULT_RENDER_AND_BUFFERS.ja.md), [results](audit/fault-render-and-buffers-results.json) | Renderer byte comparisons and scoped memory/CPU measurements |
 | [Guide and thermal](audit/GUIDE_AND_THERMAL.md) / [日本語](audit/GUIDE_AND_THERMAL.ja.md), [results](audit/guide-thermal-results.json) | 1.3.1 guide suspension and heat investigation |
 | [Experimental results](audit/experimental-signals-results.json) | 1.3.1 experimental GPU/RAW/video evidence |
-| [Injection assessment](audit/DATA_INJECTION_POINTS.md) / [日本語](audit/DATA_INJECTION_POINTS.ja.md) | Design feasibility only; injection is not an available feature |
+| [Injection assessment](audit/DATA_INJECTION_POINTS.md) / [日本語](audit/DATA_INJECTION_POINTS.ja.md) | Historical feasibility study; the current TAP feature is described in Experimental features |
 | [FAULT redesign](design/FAULT_SYSTEM.md) / [日本語](design/FAULT_SYSTEM.ja.md) | Original migration decisions from 1.0.0; superseded as a current architecture reference |
 | [Adaptive capture and audio](audit/ADAPTIVE_CAPTURE_AUDIO.md) | Current development verification and limits |
 
@@ -59,3 +59,9 @@ Update the relevant reference and its Japanese edition when behavior changes. Ke
 Keep historical measurements, hashes and submitted metadata intact. Label the source/date instead of rewriting old results as current coverage. When moving a document, repair inbound and outbound links. Run the local documentation link/coverage check, locale checks and relevant application tests before committing. Policy-copy changes require a separate site update when the corresponding app version is published; editing this application checkout does not deploy the site.
 
 This review corrected stale tutorial/settings instructions, capture exactness claims, device budgets, RAW experimental coverage, build/test counts, channel status and misleading “unreleased” context. The long validation log was moved into audit; top-level VALIDATION now points to scoped evidence. Asset hashes were checked against all 26 entries without changing the assets.
+
+
+| Files | Purpose |
+|---|---|
+| [SEED guide](SEEDS.md) / [日本語](SEEDS.ja.md) | Structural and event seeds, reseeding, locks and reproducibility |
+| [1.5.0 validation](audit/TAP_MEDIA_1_5_0.md) | Dated TAP, media/display, background and seed checks |

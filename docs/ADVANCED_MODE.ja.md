@@ -10,7 +10,7 @@
 
 TIMEは時間の生成器と状態（秒、倍率、drift、phase）、EVENTは事故の周期・継続秒数・確率・通番・強度・位置・パターンです。SIGNALは描画・加工の全内部パラメータ、PROFILEはVHS帯域とCRTの表示特性です。FAULTによっては使わない生成値もあります。下流の値をFIXにした場合、その値は生成器を変更しても変わりません。個数・領域は内部のサンプル格子、変位は原則として正規化値、位相・角度は正規化周期で表す項目を除いてラジアンです。
 
-LIVEが操作するのはFAULT時間で、カメラの撮影時刻は進み続けます。`time`の固定は一つのFAULTの時計を固定します。PAUSE中もカメラは動きますがFAULTの状態は停止し、PAUSE中にHITした状態は解除かリセットまで保持されます。LEVELが0なら全FAULTをバイパスします。撮影時は内部状態を固定したスナップショットを使います。RAWに適用するのはBayer処理に対応する先頭6FAULTのみです。VHS／CRTなどの後段はJPG／MP4を使います。内部値を操作してもRAWにない処理段は追加されません。
+LIVEが操作するのはFAULT時間で、カメラの撮影時刻は進み続けます。`time`の固定は一つのFAULTの時計を固定します。PAUSE中もカメラは動きますがFAULTの状態は停止し、PAUSE中にHITした状態は解除かリセットまで保持されます。LEVELが0なら全FAULTをバイパスします。撮影時は内部状態を固定したスナップショットを使います。RAWは先頭6FAULTと、有効化した実験機能のMOTION BLUR・THERMAL NOISE・SMEARをBayer処理します。VHS／CRTなどの後段はJPG／MP4を使います。内部値を操作してもRAWにない処理段は追加されません。
 
 以下が編集可能な全項目です。範囲は数値入力にも表示します。All faultsは全FAULT共通、Incident faultsは上記のEVENT SEED対応6種類です。スライダーの刻みと異なり、数値入力は範囲内の有限値を受け付けます。ただしサンプリング処理で離散化される項目があります。
 
@@ -104,3 +104,18 @@ LIVEが操作するのはFAULT時間で、カメラの撮影時刻は進み続�
 | SMEAR | SIGNAL | `smearAmount` | 0 … 2 |
 | SMEAR | SIGNAL | `smearLength` | 0 … .4 |
 | SMEAR | SIGNAL | `smearThreshold` | 0 … .99 |
+
+
+## SEED / RESEED
+
+[SEEDガイド](SEEDS.ja.md)に通常／ADVANCED共通の個体値編集、適用／取消、固定値の優先順位、整数入力と有効な段の再生成をまとめています。MEDIA／DISPLAYには以下を追加しました。kind値はモデル選択画面の順序に対応します。
+
+| Stage | Group | Parameter | Range |
+|---|---|---|---|
+| MEDIA / DISPLAY | PROFILE | `transportKind` | 0 … 3 |
+| MEDIA | PROFILE | `mediaReduce`, `cableKind` | 0 … 1 |
+| DISPLAY | PROFILE | `upconvert` | 0 … 1 |
+| MEDIA / DISPLAY | SIGNAL | `transportDamage`, `transportLoss` | 0 … 1 |
+| MEDIA | SIGNAL | `transportNoise` | 0 … 1 |
+| DISPLAY | SIGNAL | `networkStall`, `refreshBand` | 0 … 1 |
+| DISPLAY | SIGNAL | `networkSeed` | 0 … 997 |

@@ -62,32 +62,11 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
         val hint = a.text(a.getString(R.string.ui_advanced_hint), 11, MainActivity.MUTED)
         hint.setPadding(0, a.dp(8f), 0, a.dp(8f))
         body.addView(hint)
-        val seed = SignalControls.field(a, body, "SEED · " + editor.draft.identity(id))
-        seed.setTag("identity-seed")
-        seed.setTextSize(11f)
-        seed.setOnClickListener(
-            OnClickListener@{ v: View? ->
-                editor.auxiliary =
-                    SignalSheet.number(
-                        a,
-                        "SEED",
-                        a.getString(R.string.ui_seed_hint),
-                        editor.draft.identity(id).toString(),
-                        true,
-                        Predicate@{ text: String ->
-                            editor.draft = editor.draft.reseed(id, text!!.toLong())
-                            editor.preview()
-                            refresh()
-                            true
-                        },
-                    )
-            }
-        )
-        if (FaultParameters.incidents(id)) {
+        if (FaultParameters.incidents(id) && EffectRandomizer.supportsSeed(id, editor.draft)) {
             val eventRow = a.row()
             val eventSeed =
                 a.button(
-                    "EVENT SEED · " +
+                    "EVENT SEED\n" +
                         (if (editor.draft.fixedEventIdentity(id))
                             editor.draft
                                 .eventIdentity(
@@ -99,7 +78,7 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
                 )
             val automatic = a.button("AUTO")
             eventSeed.setTag("event-identity")
-            eventSeed.setTextSize(10f)
+            eventSeed.setTextSize(12f)
             eventRow.addView(eventSeed, LinearLayout.LayoutParams(0, a.dp(44f), 1f))
             eventRow.addView(automatic, LinearLayout.LayoutParams(a.dp(64f), a.dp(44f)))
             body.addView(eventRow)
@@ -121,6 +100,9 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
                         )
                 }
             )
+            automatic.tag = "event-auto"
+            automatic.isEnabled = editor.draft.fixedEventIdentity(id)
+            automatic.alpha = if (automatic.isEnabled) 1f else .4f
             automatic.setOnClickListener(
                 OnClickListener@{ v: View? ->
                     editor.draft = editor.draft.withEventIdentity(id, null as Long?)

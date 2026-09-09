@@ -69,6 +69,7 @@ internal object SignalSheet {
                 dialog.dismiss()
             }
         )
+        ButtonSpacing.apply(a, root)
         dialog.setContentView(root)
         val window = dialog.window
         if (window != null) {
@@ -126,6 +127,7 @@ internal object SignalSheet {
                 }
             )
         }
+        ButtonSpacing.apply(a, root)
         dialog.setContentView(root)
         val window = dialog.window
         window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -238,6 +240,7 @@ internal object SignalSheet {
                 }
             )
         }
+        ButtonSpacing.apply(a, list)
         dialog.setContentView(list)
         val window = dialog.window
         window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -279,12 +282,12 @@ internal object SignalSheet {
         val body = LinearLayout(a)
         body.setOrientation(LinearLayout.VERTICAL)
         val note = a.text(range, 12, MainActivity.MUTED)
-        body.addView(note, LinearLayout.LayoutParams(-1, a.dp(30f)))
+        body.addView(note, LinearLayout.LayoutParams(-1, -2))
         val input = EditText(a)
         input.setTag("number-input")
         input.setSingleLine(true)
         input.setTextColor(MainActivity.WHITE)
-        a.typography(input, MainActivity.TEXT_TITLE, false)
+        a.typography(input, MainActivity.TEXT_BODY, false)
         input.setPadding(a.dp(14f), 0, a.dp(14f), 0)
         input.setBackground(a.bg(MainActivity.PANEL, 0))
         input.setInputType(

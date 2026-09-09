@@ -8,14 +8,18 @@ Development branch: `codex/raw-chain-time-echo`. This work does not change relea
 - Ordinary background work pauses; only an explicitly started output recording continues through its foreground service. The recording notification offers Stop when notifications are permitted.
 - Settings orders saved metadata, experimental features, then app information.
 - LED sampling does not add black gaps between elements; module failures and refresh bands remain independent.
-- MEDIA/DISPLAY profiles and resolution behavior are documented in [Effects](EFFECTS.md) ([Japanese](EFFECTS.ja.md)). Original VHS/CRT controls and migration outputs remain compatible.
+- MEDIA/DISPLAY profiles and resolution behavior are documented in [Effects](../EFFECTS.md) ([Japanese](../EFFECTS.ja.md)). Original VHS/CRT controls and migration outputs remain compatible.
 
 Validation on 2026-09-09:
 
-- 30 unit tests per variant passed, including the unchanged migration hashes, old settings migration, seeded network stalls and disabled-LIVE behavior.
+- 33 unit tests per variant passed, including the unchanged migration hashes, old settings migration, seeded network stalls and disabled-LIVE behavior.
 - All unit-test variants, lint, F-Droid debug/release and Play debug builds passed; translated resources and placeholders passed in English, Japanese and Chinese.
 - Physical DEV test: TAP boundary/orientation, image/video import, independent source play/pause and output recording, JPEG/MP4 saving, foreground-only preview, camera/TAP background recording and return.
 - Physical GPU comparison: all 16 MEDIA/DISPLAY combinations, exact Digital thru pixels, VHS/DVD intermediate resolution, composite/component difference, upsampling choices, previous-frame network hold and resume.
 - Physical UI check: eight model selections, advanced profile editors, metadata → experiments → app ordering; LIVE pages and representative transport/settings screenshots inspected.
 
 Local verification captures are excluded from source control. The release app and its data were preserved. This connected-device check is not a reproduction of the separately reported Pixel 8a / 1.4.0 RAW crash.
+
+- SEED audit: fixed stale values after RESEED, shared exact-integer editing, retained locks and draft transactions, active-stage filtering, inactive-model suppression and recording guard. Physical `action seed` passed in basic/advanced modes, including overflow rejection and signed 64-bit limits.
+
+- Editor spacing uses an idempotent minimum 8 dp separation between neighboring control groups/buttons, horizontally and vertically. Numeric seed fields and RESEED are distinct targets.

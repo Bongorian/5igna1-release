@@ -104,3 +104,18 @@ Enabled by the separate experimental Settings switch. INPUT is available on ever
 | SMEAR | SIGNAL | `smearAmount` | 0 … 2 |
 | SMEAR | SIGNAL | `smearLength` | 0 … .4 |
 | SMEAR | SIGNAL | `smearThreshold` | 0 … .99 |
+
+
+## SEED / RESEED
+
+[SEED guide](SEEDS.md) explains the shared basic/advanced identity editor, draft Apply/Cancel, fixed-value precedence, exact integer input and active-stage reseeding. MEDIA/DISPLAY add the following internal controls; kind values follow the order shown in the model chooser.
+
+| Stage | Group | Parameter | Range |
+|---|---|---|---|
+| MEDIA / DISPLAY | PROFILE | `transportKind` | 0 … 3 |
+| MEDIA | PROFILE | `mediaReduce`, `cableKind` | 0 … 1 |
+| DISPLAY | PROFILE | `upconvert` | 0 … 1 |
+| MEDIA / DISPLAY | SIGNAL | `transportDamage`, `transportLoss` | 0 … 1 |
+| MEDIA | SIGNAL | `transportNoise` | 0 … 1 |
+| DISPLAY | SIGNAL | `networkStall`, `refreshBand` | 0 … 1 |
+| DISPLAY | SIGNAL | `networkSeed` | 0 … 997 |

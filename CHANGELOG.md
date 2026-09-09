@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0] — 2026-09-09
+
+Version name: 1.5.0. Version code: 14.
+
+- Add consistent horizontal and vertical spacing between editor buttons.
+- Correct SEED/RESEED field refresh, expose exact seed editing in both editor modes, preserve draft Apply/Cancel behavior and fixed values, and restrict reseeding to active supported stages outside recording.
+- Add experimental image/video TAP injection after READOUT, with separate source playback and output recording.
+- Randomize TIME ECHO from one probability control and reorganize LIVE pages and experimental settings.
+- Expand MEDIA to VHS, DVD, Digital thru and composite/component Analog thru; add optional media-resolution reduction.
+- Expand DISPLAY to CRT, Digital thru upconversion, Network stalls/loss and LED faults without black element gaps.
+- Pause ordinary background work; allow active recording to continue through a foreground service.
+- Preserve the selected chain when switching JPEG/RAW and organize current guides, seed behavior and dated validation evidence.
+
 ## [1.4.0] — 2026-09-09
 
 Version name: 1.4.0. Version code: 13.

@@ -30,3 +30,9 @@ Replace DEVICE with the intended emulator or device. Camera tests save actual me
 Video parameters include `videoKey` (an advertised `WIDTHxHEIGHT@FPS`), `seconds`, `sound`, `bitrate`, `codec`, `resolutionAudio` and `advanced`. Test both audio OFF and linked/ordinary audio on supported sizes. `tools/check-media.py` checks decoded media and timestamps; use ffprobe to inspect audio sample rate. `tools/check-dng.py` validates DNG through LibRaw. Full procedure and Wi-Fi ADB setup are in the Japanese edition.
 
 `verification/` and `dist/` are ignored local working directories. Keep SDK paths, keys, passwords, device addresses and private captures out of Git. Publish only scoped summaries of results in `docs/audit/`; [VALIDATION.md](VALIDATION.md) is the current evidence index.
+
+## 1.5.0 checks
+
+- `action seed`: SEED field refresh, exact integer input, Apply/Cancel, EVENT SEED and recording guard.
+- `action transport`: model UI, settings order, pixel identity, intermediate resolution, network hold/resume and LED gaps.
+- `action tap`: image/video fixtures, injection boundary, playback/recording and background lifecycle. Requires `files/tap-fixture.mp4` in DEV app storage.

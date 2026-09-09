@@ -1,7 +1,7 @@
 5igna1 is a camera for finding images in a damaged signal. Choose fault points from the sensor to the display, keep their identities, and capture the brief glitches that occur inside that system.
 
-13 FAULTS / 8 POINTS
-PIXEL DAMAGE, EXPOSURE, ROW ERROR, BIT ERROR, ADDRESS ERROR, CFA ERROR, DEMOSAIC ERROR, CHROMA ERROR, COLOR MAP, BLOCK ERROR, STREAM ERROR, VHS and CRT. CLEAN is an empty route. Faults follow causal signal order. VHS/CRT profiles are separate from tracking, dropout, convergence and sync faults. STREAM ERROR models decoded-region loss/reuse; it does not edit real packets.
+FAULT CHAINS / 8 POINTS
+PIXEL DAMAGE, EXPOSURE, ROW ERROR, BIT ERROR, ADDRESS ERROR, CFA ERROR, DEMOSAIC ERROR, CHROMA ERROR, COLOR MAP, BLOCK ERROR, STREAM ERROR, MEDIA and DISPLAY. CLEAN is an empty route. Faults follow causal signal order. MEDIA includes VHS, DVD, Digital thru and composite/component Analog thru, with media-resolution options. DISPLAY includes CRT, Digital thru upconversion, Network frame stalls/loss and LED module faults. STREAM ERROR models decoded-region loss/reuse; it does not edit real packets.
 
 A CHARACTER THAT PERSISTS
 Each fault has its own motion and incidents. RESEED changes identities while preserving controls and the route. LIVE optionally couples motion, camera timing, thermal state, processing pressure and audio amplitude to meaningful fault states. It starts off. Ordinary time progression never shuffles the chain.
@@ -12,11 +12,14 @@ Generate 2–5 faults and their controls with Random Chain, then adjust them in 
 CAPTURE THE SIGNAL
 JPEG saves a processed camera image and immutable fault state at a supported live resolution. ADVANCED OFF reduces memory use; ON pins the displayed frame. Preview and ordinary video use the same processed images. Select H.264/H.265 and device-supported video settings; sound is optional, with an optional resolution-linked audio quality mode. Original and processed DNG use separate RAW exposures and can differ from the RGB preview. Six base faults support RAW16. Optional experimental input sensitivity, motion blur, thermal noise and smear also support processed RAW. Browse photos and videos together inside the app, with photo zoom, video playback and seeking, sideways browsing and downward dismissal.
 
+EXPERIMENTAL INPUT AND ECHO
+TAP imports an image or video after READOUT. Source playback and output recording have separate controls. TIME ECHO introduces past frames through one probability control. Ordinary background work pauses; only user-started output recording continues through a foreground service.
+
 EXPERIMENTAL RAW VIDEO
 Compatible cameras can save original, silent DNG sequences in ZIP with timestamps. Extract and develop them in RAW software. This is not a playable MP4; processing is bypassed and frames can be dropped under load.
 
 ON YOUR DEVICE
-Every scene sample starts with the camera. No semantic scene generation or completion. No ads, accounts, trackers or analytics SDKs. Optional location tagging starts off. All distribution variants share the same core features.
+Scene samples come from the camera or user-selected experimental TAP media. No semantic scene generation or completion. No ads, accounts, trackers or analytics SDKs. Optional location tagging starts off. All distribution variants share the same core features.
 
 Japanese, English and Simplified Chinese. Android 12+, Camera2 and OpenGL ES required. RAW support, resolutions and processing speed depend on the device. RGB reconstruction and decoded-block faults are explicit approximations.
 

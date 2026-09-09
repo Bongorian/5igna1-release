@@ -16,7 +16,7 @@ Androidのためのグリッチカメラ。行のずれ、色の裂け、読み�
 
 ## 同じ壊れた系から、その瞬間を撮る
 
-このソースは**1.4.0（versionCode 13）**です。端末推奨設定の改訂、ADVANCED OFF時の省メモリ撮影、解像度連動オーディオを追加しました。Kotlin・RAW最適化と操作ガイドを含みます。1.0.0からの更新時は旧エフェクト設定を初期化し、保存済みの作品は保持します。
+このソースは**1.5.0（versionCode 14）**です。実験機能TAP、確率式TIME ECHO、MEDIA／DISPLAY拡張とSEED操作の修正を含みます。Kotlin・RAW最適化と操作ガイドを含みます。1.0.0からの更新時は旧エフェクト設定を初期化し、保存済みの作品は保持します。
 
 個体差は保持し、読み出しのdrift、露光位相、一時的な欠落が時間とともに変化します。選択した経路と個体を通常の時間進行で入れ替えません。実カメラ、または実験機能TAPで選んだ素材の信号を扱い、被写体の意味推論による生成・補完はしません。RAW／RGB／色差／媒体・表示後の信号は異なる表現であり、RAWだけを唯一の真とは扱いません。
 
@@ -28,8 +28,8 @@ Androidのためのグリッチカメラ。行のずれ、色の裂け、読み�
 | CFA / RECONSTRUCTION | CFA ERROR · DEMOSAIC ERROR |
 | COLOR | CHROMA ERROR · COLOR MAP |
 | CODEC / STREAM | BLOCK ERROR · STREAM ERROR |
-| MEDIA | VHS |
-| DISPLAY | CRT |
+| MEDIA | VHS · DVD · Digital thru · Analog thru |
+| DISPLAY | CRT · Digital thru · Network · LED |
 
 CLEANはFAULTなし。各FAULTの少数の操作値から、固有の故障パラメータへ変換します。「ランダムチェーン」は組み合わせと操作値を生成し、長押しでは設定を保って故障個体だけを変えます。LIVEは今この瞬間のFAULTの時間進行・変化の形・秒単位の間隔と端末入力を設定します。一時停止・故障の発生・時間リセットを操作できます。ADVANCED MODEでは全FAULTの内部パラメータと時間・事故の生成値をAUTO／固定値で操作できます。VHS／CRTは媒体・表示特性と内部故障を区別します。STREAM ERRORは復号画像領域の欠落・再利用モデルで、実packetは破壊しません。
 

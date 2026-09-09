@@ -258,6 +258,7 @@ internal object FaultDialog {
                 button.setOnClickListener { page = index; render() }
             }
             pages.setPadding(0, 0, 0, a.dp(8f))
+            ButtonSpacing.apply(a, pages)
             if (page == 2 && a.settings.experimentalSignals) {
                 toggle(R.string.echo_enabled, echo.enabled) { echo = echo.copy(enabled = it) }
                 SignalControls.slider(a, body!!, a.getString(R.string.echo_probability),
@@ -266,6 +267,7 @@ internal object FaultDialog {
                     preview()
                 }.tag = "echo-probability"
                 body!!.addView(a.text(a.getString(R.string.echo_hint), 12, MainActivity.MUTED))
+                ButtonSpacing.apply(a, body!!)
                 return
             }
             if (page == 0) {
@@ -395,6 +397,7 @@ internal object FaultDialog {
                 status!!.setPadding(0, a.dp(8f), 0, a.dp(8f))
                 body!!.addView(status)
             }
+            ButtonSpacing.apply(a, body!!)
         }
     }
 }

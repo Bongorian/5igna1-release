@@ -1,0 +1,1 @@
+SEED/RESEEDの表示・数値入力・適用／取消を修正。写真・動画を入力する実験機能TAPを追加し、素材再生と録画を分離。TIME ECHOを確率操作に整理。MEDIAにDVD／Digital／Analog、DISPLAYにDigital／Network／LEDを追加。メディア解像度低下・ネットワーク画面停止に対応。LEDの素子間黒線を削除。録画中のみバックグラウンド継続。設定とガイドを整理。

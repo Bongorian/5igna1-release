@@ -1,6 +1,6 @@
 # 5igna1 field guide
 
-These guides describe **1.4.0 / code 13**: revised device recommendations, normal capture with ADVANCED OFF, and optional resolution-linked audio. For earlier versions, read the documentation at that release tag.
+These guides describe **1.5.0 / code 14**: TAP input, probability-based TIME ECHO, MEDIA/DISPLAY models and SEED controls. For earlier versions, read the documentation at that release tag.
 
 Experimental device response, ADVANCED, EXPERT, linked audio and recording audio start OFF. Saved choices are retained. [Format and audio behavior](FORMATS.md) · [Performance modes](PERFORMANCE.md).
 
@@ -29,3 +29,5 @@ Experimental device response, ADVANCED, EXPERT, linked audio and recording audio
 Maintainer entry points: [Development checks](DEVELOPMENT.md), [release procedure](RELEASING.md), [distribution checklist](LAUNCH_TASKS.md), [Play upload automation](PLAY_AUTOMATION.md), and [F-Droid candidate](FDROID_READINESS.md).
 
 Historical measurements and submission reports retain their dated scope. Start from [Validation](VALIDATION.md) for evidence, or [Documentation map](DOCUMENTATION.md) for each file’s role, maintenance rules and archive links.
+
+- [SEED / RESEED](SEEDS.md) · [日本語](SEEDS.ja.md)

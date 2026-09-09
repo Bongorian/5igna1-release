@@ -1,6 +1,6 @@
 # Google Play 配布準備
 
-2026-09-09に1.3.0 / versionCode 11を既存のクローズドテストAlphaへ審査送信しました。1.1.0 / code 9はテスターへ公開済みで、1.2.0 / code 10はPlayでは配信していません。テスター設定・対象国を維持した更新です。管理対象の公開はオンのため、承認後に公開操作が必要です。[1.3.0提出記録](../../docs/PLAY_1_3_0.md)を参照してください。アプリIDは **com.bongorian.signa1**。F-Droid/GitHubとの署名関係は[共通リリース手順](../../docs/RELEASING.md)を先に確認してください。
+この文書はPlay用の手動包装手順です。現在の配布・下書き状況は[公開作業一覧](../../docs/LAUNCH_TASKS.md)、自動AABアップロードは[運用ガイド](../../docs/PLAY_AUTOMATION.ja.md)、過去の提出は[1.3.0記録](../../docs/PLAY_1_3_0.md)を参照してください。アプリIDは **com.bongorian.signa1**。署名は[共通リリース手順](../../docs/RELEASING.md)に従います。
 
 ## 成果物
 
@@ -12,7 +12,7 @@ python3 tools/package-play.py
 
 Play用署名は未追跡の `signing.properties` または `SIGNAL_PLAY_*` 環境変数から読みます。鍵がなければAABは未署名であり、packagingは失敗します。既存のupload keyを上書き・再生成しないでください。
 
-AABは `app/build/outputs/bundle/playRelease/app-play-release.aab`。包装後は `dist/5igna1-v1.3.0-google-play.zip` です。ZIPにはAAB、日英素材、説明資料、プライバシーHTML、SHA256SUMSを含めます。秘密鍵・署名設定は含めません。GitHubの一般配布APKはこのPlay成果物ではなくfdroidReleaseから作ります。
+AABは `app/build/outputs/bundle/playRelease/app-play-release.aab`。包装後は `dist/5igna1-v<version>-google-play.zip` です。ZIPにはAAB、日英素材、説明資料、プライバシーHTML、SHA256SUMSを含めます。秘密鍵・署名設定は含めません。GitHubの一般配布APKはこのPlay成果物ではなくfdroidReleaseから作ります。
 
 ## 素材
 

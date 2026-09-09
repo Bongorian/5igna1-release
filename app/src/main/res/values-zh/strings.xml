@@ -486,4 +486,7 @@
     <string name="transport_digital_display_hint">在模拟媒体之后，可选择将低分辨率图像放大到输出的插值方式。</string>
     <string name="transport_network_hint">拥塞时保持上一帧。LIVE推进画面停顿和丢包状态。</string>
     <string name="transport_led_hint">调整LED间距、模块故障和刷新条带。</string>
+    <string name="seed_no_target">当前启用的故障不使用随机种子。</string>
+    <string name="seed_chain_done">已重新生成有效故障的种子，保留调整值。</string>
+    <string name="seed_fixed_hint">保留固定值和固定EVENT SEED。将对应值改为AUTO以跟随新种子。</string>
 </resources>

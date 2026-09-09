@@ -486,4 +486,7 @@
     <string name="transport_digital_display_hint">アナログMEDIAの後では、縮小された画像を出力へ拡大する補間方法を選べます。</string>
     <string name="transport_network_hint">輻輳で直前の画面を保持します。LIVEで画面停止やパケットロスの状態が変化します。</string>
     <string name="transport_led_hint">LEDの素子間隔、モジュール故障、走査帯を調整します。</string>
+    <string name="seed_no_target">現在の有効なFAULTには再生成できるSEEDがありません。</string>
+    <string name="seed_chain_done">有効なFAULTのSEEDを再生成しました。調整値は保持しています。</string>
+    <string name="seed_fixed_hint">固定値と固定EVENT SEEDは維持します。新しいSEEDに連動させる値はAUTOに戻してください。</string>
 </resources>

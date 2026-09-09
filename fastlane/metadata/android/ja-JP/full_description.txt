@@ -1,7 +1,7 @@
 5igna1は、同じ壊れた信号系の中で、その瞬間にしか現れないグリッチを写真・動画に捉えるカメラです。
 
-13 FAULT / 8 FAULT POINT
-PIXEL DAMAGE、EXPOSURE、ROW ERROR、BIT ERROR、ADDRESS ERROR、CFA ERROR、DEMOSAIC ERROR、CHROMA ERROR、COLOR MAP、BLOCK ERROR、STREAM ERROR、VHS、CRTを信号の因果順で適用します。CLEANはFAULTなし。VHS／CRTの媒体・表示特性と内部故障を区別します。STREAM ERRORは復号画像領域の欠落・再利用モデルで、実packetは破壊しません。
+FAULT CHAIN / 8 FAULT POINT
+PIXEL DAMAGE、EXPOSURE、ROW ERROR、BIT ERROR、ADDRESS ERROR、CFA ERROR、DEMOSAIC ERROR、CHROMA ERROR、COLOR MAP、BLOCK ERROR、STREAM ERROR、MEDIA、DISPLAYを信号の因果順で適用します。CLEANはFAULTなし。MEDIAはVHS・DVD・Digital thru・Composite／Component相当のAnalog thruと解像度低下に対応。DISPLAYはCRT・Digital thru補間・Networkの停止／欠落・LED故障を表現します。STREAM ERRORは復号画像領域の欠落・再利用モデルで、実packetは破壊しません。
 
 同じ個体、変化する瞬間
 個体差を保ちながら各FAULT固有の動き・一時事故が進みます。RESEEDは操作値と経路を保って個体を変更します。LIVEは動き・カメラ時間・温度・処理負荷・音量を故障状態に結合し、初期OFFです。通常の時間進行でChainを入れ替えません。
@@ -12,11 +12,14 @@ PIXEL DAMAGE、EXPOSURE、ROW ERROR、BIT ERROR、ADDRESS ERROR、CFA ERROR、DE
 信号を撮る
 JPEGは処理済みカメラ画像と確定したFAULT状態を保存します。ADVANCED OFFではメモリを抑え、ONでは表示フレームを確保します。通常動画と表示も同じ処理画像を参照します。H.264/H.265、端末対応の解像度・fps・画質、任意の録音を選べます。解像度連動オーディオも任意で有効にできます。DNGは別露光のRAWで、RGBプレビューとは同一ではありません。基本6種類に加え、任意の実験機能で入力感度・ブレ・熱雑音・スミアを利用でき、加工RAWにも対応します。写真と動画はアプリ内で連続プレビューでき、写真の拡大、動画の再生・シーク、左右の切り替えと下スワイプ終了に対応します。
 
+実験的な素材入力とECHO
+TAPはREADOUT後に写真・動画を注入し、素材再生と出力録画を別々に操作できます。TIME ECHOは一つの確率操作で過去の映像を割り込ませます。通常の処理はバックグラウンドで待機し、利用者が開始した録画中だけ専用サービスで継続します。
+
 実験的RAW動画
 対応カメラでは原本・無音のDNG連番を時刻情報付きZIPに保存できます。RAW現像ソフトで展開・現像してください。MP4ではなく、FAULT加工をバイパスし、負荷によりフレームが欠落する場合があります。
 
 端末内で完結
-すべての画像は実カメラ信号から始まります。意味推論で被写体を生成・補完しません。広告・アカウント・トラッカー・解析SDKなし。位置情報記録は任意で初期OFF。各配布版でコア機能は共通です。
+画像は実カメラまたは実験機能TAPで選択した素材から始まります。意味推論で被写体を生成・補完しません。広告・アカウント・トラッカー・解析SDKなし。位置情報記録は任意で初期OFF。各配布版でコア機能は共通です。
 
 日本語・英語・簡体字中国語。Android 12以降、Camera2、OpenGL ESが必要です。RAW対応・解像度・処理速度は端末に依存します。RGB再構成と復号ブロック故障は近似モデルです。
 

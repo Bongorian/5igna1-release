@@ -26,7 +26,7 @@ LEVEL is a compact artistic macro. It changes fault-specific quantities such as 
 
 IDENTITY describes fixed defect sites and biases. MOTION is a continuous drift or phase. EVENT is a short accident with a location, pattern and envelope. Some faults only need one or two of these. PIXEL DAMAGE keeps its sites as hot-pixel activity changes; ROW ERROR keeps weak bands as their displacement moves; VHS keeps its tracking bias between slips and dropout. CFA ERROR, DEMOSAIC ERROR and COLOR MAP are structurally stable under time alone.
 
-RANDOM CHAIN creates 2–5 faults available in the current format, randomizes their controls, and sets a new overall level. Hold the main random button for RESEED. RESEED changes the identities of the selected faults and preserves the route and controls. COLOR MAP has no random identity to change. Reset restores a fault's control values without reseeding it. Intrinsic time evolution is defined by each fault. [LIVE FAULT](LIVE_FAULT.md) additionally couples device measurements into those states.
+RANDOM CHAIN creates 2–5 faults available in the current format, randomizes their controls, and sets a new overall level. Hold the main random button for RESEED. RESEED changes identities only for active seed-dependent faults, preserving route, controls and fixed values. [SEED behavior](SEEDS.md). Reset restores a fault's control values without reseeding it. Intrinsic time evolution is defined by each fault. [LIVE FAULT](LIVE_FAULT.md) additionally couples device measurements into those states.
 
 ## What the models actually do
 

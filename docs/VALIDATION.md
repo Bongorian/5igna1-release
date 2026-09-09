@@ -16,3 +16,7 @@ This page indexes evidence by source scope. Test results apply to the named buil
 The JVM suite retains the pre-Kotlin golden hashes and independent RAW differential fixtures. Device checks exercise actual camera/GL integration separately. Android Emulator results do not certify a phone’s microphone quality, hardware RAW, sustained speed, temperature or battery use. RAW is a separate exposure and representation; exact displayed-frame JPEG capture applies only with ADVANCED ON in 1.4.0.
 
 No multi-hour recording, broad device matrix, GPU energy measurement or controlled long-duration thermal comparison is claimed. For an actionable issue, include app version, device/Android version, capture format, size/fps, ADVANCED/EXPERT switches and steps to reproduce.
+
+## 1.5.0
+
+[Physical TAP, MEDIA/DISPLAY and SEED checks](audit/TAP_MEDIA_1_5_0.md).

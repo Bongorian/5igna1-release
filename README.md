@@ -16,7 +16,7 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 
 ## One damaged system, fleeting moments
 
-This source is **1.4.0 (versionCode 13)**. It adds revised device recommendations, reduced-memory capture with ADVANCED OFF, and optional resolution-linked audio. It includes the Kotlin/RAW optimizations and interactive offline guide. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
+This source is **1.5.0 (versionCode 14)**. It adds experimental TAP input, probability-based TIME ECHO, expanded MEDIA/DISPLAY models and corrected SEED controls. It includes the Kotlin/RAW optimizations and interactive offline guide. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 
@@ -32,8 +32,8 @@ Scene samples come from the camera or selected media in experimental TAP. There 
 | CFA / RECONSTRUCTION | CFA ERROR · DEMOSAIC ERROR |
 | COLOR | CHROMA ERROR · COLOR MAP |
 | CODEC / STREAM | BLOCK ERROR · STREAM ERROR |
-| MEDIA | VHS |
-| DISPLAY | CRT |
+| MEDIA | VHS · DVD · Digital thru · Analog thru |
+| DISPLAY | CRT · Digital thru · Network · LED |
 
 CLEAN is an empty route. Each fault has a few named controls mapped to its own internal mechanism parameters. RANDOM CHAIN creates a new combination and controls; hold it to reseed identities while keeping the settings. LIVE controls current fault-time progression, variation patterns, second-based intervals and optional device inputs. Pause, trigger and reset act on the fault state. ADVANCED MODE exposes every compiled fault parameter and its time/event generators through AUTO or fixed values. VHS/CRT profiles are distinct from tracking, dropout, convergence and sync faults. STREAM ERROR is an explicit decoded-region loss/reuse model, not actual packet corruption.
 

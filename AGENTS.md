@@ -79,3 +79,7 @@
 ## Owner direction — 1.4.0 release, 2026-09-09
 
 - The owner requested publishing the adaptive capture/audio update as 1.4.0. Integrate the verified source into main and publish the signed GitHub/Obtainium APK as 1.4.0 / code 13 using the existing distribution key. Preserve existing releases and store submissions. The configured Play automation may attempt an Alpha draft upload; never remove another draft or cancel review to force it through.
+
+## Owner direction — 1.5.0 release, 2026-09-09
+
+- The owner requested auditing/fixing SEED and RESEED, organizing documentation, and releasing the completed TAP/LIVE/MEDIA/DISPLAY work as 1.5.0. Integrate verified source into main and publish the signed GitHub/Obtainium APK as 1.5.0 / code 14 with the existing distribution key. Preserve earlier artifacts, signing identities and store submissions. The configured Play automation may upload an Alpha draft; never cancel review or delete another draft to force it through.

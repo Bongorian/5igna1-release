@@ -132,3 +132,9 @@ Android 12以降、Camera2プレビュー/JPEGとOpenGL ES 2.0が必要です。
 カメラの組み合わせは [CameraDeviceの公式仕様](https://developer.android.com/reference/android/hardware/camera2/CameraDevice)、ビルド要件は [AGP 8.10の公式仕様](https://developer.android.com/build/releases/past-releases/agp-8-10-0-release-notes)を参照してください。
 
 `raw-echo` は接続端末でTIME ECHOとRAW切り替えを検証する追加のInstrumentationアクションです。実際のJPEG・DNG・MP4を保存します。
+
+## 1.5.0 checks
+
+- `action seed`: SEED field refresh, exact integer input, Apply/Cancel, EVENT SEED and recording guard.
+- `action transport`: model UI, settings order, pixel identity, intermediate resolution, network hold/resume and LED gaps.
+- `action tap`: image/video fixtures, injection boundary, playback/recording and background lifecycle. Requires `files/tap-fixture.mp4` in DEV app storage.
