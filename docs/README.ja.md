@@ -1,8 +1,8 @@
 # 5igna1 ガイド
 
-1.3.1では、初期値OFFの[実験的な端末連動](EXPERIMENTAL_SIGNALS.ja.md)を追加しています。FAULT別の5入力感度と、ブレ・熱雑音・スミアを扱います。実験機能・ADVANCED MODE・音声の初期値はOFFで、保存済み設定は保持します。
+このガイドは現在のソースに対応します。公開済みの基準版は **1.3.1 / code 12** です。開発中の端末推奨設定の改訂・ADVANCED OFF時の通常撮影・解像度連動音声はまだリリースされていません。特定の公開版については、そのタグ内の文書を参照してください。
 
-撮るところから、表現を探るところまで。初回起動時のチュートリアルを含む1.3.1 / code 12の操作と機能を案内します。1.0.0とは操作が異なります。
+実験的な端末連動・ADVANCED・EXPERT・解像度連動音声・録音音声は初期OFFです。保存済みの選択は保持します。[撮影形式と音声](FORMATS.ja.md)・[負荷と動作モード](PERFORMANCE.ja.md)。
 
 [作品の紹介へ](../README.ja.md) · [English quick guide](GETTING_STARTED.md)
 
@@ -25,10 +25,12 @@
 - [発熱・負荷対策と推奨設定](PERFORMANCE.ja.md)
 - [実験的なRAW動画](RAW_VIDEO.ja.md)
 - [プライバシーポリシー](PRIVACY.ja.md)
-- [検証済みの範囲と制限](VALIDATION.md)
+- [検証済みの範囲と制限](VALIDATION.ja.md)
 
 ## 開発・配布に関わる人へ
 
-[内部設計](ARCHITECTURE.md) · [RAWパイプライン](raw-pipeline.md) · [ビルド](building.md) · [実機検証](DEVELOPMENT.md) · [Contributing](../CONTRIBUTING.md)
+[内部設計](ARCHITECTURE.ja.md) · [RAWパイプライン](raw-pipeline.ja.md) · [ビルド](building.md) · [実機検証](DEVELOPMENT.ja.md) · [Contributing](../CONTRIBUTING.md)
 
 [公開・更新手順](RELEASING.md) · [配布タスクリスト](LAUNCH_TASKS.md) · [F-Droid readiness](FDROID_READINESS.md) · [素材監査](audit/ASSETS.md) · [依存監査](audit/dependencies.json)
+
+[文書の役割・整理方針](DOCUMENTATION.ja.md) · [Play自動アップロード](PLAY_AUTOMATION.ja.md)。過去の検証値は当時のソース・端末・条件に限定して参照してください。

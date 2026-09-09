@@ -203,7 +203,7 @@
     <string name="ui_could_not_capture" formatted="false">"无法拍摄"</string>
     <string name="ui_could_not_read_raw_frames" formatted="false">"无法读取 RAW 帧"</string>
     <string name="ui_could_not_read_capture_data" formatted="false">"无法读取拍摄数据"</string>
-    <string name="ui_saving_full_resolution_effects" formatted="false">"正在保存已显示信号…"</string>
+    <string name="ui_saving_full_resolution_effects" formatted="false">正在保存处理后的信号…</string>
     <string name="ui_saving_raw_data" formatted="false">"正在保存 RAW 数据…"</string>
     <string name="ui_no_location_fix_saved_without_gps" formatted="false">"未定位，已保存但不含 GPS。"</string>
     <string name="ui_could_not_save_the_photo" formatted="false">"无法保存照片"</string>
@@ -236,8 +236,8 @@
     <string name="fault_mains_60" formatted="false">"照明电源频率 60 Hz（关闭：50 Hz）"</string>
     <string name="fault_incident" formatted="false">"瞬时故障"</string>
     <string name="fault_edit_after_recording" formatted="false">"停止录制后可预览故障调整。"</string>
-    <string name="fault_capture_signal" formatted="false">"正在保存已显示的信号…"</string>
-    <string name="fault_signal_photo_note" formatted="false">"JPG以所选实时分辨率保存已显示的相机信号。RAW来自另一次传感器曝光，RGB预览为近似效果。"</string>
+    <string name="fault_capture_signal" formatted="false">正在记录处理后的信号…</string>
+    <string name="fault_signal_photo_note" formatted="false">JPG以所选实时分辨率保存处理后的相机图像。ADVANCED开启时保留已显示帧。RAW来自另一次传感器曝光，RGB预览为近似效果。</string>
     <string name="fault_live_resolution" formatted="false">"标准实时信号（最高2 MP）"</string>
     <string name="fault_live_max" formatted="false">"支持的最大实时信号"</string>
     <string name="fault_recording_draft" formatted="false">"请先应用或取消调整，再开始录制。"</string>
@@ -338,14 +338,14 @@
     <string name="live_sources">设备输入的影响</string>
     <string name="live_mains">照明电源频率</string>
     <string name="ui_event_seed_hint">固定后，在相同故障时间、输入和设置下重现事件序列。AUTO 每次启动变化。</string>
-    <string name="ui_advanced_settings_hint">显示所有故障的内部参数。关闭后保留已固定的值。</string>
+    <string name="ui_advanced_settings_hint">显示内部参数并保留已显示的RGB帧以进行精确拍摄。关闭后保留故障值和处理，复用单个输出缓冲区以节省内存。拍摄帧可能与显示帧不同。</string>
     <string name="live_pause">暂停</string>
     <string name="live_resume">继续</string>
     <string name="live_trigger">触发故障</string>
     <string name="live_reset">重置时间</string>
     <string name="load_recommended">适合此设备的推荐设置</string>
     <string name="load_title">负载与推荐设置</string>
-    <string name="load_hint">根据温度和负载调整显示更新。推荐JPG约1–2MP，视频为HD／FHD、最高30fps。临界高温时保存录像并暂停摄像冷却。</string>
+    <string name="load_hint">根据温度和负载调整显示更新。根据RAM、可用CPU核心数及相机输出选择初始设置：JPG约1–2MP，视频VGA／HD／FHD、最高30fps。临界高温时保存录像并暂停摄像冷却。</string>
     <string name="load_use_recommended">照片和视频使用推荐设置</string>
     <string name="load_cooling">冷却中 · 摄像已暂停</string>
     <string name="load_resumed">温度下降，摄像已恢复</string>
@@ -435,4 +435,6 @@
     <string name="fault_description_14">根据陀螺仪、加速度和可用曝光时间产生运动模糊。采用有限采样的艺术模拟，并非光学重建。</string>
     <string name="fault_description_15">根据设备温度和曝光代理信息增强颗粒噪声，不代表测量了图像传感器内部温度。</string>
     <string name="fault_description_16">根据可用读出时间沿列延伸高光，模拟拖影，不代表此设备实际发生了CCD拖影。</string>
+    <string name="resolution_audio">分辨率联动音频（实验）</string>
+    <string name="resolution_audio_hint">根据视频分辨率降低AAC录音质量。QVGA：8 kHz／24 kbps；VGA：16 kHz／48 kbps；HD：32 kHz／64 kbps；全高清：48 kHz／128 kbps；更高：48 kHz／192 kbps。参数可能根据设备支持范围调整。仅在开启音频时生效，不适用于RAW视频。</string>
 </resources>

@@ -1201,6 +1201,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         }
         cancelEffectPreview()
         settings = CaptureSettings(value)
+        advancedMode = settings.advancedMode
         if (settings.photoFormat == 1) settings.photoFormat = 2
         settings.save(getSharedPreferences("signal", 0))
         geo.updateEnabled(settings.location)

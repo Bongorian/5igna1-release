@@ -1,6 +1,6 @@
 # Controls reference
 
-On the first launch of a build with the tutorial, a five-page quick start appears before the camera permission prompt. Use Next / Back, or Skip at any time. Finishing, skipping or closing it prevents automatic display on later launches. Open Settings → Quick start to read it again without applying or discarding your pending settings edits. The guide is available in English, Japanese and Simplified Chinese, works offline, and keeps its page when the activity is recreated. Existing users see it once when upgrading to the tutorial build.
+On first launch, the eight-step interactive quick start highlights actual controls and offers an isolated LEVEL practice signal. The camera pauses while the guide is open. Skip, close or finish to dismiss it; replay it from Settings → Quick start. Settings save immediately. The guide works offline in English, Japanese and Simplified Chinese and restores its page on activity recreation.
 
 [All guides](README.md) · [日本語](USAGE.ja.md)
 
@@ -16,13 +16,13 @@ LIVE controls fault-time progression, speed/reverse, second-based loops and upda
 
 The format badge at the top switches JPG or RAW (MP4 / RAW ZIP in video mode). The catalog keeps VHS / MEDIA and CRT / DISPLAY visible in RAW, with an explicit format-switch button for effects that require processed images. Switching formats preserves the selected route and controls; RAW applies only supported faults. Switching format in the editor keeps the draft open; cancelling afterwards discards effect edits but keeps the explicitly selected capture format.
 
-The gear selects language, format, resolution, quality and optional GPS. JPEG saves the displayed signal at a supported live resolution (the default is a conservative device recommendation near 1–2 MP; manual sizes and Maximum remain available). RAW DNG uses a separate exposure and may differ from the RGB preview. JPEG quality is 85/95/100. [Formats](FORMATS.md).
+The gear selects language, format, resolution, quality and optional GPS. JPEG saves the processed signal; ADVANCED ON pins the displayed frame at a supported live resolution (the default is a conservative device recommendation near 1–2 MP; manual sizes and Maximum remain available). RAW DNG uses a separate exposure and may differ from the RGB preview. JPEG quality is 85/95/100. [Formats](FORMATS.md).
 
 Normal MP4 recording uses H.264/H.265, device-supported resolution/fps, four quality levels and optional audio. Preview and encoder use the same processed images; the screen can present fewer frames than the encoder at high frame rates. MP4 splits around 3.5 GB and stops on low storage, camera interruption or leaving the foreground. Long multi-hour sessions are not validated. Experimental original RAW video saves silent DNG sequences in bounded queues and ZIP segments. [RAW video](RAW_VIDEO.md).
 
 The bottom-left thumbnail opens a shared photo/video preview. Swipe sideways to browse captures, pinch to enlarge a photo, and swipe down or tap × to return to the camera. Videos support play/pause and seeking. The ↗ button opens the current item in another app. RAW DNG previews use the available system thumbnail; RAW ZIP opens externally. JPEG/DNG photos are in `DCIM/5igna1`, MP4 in `DCIM/5igna1`, and RAW sequence ZIPs in `Download/5igna1`.
 
-GPS starts off. Approximate and precise location are supported; if no recent fix is available, capture proceeds without GPS. JPEG records the displayed camera timestamp and fault snapshot in EXIF. Exposure/ISO fields are included only when the matching camera result is available. RAW has its own exposure metadata. There is no Internet permission, tracking or account registration. [Privacy](PRIVACY.md).
+GPS starts off. Approximate and precise location are supported; if no recent fix is available, capture proceeds without GPS. JPEG records the captured signal’s camera timestamp and fault snapshot in EXIF. Exposure/ISO fields are included only when the matching camera result is available. RAW has its own exposure metadata. There is no Internet permission, tracking or account registration. [Privacy](PRIVACY.md).
 
 Enable **ADVANCED MODE** in Settings, then tap a selected fault to inspect or fix its internal values. Turning the mode off hides the advanced controls but preserves fixed values. [Full parameter reference](ADVANCED_MODE.md).
 
@@ -30,7 +30,7 @@ New JPG, DNG and MP4 captures share **DCIM/5igna1**. Existing files stay in thei
 
 The development build includes conservative device recommendations and automatic preview workload reduction. [Heat and workload](PERFORMANCE.md).
 
-Settings groups ADVANCED and EXPERT under Modes. ADVANCED exposes internal values; EXPERT removes app-level preview workload and cooling limits for maximum available speed. [Performance modes](PERFORMANCE.md).
+Settings groups ADVANCED and EXPERT under Modes. ADVANCED exposes internal values and retains displayed frames; EXPERT removes app-level preview workload and cooling limits for maximum available speed. [Performance modes](PERFORMANCE.md).
 
 The top toolbar contains the format menu, light and GPS icons, an always-visible video-audio icon, and settings. Light/GPS icons turn lime when enabled; a long press reveals their status. The format menu opens directly below its button. Branding is kept out of the capture workspace; app information is in Settings. FAULT STATE shows time and transient event meters beneath an unobscured preview. A 0% event meter does not mean that intrinsic motion or fixed processing is off.
 

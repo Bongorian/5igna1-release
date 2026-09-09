@@ -1,7 +1,5 @@
 # FAULT POINTと操作値
 
-1.3.1では、初期値OFFの[実験的な端末連動](EXPERIMENTAL_SIGNALS.ja.md)を追加しています。FAULT別の5入力感度と、ブレ・熱雑音・スミアを扱います。実験機能・ADVANCED MODE・音声の初期値はOFFで、保存済み設定は保持します。
-
 [English](EFFECTS.md) · [ガイド](README.ja.md)
 
 同じ壊れた系の個性を保ち、その中で起こる一瞬の事故を撮ります。CLEANはFAULTが選択されていない状態です。選んだ順序にかかわらず、信号の因果順で適用します。
@@ -33,3 +31,5 @@ VHS／CRTの媒体・表示特性と、その内部の故障は別項目です�
 STREAM ERRORは静止画・動画共通です。加工RAWに適用できるのはPIXEL DAMAGE〜CFA ERRORの6種類で、RGBプレビューとは別露光・別表現です。[記録形式](FORMATS.ja.md) · [LIVE FAULT](LIVE_FAULT.ja.md)
 
 今のFAULTがどう変化するかはLIVEで設定します。周期・更新間隔は秒単位です。[時間変化の操作](LIVE_FAULT.ja.md)。内部値を直接固定するには、設定で [ADVANCED MODE](ADVANCED_MODE.ja.md) を一括ONにします。
+
+実験的な端末連動がONなら、加工RAWでもブレ・熱雑音・スミアを追加できます。対応範囲と近似の制限は[実験機能](EXPERIMENTAL_SIGNALS.ja.md)を参照してください。

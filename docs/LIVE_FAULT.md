@@ -34,4 +34,4 @@ Timing is specified directly in seconds. Earlier tempo/beat settings migrate to 
 
 Unavailable measurements do not invent readings. The expanded section shows input availability and measured values. Temperature and CPU are proxies, not direct measurements of an imaginary broken sensor or network link. Audio permission is requested only when applying enabled audio coupling; denial leaves other sources usable. During audio recording, the existing recorder supplies amplitude instead of opening a second microphone. Input ownership ends when the camera leaves the foreground.
 
-Preview and ordinary video share the same processed image for each camera timestamp. JPG pins the displayed image; RAW uses a separate exposure and the applicable sensor-domain faults. Original RAW video ZIPs remain unprocessed. [Formats](FORMATS.md).
+Preview and ordinary video share the same processed image for each camera timestamp. JPG snapshots the current processed image; ADVANCED ON pins the displayed image; RAW uses a separate exposure and the applicable sensor-domain faults. Original RAW video ZIPs remain unprocessed. [Formats](FORMATS.md).

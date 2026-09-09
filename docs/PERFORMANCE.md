@@ -2,13 +2,27 @@
 
 [Guides](README.md) · [日本語](PERFORMANCE.ja.md)
 
-The development build defaults to **Recommended for this device**. It chooses an advertised camera output within a conservative pixel budget, considering low-RAM/total-memory information and available stream timing. JPG starts at up to about 2 MP, or 1 MP on memory-constrained devices; video prefers an available HD/FHD mode at up to 30 fps. If no mode fits, it uses an available fallback. This is an initial budget, not a benchmark score or a device-model whitelist. Runtime measurements then adjust preview work.
+The current development source starts with **Recommended for this device**. Camera and encoder capabilities select an actual supported output within these initial pixel budgets, preferring video at up to 30 fps:
+
+| Starting tier | JPEG budget | Video budget |
+|---|---:|---:|
+| Android low-RAM flag, unknown RAM, less than 5 GiB RAM, or at most 4 available CPU cores | 921,600 pixels | 307,200 pixels (VGA) |
+| Otherwise, less than 8 GiB RAM or fewer than 8 available cores | 1,440,000 pixels | 921,600 pixels (HD) |
+| Otherwise | 2,073,600 pixels | 2,073,600 pixels (Full HD) |
+
+These are conservative starting hints, not CPU/GPU benchmark scores. Core count does not measure core speed or GPU performance. If no supported mode fits, the catalog supplies a fallback. Existing manual sizes are retained. Measured rendering cost and thermal feedback then adjust preview cadence; they do not silently change a recording resolution.
+
+## Normal capture and ADVANCED MODE
+
+ADVANCED defaults OFF. Normal capture reuses one processed output texture, preserving every selected FAULT pass. The GL thread reads an immutable JPEG snapshot from the current processed image when it handles the shutter; exact agreement with the last displayed frame is not required. Preview and normal video share this output without retaining a display history.
+
+ADVANCED ON retains the three-slot displayed-frame history and pins the displayed image before queuing the shutter. Switching modes releases old output textures and restarts the camera. Both paths retain immutable capture state; RAW remains a separate exposure. Relative to three allocated RGBA8 history textures, one output needs two fewer full-size textures (about 15.8 MiB at 1920×1080, excluding driver and camera memory). This is a storage calculation, not measured total memory or battery savings. FAULT sampling and per-frame processing cost remain unchanged.
 
 Settings → **Workload and recommendations** → **Use recommended photo and video settings** restores these selections and standard video quality. Resolution pickers also offer Recommended alongside manual sizes and Maximum. On the first upgrade to this policy, the previous maximum-photo default becomes Recommended; exact saved sizes are retained. A subsequent explicit Maximum choice is retained. Empty legacy video selections resolve to Recommended. A selected JPG size is also the saved JPG size; automatic frame pacing does not change it mid-session. RAW still uses a separate exposure and supported sensor faults.
 
 ## EXPERT MODE
 
-Settings → Modes → **EXPERT MODE** removes app-level thermal pauses, adaptive workload caps and timed preview frame skipping. Photo preview requests the fastest advertised normal capture rate compatible with the chosen stream; video uses its selected fps. Actual throughput remains limited by the camera, GPU, display and retained-frame availability. Resolution choices are preserved, so a smaller manual size can still be faster. EXPERT is independent of ADVANCED (internal parameter display), is saved as soon as you toggle it, and starts off by default.
+Settings → Modes → **EXPERT MODE** removes app-level thermal pauses, adaptive workload caps and timed preview frame skipping. Photo preview requests the fastest advertised normal capture rate compatible with the chosen stream; video uses its selected fps. Actual throughput remains limited by the camera, GPU, display and retained-frame availability. Resolution choices are preserved, so a smaller manual size can still be faster. EXPERT is independent of ADVANCED (internal parameters and displayed-frame capture), is saved as soon as you toggle it, and starts off by default.
 
 EXPERT skips workload thermal polling and never stops a recording in response to the app's thermal thresholds. Turning it off restores automatic control. Heat and battery use can increase. Android/device thermal protections and supported-format, memory-buffer and storage checks remain in effect. This mode does not overclock the device or bypass Android's controls.
 

@@ -1,5 +1,7 @@
 # FAULT描画と画像バッファの再利用 — 2026-09-09
 
+過去の調査・検証記録です。結果は記載したソースと条件に限ります。現在の仕様は[設計](../ARCHITECTURE.ja.md)と[検証一覧](../VALIDATION.ja.md)を参照してください。
+
 [English edition](FAULT_RENDER_AND_BUFFERS.md)
 
 `codex/kotlin-cleanup` の未リリース変更です。比較元は前回までのRAW高速化を含む `0695a57`。シェーダーの数式、処理順、各段のRGBA8への丸め、RAWの演算は維持しています。

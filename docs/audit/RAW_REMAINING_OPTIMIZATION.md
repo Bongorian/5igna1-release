@@ -1,5 +1,7 @@
 # Remaining RAW effects optimization — 2026-09-09
 
+Historical audit: results and branch/release status describe the named source and test date. For current behavior, see [architecture](../ARCHITECTURE.md) and [validation](../VALIDATION.md).
+
 [Japanese edition](RAW_REMAINING_OPTIMIZATION.ja.md) · [First optimization pass](RAW_OPTIMIZATION.md)
 
 Unreleased work on `codex/kotlin-cleanup`, based on `5063f14`. This pass specializes the four remaining CPU RAW effects. PIXEL DAMAGE and ROW ERROR retain the earlier optimization.

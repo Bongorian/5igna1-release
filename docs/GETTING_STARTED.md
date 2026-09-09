@@ -4,11 +4,11 @@
 
 The first-launch guide highlights eight real controls. Tap a highlight or the practice button, and drag the practice LEVEL slider. The test signal is a sandbox: it does not change camera settings or save media. Camera processing pauses while the guide is open. Replay it from **Settings → Quick start**; your selected settings are preserved. Settings save immediately when selected; close with × or Back. **Use recommended settings** also turns EXPERT off immediately, restoring adaptive load control.
 
-Allow camera access, select Photo, and choose **JPEG · displayed signal** in settings. Start with the standard live resolution and leave GPS off unless you want location tags.
+Allow camera access, select Photo, and choose **JPG** in settings. Start with the standard live resolution and leave GPS off unless you want location tags.
 
 Tap **+**, select **ROW ERROR**, then tap its chip in the chain. Find a vertical edge or a moving subject. In the fault controls, displacement changes the sideways readout error, bands change its structure, and loss introduces short incidents. The background previews your edit. The checkmark keeps it; Back cancels it.
 
-Keep watching without changing the settings. The weak rows retain their identity as they move. Press the center shutter or a volume key at the moment you want to keep. JPEG saves that displayed signal. The bottom-left thumbnail opens the saved photograph in the shared photo/video preview; it is also in `DCIM/5igna1`.
+Keep watching without changing the settings. The weak rows retain their identity as they move. Press the center shutter or a volume key at the moment you want to keep. JPEG saves the processed camera image. ADVANCED ON additionally retains the exact displayed frame. The bottom-left thumbnail opens the saved photograph in the shared photo/video preview; it is also in `DCIM/5igna1`.
 
 Tap + and add CHROMA ERROR or VHS. Processing follows the signal path. RAW shows the full catalog and offers a switch to JPEG for these effects.
 

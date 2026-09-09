@@ -203,7 +203,7 @@
     <string name="ui_could_not_capture" formatted="false">"撮影できません"</string>
     <string name="ui_could_not_read_raw_frames" formatted="false">"RAWフレームを読み出せません"</string>
     <string name="ui_could_not_read_capture_data" formatted="false">"撮影データを取得できません"</string>
-    <string name="ui_saving_full_resolution_effects" formatted="false">"表示した信号を保存中…"</string>
+    <string name="ui_saving_full_resolution_effects" formatted="false">処理済み信号を保存中…</string>
     <string name="ui_saving_raw_data" formatted="false">"RAWデータを保存中…"</string>
     <string name="ui_no_location_fix_saved_without_gps" formatted="false">"位置を取得できなかったためGPSなしで保存しました"</string>
     <string name="ui_could_not_save_the_photo" formatted="false">"写真を保存できません"</string>
@@ -236,8 +236,8 @@
     <string name="fault_mains_60" formatted="false">"照明の電源周波数 60 Hz（OFF: 50 Hz）"</string>
     <string name="fault_incident" formatted="false">"事故"</string>
     <string name="fault_edit_after_recording" formatted="false">"FAULTの試し編集は録画停止後に行えます。"</string>
-    <string name="fault_capture_signal" formatted="false">"表示した信号を記録中…"</string>
-    <string name="fault_signal_photo_note" formatted="false">"JPGは選択したライブ解像度で、表示したカメラ信号を保存します。RAWは別のセンサー露光を取得し、RGBプレビューは近似です。"</string>
+    <string name="fault_capture_signal" formatted="false">処理済み信号を記録中…</string>
+    <string name="fault_signal_photo_note" formatted="false">JPGは選択したライブ解像度で処理済みカメラ画像を保存します。ADVANCED ONでは表示フレームを保持します。RAWは別のセンサー露光を取得し、RGBプレビューは近似です。</string>
     <string name="fault_live_resolution" formatted="false">"標準ライブ信号（2 MPまで）"</string>
     <string name="fault_live_max" formatted="false">"対応する最大ライブ信号"</string>
     <string name="fault_recording_draft" formatted="false">"編集を適用またはキャンセルしてから録画してください。"</string>
@@ -338,14 +338,14 @@
     <string name="live_sources">端末入力の影響</string>
     <string name="live_mains">照明の電源周波数</string>
     <string name="ui_event_seed_hint">固定すると同じFAULT時間・入力・設定で事故の系列を再現します。AUTOは起動ごとに変化します。</string>
-    <string name="ui_advanced_settings_hint">全FAULTの内部パラメータを表示します。OFFにしても固定済みの値は保持されます。</string>
+    <string name="ui_advanced_settings_hint">内部パラメータを表示し、表示済みRGBフレームを厳密な撮影用に保持します。OFFでもFAULTの値と処理は維持し、出力バッファを1枚にしてメモリを節約します。表示フレームと撮影フレームは一致しない場合があります。</string>
     <string name="live_pause">一時停止</string>
     <string name="live_resume">再開</string>
     <string name="live_trigger">故障を発生</string>
     <string name="live_reset">時間リセット</string>
     <string name="load_recommended">端末に合わせた推奨設定</string>
     <string name="load_title">負荷と推奨設定</string>
-    <string name="load_hint">温度と処理負荷に応じて表示更新を調整します。推奨はJPG約1〜2MP、動画HD／FHD・最大30fps。高温の限界状態では録画を保存して冷却休止します。</string>
+    <string name="load_hint">温度と処理負荷に応じて表示更新を調整します。RAM・CPU数・対応出力を参考に、JPG約1〜2MP、動画VGA／HD／FHD・最大30fpsを初期設定の目安にします。高温の限界状態では録画を保存して冷却休止します。</string>
     <string name="load_use_recommended">写真・動画を端末の推奨設定にする</string>
     <string name="load_cooling">冷却中 · カメラ休止</string>
     <string name="load_resumed">温度が下がったためカメラを再開しました</string>
@@ -435,4 +435,6 @@
     <string name="fault_description_14">端末の回転・加速度と取得できる露光時間に応じたブレ。光学系の厳密な再現ではなく、参照画素数を制限した表現です。</string>
     <string name="fault_description_15">端末の温度・露光時間の代理情報で増える粒状の雑音。撮像センサーの内部温度を測っているわけではありません。</string>
     <string name="fault_description_16">取得できる読み出し時間に応じて明部を列方向へ伸ばすスミア風の表現。この端末にCCDのスミアが発生しているという意味ではありません。</string>
+    <string name="resolution_audio">解像度連動オーディオ（実験）</string>
+    <string name="resolution_audio_hint">動画解像度に応じてAAC録音の品質を下げます。QVGA：8 kHz／24 kbps、VGA：16 kHz／48 kbps、HD：32 kHz／64 kbps、フルHD：48 kHz／128 kbps、それ以上：48 kHz／192 kbps。端末の対応範囲により調整されます。音声ON時のみ有効で、RAW動画には適用されません。</string>
 </resources>

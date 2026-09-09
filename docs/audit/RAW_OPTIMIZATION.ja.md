@@ -1,5 +1,7 @@
 # RAW処理の最適化 — 2026-09-09
 
+過去の調査・検証記録です。結果は記載したソースと条件に限ります。現在の仕様は[設計](../ARCHITECTURE.ja.md)と[検証一覧](../VALIDATION.ja.md)を参照してください。
+
 [English edition](RAW_OPTIMIZATION.md)
 
 `codex/kotlin-cleanup` の未リリース変更です。PIXEL DAMAGEとROW ERRORのCPU側RAW処理を対象に、設定取得と列・行で共通の計算をまとめました。

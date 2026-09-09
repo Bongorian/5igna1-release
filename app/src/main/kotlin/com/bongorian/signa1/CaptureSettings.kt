@@ -16,6 +16,8 @@ internal class CaptureSettings {
     var rawVideo: Boolean = false
     var expertMode: Boolean = false
     var experimentalSignals: Boolean = false
+    var resolutionAudio: Boolean = false
+    var advancedMode: Boolean = false
     var rawVideoSize: String = ""
     var rawVideoFps: Int = 12
 
@@ -23,6 +25,8 @@ internal class CaptureSettings {
 
     constructor(other: CaptureSettings) {
         experimentalSignals = other.experimentalSignals
+        resolutionAudio = other.resolutionAudio
+        advancedMode = other.advancedMode
         expertMode = other.expertMode
         photoFormat = other.photoFormat
         jpegQuality = other.jpegQuality
@@ -39,6 +43,8 @@ internal class CaptureSettings {
     fun save(p: SharedPreferences) {
         p.edit()
             .putBoolean("experimentalSignals", experimentalSignals)
+            .putBoolean("resolutionAudio", resolutionAudio)
+            .putBoolean("advancedMode", advancedMode)
             .putBoolean("expertMode", expertMode)
             .putBoolean("loadRecommendationsV1", true)
             .putInt("photoFormat", photoFormat)
@@ -58,6 +64,8 @@ internal class CaptureSettings {
         fun load(p: SharedPreferences): CaptureSettings {
             val s = CaptureSettings()
             s.experimentalSignals = p.getBoolean("experimentalSignals", false)
+            s.resolutionAudio = p.getBoolean("resolutionAudio", false)
+            s.advancedMode = p.getBoolean("advancedMode", false)
             s.expertMode = p.getBoolean("expertMode", false)
             s.photoFormat = p.getInt("photoFormat", 0)
             if (s.photoFormat == 1) s.photoFormat = 2

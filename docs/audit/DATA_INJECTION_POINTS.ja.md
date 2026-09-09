@@ -1,5 +1,7 @@
 # 信号へのデータ注入の検討
 
+過去の調査・検証記録です。結果は記載したソースと条件に限ります。現在の仕様は[設計](../ARCHITECTURE.ja.md)と[検証一覧](../VALIDATION.ja.md)を参照してください。
+
 [English](DATA_INJECTION_POINTS.md)
 
 2026-09-09、`codex/interactive-guide-thermal-inputs` のコード監査。今回は注入機能の実装ではなく、実装余地と設計上の条件を整理した。

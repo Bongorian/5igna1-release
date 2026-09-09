@@ -1,5 +1,7 @@
 # 操作ガイド・設定保存・発熱の調査
 
+過去の調査・検証記録です。結果は記載したソースと条件に限ります。現在の仕様は[設計](../ARCHITECTURE.ja.md)と[検証一覧](../VALIDATION.ja.md)を参照してください。
+
 [English](GUIDE_AND_THERMAL.md) · [測定データ](guide-thermal-results.json) · [データ注入の検討](DATA_INJECTION_POINTS.ja.md)
 
 開発ブランチ：`codex/interactive-guide-thermal-inputs`。公開済みリリースと提出済みバンドルは維持。

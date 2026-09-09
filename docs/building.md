@@ -26,9 +26,10 @@ Both release flavors use `com.bongorian.signa1`; both debug flavors use `com.bon
 
 ## Verification
 
-`./gradlew test` runs nine JVM tests for each flavor/build-type combination. The fixtures cover immutable capture state, bounded frame handoff, RAW row/byte/CFA operations, LIVE behavior, advanced controls, adaptive load, and random chains. A migration fixture compares evaluated effects and RAW bytes with fixed SHA-256 values captured from the Java implementation.
+`./gradlew test` runs the current JVM suite for each flavor/build-type combination. Counts come from that run’s reports; historical counts are not a fixed requirement. The fixtures cover immutable capture state, bounded frame handoff, RAW row/byte/CFA operations, LIVE behavior, advanced controls, adaptive load, and random chains. A migration fixture compares evaluated effects and RAW bytes with fixed SHA-256 values captured from the Java implementation.
 
 ```sh
+python3 tools/check-docs.py
 python3 tools/check-locales.py
 python3 tools/release.py check
 python3 tools/check-repository.py
@@ -38,7 +39,7 @@ python3 tools/audit-dependencies.py --check
 
 `verifyFossDependencies` checks for known prohibited SDK groups. It supplements a license review; it does not replace one. The inventory check compares resolved versions and artifact hashes with the reviewed snapshot.
 
-See [device verification procedures (Japanese)](DEVELOPMENT.md) and [tested scope](VALIDATION.md). Use an emulator or a device whose camera and storage you intend to test; capture tests write media.
+See [device verification procedures](DEVELOPMENT.md) and [tested scope](VALIDATION.md). Use an emulator or a device whose camera and storage you intend to test; capture tests write media.
 
 ## Kotlin source layout
 

@@ -1,5 +1,7 @@
 # Fault system redesign (release baseline)
 
+Historical design for the migration from 1.0.0. The current implementation reference is [Architecture](../ARCHITECTURE.md); this document retains the original decisions and acceptance scope.
+
 Baseline: public release source `7dd83a7` (1.0.0). This is an intentional settings and processing break, not an ID-compatible refactor. [Japanese design](FAULT_SYSTEM.ja.md).
 
 ## Intent

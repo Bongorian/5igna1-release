@@ -10,4 +10,4 @@ Randomness generates identities, drift and incidents. It does not invent scene c
 
 The internal mechanisms should make causal sense, but a complete physical simulator is not the goal. Distances, densities and errors can be exaggerated to make compelling images. VHS and CRT have recognizable profiles, with separate faults occurring inside them.
 
-JPEG captures the acknowledged viewfinder signal. Ordinary video records the same evolving system over an interval. RAW capture offers another representation and exposure, with an explicit RGB-preview limitation. [Fault models](EFFECTS.md) · [Recording](FORMATS.md).
+JPEG captures the processed camera signal; ADVANCED ON pins the acknowledged viewfinder frame. Ordinary video records the same evolving system over an interval. RAW capture offers another representation and exposure, with an explicit RGB-preview limitation. [Fault models](EFFECTS.md) · [Recording](FORMATS.md).

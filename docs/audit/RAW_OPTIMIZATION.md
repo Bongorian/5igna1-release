@@ -1,5 +1,7 @@
 # RAW processing optimization — 2026-09-09
 
+Historical audit: results and branch/release status describe the named source and test date. For current behavior, see [architecture](../ARCHITECTURE.md) and [validation](../VALIDATION.md).
+
 [Japanese edition](RAW_OPTIMIZATION.ja.md)
 
 Unreleased work on `codex/kotlin-cleanup`, based on `66e1950`. Only the CPU RAW implementations of PIXEL DAMAGE and ROW ERROR are specialized. Other effects, processing order, input ownership, copies, shaders, RAW capture and export remain unchanged.

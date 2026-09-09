@@ -1,8 +1,8 @@
 # 5igna1 field guide
 
-Version 1.3.1 adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. Experimental features, ADVANCED MODE and audio default to OFF; existing saved choices are retained.
+These guides follow this source checkout. The published baseline is **1.3.1 / code 12**. Current development adds revised device recommendations, normal capture with ADVANCED OFF, and optional resolution-linked audio; these additions have not been released. Use the documentation at a release tag when you need that version’s exact behavior.
 
-From your first photograph to a deeper understanding of the signal. These guides describe 1.3.1 / code 12, including the first-launch tutorial. Version 1.0.0 has different controls.
+Experimental device response, ADVANCED, EXPERT, linked audio and recording audio start OFF. Saved choices are retained. [Format and audio behavior](FORMATS.md) · [Performance modes](PERFORMANCE.md).
 
 [The project](../README.md) · [日本語ガイド](README.ja.md)
 
@@ -24,6 +24,8 @@ From your first photograph to a deeper understanding of the signal. These guides
 
 ## Build and maintain
 
-[Build the app](building.md) · [Contribute](../CONTRIBUTING.md) · [Architecture](ARCHITECTURE.md) · [RAW pipeline (Japanese)](raw-pipeline.md)
+[Build the app](building.md) · [Contribute](../CONTRIBUTING.md) · [Architecture](ARCHITECTURE.md) · [RAW pipeline](raw-pipeline.md)
 
-Maintainer records: [Release procedure](RELEASING.md), [launch checklist](LAUNCH_TASKS.md), [F-Droid readiness](FDROID_READINESS.md), [asset provenance](audit/ASSETS.md), and [resolved dependency inventory](audit/dependencies.json). Some maintainer documents are in Japanese.
+Maintainer entry points: [Development checks](DEVELOPMENT.md), [release procedure](RELEASING.md), [distribution checklist](LAUNCH_TASKS.md), [Play upload automation](PLAY_AUTOMATION.md), and [F-Droid candidate](FDROID_READINESS.md).
+
+Historical measurements and submission reports retain their dated scope. Start from [Validation](VALIDATION.md) for evidence, or [Documentation map](DOCUMENTATION.md) for each file’s role, maintenance rules and archive links.

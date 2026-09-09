@@ -16,7 +16,7 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 
 ## One damaged system, fleeting moments
 
-This source is **1.3.1 (versionCode 12)**, with the Kotlin rewrite, optimized RAW processing and an offline first-launch tutorial that can be replayed from Settings. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
+The published baseline is **1.3.1 (versionCode 12)**; this development source adds revised device budgets, normal capture with ADVANCED OFF, and optional resolution-linked audio (unreleased), with the Kotlin rewrite, optimized RAW processing and an offline first-launch tutorial that can be replayed from Settings. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 
@@ -39,11 +39,11 @@ CLEAN is an empty route. Each fault has a few named controls mapped to its own i
 
 [Fault models](docs/EFFECTS.md) · [LIVE time evolution and inputs](docs/LIVE_FAULT.md) · [ADVANCED MODE](docs/ADVANCED_MODE.md) · [Release audit and migration design](docs/design/FAULT_SYSTEM.md)
 
-## Photograph the displayed signal
+## Photograph the processed signal
 
-JPEG pins the UI-acknowledged camera image at shutter time. A later camera frame or settings edit cannot replace it. Preview and ordinary video use the same canonical processed images. JPEG uses a supported live signal resolution, rather than a later full-resolution exposure. RAW photos use separate exposures and cannot be identical to the RGB viewfinder. [Formats and limits](docs/FORMATS.md).
+JPEG snapshots the processed camera image when the shutter is handled. ADVANCED ON pins the UI-acknowledged frame; OFF reuses one output to reduce memory and may capture a different frame from the last display. The captured image and state stay immutable while saving. Preview and ordinary video use the same canonical processed images. JPEG uses a supported live signal resolution, rather than a later full-resolution exposure. RAW photos use separate exposures and cannot be identical to the RGB viewfinder. [Formats and limits](docs/FORMATS.md).
 
-1. Choose Photo and **JPEG · displayed signal**.
+1. Choose Photo and **JPG**.
 2. Select **ROW ERROR**. Adjust displacement and loss, then Apply. Watch the weak rows drift.
 3. Press the shutter when the image interests you. Open the saved photograph from the thumbnail.
 

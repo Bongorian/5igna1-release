@@ -1,5 +1,7 @@
 # Tested scope and current limits
 
+Historical audit: results and branch/release status describe the named source and test date. For current behavior, see [architecture](../ARCHITECTURE.md) and [validation](../VALIDATION.md).
+
 This is a record of what was checked for 5igna1 1.0.0. It is not a guarantee of every device's camera capabilities or sustained frame rate.
 
 ## Build and behavior checks

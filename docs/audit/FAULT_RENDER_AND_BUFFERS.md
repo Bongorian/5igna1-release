@@ -1,5 +1,7 @@
 # FAULT rendering and image-buffer reuse — 2026-09-09
 
+Historical audit: results and branch/release status describe the named source and test date. For current behavior, see [architecture](../ARCHITECTURE.md) and [validation](../VALIDATION.md).
+
 [Japanese edition](FAULT_RENDER_AND_BUFFERS.ja.md)
 
 Unreleased work on `codex/kotlin-cleanup`, based on `0695a57`. The GPU shader source, processing order, RGBA8 intermediate rounding and RAW arithmetic are unchanged. This pass reduces CPU submission overhead and reuses image storage.

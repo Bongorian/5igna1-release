@@ -242,6 +242,9 @@ class DeviceChecks : Instrumentation() {
                     "result",
                     "PASS unobscured preview, draft controls, multi-selection, random chain, cancel and apply",
                 )
+            } else if (action == "normal-capture") {
+                checkNormalCapture()
+                result.putString("result", "PASS normal capture, immutable state, released history and mode persistence")
             } else if (action == "capture-contract") {
                 checkCaptureContract()
                 result.putString(
@@ -321,6 +324,8 @@ class DeviceChecks : Instrumentation() {
             } else {
                 val chosen = CaptureSettings(original)
                 chosen.rawVideo = false
+                chosen.resolutionAudio = args!!.getString("resolutionAudio", "false") == "true"
+                chosen.advancedMode = args!!.getString("advanced", "false") == "true"
                 chosen.experimentalSignals = args!!.getString("experimental", "false") == "true"
                 chosen.location = args!!.getString("gps", "false") == "true"
                 chosen.jpegQuality = Integer.parseInt(args!!.getString("quality", "100"))
@@ -401,7 +406,7 @@ class DeviceChecks : Instrumentation() {
                         20000,
                     )
                 } else {
-                    await("acknowledged photo frame", { activity!!.engine.presentedFrames.acknowledged() > 0 }, 20000)
+                    await("acknowledged photo frame", { activity!!.engine.previewAcknowledged() > 0 }, 20000)
                     runOnMainSync { activity!!.engine.photo() }
                 }
                 await(
@@ -604,6 +609,8 @@ class DeviceChecks : Instrumentation() {
 
     internal fun checkImmediateSettings() {
         val beforeAdvanced = activity!!.advancedMode
+        val beforeAudio = activity!!.settings.resolutionAudio
+        val beforeSound = activity!!.sound
         try {
             runOnMainSync {
                 val q = QualityDialog(activity!!)
@@ -613,6 +620,9 @@ class DeviceChecks : Instrumentation() {
                 q.content!!.findViewWithTag<View>("advanced-mode").performClick()
                 if (activity!!.advancedMode == beforeAdvanced)
                     throw AssertionError("Advanced not immediate")
+                q.content!!.findViewWithTag<View>("resolution-audio").performClick()
+                check(activity!!.settings.resolutionAudio != beforeAudio && activity!!.sound == beforeSound)
+                check(CaptureSettings.load(activity!!.getSharedPreferences("signal", 0)).resolutionAudio != beforeAudio)
                 q.jpeg!!.performClick()
                 val choices = android.view.inspector.WindowInspector.getGlobalWindowViews()
                     .first { it.findViewWithTag<View>("choice-0") != null }
@@ -634,7 +644,7 @@ class DeviceChecks : Instrumentation() {
                 reopened = QualityDialog(activity!!)
                 val q = reopened
                 q.show()
-                if (q.draft.jpegQuality != 85 || q.draft.expertMode || q.advanced == beforeAdvanced)
+                if (q.draft.jpegQuality != 85 || q.draft.expertMode || q.advanced == beforeAdvanced || q.draft.resolutionAudio == beforeAudio)
                     throw AssertionError("Settings lost on recreation")
             }
             saveUi("settings-immediate.png")
@@ -1381,10 +1391,10 @@ class DeviceChecks : Instrumentation() {
             )
             if (current!!.player != null || current!!.videoSurface != null || !current!!.closed)
                 throw AssertionError("Video resources retained after dismiss")
-            val token = activity!!.engine.presentedFrames.acknowledged()
+            val token = activity!!.engine.previewAcknowledged()
             await(
                 "fresh displayed frame after video",
-                { activity!!.engine.presentedFrames.acknowledged() > token },
+                { activity!!.engine.previewAcknowledged() > token },
                 8000,
             )
             if (n < 5) {
@@ -1550,13 +1560,13 @@ class DeviceChecks : Instrumentation() {
                             ", cameraFrames=" +
                             activity!!.engine.frameSeen +
                             ", ack=" +
-                            activity!!.engine.presentedFrames.acknowledged()
+                            activity!!.engine.previewAcknowledged()
                     )
                 }
-                val token = activity!!.engine.presentedFrames.acknowledged()
+                val token = activity!!.engine.previewAcknowledged()
                 await(
                     "new displayed frame after swipe",
-                    { activity!!.engine.presentedFrames.acknowledged() > token },
+                    { activity!!.engine.previewAcknowledged() > token },
                     8000,
                 )
                 if (n == 5) saveUi("swipe-return-final.png")
@@ -1943,9 +1953,62 @@ class DeviceChecks : Instrumentation() {
         })
     }
 
+    internal fun checkNormalCapture() {
+        val next = CaptureSettings(activity!!.settings)
+        next.advancedMode = false
+        next.photoFormat = 0
+        next.photoSize = "recommended"
+        next.rawVideo = false
+        next.resolutionAudio = true
+        val generation = activity!!.engine.generation
+        runOnMainSync {
+            activity!!.videoMode = false
+            activity!!.applySettings(next)
+            activity!!.commitEffects(EffectState.defaults().single(Effects.BIT_ERROR).amount(.8f))
+        }
+        await("normal preview", { activity!!.engine.generation > generation && activity!!.ready }, 20000)
+        val e = activity!!.engine
+        val before = activity!!.latest
+        val latch = java.util.concurrent.CountDownLatch(1)
+        var issue: Throwable? = null
+        val saveGate = java.util.concurrent.CountDownLatch(1)
+        e.files.execute { saveGate.await(15, java.util.concurrent.TimeUnit.SECONDS) }
+        e.gl.post {
+            try {
+                check(e.presentedFrames.values().all { it.texture == 0 }) { "Normal mode retained history textures" }
+                check(e.encoderScratch.texture != 0 && e.encoderScratch.frame != null)
+                e.photo()
+            } catch (failure: Throwable) { issue = failure }
+            finally { latch.countDown() }
+        }
+        check(latch.await(5, java.util.concurrent.TimeUnit.SECONDS))
+        issue?.let { throw AssertionError("Normal buffer policy", it) }
+        try {
+            await("normal snapshot before save", { e.photoBusy && e.pending == null }, 5000)
+            runOnMainSync { activity!!.commitEffects(EffectState.defaults().single(Effects.CRT)) }
+            await("later processed state", { e.encoderScratch.frame?.ids()?.contains(Effects.CRT) == true }, 5000)
+        } finally {
+            saveGate.countDown()
+        }
+        await("normal JPEG", { activity!!.latest != before && !e.photoBusy }, 30000)
+        val saved = activity!!.latest!!
+        getTargetContext().contentResolver.openInputStream(saved).use {
+            val description = ExifInterface(requireNotNull(it)).getAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION)!!
+            check(description.contains("Processed RGB capture") && description.contains("BIT ERROR")) { description }
+        }
+        getTargetContext().contentResolver.openInputStream(saved).use {
+            val bitmap = BitmapFactory.decodeStream(it)!!
+            check(bitmap.width > 0 && bitmap.height > 0)
+            bitmap.recycle()
+        }
+        val restored = CaptureSettings.load(getTargetContext().getSharedPreferences("signal", 0))
+        check(!restored.advancedMode && restored.resolutionAudio)
+    }
+
     @Throws(Exception::class)
     internal fun checkCaptureContract(experimental: Boolean = false) {
         val settings = CaptureSettings(activity!!.settings)
+        settings.advancedMode = true
         settings.photoFormat = 0
         settings.rawVideo = false
         settings.photoSize = if (experimental) "recommended" else "auto"
@@ -1970,7 +2033,7 @@ class DeviceChecks : Instrumentation() {
             {
                 activity!!.engine.generation > generation &&
                     activity!!.ready &&
-                    activity!!.engine.presentedFrames.acknowledged() > 0
+                    activity!!.engine.previewAcknowledged() > 0
             },
             20000,
         )
@@ -2212,6 +2275,7 @@ class DeviceChecks : Instrumentation() {
     }
 
     internal fun presented(): EffectState.Frame? {
+        if (!activity!!.engine.settings.advancedMode) return activity!!.engine.encoderScratch.frame
         val lease = activity!!.engine.presentedFrames.reserve()
         if (lease == null) return null
         try {
@@ -2721,7 +2785,7 @@ class DeviceChecks : Instrumentation() {
                     "Advanced preview: surface=" +
                         activity!!.preview!!.getSurfaceTexture()!!.getTimestamp() +
                         " ack=" +
-                        activity!!.engine.presentedFrames.acknowledged() +
+                        activity!!.engine.previewAcknowledged() +
                         " camera=" +
                         activity!!.engine.lastFrameNs +
                         " ready=" +
@@ -3331,17 +3395,7 @@ class DeviceChecks : Instrumentation() {
             await(
                 "draft preview frame",
                 {
-                    val lease = activity!!.engine.presentedFrames.reserve()
-                    if (lease == null) return@await false
-                    try {
-                        return@await lease!!
-                            .value
-                            .frame!!
-                            .parameters
-                            .get(Effects.PIXEL_DAMAGE, "density") > .65f
-                    } finally {
-                        activity!!.engine.presentedFrames.release(lease)
-                    }
+                    return@await (presented()?.parameters?.get(Effects.PIXEL_DAMAGE, "density") ?: 0f) > .65f
                 },
                 5000,
             )

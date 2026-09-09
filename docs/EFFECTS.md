@@ -1,7 +1,5 @@
 # Fault points and controls
 
-Version 1.3.1 adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. Experimental features, ADVANCED MODE and audio default to OFF; existing saved choices are retained.
-
 [All guides](README.md) · [日本語](EFFECTS.ja.md)
 
 Choose a damaged system, then watch what happens inside it. CLEAN is an empty route. The thirteen faults are applied in signal order, regardless of the order in which you select them.
@@ -44,6 +42,8 @@ These are causal artistic models, not a complete engineering simulation. Their r
 
 ## Recording the route
 
-JPEG saves the UI-acknowledged, processed camera signal, including VHS and CRT when selected. Ordinary video uses that same processing timeline and canonical images. STREAM ERROR is available for both photos and videos. Processed RAW supports the six faults from PIXEL DAMAGE through CFA ERROR and uses a separate RAW exposure with the latched state; it is not the RGB viewfinder image. [Formats and capture limits](FORMATS.md).
+JPEG saves the processed camera signal (UI-acknowledged with ADVANCED ON), including VHS and CRT when selected. Ordinary video uses that same processing timeline and canonical images. STREAM ERROR is available for both photos and videos. Processed RAW supports the six faults from PIXEL DAMAGE through CFA ERROR and uses a separate RAW exposure with the latched state; it is not the RGB viewfinder image. [Formats and capture limits](FORMATS.md).
 
 Use LIVE to set how the current fault state evolves, with second-based periods and update intervals. [Time controls](LIVE_FAULT.md). Enable [ADVANCED MODE](ADVANCED_MODE.md) in Settings to directly fix model values.
+
+With experimental device response enabled, processed RAW also supports MOTION BLUR, THERMAL NOISE and SMEAR. These additions and their approximation limits are described in [Experimental features](EXPERIMENTAL_SIGNALS.md).

@@ -1,58 +1,32 @@
-# Launch checklist
+# Distribution status and owner checklist
 
-The public project starts here: **Bongorian/5igna1-release**. As of 2026-09-08, the owner reports F-Droid submission awaiting merge and Google Play closed testing awaiting review. Both submitted candidates remain 1.0.0 / code 8; current source prepares 1.1.0 / code 9.
+Last documented check: **2026-09-09 (Japan time)**. This is a dated maintainer status, not a live store monitor. [Release procedure](RELEASING.md) · [Documentation map](DOCUMENTATION.md)
 
-## GitHub / Obtainium
+| Channel | Last verified state | Record |
+|---|---|---|
+| GitHub / Obtainium | 1.3.1 / code 12 published; earlier tags retained | [Latest GitHub release](https://github.com/Bongorian/5igna1-release/releases/latest) |
+| Google Play Alpha | 1.3.0 / code 11 published to selected testers | [1.3.0 record](PLAY_1_3_0.md) |
+| Google Play Alpha draft | 1.3.1 / code 12 uploaded as an unpublished draft; review/publication require Console action | [First automated upload](PLAY_AUTOMATION.md#first-successful-run--2026-09-09) |
+| F-Droid | Owner-reported 1.0.0 / code 8 submission awaiting merge; later release work did not replace it | [Candidate audit](FDROID_READINESS.md) |
+| Current development | Revised device/capture/audio policies after 1.3.1; no new release allocated | [Guide scope](README.md) |
 
-- [x] Create a clean source snapshot without the old development Git history or Toren1BD screenshots.
-- [x] Keep the previous repository private after the owner changed the publication plan.
-- [x] Back up the Play upload key, certificate, and recovery settings under Documents; verify file hashes.
-- [x] Create a separate long-term distribution key and back it up with its certificate and recovery settings.
-- [x] Sign and verify the 1.0.0 FOSS APK and SHA-256.
-- [x] Rewrite the public presentation in English, including the one-time encounter, fault models, and distinction from a preset-filter workflow.
-- [x] Add first-use, installation, recipe, format, controls, and troubleshooting guides, with a Japanese edition.
-- [x] Publish this clean repository and its initial v1.0.0 release.
-- [x] Verify anonymous APK/checksum/source downloads from the new URL.
-- [ ] Confirm Obtainium installation on a device using the new source URL.
+## Remaining owner work
 
-## Ongoing releases and keys
+- [ ] Complete Play testing/review/publication as appropriate; preserve tester and country settings.
+- [ ] Respond to F-Droid review and complete the server-side build/merge process.
+- [ ] Confirm an Obtainium import/install on a device.
+- [ ] Keep a verified signing-key backup on separate offline media. The known Documents backup is on the same computer.
+- [ ] Confirm signature compatibility before claiming cross-store in-place updates. The Play upload key is not the installed APK signing key.
+- [ ] Allocate a new version/code and update release notes before releasing changed application code.
 
-- [ ] Copy the verified local backup to a separate offline medium. The Documents copy is on the same computer.
-- [ ] If using GitHub for signing, configure the release environment's four Secrets and certificate fingerprint variable.
-- [ ] Test an in-place update with a higher versionCode and the same certificate for the next release.
+GitHub-triggered Play draft uploads are configured. This is separate from the optional GitHub APK signing workflow’s `release` environment. A local signed APK release does not require that optional workflow. Never place keys, passwords or recovery files in source, issues or release assets.
 
-The first release can be signed locally; GitHub Secrets are not needed for that path. Never attach key or recovery files to a release or issue. [Public certificate fingerprint](DISTRIBUTION_CERTIFICATE.md)
+## Canonical links
 
-## F-Droid
+- [Repository / Obtainium source](https://github.com/Bongorian/5igna1-release)
+- [Latest APK release](https://github.com/Bongorian/5igna1-release/releases/latest)
+- [Project website](https://bongorian.github.io/5igna1-release/)
+- [Privacy policy](https://bongorian.github.io/5igna1-release/privacy/)
+- [Distribution certificate](DISTRIBUTION_CERTIFICATE.md)
 
-- [x] Prepare FOSS flavors, reviewed dependencies, metadata, and Japanese/English store text.
-- [x] Set the source URL to this clean repository and the candidate tag to v1.0.0.
-- [ ] Run fdroid build --test in the F-Droid Linux environment.
-- [x] Submit to fdroiddata (owner report).
-- [ ] Complete review and merge.
-- [ ] Add the actual listing URL after acceptance.
-
-## Google Play — closed-test review pending
-
-- [ ] Confirm any remaining account verification requirements in Console.
-- [ ] Decide Play App Signing at initial enrollment. To allow updates between GitHub and Play, select the distribution key as the app signing key; the upload key remains separate.
-- [ ] Confirm a public privacy-policy URL, declarations, screenshots, and required testing.
-- [x] Submit the closed-test candidate (owner report).
-- [ ] Complete closed-test review and required testing.
-- [ ] Add the actual Play listing URL.
-
-Billing products and Sponsors setup are optional future work, not prerequisites for this release.
-
-## Canonical public URLs
-
-- Repository / Obtainium source: `https://github.com/Bongorian/5igna1-release`
-- Latest release: `https://github.com/Bongorian/5igna1-release/releases/latest`
-- Initial release: `https://github.com/Bongorian/5igna1-release/releases/tag/v1.0.0`
-
-## Publication verification — 2026-09-08
-
-The initial public history has one root commit and no imported parent commits. APK and checksum downloads were fetched without authentication and matched the local files. The tagged app source was readable publicly; the previous private repository returned 404 without authentication. [Initial Ubuntu/macOS CI](https://github.com/Bongorian/5igna1-release/actions/runs/34147880216) passed both jobs. Obtainium’s on-device import/install remains a follow-up check.
-
-## Play closed-test update — 2026-09-09
-
-Console confirmed code 8 / 1.0.0 published to Alpha. Code 9 / 1.1.0, Japanese/English descriptions and eight new UI screenshots were submitted to review on the same track. Tester and country configuration were retained. The Console placed the five changes under In review, with pre-review quick checks still running. Managed publishing remains enabled; publish after approval to deliver the update. [Submission record](PLAY_1_1_0.md).
+Do not invent public store listing links. Initial launch preparation and download checks are in [the 1.0.0 report](DISTRIBUTION_REPORT.md); earlier Play submission steps are in [1.1.0](PLAY_1_1_0.md) and [1.3.0](PLAY_1_3_0.md). Those dated records are retained as evidence, not as the current task list.

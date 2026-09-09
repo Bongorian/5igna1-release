@@ -1,10 +1,8 @@
 # ADVANCED MODE
 
-Version 1.3.1 adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. Experimental features, ADVANCED MODE and audio default to OFF; existing saved choices are retained.
-
 [Guides](README.md) · [日本語](ADVANCED_MODE.ja.md)
 
-Open Settings (gear) and enable **ADVANCED MODE**, then tap any selected chain chip. The preview remains above the editor. The mode is a UI preference: turning it off preserves manual values. The Settings mode switch saves immediately. In the fault editor, Apply commits the draft; ×, Back or leaving the app discards it.
+Open Settings (gear) and enable **ADVANCED MODE**, then tap any selected chain chip. The preview remains above the editor. The mode controls internal parameter visibility and precise displayed-frame capture. OFF preserves manual values and FAULT processing while reusing one output texture; the captured frame can differ from the last displayed frame. ON retains the three-slot history. See [capture behavior](FORMATS.md). The Settings mode switch saves immediately. In the fault editor, Apply commits the draft; ×, Back or leaving the app discards it.
 
 **AUTO** follows the fault model and displays its current compiled value. Tap AUTO to FIX the current value, use its slider, or tap the number for precise input. Each value has a finite allowed range. Tap FIX to return that value to AUTO. ALL AUTO clears all fixed values and the event identity for this fault. Basic controls continue to affect values that are automatic; fixed values take precedence. Reset restores the selected fault's defaults and removes overrides. Random chain clears overrides for newly selected faults; reseed preserves fixed values.
 
@@ -12,7 +10,7 @@ Open Settings (gear) and enable **ADVANCED MODE**, then tap any selected chain c
 
 TIME contains the generators and their resolved states: seconds, time scale, drift and phase. EVENT contains period/duration in seconds, probability, serial, envelope, position and pattern. SIGNAL exposes every compiled mechanism value. PROFILE separates VHS bandwidth and CRT display characteristics from their faults. Some generator values are unused by particular faults; overriding a generator cannot affect a downstream value that is itself fixed. Counts/regions describe implementation sampling grids, offsets are generally normalized, and phases/angles use radians unless represented as normalized cycles.
 
-LIVE manipulates fault time, never camera capture time. Fixed `time` pins one fault's clock. LIVE PAUSE freezes model evolution while the camera continues; a TRIGGER made while held remains held until release or reset. LEVEL zero bypasses all faults. Captures retain immutable fault snapshots. RAW applies only the six sensor/readout/data faults supported by its Bayer backend; use JPG/MP4 for downstream stages such as VHS/CRT. Internal controls cannot add a missing RAW stage.
+LIVE manipulates fault time, never camera capture time. Fixed `time` pins one fault's clock. LIVE PAUSE freezes model evolution while the camera continues; a TRIGGER made while held remains held until release or reset. LEVEL zero bypasses all faults. Captures retain immutable fault snapshots. RAW applies the six base sensor/readout/data faults and, when enabled, three experimental imaging stages supported by its Bayer backend; use JPG/MP4 for downstream stages such as VHS/CRT. Internal controls cannot add a missing RAW stage.
 
 The following catalog is the complete editable set; range limits also appear in numeric entry. "Incident faults" means the six EVENT SEED faults above. Slider increments are conveniences; precise entry accepts any finite value in range, although sampling operations may discretize it.
 

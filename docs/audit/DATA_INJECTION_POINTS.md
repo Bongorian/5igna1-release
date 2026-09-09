@@ -1,5 +1,7 @@
 # Signal injection feasibility
 
+Historical audit: results and branch/release status describe the named source and test date. For current behavior, see [architecture](../ARCHITECTURE.md) and [validation](../VALIDATION.md).
+
 [日本語](DATA_INJECTION_POINTS.ja.md)
 
 Scope: code audit on `codex/interactive-guide-thermal-inputs`, 2026-09-09. This is a design assessment; injection is not implemented in this branch.

@@ -102,6 +102,11 @@ internal class QualityDialog(a: MainActivity) {
             draft.experimentalSignals = checked
             persist()
         }
+        mode(R.string.resolution_audio, R.string.resolution_audio_hint,
+            draft.resolutionAudio, "resolution-audio") { checked ->
+            draft.resolutionAudio = checked
+            persist()
+        }
         if (options == null) {
             note(activity.getString(R.string.camera_settings_unavailable))
             appSection()
@@ -424,12 +429,8 @@ internal class QualityDialog(a: MainActivity) {
     }
 
     fun saveAdvanced() {
-        activity!!.advancedMode = advanced
-        activity
-            .getSharedPreferences("signal", 0)
-            .edit()
-            .putBoolean("advancedMode", advanced)
-            .apply()
+        draft.advancedMode = advanced
+        persist()
     }
 
     fun refresh() {

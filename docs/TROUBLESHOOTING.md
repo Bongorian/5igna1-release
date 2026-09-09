@@ -14,7 +14,7 @@ Allow camera access in Android's app permissions. Close another app that may be 
 
 Check that you are not in CLEAN or original RAW. In a chain, the stage must be enabled and LEVEL and its relevant fault controls must be above zero. Some controls also have a no-change value, such as a ADDRESS ERROR offset of 0 bytes. STREAM ERROR can be quiet between incidents.
 
-Choose **Apply** to keep an edit. Back, tapping outside, or leaving the app cancels the previewed changes.
+In the FAULT or LIVE editor, choose **Apply** to keep an edit. Settings save immediately. Back, tapping outside, or leaving the app cancels the previewed changes.
 
 ## An effect disappears when I change modes
 
@@ -34,7 +34,7 @@ Check `DCIM/5igna1` for photos, `DCIM/5igna1` for MP4, and `Download/5igna1` for
 
 ## Video has no sound or will not play
 
-Turn audio on and allow microphone access if you want sound. RAW video is always silent. If a player cannot decode HEVC/H.265, try a new recording using AVC/H.264.
+Turn audio on and allow microphone access if you want sound. If low-resolution audio sounds intentionally reduced, disable Resolution-linked audio in Settings. RAW video is always silent. If a player cannot decode HEVC/H.265, try a new recording using AVC/H.264.
 
 A RAW video ZIP is a sequence of DNG files, not a playable MP4. Extract and develop it with a compatible workflow.
 
@@ -60,3 +60,5 @@ Open an [issue](https://github.com/Bongorian/5igna1-release/issues) and include:
 - Steps to reproduce, expected result, and what happened.
 
 A short example helps. Review images and logs for faces, location metadata, or other personal information before attaching them. [Contributing](../CONTRIBUTING.md)
+
+With experimental device response enabled, processed RAW also supports MOTION BLUR, THERMAL NOISE and SMEAR. These additions and their approximation limits are described in [Experimental features](EXPERIMENTAL_SIGNALS.md).

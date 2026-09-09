@@ -1,4 +1,4 @@
-# Public launch preparation
+# Initial 1.0.0 launch record
 
 5igna1 1.0.0 / versionCode 8 starts a new public source history in **Bongorian/5igna1-release**. The previous development repository stays private. Old Toren1BD screenshots and their history are not imported.
 
@@ -17,6 +17,6 @@ The app's processing code and packaged assets are unchanged by this public docum
 
 See [tested scope](VALIDATION.md) for build, behavior, device, and RAW limits. Repository guards check tracked credentials/blobs and the wrapper; dependency and release checks compare reviewed metadata. Public download verification is recorded in the [launch checklist](LAUNCH_TASKS.md).
 
-## Next steps
+## Follow-up at the time of launch
 
 [Launch tasks](LAUNCH_TASKS.md) is the current checklist. GitHub distribution comes first. This report records the initial 1.0.0 publication. The owner subsequently reported Play closed-test review and F-Droid merge pending on 2026-09-08; see the launch checklist for current status. Optional CI signing Secrets and an offline copy of the key backup remain separate work.

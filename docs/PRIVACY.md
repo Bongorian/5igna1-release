@@ -1,5 +1,5 @@
 # 5igna1 Privacy Policy
-Last updated: September 8, 2026
+Last updated: September 9, 2026
 
 Provider: Bongorian
 Contact: dennosamurai@gmail.com
@@ -11,7 +11,7 @@ App: 5igna1 (com.bongorian.signa1)
 ## 2. Camera and microphone
 Camera permission is used for previews and capture. Microphone permission is requested for video with sound or when you enable the optional LIVE audio input. You can record silently with audio off. Recording takes place in the foreground and stops when you leave the app.
 
-LIVE FAULT can use optional motion, audio level, camera timing, temperature and process-load inputs to vary fault state. Microphone samples used for LIVE are reduced to levels on the device and are not saved as an audio recording unless video sound is enabled. Derived fault state may be included in capture metadata. Independently of LIVE, while the camera is active the app reads thermal status/headroom, battery temperature, memory capacity and rendering time to reduce workload. These measurements are processed locally and are not sent to the developer.
+LIVE FAULT can use optional motion, audio level, camera timing, temperature and process-load inputs to vary fault state. Microphone samples used for LIVE are reduced to levels on the device and are not saved as an audio recording unless video sound is enabled. Derived fault state may be included in capture metadata. Independently of LIVE, while the camera is active the app reads thermal status/headroom, battery temperature, memory capacity, available CPU core count and rendering time to reduce workload. These measurements are processed locally and are not sent to the developer.
 
 ## 3. Optional location
 Saving location is off by default. If you enable it and grant device permission, an available capture location is written to photo GPS metadata and video location tags. Location is requested only while you use the app. Location services are provided by the operating system and are subject to that provider's settings and policies.

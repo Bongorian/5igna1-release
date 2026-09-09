@@ -1,5 +1,7 @@
 # Interactive guide, immediate settings and thermal investigation
 
+Historical audit: results and branch/release status describe the named source and test date. For current behavior, see [architecture](../ARCHITECTURE.md) and [validation](../VALIDATION.md).
+
 [日本語](GUIDE_AND_THERMAL.ja.md) · [Raw measurements](guide-thermal-results.json) · [Injection assessment](DATA_INJECTION_POINTS.md)
 
 Development branch: `codex/interactive-guide-thermal-inputs`, based on 1.3.0. Published releases and submitted bundles are unchanged.

@@ -33,17 +33,17 @@ Install a newer release over the existing app, using the same distribution sourc
 
 An app from a different store may have a different signature even if its name and package ID match. Do not uninstall as a first response to a signature error: uninstalling removes app settings. Check the source and [troubleshooting guide](TROUBLESHOOTING.md) first.
 
-The GitHub APK is FOSS. As of 2026-09-08, the owner reports Play closed-test review and F-Droid merge pending; no official store listing is available yet.
+The GitHub APK is FOSS. Distribution status is dated in the [maintainer checklist](LAUNCH_TASKS.md); an Alpha tester release is not a public production listing. F-Droid acceptance remains separate.
 
 ## Check the download
 
-The release includes `5igna1-vX.Y.Z.apk.sha256` beside the APK. On a computer, put both files in one folder and run the appropriate command for version 1.0.0:
+The release includes `5igna1-vX.Y.Z.apk.sha256` beside the APK. On a computer, put both files in one folder and run the appropriate commands, replacing X.Y.Z with the downloaded version:
 
 ```sh
 # Linux
-sha256sum -c 5igna1-v1.0.0.apk.sha256
+sha256sum -c 5igna1-vX.Y.Z.apk.sha256
 # macOS
-shasum -a 256 -c 5igna1-v1.0.0.apk.sha256
+shasum -a 256 -c 5igna1-vX.Y.Z.apk.sha256
 ```
 
 A checksum detects a mismatched download. The [signing certificate fingerprint](DISTRIBUTION_CERTIFICATE.md) identifies the release key; it is a different value from an APK's file hash. [Android's signing documentation](https://developer.android.com/studio/publish/app-signing) explains update signatures.

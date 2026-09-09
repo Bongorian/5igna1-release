@@ -112,6 +112,12 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     val presentedFrames: FrameHistory<SignalBuffer> =
         FrameHistory<SignalBuffer>(3, Supplier { SignalBuffer() })
     val encoderScratch: SignalBuffer = SignalBuffer()
+    @Volatile private var normalPublishedNs = 0L
+    @Volatile private var normalFirstPublishedNs = 0L
+    @Volatile private var normalAcknowledgedNs = 0L
+
+    fun previewAcknowledged(): Long =
+        if (settings.advancedMode) presentedFrames.acknowledged() else normalAcknowledgedNs
     val cleanFrame: EffectState.Frame = EffectState.defaults().snapshot(true, 0)
     var signalW: Int = 0
     var signalH: Int = 0
@@ -427,7 +433,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     var options: CameraOptions? = null
     var photoChoice: CameraOptions.Photo? = null
     var videoChoice: CameraOptions.Video? = null
-    var settings: CaptureSettings
+    @Volatile var settings: CaptureSettings
     var position: Supplier<Location?> = Supplier { null }
     var recorder: MediaRecorder? = null
     var videoFd: ParcelFileDescriptor? = null
@@ -664,6 +670,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         try {
             closeCamera()
             current(window)
+            for (buffer in presentedFrames.values()) buffer.release()
+            encoderScratch.release()
             if (cameraTexture != null) {
                 cameraTexture!!.setOnFrameAvailableListener(null)
                 cameraTexture!!.release()
@@ -1348,7 +1356,14 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     }
 
     fun previewPresented(timestamp: Long) {
-        if (timestamp > presentedFrames.acknowledged() && presentedFrames.acknowledge(timestamp))
+        if (if (settings.advancedMode) {
+                timestamp > presentedFrames.acknowledged() && presentedFrames.acknowledge(timestamp)
+            } else {
+                val accepted = normalFirstPublishedNs > 0 && timestamp >= normalFirstPublishedNs &&
+                    timestamp > normalAcknowledgedNs && timestamp <= normalPublishedNs
+                if (accepted) normalAcknowledgedNs = timestamp
+                accepted
+            })
             gl.post(
                 Runnable@{
                     lastPreviewAckMs = SystemClock.elapsedRealtime()
@@ -1383,9 +1398,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 val state =
                     faultFrame((if (previewEffects == null) effectState else previewEffects)!!)
                 var didRender = false
-                val slot = if (show) presentedFrames.acquire() else null
+                val slot = if (show && settings.advancedMode) presentedFrames.acquire() else null
                 val rendered: SignalBuffer = (if (slot == null) encoderScratch else slot.value)!!
-                if (slot != null || recording && !rawVideoMode()) {
+                if (slot != null || show && !settings.advancedMode || recording && !rawVideoMode()) {
                     try {
                         rendered.allocate(signalW, signalH)
                         previewChain!!.render(
@@ -1408,7 +1423,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         throw failure
                     }
                 }
-                if (slot != null) {
+                if (show && didRender && (!settings.advancedMode || slot != null)) {
                     try {
                         blit(rendered, width, height)
                         rendered.presentedAt = System.currentTimeMillis()
@@ -1417,7 +1432,11 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         // identifies this buffer; the immutable payload retains the original
                         // cameraNs.
                         val presentationNs = System.nanoTime()
-                        presentedFrames.publish(slot, presentationNs)
+                        if (slot != null) presentedFrames.publish(slot, presentationNs)
+                        else {
+                            if (normalFirstPublishedNs == 0L) normalFirstPublishedNs = presentationNs
+                            normalPublishedNs = presentationNs
+                        }
                         check(
                             !(!EGLExt.eglPresentationTimeANDROID(
                                 display,
@@ -1428,7 +1447,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                             "Preview presentation"
                         }
                     } catch (failure: Exception) {
-                        presentedFrames.abandon(slot)
+                        if (slot != null) presentedFrames.abandon(slot)
                         throw failure
                     }
                     lastPreviewNs = lastFrameNs
@@ -1468,7 +1487,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             if (!frameSeen) {
                 frameSeen = true
                 ready(
-                    presentedFrames.acknowledged() > 0 &&
+                    previewAcknowledged() > 0 &&
                         !photoBusy &&
                         (!rawVideoMode() || rawFrameSeen)
                 )
@@ -1524,15 +1543,15 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 (if (settings.photoFormat == 1) "RAW ORIGINAL"
                 else Effects.chainName(frame.ids()) + " | " + frame.describe()) +
                 " | " +
-                (if (settings.photoFormat == 0) "Displayed RGB signal"
+                (if (settings.photoFormat == 0) if (settings.advancedMode) "Displayed RGB signal" else "Processed RGB capture"
                 else if (settings.photoFormat == 1) "Separate RAW exposure"
                 else "Separate RAW exposure, latched fault state; RGB preview approximate")
         }
     }
 
     @JvmOverloads
-    fun photo(displayedTimestamp: Long = presentedFrames.acknowledged()) {
-        val lease = presentedFrames.reserve(displayedTimestamp)
+    fun photo(displayedTimestamp: Long = previewAcknowledged()) {
+        val lease = if (settings.advancedMode) presentedFrames.reserve(displayedTimestamp) else null
         gl.post(
             Runnable@{
                 if (
@@ -1540,21 +1559,23 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         photoBusy ||
                         videoMode ||
                         cooling ||
-                        !presentedFrames.valid(lease) ||
+                        (if (settings.advancedMode) !presentedFrames.valid(lease) else encoderScratch.frame == null) ||
                         (settings.photoFormat != 0 && stillReader == null)
                 ) {
                     presentedFrames.release(lease)
-                    ready(frameSeen && !photoBusy && presentedFrames.acknowledged() > 0)
+                    ready(frameSeen && !photoBusy && previewAcknowledged() > 0)
                     return@Runnable
                 }
                 photoBusy = true
                 ready(false)
-                val shot = PendingPhoto(this, lease!!.value!!)
+                // GL serializes this snapshot/readback before any subsequent camera frame.
+                val captured = if (settings.advancedMode) lease!!.value else encoderScratch
+                val shot = PendingPhoto(this, captured)
                 pending = shot
                 try {
                     if (settings.photoFormat == 0) {
                         current(window)
-                        shot.signal = lease.value.read()
+                        shot.signal = captured.read()
                         shot.result = signalMetadata.get(shot.frame.cameraNs)
                         shot.dispatched = true
                         pending = null
@@ -1746,8 +1767,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             recorder!!.setMaxFileSize(segmentBytes)
             if (sound) {
                 recorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                recorder!!.setAudioSamplingRate(48000)
-                recorder!!.setAudioEncodingBitRate(192000)
+                val audio = RecordingAudio.supported(outW, outH, settings.resolutionAudio)
+                recorder!!.setAudioSamplingRate(audio.sampleRate)
+                recorder!!.setAudioEncodingBitRate(audio.bitRate)
                 recorder!!.setAudioChannels(1)
             }
             val geo = if (settings.location) position.get() else null
@@ -1949,6 +1971,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         faultInputs.resetTiming()
         generation++
         presentedFrames.clear()
+        normalPublishedNs = 0
+        normalFirstPublishedNs = 0
+        normalAcknowledgedNs = 0
         encoderScratch.frame = null
         signalMetadata.clear()
         frameSeen = false

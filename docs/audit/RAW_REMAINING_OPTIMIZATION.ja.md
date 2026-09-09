@@ -1,5 +1,7 @@
 # 残りのRAWエフェクトの最適化 — 2026-09-09
 
+過去の調査・検証記録です。結果は記載したソースと条件に限ります。現在の仕様は[設計](../ARCHITECTURE.ja.md)と[検証一覧](../VALIDATION.ja.md)を参照してください。
+
 [English edition](RAW_REMAINING_OPTIMIZATION.md) · [前回の最適化](RAW_OPTIMIZATION.ja.md)
 
 開発ブランチ `codex/kotlin-cleanup` で、残り4種類も最適化しました。比較元は前回のPIXEL DAMAGE・ROW ERROR最適化を含む `5063f14` です。

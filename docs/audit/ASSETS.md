@@ -14,7 +14,7 @@
 
 ## 現在のスクリーンショット
 
-01 CLEAN、02 ROW SHIFT、03 ROW SHIFT→CHROMA→VHS、04 調整ダイアログを収録。撮影対象は写真素材ではなく、Androidのfake cameraが生成する20×20の家のパターンです。対応する[Scene.cpp](https://android.googlesource.com/device/generic/goldfish/+/refs/heads/android10-gsi/camera/fake-pipeline2/Scene.cpp)のパターンとApache-2.0ヘッダ（Copyright 2012 AOSP）を確認し、NOTICEへ帰属を記載しました。撮影時のエミュレーターの色・移動は入力自体の特徴で、実機のカメラ品質を示すものではありません。
+01 CLEAN、02 ROW ERROR、03 ROW ERROR→CHROMA ERROR→VHS、04 調整ダイアログを収録。撮影対象は写真素材ではなく、Androidのfake cameraが生成する20×20の家のパターンです。対応する[Scene.cpp](https://android.googlesource.com/device/generic/goldfish/+/refs/heads/android10-gsi/camera/fake-pipeline2/Scene.cpp)のパターンとApache-2.0ヘッダ（Copyright 2012 AOSP）を確認し、NOTICEへ帰属を記載しました。撮影時のエミュレーターの色・移動は入力自体の特徴で、実機のカメラ品質を示すものではありません。
 
 再生成は `DeviceChecks` の `action=screenshots` を、個人情報のないエミュレーターで実行します。実機で実行すると現在カメラが写すものを保存するため、公開対象の被写体を先に確認してください。READMEとfastlaneは同じ画像を参照します。
 
@@ -24,7 +24,7 @@
 
 ## 公開履歴の開始点
 
-このリポジトリは2026-09-08の現行ソースから新しいGit履歴を開始します。開発用リポジトリの過去コミット・旧Toren1BD背景を含むスクリーンショットは取り込んでいません。現在の画像13ファイルとベクター/adaptive iconは `assets.json` に記録しています。
+このリポジトリは2026-09-08の現行ソースから新しいGit履歴を開始します。開発用リポジトリの過去コミット・旧Toren1BD背景を含むスクリーンショットは取り込んでいません。現在の26件の画像・ベクター/adaptive iconは `assets.json` に記録しています。
 
 所有者から提示された [Android Emulator Internal Book](https://github.com/aospbooks/android-emulator-internal-book/blob/main/index.md) のApache-2.0表記は書籍への許諾として確認しました。Toren1BD素材自体の許諾をこの記載だけで確定せず、旧素材を含まない現行スナップショットを公開する方針へ変更しています。旧素材はこの公開リポジトリのライセンス監査対象ファイルに含まれません。
 
@@ -37,3 +37,7 @@
 ### Play 1.1.0 screenshot refresh — 2026-09-09
 
 Replaced the eight Japanese/English phone screenshots with unedited captures of 1.1.0-debug on the API 37 emulator, using the same AOSP-generated camera pattern and 1080×1920 display. Scenes: CLEAN, ROW ERROR, three-fault chain and its adjustment panel. No private camera imagery or simulated UI is used. The icon and feature graphic are unchanged.
+
+### Scope review — 2026-09-09
+
+All 26 recorded file hashes match this checkout. Store screenshots remain the submitted 1.1.0 UI, not screenshots of the newest development controls. The separately hosted landing page and its owner-supplied photograph are maintained on the `codex/privacy-pages` site branch, outside this application asset inventory.
