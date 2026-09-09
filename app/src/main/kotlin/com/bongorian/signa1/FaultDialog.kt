@@ -127,7 +127,7 @@ internal object FaultDialog {
             val usable = a.cameraRoot.height - a.cameraRoot.paddingTop - a.cameraRoot.paddingBottom
             val height = min(a.dp(540f), Math.round(usable * .64f))
             dialog!!.window!!.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-            dialog!!.window!!.setLayout(a.cameraRoot.width - a.dp(16f), height)
+            SignalSheet.placeEditor(a, dialog!!, height)
             a.reserveEffectEditor(this, height)
             dialog!!.setOnDismissListener(
                 OnDismissListener@{ d: DialogInterface? ->

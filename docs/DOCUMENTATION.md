@@ -61,3 +61,5 @@ Start with the user guides to learn the app, the implementation references to ch
 Update the relevant reference and its Japanese edition when behavior changes. Keep volatile counts in dated test records, versions in the guide scope/release records, and channel status in LAUNCH_TASKS. The application version is authoritative in `app/build.gradle`; a development tree sharing a release’s version string is still unreleased.
 
 Keep historical measurements, hashes and submitted metadata intact. Label the source/date instead of rewriting old results as current coverage. When moving a document, repair inbound and outbound links. Run the local documentation link/coverage check, locale checks and relevant application tests before committing. Policy-copy changes require a separate site update when the corresponding app version is published; editing this application checkout does not deploy the site.
+
+- [Adaptive windows and feedback](audit/ADAPTIVE_WINDOW_FEEDBACK.md): development scope, device verification and SDK-free Play diagnostics.

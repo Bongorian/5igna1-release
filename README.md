@@ -1,5 +1,7 @@
 # 5igna1
 
+Development adds rotating/resizable camera layouts, exclusive photo/video/TAP icon controls and an optional email feedback draft. See [development verification](docs/audit/ADAPTIVE_WINDOW_FEEDBACK.md).
+
 Version 1.5.1 stops and saves recording when you leave the capture screen or lock the device. It includes camera faults, optional imported-media TAP, LIVE variation and MEDIA/DISPLAY models. Experimental features, ADVANCED MODE and audio start OFF; saved choices are retained.
 
 **Every glitch is an encounter.**
@@ -53,7 +55,7 @@ All processing runs on your device. No ads, accounts, analytics or Internet perm
 
 ## Explore time, sources and workload
 
-Hold PHOTO/VIDEO to select resolution. Settings recommends a conservative starting size and adjusts preview workload under load. ADVANCED exposes internal controls and retains displayed frames; EXPERT removes app-level preview and cooling limits. [Performance modes](docs/PERFORMANCE.md).
+Hold the photo/video mode icon to select resolution. Settings recommends a conservative starting size and adjusts preview workload under load. ADVANCED exposes internal controls and retains displayed frames; EXPERT removes app-level preview and cooling limits. [Performance modes](docs/PERFORMANCE.md).
 
 Experimental **TIME ECHO** inserts past frames using the current fault state. **TAP** accepts a selected image or video after READOUT and before DATA. Source playback and processed-output recording have separate controls. [Experimental features](docs/EXPERIMENTAL_SIGNALS.md).
 

@@ -90,8 +90,7 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
                 context.contentResolver.openOutputStream(uri).use { out ->
                     dng.setDescription(shot.description())
                     dng.setOrientation(
-                        if (shot.front) (if (shot.rotation == 270) 5 else 7)
-                        else (if (shot.rotation == 90) 6 else if (shot.rotation == 270) 8 else 1)
+                        CameraOrientation.exif(shot.rotation, shot.front)
                     )
                     if (shot.location != null) dng.setLocation(shot.location)
                     // DngCreator also accepts array-backed buffers, as in the RAW video writer.

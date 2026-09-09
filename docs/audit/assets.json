@@ -128,5 +128,20 @@
     "path": "app/src/main/res/drawable/ic_mic_off.xml",
     "sha256": "d563362360cd03bcc5a1d62087bd01f714ec088942cbaf0ada8c9513158b1a0f",
     "bytes": 488
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_mode_photo.xml",
+    "sha256": "9d386bfaa9189c5f0c0a3ea685135cc3fa0e127ef450c7bcb52addc53d66c0bf",
+    "bytes": 490
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_mode_tap.xml",
+    "sha256": "c25ad5fb7f27035527295c22280404e83254866feb65c8d62b9c14987509dba4",
+    "bytes": 536
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_mode_video.xml",
+    "sha256": "399bfa30da98b1dc8c55200893ef0249a67d5515f2d38fa4b4993ba5c5a64253",
+    "bytes": 440
   }
 ]

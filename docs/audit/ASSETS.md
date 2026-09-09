@@ -12,6 +12,10 @@
 | 各言語の `images/phoneScreenshots/*.png`（現在の版） | 2026-09-09、Android Emulator API 37、`-camera-back emulated`、1080×1920。1.1.0のfdroidDebug UIを日本語/英語で実行して画面をそのまま取得 | プロジェクトUI＋Apache-2.0のAOSPテストシーン。UI合成・画像の描き足しなし。問題なし |
 | 外部フォント、音声、写真、テクスチャ、機械学習モデル、presetデータ | アプリの追跡ファイルとAPKを点検。該当なし | 同梱なし。フォントはOS標準を利用 |
 
+## 撮影モードアイコン（開発版）
+
+`ic_mode_photo.xml`、`ic_mode_video.xml`、`ic_mode_tap.xml` は2026-09-09に本プロジェクトで記述したAndroidベクターです。カメラ、ビデオカメラ、画像入力を表す単純な図形を24×24の座標で作成しました。外部素材や画像生成モデルは使用していません。プロジェクトのApache-2.0ライセンスを適用し、ハッシュを `assets.json` に記録しています。
+
 ## 現在のスクリーンショット
 
 01 CLEAN、02 ROW ERROR、03 ROW ERROR→CHROMA ERROR→VHS、04 調整ダイアログを収録。撮影対象は写真素材ではなく、Androidのfake cameraが生成する20×20の家のパターンです。対応する[Scene.cpp](https://android.googlesource.com/device/generic/goldfish/+/refs/heads/android10-gsi/camera/fake-pipeline2/Scene.cpp)のパターンとApache-2.0ヘッダ（Copyright 2012 AOSP）を確認し、NOTICEへ帰属を記載しました。撮影時のエミュレーターの色・移動は入力自体の特徴で、実機のカメラ品質を示すものではありません。

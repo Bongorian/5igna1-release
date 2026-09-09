@@ -130,7 +130,57 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     }
     fun toggleTapPlayback() { gl.post { tapSource?.toggle() } }
 
+    /** Metadata only: a restored TAP source has no preceding camera session. */
+    private fun loadCameraCatalog(manager: CameraManager): String {
+        var id: String? = null
+        for (candidate in manager.cameraIdList) {
+            val cc = manager.getCameraCharacteristics(candidate)
+            val facing = cc.get<Int?>(CameraCharacteristics.LENS_FACING)
+            if (
+                cc.get<StreamConfigurationMap?>(
+                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
+                ) != null &&
+                    facing != null &&
+                    facing ==
+                        (if (front) CameraCharacteristics.LENS_FACING_FRONT
+                        else CameraCharacteristics.LENS_FACING_BACK)
+            ) {
+                id = candidate
+                characteristics = cc
+                break
+            }
+        }
+        if (id == null)
+            for (candidate in manager.cameraIdList) {
+                val cc = manager.getCameraCharacteristics(candidate)
+                if (
+                    cc.get<StreamConfigurationMap?>(
+                        CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
+                    ) != null
+                ) {
+                    id = candidate
+                    characteristics = cc
+                    break
+                }
+            }
+        checkNotNull(id) { "No camera" }
+        front =
+            CameraCharacteristics.LENS_FACING_FRONT ==
+                characteristics!!.get<Int?>(CameraCharacteristics.LENS_FACING)
+        val rotation = characteristics!!.get<Int?>(CameraCharacteristics.SENSOR_ORIENTATION)
+        sensorRotation = if (rotation == null) 0 else rotation
+        options = catalogs.get(id)
+        if (options == null) {
+            options = CameraOptions(id, requireNotNull(characteristics), maxTexture)
+            catalogs.put(id, options)
+        }
+        options!!.recommendedPhotoPixels = deviceProfile.photoPixels()
+        options!!.recommendedVideoPixels = deviceProfile.videoPixels()
+        return requireNotNull(id)
+    }
+
     private fun openTap() {
+        if (options == null) loadCameraCatalog(context.getSystemService(Context.CAMERA_SERVICE) as CameraManager)
         val source = TapSource(this, tapInput ?: return)
         tapSource = source
         status(context.getString(R.string.tap_loading))
@@ -429,6 +479,23 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     var width: Int = 0
     var height: Int = 0
     var sensorRotation: Int = 90
+    @Volatile var captureRotation: Int = 90
+    private var displayDegrees = 0
+    private val orientedMatrix = FloatArray(16)
+    private val displayMatrix = FloatArray(16)
+
+    @Suppress("DEPRECATION")
+    private fun displayDegrees(): Int = (context.getSystemService(Context.WINDOW_SERVICE) as
+        android.view.WindowManager).defaultDisplay.rotation * 90
+
+    private fun updateOrientation() {
+        displayDegrees = displayDegrees()
+        captureRotation = CameraOrientation.relative(sensorRotation, displayDegrees, front)
+        android.opengl.Matrix.setIdentityM(displayMatrix, 0)
+        android.opengl.Matrix.translateM(displayMatrix, 0, .5f, .5f, 0f)
+        android.opengl.Matrix.rotateM(displayMatrix, 0, displayDegrees.toFloat(), 0f, 0f, 1f)
+        android.opengl.Matrix.translateM(displayMatrix, 0, -.5f, -.5f, 0f)
+    }
     var maxTexture: Int = 4096
 
     @Volatile var generation: Int = 0
@@ -817,50 +884,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         }
         try {
             val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-            var id: String? = null
-            for (candidate in manager.cameraIdList) {
-                val cc = manager.getCameraCharacteristics(candidate)
-                val facing = cc.get<Int?>(CameraCharacteristics.LENS_FACING)
-                if (
-                    cc.get<StreamConfigurationMap?>(
-                        CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-                    ) != null &&
-                        facing != null &&
-                        facing ==
-                            (if (front) CameraCharacteristics.LENS_FACING_FRONT
-                            else CameraCharacteristics.LENS_FACING_BACK)
-                ) {
-                    id = candidate
-                    characteristics = cc
-                    break
-                }
-            }
-            if (id == null)
-                for (candidate in manager.cameraIdList) {
-                    val cc = manager.getCameraCharacteristics(candidate)
-                    if (
-                        cc.get<StreamConfigurationMap?>(
-                            CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-                        ) != null
-                    ) {
-                        id = candidate
-                        characteristics = cc
-                        break
-                    }
-                }
-            checkNotNull(id) { "No camera" }
-            front =
-                CameraCharacteristics.LENS_FACING_FRONT ==
-                    characteristics!!.get<Int?>(CameraCharacteristics.LENS_FACING)
-            val rotation = characteristics!!.get<Int?>(CameraCharacteristics.SENSOR_ORIENTATION)
-            sensorRotation = if (rotation == null) 0 else rotation
-            options = catalogs.get(id)
-            if (options == null) {
-                options = CameraOptions(id, requireNotNull(characteristics), maxTexture)
-                catalogs.put(id, options)
-            }
-            options!!.recommendedPhotoPixels = deviceProfile.photoPixels()
-            options!!.recommendedVideoPixels = deviceProfile.videoPixels()
+            val id = loadCameraCatalog(manager)
             if (options!!.videosFor(settings.codec).isEmpty())
                 settings.codec = if (settings.codec == "video/hevc") "video/avc" else "video/hevc"
             if (settings.photoFormat != 0 && options!!.raws.isEmpty()) {
@@ -905,10 +929,12 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             val output =
                 if (videoMode) videoChoice!!.size
                 else if (settings.photoFormat == 0) stream else photoChoice!!.size
-            signalW = stream.height
-            signalH = stream.width
-            outW = output.height
-            outH = output.width
+            updateOrientation()
+            val swap = captureRotation % 180 != 0
+            signalW = if (swap) stream.height else stream.width
+            signalH = if (swap) stream.width else stream.height
+            outW = if (swap) output.height else output.width
+            outH = if (swap) output.width else output.height
             cameraTexture!!.setDefaultBufferSize(stream.width, stream.height)
             applyLoadSample(
                 SystemClock.elapsedRealtime(),
@@ -1439,10 +1465,21 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             if (source == null) {
                 cameraTexture!!.updateTexImage()
                 cameraTexture!!.getTransformMatrix(matrix)
+                // Freeform windows may retain the activity even on a quarter turn.
+                // Freeze orientation during a capture; rebuild sized buffers afterwards.
+                val nextRotation = displayDegrees()
+                if (!recording && !photoBusy && nextRotation != displayDegrees) {
+                    if ((nextRotation - displayDegrees) % 180 != 0) {
+                        restart()
+                        return
+                    }
+                    updateOrientation()
+                }
+                android.opengl.Matrix.multiplyMM(orientedMatrix, 0, matrix, 0, displayMatrix, 0)
             } else source.update()
             val inputTexture = source?.texture ?: texture
             val inputExternal = source?.external ?: true
-            val inputMatrix = source?.matrix ?: matrix
+            val inputMatrix = source?.matrix ?: orientedMatrix
             val timestamp = if (source == null) cameraTexture!!.timestamp else SystemClock.elapsedRealtimeNanos()
             if (timestamp <= lastFrameNs) return
             lastFrameNs = timestamp
@@ -1614,7 +1651,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             choice = e.photoChoice
             frame = requireNotNull(displayed.frame)
             front = e.front
-            rotation = e.sensorRotation
+            rotation = e.captureRotation
             location = if (settings.location) e.position.get() else null
             taken =
                 if (settings.photoFormat == 0) displayed.presentedAt else System.currentTimeMillis()

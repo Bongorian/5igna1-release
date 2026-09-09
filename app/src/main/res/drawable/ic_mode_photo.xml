@@ -1,0 +1,4 @@
+<!-- Original project geometry, Apache-2.0: still camera and lens. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="1.8" android:strokeLineJoin="round" android:fillColor="#00000000" android:pathData="M3,7 L7,7 L9,4 L15,4 L17,7 L21,7 L21,20 L3,20 Z M16,13.5 A4,4 0,1 1,8,13.5 A4,4 0,1 1,16,13.5" />
+</vector>

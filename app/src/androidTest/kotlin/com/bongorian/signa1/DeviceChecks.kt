@@ -40,6 +40,7 @@ class DeviceChecks : Instrumentation() {
         var effectsBefore: EffectState? = null
         var faultsBefore: FaultConfig? = null
         var video = false
+        var launchMonitor: ActivityMonitor? = null
         try {
             Thread(
                     {
@@ -72,6 +73,7 @@ class DeviceChecks : Instrumentation() {
                 check(!prefs.contains("sound") && !prefs.contains("advancedMode") && !prefs.contains("experimentalSignals")) { "Requires fresh test installation" }
             }
             val monitor = addMonitor(MainActivity::class.java!!.getName(), null, false)
+            launchMonitor = monitor
             getUiAutomation()
                 .executeShellCommand(
                     "am start -f 0x10008000 -n " +
@@ -81,7 +83,6 @@ class DeviceChecks : Instrumentation() {
                 )
                 .use({ launched -> })
             activity = monitor.waitForActivityWithTimeout(20000) as MainActivity
-            removeMonitor(monitor)
             if (activity == null) throw AssertionError("Activity start timeout")
             if (args!!.getString("action", "") == "release-defaults") {
                 val prefs = getTargetContext().getSharedPreferences("signal", 0)
@@ -152,9 +153,19 @@ class DeviceChecks : Instrumentation() {
             })
             await(
                 "camera ready",
-                { activity!!.engine.frameSeen && activity!!.cameraOptions != null },
+                {
+                    // A launch into another orientation may create a replacement activity.
+                    val latest = monitor.lastActivity as? MainActivity
+                    if (latest != null && latest !== activity) {
+                        activity = latest
+                        runOnMainSync { latest.tutorial?.dialog?.dismiss() }
+                    }
+                    activity!!.resumed && !activity!!.isDestroyed && activity!!.engine.frameSeen && activity!!.cameraOptions != null
+                },
                 20000,
             )
+            removeMonitor(monitor)
+            launchMonitor = null
             original = CaptureSettings(activity!!.settings)
             effectsBefore = activity!!.effectState
             faultsBefore = activity!!.faultConfig
@@ -180,7 +191,11 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "seed") {
+            if (action == "adaptive-rotation") {
+                result.putString("result", AdaptiveRotationChecks.run(this))
+            } else if (action == "adaptive") {
+                result.putString("result", AdaptiveUiChecks.run(this))
+            } else if (action == "seed") {
                 result.putString("result", SeedUiChecks.run(this))
             } else if (action == "transport") {
                 TransportUiChecks.run(this)
@@ -493,6 +508,7 @@ class DeviceChecks : Instrumentation() {
             result.putString("failure", android.util.Log.getStackTraceString(error))
             activity?.engine?.let { e -> result.putString("captureState", "busy=${e.photoBusy} pending=${e.pending != null} ack=${e.presentedFrames.acknowledged()} attached=${e.attached} cooling=${e.cooling} still=${e.stillReader != null} format=${e.settings.photoFormat}") }
         } finally {
+            launchMonitor?.let { removeMonitor(it) }
             if (activity != null && original != null) {
                 val restore = original
                 val restoreEffects = requireNotNull(effectsBefore)

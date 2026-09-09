@@ -56,9 +56,9 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     lateinit var status: TextView
     lateinit var count: TextView
     lateinit var strengthValue: TextView
-    lateinit var photoTab: TextView
-    lateinit var videoTab: TextView
-    lateinit var tapTab: TextView
+    lateinit var photoTab: CaptureModeButton
+    lateinit var videoTab: CaptureModeButton
+    lateinit var tapTab: CaptureModeButton
     lateinit var tapPlay: TextView
     lateinit var tapChoose: TextView
     var tapMode = false
@@ -194,6 +194,11 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             videoMode = b.getBoolean("session.video", false)
             zoom = b.getFloat("session.zoom", 1f)
             captureCount = b.getInt("session.count", 0)
+            b.getString("session.tap.uri")?.let { uri ->
+                tapInput = TapInput(Uri.parse(uri), b.getBoolean("session.tap.video"))
+                tapMode = b.getBoolean("session.tap", false)
+                cameraVideoBeforeTap = b.getBoolean("session.cameraVideoBeforeTap", false)
+            }
         }
         settings = CaptureSettings.load(prefs)
         geo = GeoTags(this, Runnable { this.renderGeo() })
@@ -210,6 +215,15 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         if (b != null) faultConfig = faultConfig.enabled(b.getBoolean("session.live", false))
         engine.applyFaultConfig(faultConfig)
         buildUi()
+        b?.getBundle("feedback.draft")?.let { draft ->
+            cameraRoot.viewTreeObserver.addOnGlobalLayoutListener(object : android.view.ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    if (cameraRoot.width <= 0 || cameraRoot.height <= 0) return
+                    cameraRoot.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    if (!isFinishing && !isDestroyed) FeedbackDialog.show(this@MainActivity, draft)
+                }
+            })
+        }
         tutorialPage =
             if (b != null && b.containsKey("tutorial.page")) b.getInt("tutorial.page")
             else
@@ -225,6 +239,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     override fun onSaveInstanceState(out: Bundle) {
         super.onSaveInstanceState(out)
+        out.putBundle("feedback.draft", FeedbackDialog.save(this))
         out.putInt("tutorial.page", if (tutorial == null) tutorialPage else tutorial!!.page)
         savePrefs()
         out.putInt("session.count", captureCount)
@@ -232,6 +247,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         out.putBoolean("session.front", engine.front)
         out.putFloat("session.zoom", zoom)
         out.putBoolean("session.live", faultConfig.enabled)
+        out.putBoolean("session.tap", tapMode)
+        out.putBoolean("session.cameraVideoBeforeTap", cameraVideoBeforeTap)
+        out.putString("session.tap.uri", tapInput?.uri?.toString())
+        out.putBoolean("session.tap.video", tapInput?.video == true)
     }
 
     fun bg(color: Int, border: Int): GradientDrawable {
@@ -309,7 +328,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         return l
     }
 
-    lateinit var cameraRoot: LinearLayout
+    var feedbackDialog: android.app.Dialog? = null
+    lateinit var cameraRoot: CameraWorkspace
     var effectEditorSpace: Space? = null
     var effectEditorOwner: Any? = null
     val editorHiddenViews: MutableMap<View?, Int?> = LinkedHashMap<View?, Int?>()
@@ -317,20 +337,12 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     fun reserveEffectEditor(owner: Any?, pixels: Int) {
         effectEditorOwner = owner
         if (effectEditorSpace == null) {
-            var belowPreview = false
-            for (i in 0..<cameraRoot.childCount) {
-                val child = cameraRoot.getChildAt(i)
-                if (belowPreview) {
-                    editorHiddenViews.put(child, child.visibility)
-                    child.setVisibility(View.GONE)
-                }
-                if (child === previewArea) belowPreview = true
-            }
+            editorHiddenViews[cameraRoot.controlsColumn] = cameraRoot.controlsColumn.visibility
             effectEditorSpace = Space(this)
-            cameraRoot.addView(effectEditorSpace)
+            if (!cameraRoot.wide) cameraRoot.addView(effectEditorSpace)
         }
-        // Dialog ends at the usable window bottom; reserve that same height in the camera layout.
-        effectEditorSpace!!.setLayoutParams(LinearLayout.LayoutParams(-1, pixels))
+        cameraRoot.controlsColumn.visibility = if (cameraRoot.wide) View.INVISIBLE else View.GONE
+        effectEditorSpace!!.layoutParams = LinearLayout.LayoutParams(-1, if (cameraRoot.wide) 0 else pixels)
     }
 
     fun restoreEffectEditor(owner: Any?) {
@@ -654,17 +666,14 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         renderAudio()
         val value = videoMode
         tapTab.visibility = if (settings.experimentalSignals) View.VISIBLE else View.GONE
-        tapTab.setTextColor(if (tapMode) LIME else MUTED)
-        tapTab.background = bg(if (tapMode) PANEL else BG, 0)
+        tapTab.setChecked(tapMode)
         tapPlay.visibility = if (tapMode && tapInput?.video == true) View.VISIBLE else View.GONE
         tapChoose.visibility = if (tapMode) View.VISIBLE else View.GONE
         flipButton.visibility = if (tapMode) View.GONE else View.VISIBLE
         torchButton.visibility = if (tapMode) View.GONE else View.VISIBLE
         zoomButton.visibility = if (tapMode) View.GONE else View.VISIBLE
-        photoTab.setTextColor(if (!value && !tapMode) LIME else MUTED)
-        videoTab.setTextColor(if (value && !tapMode) LIME else MUTED)
-        photoTab.setBackground(bg(if (!value && !tapMode) PANEL else BG, 0))
-        videoTab.setBackground(bg(if (value && !tapMode) PANEL else BG, 0))
+        photoTab.setChecked(!value && !tapMode)
+        videoTab.setChecked(value && !tapMode)
         capture.setContentDescription(
             if (value) getString(R.string.ui_start_video_recording)
             else getString(R.string.ui_take_a_photo)
@@ -879,6 +888,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     override fun recording(value: Boolean) {
         recording = value
+        for (mode in listOf(photoTab, videoTab, tapTab)) {
+            mode.isEnabled = !value
+            mode.alpha = if (value) .5f else 1f
+        }
         capture.invalidate()
         capture.setContentDescription(
             if (value) getString(R.string.ui_stop_recording)
@@ -990,6 +1003,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun onDestroy() {
+        feedbackDialog?.dismiss()
         if (tutorial != null) tutorial!!.dispose()
         galleryButton.dispose()
         engine.shutdown()

@@ -31,7 +31,7 @@ import kotlin.math.min
 
 /** Constructs the camera screen and binds its user actions. */
 internal fun MainActivity.buildUi() {
-    val root = LinearLayout(this)
+    val root = CameraWorkspace(this)
     cameraRoot = root
     root.setOrientation(LinearLayout.VERTICAL)
     root.setBackgroundColor(BG)
@@ -53,8 +53,22 @@ internal fun MainActivity.buildUi() {
         }
     )
     root.requestApplyInsets()
+    val previewColumn = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+    val controlsColumn = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+    val controlBody = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+    val controlScroll = android.widget.ScrollView(this).apply {
+        isFillViewport = false
+        isVerticalScrollBarEnabled = true
+        addView(controlBody)
+    }
+    root.previewColumn = previewColumn
+    root.controlsColumn = controlsColumn
+    root.controlsScroll = controlScroll
+    root.addView(previewColumn)
+    root.addView(controlsColumn)
+    controlsColumn.addView(controlScroll, LinearLayout.LayoutParams(-1, 0, 1f))
     val header = row()
-    root.addView(header, LinearLayout.LayoutParams(-1, dp(49f)))
+    previewColumn.addView(header, LinearLayout.LayoutParams(-1, dp(49f)))
     formatButton = button("")
     formatButton.setTextSize(12f)
     formatButton.setOnClickListener(OnClickListener@{ v: View? -> showFormat() })
@@ -99,7 +113,7 @@ internal fun MainActivity.buildUi() {
         }
     }
     val info = row()
-    root.addView(info, LinearLayout.LayoutParams(-1, dp(27f)))
+    previewColumn.addView(info, LinearLayout.LayoutParams(-1, dp(27f)))
     status = text("CONNECTING…", 10, LIME)
     status.setTypeface(Typeface.MONOSPACE)
     status.setSingleLine(true)
@@ -115,9 +129,9 @@ internal fun MainActivity.buildUi() {
     countParams.leftMargin = dp(10f)
     count.setVisibility(View.GONE)
     info.addView(count, countParams)
-    // Fit a true 9:16 preview into the remaining space. Saved media has the same framing.
+    // Fit the actual signal aspect without cropping or stretching.
     previewArea = FrameLayout(this)
-    root.addView(previewArea, LinearLayout.LayoutParams(-1, 0, 1f))
+    previewColumn.addView(previewArea, LinearLayout.LayoutParams(-1, 0, 1f))
     viewfinder = FrameLayout(this)
     viewfinder.setBackground(bg(Color.BLACK, 0))
     viewfinder.setClipToOutline(true)
@@ -232,7 +246,7 @@ internal fun MainActivity.buildUi() {
         )
     effects.setBackgroundColor(BG)
     val ep = FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM)
-    root.addView(effects, LinearLayout.LayoutParams(-1, -2))
+    controlBody.addView(effects, LinearLayout.LayoutParams(-1, -2))
     val chainRow = row()
     effects.addView(chainRow, LinearLayout.LayoutParams(-1, dp(48f)))
     val scroll = HorizontalScrollView(this)
@@ -302,21 +316,31 @@ internal fun MainActivity.buildUi() {
         }
     )
     val tools = row()
-    root.addView(tools, LinearLayout.LayoutParams(-1, dp(44f)))
-    photoTab = button(getString(R.string.ui_photo))
-    videoTab = button(getString(R.string.ui_video))
-    tapTab = button("TAP")
-    tapTab.contentDescription = getString(R.string.tap_choose)
-    tools.addView(photoTab, LinearLayout.LayoutParams(dp(52f), dp(40f)))
-    tools.addView(videoTab, LinearLayout.LayoutParams(dp(52f), dp(40f)))
-    tools.addView(tapTab, LinearLayout.LayoutParams(dp(50f), dp(40f)))
-    tapTab.setOnClickListener { if (!tapMode && tapInput != null) enterTap(tapInput!!) else chooseTap() }
-    photoTab.setOnClickListener(OnClickListener@{ v: View? -> setVideo(false) })
-    videoTab.setOnClickListener(OnClickListener@{ v: View? -> setVideo(true) })
+    controlBody.addView(tools, LinearLayout.LayoutParams(-1, dp(56f)))
+    val modeGroup = row().apply {
+        background = bg(PANEL, 0)
+        setPadding(dp(4f), dp(4f), dp(4f), dp(4f))
+        accessibilityDelegate = object : View.AccessibilityDelegate() {
+            override fun onInitializeAccessibilityNodeInfo(host: View, info: android.view.accessibility.AccessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(host, info)
+                info.collectionInfo = android.view.accessibility.AccessibilityNodeInfo.CollectionInfo.obtain(
+                    1, if (settings.experimentalSignals) 3 else 2, false,
+                    android.view.accessibility.AccessibilityNodeInfo.CollectionInfo.SELECTION_MODE_SINGLE)
+            }
+        }
+    }
+    photoTab = CaptureModeButton(this, R.drawable.ic_mode_photo, getString(R.string.ui_photo))
+    videoTab = CaptureModeButton(this, R.drawable.ic_mode_video, getString(R.string.ui_video))
+    tapTab = CaptureModeButton(this, R.drawable.ic_mode_tap, getString(R.string.tap_mode))
+    for (mode in listOf(photoTab, videoTab, tapTab)) modeGroup.addView(mode, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    tools.addView(modeGroup, LinearLayout.LayoutParams(-2, dp(56f)))
+    tapTab.setOnClickListener { if (!tapMode) { if (tapInput != null) enterTap(tapInput!!) else chooseTap() } }
+    photoTab.setOnClickListener { setVideo(false) }
+    videoTab.setOnClickListener { setVideo(true) }
     photoTab.setOnLongClickListener { ResolutionPicker.show(this, false); true }
     videoTab.setOnLongClickListener { ResolutionPicker.show(this, true); true }
-    photoTab.tooltipText = getString(R.string.resolution_hold)
-    videoTab.tooltipText = getString(R.string.resolution_hold)
+    photoTab.tooltipText = getString(R.string.ui_photo) + " · " + getString(R.string.resolution_hold)
+    videoTab.tooltipText = getString(R.string.ui_video) + " · " + getString(R.string.resolution_hold)
     tools.addView(Space(this), LinearLayout.LayoutParams(dp(8f), 1))
     val live = row()
     live.setBackground(bg(PANEL, 0))
@@ -345,7 +369,7 @@ internal fun MainActivity.buildUi() {
     val timeRow = LinearLayout.LayoutParams(-1, dp(44f))
     timeRow.topMargin = dp(8f)
     timeRow.bottomMargin = dp(4f)
-    root.addView(liveTransport, timeRow)
+    controlBody.addView(liveTransport, timeRow)
     liveHold = button(getString(R.string.live_pause))
     val hit = button(getString(R.string.live_trigger))
     val rewind = button(getString(R.string.live_reset))
@@ -370,10 +394,10 @@ internal fun MainActivity.buildUi() {
     echoButton = button(getString(R.string.echo_trigger))
     echoButton.contentDescription = getString(R.string.echo_hint)
     echoButton.setOnClickListener { engine.triggerEcho() }
-    root.addView(echoButton, LinearLayout.LayoutParams(-1, dp(40f)))
+    controlBody.addView(echoButton, LinearLayout.LayoutParams(-1, dp(40f)))
     val controls = row()
     controls.setGravity(Gravity.CENTER)
-    root.addView(controls, LinearLayout.LayoutParams(-1, dp(88f)))
+    controlsColumn.addView(controls, LinearLayout.LayoutParams(-1, dp(88f)))
     galleryButton = MediaThumbnail(this)
     controls.addView(galleryButton, LinearLayout.LayoutParams(dp(54f), dp(54f)))
     galleryButton.setOnClickListener(OnClickListener@{ v: View? -> openGallery() })

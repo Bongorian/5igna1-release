@@ -21,3 +21,7 @@
 ## 1.5.0
 
 [Physical TAP, MEDIA/DISPLAY and SEED checks](audit/TAP_MEDIA_1_5_0.md).
+
+## Development
+
+[Adaptive windows, icon modes and feedback](audit/ADAPTIVE_WINDOW_FEEDBACK.md).

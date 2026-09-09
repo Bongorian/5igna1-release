@@ -487,4 +487,14 @@
     <string name="seed_no_target">No active fault uses a seed.</string>
     <string name="seed_chain_done">Regenerated active fault seeds. Controls unchanged.</string>
     <string name="seed_fixed_hint">Fixed values and fixed EVENT SEED are retained. Return them to AUTO to follow the new seed.</string>
+    <string name="tap_mode">Imported media · TAP</string>
+    <string name="feedback_title">Feedback / report bug</string>
+    <string name="feedback_hint">Review your message, then open your email app to send it to %1$s. Nothing is sent automatically. You can also copy the draft.</string>
+    <string name="feedback_subject">Subject</string>
+    <string name="feedback_message">What happened?\nSteps to reproduce\nExpected behavior</string>
+    <string name="feedback_device">Include the app and device information shown below</string>
+    <string name="feedback_copy">Copy draft</string>
+    <string name="feedback_copied">Draft copied</string>
+    <string name="feedback_email">Open email app</string>
+    <string name="feedback_no_email">No email app found. Copy the draft and send it using your preferred email service.</string>
 </resources>

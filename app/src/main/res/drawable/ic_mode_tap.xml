@@ -1,0 +1,4 @@
+<!-- Original project geometry, Apache-2.0: selected media entering an image frame. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="1.8" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" android:pathData="M13,4 L21,4 L21,20 L3,20 L3,13 M3,7 L12,7 M8,3 L12,7 L8,11 M6,17 L11,12 L14,15 L17,12 L21,17" />
+</vector>

@@ -173,7 +173,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 a.dp((198 + Effects.CONTROLS[focused].size * 66).toFloat())
             else a.dp(425f)
         val height = min(desired, Math.round(usable * .53f))
-        sheet!!.window!!.setLayout(a.cameraRoot.width - a.dp(16f), height)
+        SignalSheet.placeEditor(a, sheet!!, height)
         a.reserveEffectEditor(this, height)
     }
 

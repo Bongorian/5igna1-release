@@ -487,4 +487,14 @@
     <string name="seed_no_target">当前启用的故障不使用随机种子。</string>
     <string name="seed_chain_done">已重新生成有效故障的种子，保留调整值。</string>
     <string name="seed_fixed_hint">保留固定值和固定EVENT SEED。将对应值改为AUTO以跟随新种子。</string>
+    <string name="tap_mode">素材输入 · TAP</string>
+    <string name="feedback_title">反馈 / 报告问题</string>
+    <string name="feedback_hint">请检查内容，再打开邮件应用发送至 %1$s。不会自动发送。也可以复制草稿。</string>
+    <string name="feedback_subject">主题</string>
+    <string name="feedback_message">发生了什么？\n重现步骤\n预期行为</string>
+    <string name="feedback_device">包含下方显示的应用和设备信息</string>
+    <string name="feedback_copy">复制草稿</string>
+    <string name="feedback_copied">已复制草稿</string>
+    <string name="feedback_email">打开邮件应用</string>
+    <string name="feedback_no_email">未找到邮件应用。请复制草稿并使用您选择的邮件服务发送。</string>
 </resources>

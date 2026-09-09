@@ -262,8 +262,8 @@ internal object SignalSheet {
             max(
                 a.dp(8f),
                 min(
-                    position[0],
-                    a.resources.displayMetrics.widthPixels - lp.width - a.dp(8f),
+                    position[0] - visible.left,
+                    visible.width() - lp.width - a.dp(8f),
                 ),
             )
         lp.y = max(0, position[1] + anchor.height + a.dp(6f) - visible.top)
@@ -325,12 +325,26 @@ internal object SignalSheet {
         return dialog
     }
 
+    fun placeEditor(a: MainActivity, dialog: Dialog, height: Int): Int {
+        val usable = a.cameraRoot.height - a.cameraRoot.paddingTop - a.cameraRoot.paddingBottom
+        val window = dialog.window!!
+        if (a.cameraRoot.wide) {
+            window.setGravity(Gravity.END or Gravity.CENTER_VERTICAL)
+            window.attributes = window.attributes.apply { x = a.cameraRoot.paddingRight }
+            window.setLayout(a.cameraRoot.controlsColumn.width, usable)
+            return usable
+        }
+        window.setGravity(Gravity.BOTTOM)
+        window.setLayout(a.cameraRoot.width - a.dp(16f), height)
+        return height
+    }
+
     fun resize(a: MainActivity, dialog: Dialog, fraction: Float) {
         val window = dialog.window
         if (window != null) {
-            val h = a.window.decorView.height
+            val h = a.cameraRoot.height - a.cameraRoot.paddingTop - a.cameraRoot.paddingBottom
             window.setLayout(
-                a.resources.displayMetrics.widthPixels - a.dp(16f),
+                min(a.cameraRoot.width - a.dp(16f), a.dp(640f)),
                 (h * fraction).toInt(),
             )
         }

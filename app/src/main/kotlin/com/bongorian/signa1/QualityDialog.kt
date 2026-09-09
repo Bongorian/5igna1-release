@@ -418,6 +418,10 @@ internal class QualityDialog(a: MainActivity) {
                 )
             }
         )
+        val feedback = field()
+        feedback.tag = "settings-feedback"
+        feedback.text = activity.getString(R.string.feedback_title)
+        feedback.setOnClickListener { FeedbackDialog.show(activity) }
         val privacy = field()
         privacy.setText(
             BuildConfig.APP_NAME +

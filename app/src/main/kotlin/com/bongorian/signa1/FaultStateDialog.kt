@@ -52,7 +52,7 @@ internal class FaultStateDialog(val a: MainActivity) {
                 null,
                 .54f,
             )
-        a.reserveEffectEditor(this, dialog.window!!.attributes.height)
+        a.reserveEffectEditor(this, SignalSheet.placeEditor(a, dialog, dialog.window!!.attributes.height))
         dialog.setOnDismissListener(
             OnDismissListener@{ v: DialogInterface? ->
                 a.restoreEffectEditor(this)

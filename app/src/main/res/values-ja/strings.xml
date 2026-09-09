@@ -487,4 +487,14 @@
     <string name="seed_no_target">現在の有効なFAULTには再生成できるSEEDがありません。</string>
     <string name="seed_chain_done">有効なFAULTのSEEDを再生成しました。調整値は保持しています。</string>
     <string name="seed_fixed_hint">固定値と固定EVENT SEEDは維持します。新しいSEEDに連動させる値はAUTOに戻してください。</string>
+    <string name="tap_mode">素材入力 · TAP</string>
+    <string name="feedback_title">フィードバック・不具合報告</string>
+    <string name="feedback_hint">内容を確認し、メールアプリから %1$s 宛てに送信してください。自動送信は行いません。下書きのコピーもできます。</string>
+    <string name="feedback_subject">件名</string>
+    <string name="feedback_message">起きたこと\n再現手順\n期待した動作</string>
+    <string name="feedback_device">下記のアプリ・端末情報を含める</string>
+    <string name="feedback_copy">下書きをコピー</string>
+    <string name="feedback_copied">下書きをコピーしました</string>
+    <string name="feedback_email">メールアプリを開く</string>
+    <string name="feedback_no_email">メールアプリが見つかりません。下書きをコピーして、お使いのメールサービスから送信してください。</string>
 </resources>

@@ -72,9 +72,7 @@ constructor(
         size = requireNotNull(engine.rawVideoChoice).size
         fps = requireNotNull(engine.videoChoice).fps
         orientation =
-            if (engine.front) (if (engine.sensorRotation == 270) 5 else 7)
-            else
-                (if (engine.sensorRotation == 90) 6 else if (engine.sensorRotation == 270) 8 else 1)
+            CameraOrientation.exif(engine.captureRotation, engine.front)
         location = if (engine.settings.location) engine.position.get() else null
         name =
             BuildConfig.APP_NAME +
