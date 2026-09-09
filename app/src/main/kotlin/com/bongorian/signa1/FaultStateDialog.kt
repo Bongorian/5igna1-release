@@ -108,7 +108,7 @@ internal class FaultStateDialog(val a: MainActivity) {
             val line = a.row()
             val name =
                 a.text(
-                    String.format(Locale.US, "%02d  %s", index, Effects.name(id)),
+                    String.format(Locale.US, "%02d  %s", index, Effects.label(id)),
                     13,
                     MainActivity.WHITE,
                 )

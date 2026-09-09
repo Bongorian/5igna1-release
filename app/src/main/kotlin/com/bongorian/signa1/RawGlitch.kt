@@ -24,6 +24,7 @@ internal object RawGlitch {
         white: Int,
         black: Int,
         frame: EffectState.Frame,
+        checkpoint: () -> Unit = {},
     ): ByteArray {
         require(
             !(w <= 0 ||
@@ -40,12 +41,13 @@ internal object RawGlitch {
         var first: ByteArray? = null
         var second: ByteArray? = null
         for (node in frame.nodes) if (Effects.raw(node.id)) {
+            checkpoint()
             val output = if (current === first) {
                 second ?: ByteArray(input.size).also { second = it }
             } else {
                 first ?: ByteArray(input.size).also { first = it }
             }
-            applyInto(current, output, w, h, white, black, node)
+            applyInto(current, output, w, h, white, black, node, checkpoint)
             current = output
         }
         // Even an empty chain returns owned storage rather than exposing its input.
@@ -53,7 +55,7 @@ internal object RawGlitch {
     }
 
     /** Bounded same-CFA-color sampling; these are artistic sensor-domain approximations. */
-    private fun physical(input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode) {
+    private fun physical(input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode, checkpoint: () -> Unit) {
         fun coordinate(p: Int, delta: Float, limit: Int): Int {
             val shifted = p + 2 * kotlin.math.round(delta / 2f).toInt()
             return shifted.coerceIn(p and 1, limit - 1 - ((limit - 1 - p) and 1))
@@ -78,6 +80,7 @@ internal object RawGlitch {
             IntArray(h) { y -> coordinate(y, (i / 7f - .5f) * smearLength * h, h) * w }
         } else emptyArray()
         for (y in 0 until h) for (x in 0 until w) {
+            if (x == 0) checkpoint()
             val index = y * w + x
             val original = read(input, index).toFloat()
             val value = when (n.id) {
@@ -114,18 +117,19 @@ internal object RawGlitch {
         input.clone().also { applyInto(input, it, w, h, white, black, n) }
 
     private fun applyInto(
-        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode, checkpoint: () -> Unit = {},
     ) {
         // Every stage writes every output sample; its source remains untouched until it finishes.
         when (n.id) {
-            Effects.MOTION_BLUR, Effects.THERMAL_NOISE, Effects.SMEAR -> physical(input, out, w, h, white, black, n)
-            Effects.PIXEL_DAMAGE -> pixelDamage(input, out, w, h, white, black, n)
-            Effects.EXPOSURE -> exposure(input, out, w, h, white, black, n)
-            Effects.ROW_ERROR -> rowError(input, out, w, h, white, black, n)
-            Effects.BIT_ERROR -> bitError(input, out, w, h, white, n)
-            Effects.ADDRESS_ERROR -> addressError(input, out, w, h, white, black, n)
-            Effects.CFA_ERROR -> cfaError(input, out, w, h, white, n)
+            Effects.MOTION_BLUR, Effects.THERMAL_NOISE, Effects.SMEAR -> physical(input, out, w, h, white, black, n, checkpoint)
+            Effects.PIXEL_DAMAGE -> pixelDamage(input, out, w, h, white, black, n, checkpoint)
+            Effects.EXPOSURE -> exposure(input, out, w, h, white, black, n, checkpoint)
+            Effects.ROW_ERROR -> rowError(input, out, w, h, white, black, n, checkpoint)
+            Effects.BIT_ERROR -> bitError(input, out, w, h, white, n, checkpoint)
+            Effects.ADDRESS_ERROR -> addressError(input, out, w, h, white, black, n, checkpoint)
+            Effects.CFA_ERROR -> cfaError(input, out, w, h, white, n, checkpoint)
             else -> for (y in 0..<h) for (x in 0..<w) {
+                if (x == 0) checkpoint()
                 val index = y * w + x
                 write(out, index, max(0, min(white, read(input, index))))
             }
@@ -133,13 +137,14 @@ internal object RawGlitch {
     }
 
     private fun exposure(
-        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode, checkpoint: () -> Unit = {},
     ) {
         val depth = n.get("exposureDepth")
         val integration = n.get("integration")
         val scanPhase = n.get("scanPhase")
         val exposurePhase = n.get("exposurePhase")
         for (y in 0..<h) {
+            checkpoint()
             // Keep the original Float/Double conversions and multiplication order.
             val gain = 1 - depth * (.5f + .5f * integration *
                 sin((y / h.toFloat() * scanPhase + exposurePhase).toDouble()).toFloat())
@@ -152,7 +157,7 @@ internal object RawGlitch {
     }
 
     private fun bitError(
-        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, n: FaultNode,
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, n: FaultNode, checkpoint: () -> Unit,
     ) {
         val seed = n.identity.seed xor n.event.pattern.toLong()
         val block = max(2, n.get("bitBlock").toInt())
@@ -163,6 +168,7 @@ internal object RawGlitch {
         val affected = BooleanArray((w - 1) / block + 1)
         var previousGroup = -1
         for (y in 0..<h) {
+            checkpoint()
             val group = y / blockHeight
             if (group != previousGroup) {
                 for (bx in affected.indices) affected[bx] = hash(seed, bx, group) < probability
@@ -178,7 +184,7 @@ internal object RawGlitch {
     }
 
     private fun addressError(
-        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode, checkpoint: () -> Unit = {},
     ) {
         val seed = n.identity.seed
         val bytes = max(2, n.get("addressRegion").toInt())
@@ -187,6 +193,7 @@ internal object RawGlitch {
         var previousRegion = -1
         var affected = false
         for (index in 0..<w * h) {
+            if (index and 4095 == 0) checkpoint()
             val address = index * 2
             if (offset > 0) {
                 // Regions are byte-addressed, including odd sizes and row crossings.
@@ -208,7 +215,7 @@ internal object RawGlitch {
     }
 
     private fun cfaError(
-        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, n: FaultNode,
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, n: FaultNode, checkpoint: () -> Unit,
     ) {
         val seed = n.identity.seed
         val region = max(2, n.get("cfaRegion").toInt())
@@ -217,6 +224,7 @@ internal object RawGlitch {
         val affected = BooleanArray((w - 1) / region + 1)
         var previousGroup = -1
         for (y in 0..<h) {
+            checkpoint()
             val group = y / region
             if (group != previousGroup) {
                 for (bx in affected.indices) affected[bx] = hash(seed, bx, group) < coverage
@@ -236,7 +244,7 @@ internal object RawGlitch {
     }
 
     private fun pixelDamage(
-        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode, checkpoint: () -> Unit = {},
     ) {
         val seed = n.identity.seed
         val columnDensity = n.get("columnDensity")
@@ -254,6 +262,7 @@ internal object RawGlitch {
                 columnValues[x] = if (hash(seed + 71, x, 0) < hotFraction) hotValue else black
         }
         for (y in 0..<h) for (x in 0..<w) {
+            if (x == 0) checkpoint()
             val index = y * w + x
             var value = read(input, index)
             if (damagedColumns[x]) value = columnValues[x]
@@ -266,7 +275,7 @@ internal object RawGlitch {
     }
 
     private fun rowError(
-        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode, checkpoint: () -> Unit = {},
     ) {
         val seed = n.identity.seed
         val rowGroups = n.get("rowGroups")
@@ -278,6 +287,7 @@ internal object RawGlitch {
         val lineRetention = n.get("lineRetention")
         val lineLoss = n.get("lineLoss")
         for (y in 0..<h) {
+            checkpoint()
             val row = ((y and 1.inv()) / h.toFloat() * rowGroups).toInt()
             var displacement =
                 if (hash(seed, row, 0) < weakRows) (hash(seed + 17, row, 0) - .5f) * rowOffset

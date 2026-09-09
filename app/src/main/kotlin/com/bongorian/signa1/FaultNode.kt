@@ -50,10 +50,19 @@ constructor(
                 FaultSensitivity.keys.forEachIndexed { source, key ->
                     if (!containsKey(key)) put(key, FaultSensitivity.initial(id, source))
                 }
+                if (id == Effects.VHS || id == Effects.CRT) {
+                    for (key in transportKeys) {
+                        if (FaultParameters.all(id).any { it.key == key }) putIfAbsent(key, if (key == "upconvert") 1f else 0f)
+                    }
+                }
                 putAll(profile)
                 putAll(mechanism)
             }
             .immutableCopy()
+
+    companion object {
+        val transportKeys = setOf("transportKind", "mediaReduce", "cableKind", "upconvert", "transportDamage", "transportLoss", "transportNoise", "networkStall", "refreshBand", "networkSeed")
+    }
 
     fun describe(): String {
         return Effects.name(id) +

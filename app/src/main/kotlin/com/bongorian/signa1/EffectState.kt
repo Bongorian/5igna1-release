@@ -88,6 +88,7 @@ private constructor(
         time: Double,
         nodes: List<FaultNode>,
         val experimental: Boolean = false,
+        val injection: Boolean = false,
     ) {
         private val route: IntArray
         val amount: Float
@@ -131,7 +132,13 @@ private constructor(
                     .toArray()
             val selected: MutableList<FaultNode> = ArrayList<FaultNode>()
             for (n in nodes) if (Effects.point(n.id).ordinal <= point.ordinal) selected.add(n)
-            return Frame(prefix, amount, parameters, cameraNs, time, selected, experimental)
+            return Frame(prefix, amount, parameters, cameraNs, time, selected, experimental, injection)
+        }
+
+        fun afterReadout(): Frame {
+            val suffix = route.filter { Effects.point(it).ordinal > Effects.Point.READOUT.ordinal }.toIntArray()
+            return Frame(suffix, amount, parameters, cameraNs, time,
+                nodes.filter { Effects.point(it.id).ordinal > Effects.Point.READOUT.ordinal }, experimental, true)
         }
 
         fun describe(): String {
@@ -145,6 +152,7 @@ private constructor(
                     .append(parameters.describe(route))
             if (experimental || route.any { id -> FaultSensitivity.keys.any { parameters.manual(id, it) } })
                 s.append(" experimental=").append(experimental)
+            if (injection) s.append(" input=TAP@READOUT/DATA")
             for (n in nodes) s.append(" | ").append(n.describe())
             return s.toString()
         }

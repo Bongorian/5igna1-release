@@ -176,10 +176,40 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         a.reserveEffectEditor(this, height)
     }
 
+    private fun transportControls(id: Int) {
+        if (id != Effects.VHS && id != Effects.CRT) return
+        fun choice(key: String, title: Int, labels: Array<String>) {
+            val selected = kotlin.math.round(draft.get(id, key) * (labels.size - 1)).toInt()
+            val button = a.button(a.getString(title) + " · " + labels[selected])
+            button.tag = "transport-$key"
+            body!!.addView(button, LinearLayout.LayoutParams(-1, a.dp(48f)))
+            button.setOnClickListener {
+                SignalSheet.pick(a, a.getString(title), labels, selected, { n ->
+                    draft = draft.with(id, key, n.toFloat() / (labels.size - 1))
+                    renderBody(); preview()
+                })
+            }
+        }
+        choice("transport", R.string.transport_model, if (id == Effects.VHS)
+            arrayOf("VHS", "DVD", "Digital thru", "Analog thru")
+            else arrayOf("CRT", "Digital thru", "Network display", "LED display"))
+        val kind = kotlin.math.round(draft.get(id, "transport") * 3).toInt()
+        if (id == Effects.VHS && kind <= 1) {
+            val toggle = SignalToggle(a, a.getString(R.string.transport_reduce), draft.get(id, "reduce") >= .5f)
+            body!!.addView(toggle, LinearLayout.LayoutParams(-1, a.dp(48f)))
+            toggle.setOnCheckedChangeListener { _, checked -> draft = draft.with(id, "reduce", if (checked) 1f else 0f); preview() }
+        }
+        if (id == Effects.VHS && kind == 3) choice("cable", R.string.transport_cable, arrayOf("Composite", "Component"))
+        if (id == Effects.CRT && kind == 1) choice("upconvert", R.string.transport_upconvert,
+            arrayOf(a.getString(R.string.transport_nearest), a.getString(R.string.transport_linear)))
+        val hint = a.text(a.getString((if (id == Effects.VHS) intArrayOf(R.string.transport_vhs_hint, R.string.transport_dvd_hint, R.string.transport_digital_media_hint, R.string.transport_analog_hint) else intArrayOf(R.string.transport_crt_hint, R.string.transport_digital_display_hint, R.string.transport_network_hint, R.string.transport_led_hint))[kind]), 12, MainActivity.MUTED)
+        body!!.addView(hint)
+    }
+
     fun renderRoute() {
         route!!.removeAllViews()
         for (id in Effects.ordered(mask, false).filter { a.settings.experimentalSignals || !Effects.physical(it) }) {
-            val chip = a.button(Effects.name(id))
+            val chip = a.button(Effects.label(id))
             chip.setTextSize(10f)
             val focus = tuning && id == focused
             chip.setTextColor(
@@ -215,7 +245,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             val title = a.row()
             val name =
                 a.text(
-                    Effects.name(id) + " · " + (if (Effects.physical(id)) a.getString(R.string.physical_artifact) else Effects.stage(id)),
+                    Effects.label(id) + " · " + (if (Effects.physical(id)) a.getString(R.string.physical_artifact) else Effects.stage(id)),
                     10,
                     MainActivity.MUTED,
                 )
@@ -252,10 +282,16 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 body!!.addView(convert, LinearLayout.LayoutParams(-1, a.dp(48f)))
                 convert.setOnClickListener(OnClickListener@{ v: View? -> switchFormat(id) })
             } else {
+                transportControls(id)
                 if (a.advancedMode) {
                     advancedControls = AdvancedControls(this, id)
                     advancedControls!!.show(requireNotNull(body))
-                } else for (control in Effects.CONTROLS[id]) slider(id, control)
+                } else for (control in Effects.CONTROLS[id].filter { it.key !in setOf("transport", "reduce", "cable", "upconvert") }) {
+                    val kind = if (id == Effects.VHS || id == Effects.CRT) kotlin.math.round(draft.get(id, "transport") * 3).toInt() else 0
+                    if (id == Effects.VHS && (kind == 2 || (kind == 1 && control.key in setOf("bandwidth", "noise")) || (kind == 3 && control.key == "bandwidth"))) continue
+                    if (id == Effects.CRT && (kind == 1 || (kind >= 2 && control.key == "phosphor"))) continue
+                    slider(id, control)
+                }
                 val actions = a.row()
                 val reset = action(R.string.ui_reset)
                 val reseed = action(R.string.ui_reseed)
@@ -376,7 +412,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         stage = stage.substring(stage.indexOf(" / ") + 3)
         view!!.setText(
             (if (selected) "✓ " else "") +
-                Effects.name(id) +
+                Effects.label(id) +
                 "\n" +
                 (if (Effects.physical(id)) a.getString(R.string.physical_artifact) else stage) +
                 (if (available) "" else " · " + (if (a.videoMode) "MP4" else "JPG"))
@@ -393,22 +429,43 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         )
         view.setSelected(selected)
         view.setContentDescription(
-            Effects.name(id) +
+            Effects.label(id) +
                 " · " +
                 stage +
                 (if (available) "" else " · " + a.getString(R.string.fault_requires_rgb))
         )
     }
 
+    private fun transportControlLabel(id: Int, key: String): Int {
+        val kind = if (id == Effects.VHS || id == Effects.CRT) kotlin.math.round(draft.get(id, "transport") * 3).toInt() else 0
+        if (id == Effects.VHS && kind == 1) return if (key == "tracking") R.string.transport_block_damage else R.string.transport_block_loss
+        if (id == Effects.VHS && kind == 3) return when (key) {
+            "tracking" -> R.string.transport_sync_loss
+            "dropout" -> R.string.transport_contact
+            else -> R.string.transport_interference
+        }
+        if (id == Effects.CRT && kind == 2) return when (key) {
+            "scan" -> R.string.transport_resolution_loss
+            "convergence" -> R.string.transport_packet_loss
+            else -> R.string.transport_stall
+        }
+        if (id == Effects.CRT && kind == 3) return when (key) {
+            "scan" -> R.string.transport_pitch
+            "convergence" -> R.string.transport_module_loss
+            else -> R.string.transport_refresh
+        }
+        return controlLabel(key)
+    }
+
     fun slider(id: Int, control: Effects.Control) {
         val row = a.row()
-        val name = a.text(a.getString(controlLabel(control.key)), 12, MainActivity.MUTED)
+        val name = a.text(a.getString(transportControlLabel(id, control.key)), 12, MainActivity.MUTED)
         val value = a.text("", 12, MainActivity.LIME)
         row.addView(name, LinearLayout.LayoutParams(0, a.dp(24f), 1f))
         row.addView(value)
         body!!.addView(row)
         val slider = SeekBar(a)
-        slider.setContentDescription(a.getString(controlLabel(control.key)))
+        slider.setContentDescription(a.getString(transportControlLabel(id, control.key)))
         slider.setTag(control.key)
         slider.setMax(100)
         slider.setProgress(Math.round(draft.get(id, control.key) * 100))
@@ -436,6 +493,10 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     companion object {
         fun controlLabel(key: String): Int {
             when (key) {
+                "transport" -> return R.string.fault_control_transport
+                "reduce" -> return R.string.fault_control_reduce
+                "cable" -> return R.string.fault_control_cable
+                "upconvert" -> return R.string.fault_control_upconvert
                 "amount" -> return R.string.fault_control_amount
                 "floor" -> return R.string.fault_control_floor
                 "grain" -> return R.string.fault_control_grain

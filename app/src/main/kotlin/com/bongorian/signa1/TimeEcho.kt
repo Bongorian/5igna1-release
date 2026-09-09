@@ -7,8 +7,7 @@ internal class TimeEcho {
     private val samples = Array(33) { Sample() }
     private var cursor = 0
     private var lastStored = 0L
-    private var start = 0L
-    private var nextAuto = 0L
+    private val schedule = EchoSchedule()
     private var requested = false
     @Volatile var failed = false
         private set
@@ -24,8 +23,7 @@ internal class TimeEcho {
         samples.forEach { it.cameraNs = 0 }
         cursor = 0
         lastStored = 0
-        start = 0
-        nextAuto = 0
+        schedule.reset()
         requested = false
         replaying = false
         ready = false
@@ -50,20 +48,19 @@ internal class TimeEcho {
             lastStored = now
             cursor = (cursor + 1) % samples.size
         }
-        if (nextAuto == 0L) nextAuto = now + 12_000_000_000L
-        val target = now - config.delayNs
-        var past: Sample? = null
-        for (sample in samples) if (sample.cameraNs > 0 && sample.cameraNs <= target &&
-            (past == null || sample.cameraNs > past.cameraNs)) past = sample
-        ready = past != null && target - past.cameraNs < 750_000_000L
-        if (start != 0L && now - start >= 2_000_000_000L) start = 0
-        if (start == 0L && (requested || now >= nextAuto) && ready) {
-            start = now
-            bursts++
-            nextAuto = now + 12_000_000_000L
+        var oldest = Long.MAX_VALUE
+        for (sample in samples) {
+            if (sample.cameraNs < now - schedule.retentionNs) sample.cameraNs = 0
+            if (sample.cameraNs > 0) oldest = minOf(oldest, sample.cameraNs)
         }
+        val target = schedule.frame(now, if (oldest == Long.MAX_VALUE) 0 else oldest, requested, config.chance)
         requested = false
-        replaying = start != 0L && ready
+        ready = schedule.ready
+        bursts = schedule.bursts
+        var past: Sample? = null
+        if (target != null) for (sample in samples) if (sample.cameraNs > 0 && sample.cameraNs <= target &&
+            (past == null || sample.cameraNs > past.cameraNs)) past = sample
+        replaying = target != null && past != null && target - past.cameraNs < 750_000_000L
         return if (replaying) past else null
     }
     fun fail() { release(); failed = true }

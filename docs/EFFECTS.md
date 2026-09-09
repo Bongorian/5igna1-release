@@ -17,8 +17,8 @@ Choose a damaged system, then watch what happens inside it. CLEAN is an empty ro
 | COLOR | COLOR MAP | Palette phase, cycles, mixture |
 | CODEC / STREAM | BLOCK ERROR | Quantization loss, block size, wrong-block incidents |
 | CODEC / STREAM | STREAM ERROR | Loss incidents, region, acquired-sample reuse |
-| MEDIA | VHS | Bandwidth profile, tracking, dropout, noise |
-| DISPLAY | CRT | Scan and phosphor profiles, convergence and sync faults |
+| MEDIA | VHS / DVD / Digital thru / Analog thru | Media resolution, tape/DVD faults, composite/component cable faults |
+| DISPLAY | CRT / Digital thru / Network / LED | Scan/phosphor, analog upconversion, network stalls/loss, LED module faults |
 
 LEVEL is a compact artistic macro. It changes fault-specific quantities such as defect density, readout distance, exposure attenuation, incident impact or display mixture. It is not a common physical strength multiplied into every stage. The internal model uses named parameters of arbitrary count; the controls above intentionally hide that detail.
 
@@ -30,7 +30,7 @@ RANDOM CHAIN creates 2–5 faults available in the current format, randomizes th
 
 ## What the models actually do
 
-The camera supplies every scene sample. No semantic inference, object synthesis or content completion is used. Noise, black samples, misread bytes and reuse of acquired samples are part of the fault model.
+The camera, or a user-selected experimental TAP source, supplies every scene sample. No semantic inference, object synthesis or content completion is used. Noise, black samples, misread bytes and reuse of acquired samples are part of the fault model.
 
 - PIXEL DAMAGE through CFA ERROR have RAW16 adapters. Row displacements and row reuse preserve Bayer parity; CFA ERROR deliberately changes it. ADDRESS ERROR can intentionally break byte and component alignment.
 - RGB CFA/reconstruction faults remosaic the already processed camera RGB. They do not access or reconstruct the sensor's actual RAW pipeline.
@@ -47,3 +47,10 @@ JPEG saves the processed camera signal (UI-acknowledged with ADVANCED ON), inclu
 Use LIVE to set how the current fault state evolves, with second-based periods and update intervals. [Time controls](LIVE_FAULT.md). Enable [ADVANCED MODE](ADVANCED_MODE.md) in Settings to directly fix model values.
 
 With experimental device response enabled, processed RAW also supports MOTION BLUR, THERMAL NOISE and SMEAR. These additions and their approximation limits are described in [Experimental features](EXPERIMENTAL_SIGNALS.md).
+
+
+## MEDIA and DISPLAY models
+
+MEDIA selects VHS, DVD, Digital thru or Analog thru. VHS and DVD optionally reduce the intermediate image to media scale (up to 320 × 480 or 720 × 480). Analog thru always uses an intermediate composite (320 × 480) or component (720 × 480) representation, with reflection/sync disturbance, contact loss, interference and chroma crosstalk. Smaller inputs are not enlarged at the media stage. These are artistic approximations of bandwidth, with the original aspect ratio retained at output, not exact equipment specifications. DVD models decoded block damage and loss. Digital thru performs no media pass.
+
+DISPLAY selects CRT, Digital thru, Network display or LED display. After analog MEDIA, Digital thru offers nearest-pixel or linear upconversion. Network display lowers intermediate resolution, damages decoded packet regions, and holds the preceding processed frame during congestion; LIVE advances its seeded congestion state. With LIVE off it has no automatic temporal stalls. LED display models module pitch, failed modules and refresh bands. Neither network model sends network traffic or modifies real packets. All these profiles remain RGB-only; processed RAW bypasses them. The saved output dimensions remain those of the selected capture format.

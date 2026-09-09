@@ -74,12 +74,14 @@ internal object Effects {
             arrayOf<Control>(c("quantization", .5f), c("block_size", .45f), c("misaddress", .4f)),
             arrayOf<Control>(c("loss", .5f), c("region", .4f), c("concealment", .7f)),
             arrayOf<Control>(
+                c("transport", 0f), c("reduce", 0f), c("cable", 0f),
                 c("bandwidth", .6f),
                 c("tracking", .5f),
                 c("dropout", .4f),
                 c("noise", .25f),
             ),
             arrayOf<Control>(
+                c("transport", 0f), c("upconvert", 1f),
                 c("scan", .5f),
                 c("phosphor", 0f),
                 c("convergence", .4f),
@@ -89,6 +91,8 @@ internal object Effects {
             arrayOf(c("amount", .6f), c("grain", .2f), c("floor", 0f)),
             arrayOf(c("amount", .6f), c("length", .6f), c("threshold", .75f)),
         )
+
+    fun label(id: Int) = if (id == VHS) "MEDIA" else if (id == CRT) "DISPLAY" else name(id)
 
     fun physical(id: Int) = id >= MOTION_BLUR && id <= SMEAR
 
@@ -146,7 +150,7 @@ internal object Effects {
     fun shaderDefines(): String {
         val s = StringBuilder()
         for (id in ORDER) s.append("#define FX_")
-            .append(NAMES[id].replace(' ', '_'))
+            .append((if (id == VHS) "VHS" else if (id == CRT) "CRT" else NAMES[id]).replace(' ', '_'))
             .append(' ')
             .append(id)
             .append('\n')

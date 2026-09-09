@@ -393,6 +393,17 @@ internal object FaultParameters {
                 Effects.SMEAR -> add(p, Group.SIGNAL, "smearAmount", 0, 2, .01f, "smearLength", 0, .4f, .001f, "smearThreshold", 0, .99f, .001f)
                 else -> throw IllegalArgumentException("Fault ID")
             }
+            if (id == Effects.VHS || id == Effects.CRT) {
+                add(p, Group.PROFILE, "transportKind", 0, 3, 1)
+                add(p, Group.SIGNAL, "transportDamage", 0, 1, .001f, "transportLoss", 0, 1, .001f)
+                if (id == Effects.VHS) {
+                    add(p, Group.PROFILE, "mediaReduce", 0, 1, 1, "cableKind", 0, 1, 1)
+                    add(p, Group.SIGNAL, "transportNoise", 0, 1, .001f)
+                } else {
+                    add(p, Group.PROFILE, "upconvert", 0, 1, 1)
+                    add(p, Group.SIGNAL, "networkStall", 0, 1, 1, "refreshBand", 0, 1, .001f, "networkSeed", 0, 997, .1f)
+                }
+            }
             CATALOG.put(id, Collections.unmodifiableList<Spec>(p))
         }
     }

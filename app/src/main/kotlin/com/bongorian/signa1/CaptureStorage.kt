@@ -25,6 +25,7 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
     var temp: File? = null
     var bitmap: Bitmap? = null
     try {
+        foregroundWork.await()
         val raw = shot.settings.photoFormat != 0
         val w: Int
         val h: Int
@@ -39,13 +40,14 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
                     !bitmap.compress(
                         Bitmap.CompressFormat.JPEG,
                         shot.settings.jpegQuality,
-                        out,
+                        foregroundWork.output(out),
                     )
                 )
                     throw IOException("JPEG compress")
             }
             bitmap.recycle()
             bitmap = null
+            foregroundWork.await()
             PhotoMetadata.write(
                 temp,
                 shot.bytes,
@@ -59,7 +61,7 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
             uri = createMedia("jpg", shot.taken)
             FileInputStream(temp).use { `in` ->
                 context.contentResolver.openOutputStream(uri).use { out ->
-                    GlitchEngine.copy(`in`, out!!)
+                    GlitchEngine.copy(`in`, foregroundWork.output(out!!))
                 }
             }
         } else {
@@ -80,6 +82,7 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
                         if (white == null) 65535 else white,
                         black,
                         shot.frame,
+                        foregroundWork::await,
                     )
                 else shot.bytes)!!
             uri = createMedia("dng", shot.taken)
@@ -92,10 +95,11 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
                     )
                     if (shot.location != null) dng.setLocation(shot.location)
                     // DngCreator also accepts array-backed buffers, as in the RAW video writer.
-                    dng.writeByteBuffer(out!!, Size(w, h), ByteBuffer.wrap(data), 0)
+                    dng.writeByteBuffer(foregroundWork.output(out!!), Size(w, h), ByteBuffer.wrap(data), 0)
                 }
             }
         }
+        foregroundWork.await()
         publish(uri, false, shot.taken)
         Log.i(
             "Signal",

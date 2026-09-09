@@ -9,7 +9,7 @@ App: 5igna1 (com.bongorian.signa1)
 5igna1 is a camera app that applies effects simulating imaging faults to photos and videos. Images are processed and saved on your device. The app has no developer-operated server, ads, analytics SDK or account registration. It does not automatically send photos, videos, audio or location to the developer.
 
 ## 2. Camera and microphone
-Camera permission is used for previews and capture. Microphone permission is requested for video with sound or when you enable the optional LIVE audio input. You can record silently with audio off. Recording takes place in the foreground and stops when you leave the app.
+Camera permission is used for previews and capture. Microphone permission is requested for video with sound or when you enable the optional LIVE audio input. You can record silently with audio off. Only a user-started output recording may continue when you leave the app. A dedicated foreground service supports that session; notification permission enables its recording notification and Stop action. Ordinary preview and imported-video playback stop while hidden.
 
 LIVE FAULT can use optional motion, audio level, camera timing, temperature and process-load inputs to vary fault state. Microphone samples used for LIVE are reduced to levels on the device and are not saved as an audio recording unless video sound is enabled. Derived fault state may be included in capture metadata. Independently of LIVE, while the camera is active the app reads thermal status/headroom, battery temperature, memory capacity, available CPU core count and rendering time to reduce workload. These measurements are processed locally and are not sent to the developer.
 
@@ -31,3 +31,5 @@ If you contact us by email, your message and email address are used to reply and
 RAW video saves original, silent DNG sequences and timestamps as ZIP files in Download/5igna1. If location is enabled, an available location is included in the DNG files. Compatibility checks process one RAW image on the device without saving that test image as a file.
 
 [All guides](README.md) · [日本語](PRIVACY.ja.md)
+
+Experimental TAP reads only media you select with the system picker; it does not upload or modify the originals. Preview and source playback stop when the app is hidden. Only a user-started output recording may continue in the background; a foreground service and optional notification support that session. Photo processing pauses while hidden.

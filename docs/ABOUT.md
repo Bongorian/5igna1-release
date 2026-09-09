@@ -6,7 +6,7 @@ A sensor measures light, rows are read, components are reconstructed, and signal
 
 Its center is **a reproducible character × an unrepeatable encounter**. A damaged individual keeps its defect sites and biases while motion and short incidents continue inside it. The subject, light, device inputs and shutter timing meet that state. You can return to the same character without asking the system to generate the same encounter.
 
-Randomness generates identities, drift and incidents. It does not invent scene content. All scene samples come from the camera; missing data may be black, noise or reused acquired samples. RAW is one representation along the path, not the only true image. RGB reconstruction and decoded-block models state their approximations explicitly.
+Randomness generates identities, drift and incidents. It does not invent scene content. Scene samples come from the camera or selected TAP media; missing data may be black, noise or reused acquired samples. RAW is one representation along the path, not the only true image. RGB reconstruction and decoded-block models state their approximations explicitly.
 
 The internal mechanisms should make causal sense, but a complete physical simulator is not the goal. Distances, densities and errors can be exaggerated to make compelling images. VHS and CRT have recognizable profiles, with separate faults occurring inside them.
 

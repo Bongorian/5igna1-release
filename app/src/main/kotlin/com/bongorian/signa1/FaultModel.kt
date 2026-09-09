@@ -709,6 +709,27 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
             }
             else -> throw IllegalArgumentException("Fault ID")
         }
+        if ((id == Effects.VHS || id == Effects.CRT) && (controls.get(id, "transport") > 0f ||
+                (id == Effects.VHS && controls.get(id, "reduce") >= .5f) || controls.overrides(id).keys.any { it in FaultNode.transportKeys })) {
+            val kind = Math.round(controls.get(id, "transport") * 3).toFloat()
+            profile["transportKind"] = kind
+            if (id == Effects.VHS) {
+                profile["mediaReduce"] = if (controls.get(id, "reduce") >= .5f) 1f else 0f
+                profile["cableKind"] = if (controls.get(id, "cable") >= .5f) 1f else 0f
+                p["transportDamage"] = level * controls.get(id, "tracking")
+                p["transportLoss"] = level * controls.get(id, "dropout") * (.15f + .85f * event.envelope)
+                p["transportNoise"] = level * controls.get(id, "noise")
+            } else {
+                profile["upconvert"] = if (controls.get(id, "upconvert") >= .5f) 1f else 0f
+                p["transportDamage"] = level * controls.get(id, "convergence")
+                p["transportLoss"] = level * controls.get(id, "scan")
+                val slot = floor(time / .7).toLong()
+                // A fixed network state with LIVE OFF; bounded, deterministic congestion with LIVE ON.
+                p["networkStall"] = if (config.enabled && random(seed xor mix(slot)) < level * controls.get(id, "sync") * .8f) 1f else 0f
+                p["refreshBand"] = level * controls.get(id, "sync") * .5f
+                p["networkSeed"] = random(seed xor mix(slot)) * 997f
+            }
+        }
         for (value in controls.overrides(id).entries) {
             if (profile.containsKey(value.key)) profile.put(value.key, value.value)
             if (p.containsKey(value.key)) p.put(value.key, value.value)

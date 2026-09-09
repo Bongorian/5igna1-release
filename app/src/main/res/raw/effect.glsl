@@ -6,6 +6,7 @@ uniform samplerExternalOES cam;
 uniform mat4 st;
 uniform int mode;
 uniform vec2 sourceSize;
+uniform float transportKind,mediaReduce,cableKind,upconvert,transportDamage,transportLoss,transportNoise,networkStall,refreshBand,networkSeed;
 // Compiled mechanism parameters. Only the current fault's named values are bound.
 uniform float identitySeed,eventSeed,grainSeed;
 uniform float pixelDensity,columnDensity,hotFraction,hotValue,sensorNoise;
@@ -135,6 +136,33 @@ void main(){
     }else if(mode==FX_STREAM_ERROR){
         vec2 grid=vec2(streamColumns,streamColumns*sourceSize.y/sourceSize.x),region=floor(p*grid);
         if(hash(region+eventSeed)<streamLoss){vec2 previous=p-vec2(0.,1./grid.y);c=previous.y<0.?vec3(0.):sampleAt(previous)*concealment;}
+    }else if(mode==FX_VHS && transportKind>.5){
+        if(transportKind<1.5){
+            vec2 grid=max(vec2(1.),sourceSize/16.);vec2 block=floor(p*grid);
+            if(hash(block+eventSeed)<transportLoss*.3)p.x=fract(p.x+1./grid.x);
+            c=sampleAt(p);float q=mix(256.,16.,transportDamage);c=floor(c*q+.5)/q;
+            if(hash(block+identitySeed)<transportDamage*.2)c=sampleAt((block+.5)/grid);
+        }else if(transportKind>2.5){
+            // Cable impedance reflection, sync disturbance, chroma crosstalk and contact loss.
+            p.x+=sin(p.y*45.+trackingPhase)*transportDamage*.014;
+            c=sampleAt(p);c=mix(c,sampleAt(p-vec2(.012,0.)),transportDamage*.35);
+            vec3 yuv=toYuv(c);
+            if(cableKind<.5)yuv.yz=mix(yuv.yz,toYuv(sampleAt(p-vec2(.005,0.))).yz,.65);
+            else yuv.z*=1.-transportLoss*.8;
+            c=fromYuv(yuv)+(hash(floor(p*sourceSize)+grainSeed)-.5)*transportNoise*.15;
+            if(abs(p.y-dropoutPosition)<transportLoss*.12)c*=1.-transportLoss;
+        }
+    }else if(mode==FX_CRT && transportKind>.5){
+        if(transportKind>1.5 && transportKind<2.5){
+            vec2 block=floor(p*vec2(40.,24.));
+            if(hash(block+networkSeed)<transportDamage*.3)c=sampleAt((block+.5)/vec2(40.,24.))*.55;
+        }else if(transportKind>2.5){
+            vec2 grid=vec2(mix(300.,60.,transportLoss),mix(180.,36.,transportLoss));
+            vec2 cell=floor(p*grid);
+            c=sampleAt((cell+.5)/grid);
+            if(hash(floor(cell/8.)+identitySeed)<transportDamage*.2)c*=.08;
+            c*=1.-refreshBand*(.5+.5*sin(p.y*35.+syncOffset*100.));
+        }
     }else if(mode==FX_VHS){
         p.x+=trackingOffset+sin(p.y*70.+trackingPhase)*trackingWave;
         if(p.y>dropoutPosition)p.x+=trackingSlip;

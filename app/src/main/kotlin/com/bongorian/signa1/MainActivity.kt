@@ -58,6 +58,42 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     lateinit var strengthValue: TextView
     lateinit var photoTab: TextView
     lateinit var videoTab: TextView
+    lateinit var tapTab: TextView
+    lateinit var tapPlay: TextView
+    lateinit var tapChoose: TextView
+    var tapMode = false
+    var tapInput: TapInput? = null
+    private var cameraVideoBeforeTap = false
+    val capturePhotoFormat: Int get() = if (tapMode) 0 else settings.photoFormat
+    val captureRawVideo: Boolean get() = !tapMode && settings.rawVideo
+    private val tapPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null && settings.experimentalSignals && !recording) {
+            val type = contentResolver.getType(uri) ?: ""
+            if (type.startsWith("image/") || type.startsWith("video/")) enterTap(TapInput(uri, type.startsWith("video/")))
+            else Toast.makeText(this, R.string.tap_failed, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun chooseTap() {
+        if (!settings.experimentalSignals || recording || engine.photoBusy) return
+        tapPicker.launch(arrayOf("image/*", "video/*"))
+    }
+
+    fun enterTap(input: TapInput) {
+        if (!settings.experimentalSignals || recording || engine.photoBusy) return
+        if (!tapMode) cameraVideoBeforeTap = videoMode
+        cancelEffectPreview()
+        tapMode = true
+        tapInput = input
+        videoMode = input.video
+        ready(false)
+        engine.configure(settings, videoMode, effectState, input)
+        renderEffects()
+        renderCaptureMode()
+    }
+
+    fun configureEngine() = engine.configure(settings, videoMode, effectState, if (tapMode) tapInput else null)
+
     lateinit var zoomButton: TextView
     lateinit var flipButton: ImageView
     lateinit var galleryButton: MediaThumbnail
@@ -69,6 +105,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     var resumed: Boolean = false
     var ready: Boolean = false
     var recording: Boolean = false
+    private var pendingRecordPermission = false
     var videoMode: Boolean = false
     var sound: Boolean = false
     var latestVideo: Boolean = false
@@ -118,7 +155,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                 if (recording) {
                     val sec = (SystemClock.elapsedRealtime() - start) / 1000
                     status.setText(
-                        if (settings.rawVideo)
+                        if (captureRawVideo)
                             String.format(
                                 Locale.US,
                                 "● RAW %02d:%02d  ",
@@ -165,7 +202,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         effectState = EffectStateStore.load(prefs)
         engine = GlitchEngine(this, this)
         engine.position = Supplier { geo.snapshot() }
-        engine.configure(settings, videoMode, effectState)
+        configureEngine()
         if (b != null) {
             engine.front = b.getBoolean("session.front", false)
             engine.zoom = zoom
@@ -311,12 +348,13 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun rawOriginal(): Boolean {
-        return if (videoMode) settings.rawVideo else settings.photoFormat == 1
+        return if (videoMode) captureRawVideo else capturePhotoFormat == 1
     }
 
     fun availableEffects(): IntArray {
-        return Effects.choices(videoMode, !videoMode && settings.photoFormat == 2)
-            .filter { settings.experimentalSignals || !Effects.physical(it) }.toIntArray()
+        return Effects.choices(videoMode, !videoMode && capturePhotoFormat == 2)
+            .filter { (settings.experimentalSignals || !Effects.physical(it)) &&
+                (!tapMode || it == Effects.CLEAN || Effects.point(it).ordinal > Effects.Point.READOUT.ordinal) }.toIntArray()
     }
 
     fun uiEffects(): IntArray {
@@ -325,9 +363,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             effectState
                 .snapshot(
                     videoMode,
-                    settings.photoFormat,
+                    capturePhotoFormat,
                 )
-                .ids().filter { settings.experimentalSignals || !Effects.physical(it) }.toIntArray()
+                .ids().filter { (settings.experimentalSignals || !Effects.physical(it)) &&
+                (!tapMode || it == Effects.CLEAN || Effects.point(it).ordinal > Effects.Point.READOUT.ordinal) }.toIntArray()
     }
 
     fun nextAvailable(delta: Int): Int {
@@ -357,7 +396,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     fun beginEffectPreview(): EffectPreview {
         if (liveEditor != null) liveEditor!!.dialog!!.dismiss()
         cancelEffectPreview()
-        effectPreview = EffectPreview(effectState, videoMode, settings.photoFormat)
+        effectPreview = EffectPreview(effectState, videoMode, capturePhotoFormat)
         return effectPreview!!
     }
 
@@ -365,12 +404,12 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         return effectPreview == edit &&
             effectState == edit.base &&
             videoMode == edit.video &&
-            settings.photoFormat == edit.format
+            capturePhotoFormat == edit.format
     }
 
     fun previewEffectEdit(edit: EffectPreview, draft: EffectState) {
         if (validPreview(edit)) {
-            engine.previewEffects(draft.forContext(videoMode, settings.photoFormat))
+            engine.previewEffects(draft.forContext(videoMode, capturePhotoFormat))
             val tag = viewfinder.findViewWithTag<TextView>("fx")
             tag.setText(getString(R.string.ui_preview_editing))
         }
@@ -403,9 +442,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun renderEffects() {
+        tapTab.visibility = if (settings.experimentalSignals) View.VISIBLE else View.GONE
         echoButton.visibility = if (settings.experimentalSignals && faultConfig.enabled &&
-            faultConfig.echo.enabled && !rawOriginal() && (videoMode && !settings.rawVideo ||
-            !videoMode && settings.photoFormat == 0) && effectPreview == null && liveEditor == null)
+            faultConfig.echo.enabled && !rawOriginal() && (videoMode && !captureRawVideo ||
+            !videoMode && capturePhotoFormat == 0) && effectPreview == null && liveEditor == null)
             View.VISIBLE else View.GONE
         liveTransport.setVisibility(
             if (
@@ -424,15 +464,15 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         val original = rawOriginal()
         val active = uiEffects()
         formatButton.setText(
-            if (videoMode) (if (settings.rawVideo) "RAW ZIP ▾" else "MP4 ▾")
-            else if (settings.photoFormat == 0) "JPG ▾" else "RAW ▾"
+            if (tapMode) "TAP ▾" else if (videoMode) (if (captureRawVideo) "RAW ZIP ▾" else "MP4 ▾")
+            else if (capturePhotoFormat == 0) "JPG ▾" else "RAW ▾"
         )
         selectedRoute.removeAllViews()
-        for (id in effectState.ids()) {
+        for (id in effectState.ids().filter { !tapMode || Effects.point(it).ordinal > Effects.Point.READOUT.ordinal }) {
             val enabled = effectAvailable(id)
             val chip =
                 button(
-                    Effects.name(id) +
+                    Effects.label(id) +
                         (if (enabled) "" else " · " + (if (videoMode) "MP4" else "JPG"))
                 )
             chip.setTextSize(10f)
@@ -442,7 +482,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             selectedRoute.addView(chip, cp)
             chip.setOnClickListener(OnClickListener@{ v: View? -> showEffect(id) })
         }
-        if (effectState.mask == 0) {
+        if (effectState.mask == 0 || tapMode && active.isEmpty()) {
             val empty = button(getString(R.string.fault_chain_empty))
             empty.setTextColor(MUTED)
             selectedRoute.addView(empty, LinearLayout.LayoutParams(-2, dp(44f)))
@@ -459,10 +499,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun liveChainDetails(frame: EffectState.Frame): String {
-        val text = StringBuilder(Effects.chainName(frame.ids()))
+        val text = StringBuilder(frame.ids().joinToString(" → ") { Effects.label(it) })
         for (n in frame.nodes) text
             .append("\n")
-            .append(Effects.name(n.id))
+            .append(Effects.label(n.id))
             .append(" · ")
             .append(getString(R.string.fault_incident))
             .append(" ")
@@ -472,6 +512,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun liveFrame(frame: EffectState.Frame) {
+        if (tapMode) {
+            tapPlay.setText(if (engine.tapSource?.playing == true) R.string.tap_pause else R.string.tap_play)
+            tapPlay.isEnabled = engine.tapSource?.ready == true
+        }
         if (echoButton.visibility == View.VISIBLE) {
             val echo = engine.timeEcho
             echoButton.setText(if (echo.failed) R.string.echo_memory else if (echo.replaying)
@@ -529,7 +573,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             Effects.available(
                 id,
                 videoMode,
-                !videoMode && settings.photoFormat == 2,
+                !videoMode && capturePhotoFormat == 2,
             )
     }
 
@@ -545,6 +589,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun showFormat(): Dialog? {
+        if (tapMode) { chooseTap(); return null }
         if (recording || engine.photoBusy) return null
         val labels: Array<String> =
             if (videoMode)
@@ -566,8 +611,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             formatButton,
             getString(R.string.ui_save_format),
             labels,
-            if (videoMode) (if (settings.rawVideo) 1 else 0)
-            else (if (settings.photoFormat == 0) 0 else 1),
+            if (videoMode) (if (captureRawVideo) 1 else 0)
+            else (if (capturePhotoFormat == 0) 0 else 1),
             IntConsumer@{ index: Int ->
                 val next = CaptureSettings(settings)
                 if (videoMode) next.rawVideo = index == 1
@@ -603,10 +648,18 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     fun renderCaptureMode() {
         renderAudio()
         val value = videoMode
-        photoTab.setTextColor(if (!value) LIME else MUTED)
-        videoTab.setTextColor(if (value) LIME else MUTED)
-        photoTab.setBackground(bg(if (!value) PANEL else BG, 0))
-        videoTab.setBackground(bg(if (value) PANEL else BG, 0))
+        tapTab.visibility = if (settings.experimentalSignals) View.VISIBLE else View.GONE
+        tapTab.setTextColor(if (tapMode) LIME else MUTED)
+        tapTab.background = bg(if (tapMode) PANEL else BG, 0)
+        tapPlay.visibility = if (tapMode && tapInput?.video == true) View.VISIBLE else View.GONE
+        tapChoose.visibility = if (tapMode) View.VISIBLE else View.GONE
+        flipButton.visibility = if (tapMode) View.GONE else View.VISIBLE
+        torchButton.visibility = if (tapMode) View.GONE else View.VISIBLE
+        zoomButton.visibility = if (tapMode) View.GONE else View.VISIBLE
+        photoTab.setTextColor(if (!value && !tapMode) LIME else MUTED)
+        videoTab.setTextColor(if (value && !tapMode) LIME else MUTED)
+        photoTab.setBackground(bg(if (!value && !tapMode) PANEL else BG, 0))
+        videoTab.setBackground(bg(if (value && !tapMode) PANEL else BG, 0))
         capture.setContentDescription(
             if (value) getString(R.string.ui_start_video_recording)
             else getString(R.string.ui_take_a_photo)
@@ -615,12 +668,12 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun setVideo(value: Boolean) {
-        if (!ready || recording || engine.photoBusy || videoMode == value) return
+        if ((!ready && !tapMode) || recording || engine.photoBusy || !tapMode && videoMode == value) return
         if (
             value &&
                 cameraOptions != null &&
                 cameraOptions!!.videos.isEmpty() &&
-                !(settings.rawVideo && cameraOptions!!.rawVideoAvailable())
+                !(captureRawVideo && cameraOptions!!.rawVideoAvailable())
         ) {
             Toast.makeText(
                     this,
@@ -631,9 +684,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             return
         }
         cancelEffectPreview()
+        tapMode = false
         videoMode = value
         ready(false)
-        engine.configure(settings, value, effectState)
+        configureEngine()
         renderEffects()
         renderCaptureMode()
         savePrefs()
@@ -713,12 +767,20 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                     .show()
             return
         }
+        if (videoMode && !recording && Build.VERSION.SDK_INT >= 33 &&
+            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED &&
+            !getSharedPreferences("signal", 0).getBoolean("recording.notificationsAsked", false)) {
+            getSharedPreferences("signal", 0).edit().putBoolean("recording.notificationsAsked", true).apply()
+            pendingRecordPermission = true
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 5)
+            return
+        }
         capture.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
         if (videoMode) {
             if (
                 !recording &&
                     sound &&
-                    !settings.rawVideo &&
+                    !captureRawVideo &&
                     checkSelfPermission(Manifest.permission.RECORD_AUDIO) !=
                         PackageManager.PERMISSION_GRANTED
             ) {
@@ -726,7 +788,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                 return
             }
             ready(false)
-            engine.toggleVideo(sound && !settings.rawVideo)
+            engine.toggleVideo(sound && !captureRawVideo)
         } else {
             ready(false)
             engine.photo(
@@ -866,6 +928,9 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     override fun onResume() {
         super.onResume()
         resumed = true
+        engine.foreground = true
+        engine.foregroundWork.resume()
+        if (recording) handler.post(timer)
         handler.removeCallbacks(previewAcknowledgement)
         handler.post(previewAcknowledgement)
         if (tutorialPage < 0 && tutorial == null) geo.start()
@@ -880,6 +945,11 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             )
     }
 
+    override fun onUserLeaveHint() {
+        pendingRecordPermission = false
+        super.onUserLeaveHint()
+    }
+
     override fun onPause() {
         resumed = false
         if (mediaPreview != null) mediaPreview!!.dismiss()
@@ -891,7 +961,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         resumed = false
         handler.removeCallbacks(previewAcknowledgement)
         geo.stop()
-        engine.detach()
+        engine.background()
         handler.removeCallbacks(timer)
         super.onPause()
     }
@@ -935,6 +1005,18 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     override fun onRequestPermissionsResult(code: Int, p: Array<String>, results: IntArray) {
         super.onRequestPermissionsResult(code, p, results)
+        if (code == 5 && pendingRecordPermission) {
+            val deadline = SystemClock.elapsedRealtime() + 5000
+            handler.post(object : Runnable {
+                override fun run() {
+                    if (!pendingRecordPermission) return
+                    if (resumed && ready) { pendingRecordPermission = false; shoot() }
+                    else if (SystemClock.elapsedRealtime() < deadline) handler.postDelayed(this, 100)
+                    else pendingRecordPermission = false
+                }
+            })
+            return
+        }
         if (code == 4 && pendingFaultConfig != null) {
             val requested = pendingFaultConfig
             pendingFaultConfig = null
@@ -1026,7 +1108,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     fun renderAudio() {
         if (micButton != null) {
-            val silent = videoMode && settings.rawVideo
+            val silent = videoMode && captureRawVideo
             val enabled = sound && !silent
             micButton.setImageResource(if (enabled) R.drawable.ic_mic else R.drawable.ic_mic_off)
             micButton.setColorFilter(if (enabled) LIME else MUTED)
@@ -1213,13 +1295,17 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         }
         cancelEffectPreview()
         settings = CaptureSettings(value)
+        if (tapMode && !settings.experimentalSignals) {
+            tapMode = false
+            videoMode = cameraVideoBeforeTap
+        }
         advancedMode = settings.advancedMode
         if (settings.photoFormat == 1) settings.photoFormat = 2
         settings.save(getSharedPreferences("signal", 0))
         geo.updateEnabled(settings.location)
         if (settings.location && !geo.permitted()) requestLocationAccess()
         ready(false)
-        engine.configure(settings, videoMode, effectState)
+        configureEngine()
         renderEffects()
         renderCaptureMode()
         savePrefs()
@@ -1234,20 +1320,20 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         detail: String,
     ) {
         if (actualVideo != videoMode) return
-        if (actual.photoFormat != settings.photoFormat) cancelEffectPreview()
+        if (actual.photoFormat != capturePhotoFormat) cancelEffectPreview()
         cameraOptions = choices
-        settings = CaptureSettings(actual)
+        if (!tapMode) settings = CaptureSettings(actual)
         settings.location = geo.enabled
         renderAudio()
         displayAspect = w / h.toFloat()
         val aw = previewArea.width
         val ah = previewArea.height
         measuredFps = 0f
-        zoomButton.setEnabled(!rawOriginal() && (videoMode || settings.photoFormat == 0))
+        zoomButton.setEnabled(!rawOriginal() && (videoMode || capturePhotoFormat == 0))
         zoomButton.setAlpha(
-            if (!rawOriginal() && (videoMode || settings.photoFormat == 0)) 1f else .4f
+            if (!rawOriginal() && (videoMode || capturePhotoFormat == 0)) 1f else .4f
         )
-        if (rawOriginal() || (!videoMode && settings.photoFormat != 0)) {
+        if (rawOriginal() || (!videoMode && capturePhotoFormat != 0)) {
             zoom = 1f
             zoomButton.setText("1×")
         }
@@ -1261,7 +1347,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         }
         count.setText(
             if (videoMode)
-                (if (settings.rawVideo) "RAW · " else "") +
+                (if (captureRawVideo) "RAW · " else "") +
                     requireNotNull(engine.videoChoice).fps +
                     " fps / ⚙"
             else
@@ -1272,6 +1358,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                 )
         )
         renderEffects()
+        renderCaptureMode()
     }
 
     override fun fps(value: Float) {
@@ -1289,7 +1376,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun onBackPressed() {
-        if (recording) engine.toggleVideo(sound && !settings.rawVideo) else super.onBackPressed()
+        if (recording) engine.toggleVideo(sound && !captureRawVideo) else super.onBackPressed()
     }
 
     internal inner class CaptureButton : View(this@MainActivity) {

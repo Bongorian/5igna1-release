@@ -1,0 +1,160 @@
+package com.bongorian.signa1
+
+import android.graphics.ImageDecoder
+import android.graphics.SurfaceTexture
+import android.media.MediaPlayer
+import android.net.Uri
+import android.opengl.GLES11Ext
+import android.opengl.GLES20
+import android.opengl.GLUtils
+import android.view.Surface
+import java.util.concurrent.Future
+import kotlin.math.sqrt
+
+internal data class TapInput(val uri: Uri, val video: Boolean)
+
+/** Owned imported RGB source. Video transport never starts or stops the output recorder. */
+internal class TapSource(private val engine: GlitchEngine, val input: TapInput) {
+    var texture = 0
+        private set
+    val external get() = input.video
+    val matrix = GlitchEngine.IDENTITY.clone()
+    @Volatile var ready = false
+        private set
+    @Volatile var playing = false
+        private set
+    var width = 0
+        private set
+    var height = 0
+        private set
+    @Volatile private var closed = false
+    private var available = false
+    private var player: MediaPlayer? = null
+    private var stream: SurfaceTexture? = null
+    private var surface: Surface? = null
+    private var load: Future<*>? = null
+
+    private fun createTexture() {
+        val id = IntArray(1)
+        GLES20.glGenTextures(1, id, 0)
+        texture = id[0]
+        val target = if (external) GLES11Ext.GL_TEXTURE_EXTERNAL_OES else GLES20.GL_TEXTURE_2D
+        GLES20.glBindTexture(target, texture)
+        GLES20.glTexParameteri(target, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR)
+        GLES20.glTexParameteri(target, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
+        GLES20.glTexParameteri(target, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE)
+        GLES20.glTexParameteri(target, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE)
+    }
+
+    fun open() {
+        createTexture()
+        if (!input.video) {
+            load = engine.files.submit {
+                try {
+                    engine.foregroundWork.await()
+                    val bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(engine.context.contentResolver, input.uri)) {
+                            decoder, info, _ ->
+                        val scale = minOf(1.0, sqrt(engine.deviceProfile.photoPixels().toDouble() /
+                            (info.size.width.toDouble() * info.size.height)))
+                        decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                        decoder.setTargetSize(maxOf(1, (info.size.width * scale).toInt()),
+                            maxOf(1, (info.size.height * scale).toInt()))
+                    }
+                    engine.gl.post {
+                        try {
+                            if (!closed) {
+                                engine.current(engine.window)
+                                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture)
+                                GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
+                                check(GLES20.glGetError() == GLES20.GL_NO_ERROR) { "TAP texture allocation" }
+                                width = bitmap.width
+                                height = bitmap.height
+                                matrix[5] = -1f
+                                matrix[13] = 1f
+                                ready = true
+                                engine.tapPrepared(this)
+                            }
+                        } catch (error: Exception) { fail(error) }
+                        finally { bitmap.recycle() }
+                    }
+                } catch (error: Exception) { engine.gl.post { if (!closed) fail(error) } }
+                catch (error: OutOfMemoryError) {
+                    engine.gl.post { if (!closed) fail(IllegalStateException("TAP image memory", error)) }
+                }
+            }
+            return
+        }
+        stream = SurfaceTexture(texture).also {
+            it.setOnFrameAvailableListener({ if (!closed) available = true }, engine.gl)
+        }
+        surface = Surface(stream)
+        player = MediaPlayer().also { media ->
+            media.setDataSource(engine.context, input.uri)
+            media.setSurface(surface)
+            // TAP is an image signal at the readout/data boundary. It does not import sound.
+            media.setVolume(0f, 0f)
+            media.isLooping = true
+            media.setOnVideoSizeChangedListener { _, w, h ->
+                if (!closed && w > 0 && h > 0) { width = w; height = h }
+            }
+            media.setOnPreparedListener {
+                if (!closed) {
+                    width = media.videoWidth
+                    height = media.videoHeight
+                    media.seekTo(0L, MediaPlayer.SEEK_CLOSEST_SYNC)
+                }
+            }
+            media.setOnSeekCompleteListener {
+                if (!closed && !ready && width > 0 && height > 0) {
+                    ready = true
+                    engine.tapPrepared(this)
+                }
+            }
+            media.setOnErrorListener { _, what, extra ->
+                if (!closed) fail(IllegalStateException("TAP video $what/$extra"))
+                true
+            }
+            media.prepareAsync()
+        }
+    }
+
+    fun update() {
+        if (external && available) {
+            stream!!.updateTexImage()
+            stream!!.getTransformMatrix(matrix)
+            available = false
+        }
+    }
+
+    fun toggle() {
+        if (!ready || !input.video || closed) return
+        try {
+            if (playing) player!!.pause() else player!!.start()
+            playing = !playing
+        } catch (error: Exception) { fail(error) }
+    }
+
+    private fun fail(error: Exception) {
+        if (engine.recording) engine.stopVideo()
+        close()
+        engine.error(engine.context.getString(R.string.tap_failed), error)
+        engine.ready(false)
+    }
+
+    fun close() {
+        if (closed) return
+        closed = true
+        load?.cancel(true)
+        player?.release()
+        player = null
+        surface?.release()
+        surface = null
+        stream?.setOnFrameAvailableListener(null)
+        stream?.release()
+        stream = null
+        if (texture != 0) GLES20.glDeleteTextures(1, intArrayOf(texture), 0)
+        texture = 0
+        ready = false
+        playing = false
+    }
+}

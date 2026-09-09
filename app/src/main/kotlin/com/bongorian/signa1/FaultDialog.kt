@@ -75,6 +75,7 @@ internal object FaultDialog {
         var thermal: Boolean
         var cpu: Boolean
         var sources: Boolean = false
+        var page: Int = 0
         var sensitivity: Float
         var mains: Int
         var echo: EchoConfig
@@ -82,6 +83,7 @@ internal object FaultDialog {
         var dialog: Dialog? = null
         var child: Dialog? = null
         var body: LinearLayout? = null
+        var pages: LinearLayout? = null
         var status: TextView? = null
         var finished: Boolean = false
 
@@ -105,6 +107,7 @@ internal object FaultDialog {
         }
 
         fun show(): Dialog? {
+            pages = a.row()
             body = LinearLayout(a)
             body!!.setOrientation(LinearLayout.VERTICAL)
             render()
@@ -118,10 +121,11 @@ internal object FaultDialog {
                         a.engine.finishFaultPreview(true)
                         a.requestFaultConfig(state())
                     },
-                    .53f,
+                    .64f,
+                    pages,
                 )
             val usable = a.cameraRoot.height - a.cameraRoot.paddingTop - a.cameraRoot.paddingBottom
-            val height = min(a.dp(460f), Math.round(usable * .53f))
+            val height = min(a.dp(540f), Math.round(usable * .64f))
             dialog!!.window!!.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             dialog!!.window!!.setLayout(a.cameraRoot.width - a.dp(16f), height)
             a.reserveEffectEditor(this, height)
@@ -238,101 +242,101 @@ internal object FaultDialog {
                 enabled,
                 Consumer@{ value: Boolean -> enabled = value!! },
             )
-            setting(R.string.live_clock, clocks(a), performance.clock, "clock")
-            slider(R.string.live_speed, "speed", performance.speed, -4f, 4f, .05f, "×")
-            setting(R.string.live_style, styles(a), performance.style, "style")
-            if (
-                performance.style != LivePerformance.NATURAL ||
-                    performance.clock == LivePerformance.LOOP ||
-                    performance.clock == LivePerformance.PING_PONG
-            )
-                slider(
-                    R.string.live_cycle,
-                    "period",
-                    performance.periodSeconds,
-                    .25f,
-                    32f,
-                    .05f,
-                    " s",
-                )
-            if (performance.style != LivePerformance.NATURAL)
-                slider(
-                    R.string.live_depth,
-                    "depth",
-                    performance.depth * 100,
-                    0f,
-                    100f,
-                    1f,
-                    "%",
-                )
-            if (performance.clock == LivePerformance.STEP)
-                slider(
-                    R.string.live_division,
-                    "interval",
-                    performance.stepSeconds,
-                    .015625f,
-                    2f,
-                    .015625f,
-                    " s",
-                )
-            if (performance.style == LivePerformance.BURST) {
-                slider(R.string.live_burst_width, "width", performance.width, .05f, .95f, .01f, "")
-                slider(R.string.live_chance, "chance", performance.chance, 0f, 1f, .01f, "")
+            val pages = pages!!
+            pages.removeAllViews()
+            val pageLabels = if (a.settings.experimentalSignals)
+                intArrayOf(R.string.live_page_time, R.string.live_page_inputs, R.string.echo_enabled)
+                else intArrayOf(R.string.live_page_time, R.string.live_page_inputs)
+            for (index in pageLabels.indices) {
+                val button = a.button(a.getString(pageLabels[index]))
+                button.tag = "live-page-$index"
+                button.textSize = 11f
+                button.setTextColor(if (page == index) MainActivity.LIME else MainActivity.MUTED)
+                val layout = LinearLayout.LayoutParams(0, a.dp(44f), 1f)
+                if (index > 0) layout.leftMargin = a.dp(6f)
+                pages.addView(button, layout)
+                button.setOnClickListener { page = index; render() }
             }
-            val transport = a.row()
-            body!!.addView(transport, LinearLayout.LayoutParams(-1, a.dp(48f)))
-            val hold =
-                a.button(
-                    a.getString(if (performance.hold) R.string.live_resume else R.string.live_pause)
-                )
-            val hit = a.button(a.getString(R.string.live_trigger))
-            val reset = a.button(a.getString(R.string.live_reset))
-            hold.setTextColor(if (performance.hold) MainActivity.LIME else MainActivity.MUTED)
-            hold.setContentDescription(a.getString(R.string.live_hold_hint))
-            hit.setContentDescription(a.getString(R.string.live_hit_hint))
-            reset.setContentDescription(a.getString(R.string.live_reset_hint))
-            timeButtons(a, transport, hold, hit, reset, 44)
-            hold.setOnClickListener(
-                OnClickListener@{ v: View? ->
-                    performance = performance.held(!performance.hold)
-                    preview()
-                    render()
-                }
-            )
-            hit.setOnClickListener(
-                OnClickListener@{ v: View? -> if (enabled) a.engine.hitFaults() }
-            )
-            reset.setOnClickListener(OnClickListener@{ v: View? -> a.engine.rewindFaults() })
-            if (a.settings.experimentalSignals) {
+            pages.setPadding(0, 0, 0, a.dp(8f))
+            if (page == 2 && a.settings.experimentalSignals) {
                 toggle(R.string.echo_enabled, echo.enabled) { echo = echo.copy(enabled = it) }
-                val echoHint = a.text(a.getString(R.string.echo_hint), 11, MainActivity.MUTED)
-                body!!.addView(echoHint)
-                val echoDelay = a.button(a.getString(R.string.echo_delay, echo.delaySeconds))
-                body!!.addView(echoDelay, LinearLayout.LayoutParams(-1, a.dp(44f)))
-                echoDelay.setOnClickListener {
-                    child = SignalSheet.pick(a, a.getString(R.string.echo_point),
-                        arrayOf(2, 4, 6).map { a.getString(R.string.echo_delay, it) }.toTypedArray(),
-                        arrayOf(2, 4, 6).indexOf(echo.delaySeconds).coerceAtLeast(0)) { n ->
-                        echo = echo.copy(delaySeconds = arrayOf(2, 4, 6)[n])
-                        echoDelay.text = a.getString(R.string.echo_delay, echo.delaySeconds)
-                        preview()
-                    }
-                }
+                SignalControls.slider(a, body!!, a.getString(R.string.echo_probability),
+                    echo.chance * 100, 0f, 100f, 1f, "%") { value ->
+                    echo = echo.copy(probability = value / 100f)
+                    preview()
+                }.tag = "echo-probability"
+                body!!.addView(a.text(a.getString(R.string.echo_hint), 12, MainActivity.MUTED))
+                return
             }
-            val input =
-                SignalControls.field(
-                    a,
-                    body!!,
-                    a.getString(R.string.live_sources) + (if (sources) " ▴" else " ▾"),
+            if (page == 0) {
+                setting(R.string.live_clock, clocks(a), performance.clock, "clock")
+                slider(R.string.live_speed, "speed", performance.speed, -4f, 4f, .05f, "×")
+                setting(R.string.live_style, styles(a), performance.style, "style")
+                if (
+                    performance.style != LivePerformance.NATURAL ||
+                        performance.clock == LivePerformance.LOOP ||
+                        performance.clock == LivePerformance.PING_PONG
                 )
-            input.setTextColor(MainActivity.LIME)
-            input.setTag("live-sources")
-            input.setOnClickListener(
-                OnClickListener@{ v: View? ->
-                    sources = !sources
-                    render()
+                    slider(
+                        R.string.live_cycle,
+                        "period",
+                        performance.periodSeconds,
+                        .25f,
+                        32f,
+                        .05f,
+                        " s",
+                    )
+                if (performance.style != LivePerformance.NATURAL)
+                    slider(
+                        R.string.live_depth,
+                        "depth",
+                        performance.depth * 100,
+                        0f,
+                        100f,
+                        1f,
+                        "%",
+                    )
+                if (performance.clock == LivePerformance.STEP)
+                    slider(
+                        R.string.live_division,
+                        "interval",
+                        performance.stepSeconds,
+                        .015625f,
+                        2f,
+                        .015625f,
+                        " s",
+                    )
+                if (performance.style == LivePerformance.BURST) {
+                    slider(R.string.live_burst_width, "width", performance.width, .05f, .95f, .01f, "")
+                    slider(R.string.live_chance, "chance", performance.chance, 0f, 1f, .01f, "")
                 }
-            )
+                val transport = a.row()
+                body!!.addView(transport, LinearLayout.LayoutParams(-1, a.dp(48f)))
+                val hold =
+                    a.button(
+                        a.getString(if (performance.hold) R.string.live_resume else R.string.live_pause)
+                    )
+                val hit = a.button(a.getString(R.string.live_trigger))
+                val reset = a.button(a.getString(R.string.live_reset))
+                hold.setTextColor(if (performance.hold) MainActivity.LIME else MainActivity.MUTED)
+                hold.setContentDescription(a.getString(R.string.live_hold_hint))
+                hit.setContentDescription(a.getString(R.string.live_hit_hint))
+                reset.setContentDescription(a.getString(R.string.live_reset_hint))
+                timeButtons(a, transport, hold, hit, reset, 44)
+                hold.setOnClickListener(
+                    OnClickListener@{ v: View? ->
+                        performance = performance.held(!performance.hold)
+                        preview()
+                        render()
+                    }
+                )
+                hit.setOnClickListener(
+                    OnClickListener@{ v: View? -> if (enabled) a.engine.hitFaults() }
+                )
+                reset.setOnClickListener(OnClickListener@{ v: View? -> a.engine.rewindFaults() })
+                return
+            }
+            sources = true
             if (sources) {
                 toggle(
                     R.string.fault_motion,

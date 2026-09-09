@@ -20,7 +20,7 @@ This source is **1.4.0 (versionCode 13)**. It adds revised device recommendation
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 
-Every scene sample comes from the camera. There is no semantic scene generation or content completion. RAW, camera RGB, luma/chroma and media/display outputs are representations along a route; RAW is not the sole true image. Mechanisms are causal but their ranges serve glitch expression, not engineering simulation.
+Scene samples come from the camera or selected media in experimental TAP. There is no semantic scene generation or content completion. RAW, camera RGB, luma/chroma and media/display outputs are representations along a route; RAW is not the sole true image. Mechanisms are causal but their ranges serve glitch expression, not engineering simulation.
 
 ## Choose where the signal breaks
 
@@ -106,3 +106,5 @@ The development build includes conservative device recommendations and automatic
 Settings groups ADVANCED and EXPERT under Modes. ADVANCED exposes internal values; EXPERT removes app-level preview workload and cooling limits for maximum available speed. [Performance modes](docs/PERFORMANCE.md).
 
 Development additions: hold PHOTO/VIDEO for resolution; experimental [TIME ECHO](docs/LIVE_FAULT.md#time-echo-experimental) inserts past camera frames using the current FAULT state.
+
+Experimental **TAP** accepts selected photos/videos after READOUT and before DATA, with independent video playback and output recording. Ordinary processing stops or waits when the app is hidden; only an active video recording may continue. [Experimental inputs](docs/EXPERIMENTAL_SIGNALS.md).

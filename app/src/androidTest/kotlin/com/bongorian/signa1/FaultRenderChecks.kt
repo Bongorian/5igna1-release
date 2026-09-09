@@ -63,7 +63,7 @@ internal object FaultRenderChecks {
             .put("plugged", battery.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0))
     }
 
-    fun run(context: Context, benchmark: Boolean): String {
+    fun run(context: Context, benchmark: Boolean, transportOnly: Boolean = false): String {
         val display = EglLease.acquire()
         var egl = EGL14.EGL_NO_CONTEXT
         var surface = EGL14.EGL_NO_SURFACE
@@ -79,7 +79,7 @@ internal object FaultRenderChecks {
             surface = EGL14.eglCreatePbufferSurface(display,configs[0],
                 intArrayOf(EGL14.EGL_WIDTH,1,EGL14.EGL_HEIGHT,1,EGL14.EGL_NONE),0)
             check(EGL14.eglMakeCurrent(display,surface,surface,egl))
-            val report = compare(context, benchmark)
+            val report = if (transportOnly) transportCompare(context) else compare(context, benchmark)
             val directory = File(context.filesDir, "verification").also { it.mkdirs() }
             File(directory, "fault-render.json").writeText(report.toString(2))
             return report.toString()
@@ -89,6 +89,68 @@ internal object FaultRenderChecks {
             if (egl != EGL14.EGL_NO_CONTEXT) EGL14.eglDestroyContext(display,egl)
             EglLease.release()
             EGL14.eglReleaseThread()
+        }
+    }
+
+    private fun transportCompare(context: Context): JSONObject {
+        val chain = EffectChain(PhotoRenderer.shaderSource(context), false)
+        val source = SignalBuffer()
+        val target = SignalBuffer()
+        val w = 960; val h = 720
+        val bytes = ByteBuffer.allocateDirect(w * h * 4)
+        source.allocate(w, h); target.allocate(w, h)
+        val image = fixture(w, h)
+        fun upload(invert: Boolean) {
+            val bitmap = if (!invert) image else Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888).apply { eraseColor(android.graphics.Color.MAGENTA) }
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, source.texture)
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
+            if (invert) bitmap.recycle()
+        }
+        fun render(parameters: EffectParameters, mask: Int): ByteArray {
+            val state = EffectState.defaults().edit(true, mask, parameters).amount(.8f)
+            chain.render(source.texture, false, identity, frame(state, false, 0.0), w, h, w, h, target.fbo, target.texture)
+            return pixels(target, bytes)
+        }
+        val defaults = EffectParameters.defaults()
+        val media = 1 shl Effects.VHS
+        val display = 1 shl Effects.CRT
+        try {
+            upload(false)
+            val clean = render(defaults, 0)
+            val digital = defaults.with(Effects.VHS, "transport", 2f / 3)
+            check(clean.contentEquals(render(digital, media))) { "Digital media changed pixels" }
+            check(clean.contentEquals(render(digital.with(Effects.CRT, "transport", 1f / 3), media or display))) { "Digital chain changed pixels" }
+            val hashes = HashSet<String>()
+            for (m in 0..3) for (d in 0..3) {
+                val parameters = defaults.with(Effects.VHS, "transport", m / 3f).with(Effects.VHS, "reduce", 1f)
+                    .with(Effects.CRT, "transport", d / 3f)
+                hashes.add(hash(render(parameters, media or display)))
+            }
+            check(hashes.size >= 12) { "Transport profiles produced indistinguishable frames" }
+            for (m in 0..1) {
+                val parameters = defaults.with(Effects.VHS, "transport", m / 3f)
+                check(!render(parameters, media).contentEquals(render(parameters.with(Effects.VHS, "reduce", 1f), media))) { "Media reduction did not change pixels" }
+            }
+            val analog = defaults.with(Effects.VHS, "transport", 1f).with(Effects.CRT, "transport", 1f / 3)
+            check(!render(analog, media or display).contentEquals(render(analog.with(Effects.VHS, "cable", 1f), media or display))) { "Composite/component match" }
+            check(!render(analog, media or display).contentEquals(render(analog.with(Effects.CRT, "upconvert", 0f), media or display))) { "Upsampling choices match" }
+            val network = defaults.with(Effects.CRT, "transport", 2f / 3).override(Effects.CRT, "networkStall", 0f)
+            val before = render(network, display)
+            upload(true)
+            check(before.contentEquals(render(network.override(Effects.CRT, "networkStall", 1f), display))) { "Network stall did not retain preceding pixels" }
+            check(!before.contentEquals(render(network, display))) { "Network did not resume" }
+            val solid = render(defaults, 0)
+            val led = defaults.with(Effects.CRT, "transport", 1f).with(Effects.CRT, "scan", 1f)
+                .with(Effects.CRT, "convergence", 0f).with(Effects.CRT, "sync", 0f)
+            check(solid.contentEquals(render(led, display))) { "LED added element-gap lines" }
+            upload(false)
+            // Reuse the same specialized programs after switching away from transport models.
+            chain.releaseBuffers()
+            check(clean.contentEquals(render(digital, media)))
+            return JSONObject().put("result", "PASS digital identity, 16 media/display combinations, media resolution, cable models, upconversion, network frame hold/resume, LED without black gaps")
+                .put("uniqueFrames", hashes.size)
+        } finally {
+            image.recycle(); chain.release(); source.release(); target.release()
         }
     }
 

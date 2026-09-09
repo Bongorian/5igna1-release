@@ -24,7 +24,7 @@ LEVELは各FAULT固有の密度・距離・露光・事故の影響などへ変�
 
 IDENTITYは故障位置やbias、MOTIONは連続的なdriftや位相、EVENTは一時的な事故です。時間が進んでもChainと個体seedを変えません。「ランダムチェーン」は現在の形式で使える効果を2〜5個選び、操作値と全体LEVELを生成します。長押しでRESEEDになります。RESEEDは選択中の故障個体だけを変更し、操作値は保持します。COLOR MAPは個体seedを使いません。リセットは操作値だけを初期化します。
 
-画像の起点はすべて実カメラです。被写体を意味推論で生成・補完しません。RGBのCFA／DEMOSAICは再モザイクによる近似です。CHROMA ERRORは輝度・色差を分けて扱います。BLOCK／STREAMは復号画像の故障モデルで、実bitstream／packetは破壊しません。STREAMの再利用元は同じフレーム内の取得済みサンプルで、過去フレームのdatamoshは未実装です。
+画像の起点は実カメラ、または実験機能TAPで選択した素材です。被写体を意味推論で生成・補完しません。RGBのCFA／DEMOSAICは再モザイクによる近似です。CHROMA ERRORは輝度・色差を分けて扱います。BLOCK／STREAMは復号画像の故障モデルで、実bitstream／packetは破壊しません。STREAMの再利用元は同じフレーム内の取得済みサンプルで、過去フレームのdatamoshは未実装です。
 
 VHS／CRTの媒体・表示特性と、その内部の故障は別項目です。TERMINALはCRTの緑色蛍光体profileに統合しました。RAWを唯一の正解とは扱いません。各経路は異なる信号表現です。
 
@@ -33,3 +33,10 @@ STREAM ERRORは静止画・動画共通です。加工RAWに適用できるの�
 今のFAULTがどう変化するかはLIVEで設定します。周期・更新間隔は秒単位です。[時間変化の操作](LIVE_FAULT.ja.md)。内部値を直接固定するには、設定で [ADVANCED MODE](ADVANCED_MODE.ja.md) を一括ONにします。
 
 実験的な端末連動がONなら、加工RAWでもブレ・熱雑音・スミアを追加できます。対応範囲と近似の制限は[実験機能](EXPERIMENTAL_SIGNALS.ja.md)を参照してください。
+
+
+## MEDIAとDISPLAYのモデル
+
+MEDIAではVHS、DVD、Digital thru、Analog thruを選択します。VHS／DVDは途中画像をメディア相当（最大320 × 480／720 × 480）に落とすオプションを持ちます。Analog thruは必ずComposite（320 × 480）またはComponent（720 × 480）相当の途中画像を用い、反射・同期ずれ、接触不良、干渉、色信号の混入を表現します。小さい入力はMEDIA段で拡大しません。数値は帯域の表現用近似で、特定機器の厳密な仕様ではありません。出力の縦横比を保ちます。DVDでは復号後のブロック破損と欠落を表現し、Digital thruはこの段を無加工で通します。
+
+DISPLAYではCRT、Digital thru、Network display、LED displayを選択します。アナログMEDIAの後のDigital thruはピクセル保持または線形補間でアップコンバートします。Networkは途中解像度を下げ、復号画像のパケット領域を壊し、輻輳中には直前の処理画像を保持します。LIVEで乱数種に基づく輻輳状態が進み、LIVE OFFでは自動的な時間停止は起こりません。LEDは素子間隔、モジュール故障、走査帯を表現します。実際の通信やパケット改変は行いません。すべてRGB用で、処理済みRAWでは迂回します。保存画像の寸法は選択中の撮影形式に従います。

@@ -156,6 +156,18 @@ internal fun MainActivity.buildUi() {
     viewfinder.addView(preview, FrameLayout.LayoutParams(-1, -1))
     overlay = Overlay()
     viewfinder.addView(overlay, FrameLayout.LayoutParams(-1, -1))
+    val tapControls = row()
+    tapControls.setPadding(dp(8f), dp(4f), dp(8f), dp(8f))
+    tapPlay = button(getString(R.string.tap_play))
+    tapPlay.tag = "tap-play"
+    tapPlay.setOnClickListener { engine.toggleTapPlayback() }
+    tapControls.addView(tapPlay, LinearLayout.LayoutParams(0, dp(44f), 1f))
+    tapChoose = button(getString(R.string.tap_choose))
+    tapChoose.tag = "tap-choose"
+    tapChoose.setOnClickListener { chooseTap() }
+    tapControls.addView(tapChoose, LinearLayout.LayoutParams(0, dp(44f), 1f).apply { leftMargin = dp(6f) })
+    viewfinder.addView(tapControls, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM))
+
     preview.setOnTouchListener(
         object : OnTouchListener {
             var downX: Float = 0f
@@ -293,8 +305,12 @@ internal fun MainActivity.buildUi() {
     root.addView(tools, LinearLayout.LayoutParams(-1, dp(44f)))
     photoTab = button(getString(R.string.ui_photo))
     videoTab = button(getString(R.string.ui_video))
-    tools.addView(photoTab, LinearLayout.LayoutParams(dp(60f), dp(40f)))
-    tools.addView(videoTab, LinearLayout.LayoutParams(dp(60f), dp(40f)))
+    tapTab = button("TAP")
+    tapTab.contentDescription = getString(R.string.tap_choose)
+    tools.addView(photoTab, LinearLayout.LayoutParams(dp(52f), dp(40f)))
+    tools.addView(videoTab, LinearLayout.LayoutParams(dp(52f), dp(40f)))
+    tools.addView(tapTab, LinearLayout.LayoutParams(dp(50f), dp(40f)))
+    tapTab.setOnClickListener { if (!tapMode && tapInput != null) enterTap(tapInput!!) else chooseTap() }
     photoTab.setOnClickListener(OnClickListener@{ v: View? -> setVideo(false) })
     videoTab.setOnClickListener(OnClickListener@{ v: View? -> setVideo(true) })
     photoTab.setOnLongClickListener { ResolutionPicker.show(this, false); true }

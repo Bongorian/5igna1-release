@@ -97,18 +97,9 @@ internal class QualityDialog(a: MainActivity) {
                 if (!syncing) persist()
             },
         )
-        mode(R.string.experimental_signals, R.string.experimental_signals_hint,
-            draft.experimentalSignals, "experimental-signals") { checked ->
-            draft.experimentalSignals = checked
-            persist()
-        }
-        mode(R.string.resolution_audio, R.string.resolution_audio_hint,
-            draft.resolutionAudio, "resolution-audio") { checked ->
-            draft.resolutionAudio = checked
-            persist()
-        }
         if (options == null) {
             note(activity.getString(R.string.camera_settings_unavailable))
+            experimentalSection()
             appSection()
             refresh()
             scroll.removeView(content)
@@ -361,6 +352,7 @@ internal class QualityDialog(a: MainActivity) {
         )
         content!!.addView(gps, LinearLayout.LayoutParams(-1, activity.dp(48f)))
         note(activity.getString(R.string.settings_metadata_hint))
+        experimentalSection()
         appSection()
         refresh()
         scroll.removeView(content)
@@ -388,6 +380,20 @@ internal class QualityDialog(a: MainActivity) {
                 changed(checked)
             }
         )
+    }
+
+    fun experimentalSection() {
+        heading(activity.getString(R.string.settings_experiments))
+        mode(R.string.experimental_signals, R.string.experimental_signals_hint,
+            draft.experimentalSignals, "experimental-signals") { checked ->
+            draft.experimentalSignals = checked
+            persist()
+        }
+        mode(R.string.resolution_audio, R.string.resolution_audio_hint,
+            draft.resolutionAudio, "resolution-audio") { checked ->
+            draft.resolutionAudio = checked
+            persist()
+        }
     }
 
     fun appSection() {

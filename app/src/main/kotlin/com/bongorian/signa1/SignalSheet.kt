@@ -25,6 +25,7 @@ internal object SignalSheet {
         content: View?,
         apply: Runnable,
         fraction: Float = .87f,
+        toolbar: View? = null,
     ): Dialog {
         val dialog = Dialog(a)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -44,6 +45,7 @@ internal object SignalSheet {
         val note = a.text(subtitle, MainActivity.TEXT_BODY, MainActivity.MUTED)
         note.setPadding(0, 0, 0, a.dp(12f))
         root.addView(note, LinearLayout.LayoutParams(-1, -2))
+        if (toolbar != null) root.addView(toolbar, LinearLayout.LayoutParams(-1, -2))
         val scroll = ScrollView(a)
         scroll.setFillViewport(false)
         scroll.setVerticalScrollBarEnabled(false)

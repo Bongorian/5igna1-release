@@ -54,6 +54,7 @@ internal class EffectChain(private val source: String, private val supportsExter
             }
             if (node != null) {
                 // Retain profile-then-mechanism override order, including overlapping names.
+                if (node.id == Effects.VHS || node.id == Effects.CRT) bindScalars(mapOf("transportKind" to (node.profile["transportKind"] ?: 0f)))
                 bindScalars(node.profile)
                 bindScalars(node.mechanism)
             }
@@ -157,6 +158,105 @@ internal class EffectChain(private val source: String, private val supportsExter
         bufferCount = count
     }
 
+    private class StageBuffer {
+        var texture = 0
+        var fbo = 0
+        var w = 0
+        var h = 0
+        fun allocate(width: Int, height: Int) {
+            if (w == width && h == height && texture != 0) return
+            release()
+            val ids = IntArray(1)
+            GLES20.glGenTextures(1, ids, 0); texture = ids[0]
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE)
+            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null)
+            GLES20.glGenFramebuffers(1, ids, 0); fbo = ids[0]
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fbo)
+            GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, texture, 0)
+            check(GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER) == GLES20.GL_FRAMEBUFFER_COMPLETE) { "Transport GPU memory" }
+            w = width; h = height
+        }
+        fun release() {
+            if (texture != 0) GLES20.glDeleteTextures(1, intArrayOf(texture), 0)
+            if (fbo != 0) GLES20.glDeleteFramebuffers(1, intArrayOf(fbo), 0)
+            texture = 0; fbo = 0; w = 0; h = 0
+        }
+    }
+
+    private val transportBuffers = arrayOf(StageBuffer(), StageBuffer())
+    private val networkFrame = StageBuffer()
+    private var networkValid = false
+    private var networkIdentity = 0L
+
+    private fun drawStage(input: Int, external: Boolean, matrix: FloatArray, node: FaultNode?,
+                          sourceWidth: Int, sourceHeight: Int, destination: Int, w: Int, h: Int) {
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, destination)
+        GLES20.glViewport(0, 0, w, h)
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+        val program = program(node?.id ?: Effects.CLEAN, external)
+        GLES20.glUseProgram(program.id)
+        GLES20.glBindTexture(if (external) GLES11Ext.GL_TEXTURE_EXTERNAL_OES else GLES20.GL_TEXTURE_2D, input)
+        program.bind(node, matrix, sourceWidth, sourceHeight)
+        vertices.position(0)
+        GLES20.glEnableVertexAttribArray(program.position)
+        GLES20.glVertexAttribPointer(program.position, 2, GLES20.GL_FLOAT, false, 0, vertices)
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
+    }
+
+    private fun renderTransport(texture: Int, oes: Boolean, transform: FloatArray?, frame: EffectState.Frame,
+                                w: Int, h: Int, sourceW: Int, sourceH: Int, target: Int) {
+        var input = texture
+        var iw = sourceW; var ih = sourceH
+        var first = true
+        var analog = false
+        var nearest = false
+        var networkUsed = false
+        for (node in frame.nodes) {
+            val kind = Math.round(node.profile["transportKind"] ?: 0f)
+            // Digital media is an exact pass-through: no render or resampling at this stage.
+            if (node.id == Effects.VHS && kind == 2) continue
+            if (node.id == Effects.CRT && kind == 1) {
+                nearest = analog && node.get("upconvert") < .5f
+                continue
+            }
+            var ow = w; var oh = h
+            if (node.id == Effects.VHS) {
+                analog = kind == 0 || kind == 3
+                if (kind == 3 || (node.profile["mediaReduce"] ?: 0f) >= .5f) {
+                    val capW = if (kind == 0 || (kind == 3 && node.get("cableKind") < .5f)) 320 else 720
+                    ow = minOf(w, capW); oh = minOf(h, 480)
+                }
+            }
+            val network = node.id == Effects.CRT && kind == 2
+            if (network) {
+                networkUsed = true
+                val factor = 1f - node.get("transportLoss") * .8f
+                ow = max(16, (w * factor).toInt()); oh = max(16, (h * factor).toInt())
+            }
+            val buffer = if (network) networkFrame else transportBuffers.first { it.texture != input }
+            if (network && (buffer.w != ow || buffer.h != oh || networkIdentity != node.identity.seed)) networkValid = false
+            buffer.allocate(ow, oh)
+            if (!network || !networkValid || node.get("networkStall") < .5f) {
+                drawStage(input, first && oes, if (first) requireNotNull(transform) else IDENTITY,
+                    node, iw, ih, buffer.fbo, ow, oh)
+                if (network) { networkValid = true; networkIdentity = node.identity.seed }
+            }
+            input = buffer.texture; iw = ow; ih = oh; first = false
+        }
+        if (!networkUsed) { networkValid = false; networkFrame.release() }
+        if (nearest && !first) {
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, input)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
+        }
+        drawStage(input, first && oes, if (first) requireNotNull(transform) else IDENTITY, null, iw, ih, target, w, h)
+        if (nearest && !first) GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
+        check(GLES20.glGetError() == GLES20.GL_NO_ERROR) { "Transport GPU draw failed" }
+    }
+
     fun render(
         texture: Int,
         oes: Boolean,
@@ -169,6 +269,12 @@ internal class EffectChain(private val source: String, private val supportsExter
         target: Int,
         targetTexture: Int = 0,
     ) {
+        if (frame.nodes.any { (it.profile["transportKind"] ?: 0f) > 0f || (it.profile["mediaReduce"] ?: 0f) > 0f }) {
+            renderTransport(texture, oes, transform, frame, w, h, sourceW, sourceH, target)
+            return
+        }
+        if (networkValid) { networkValid = false; networkFrame.release() }
+        transportBuffers.forEach { if (it.texture != 0) it.release() }
         val count = frame.nodes.size
         // Opt in only for an owned RGBA8 target texture of exactly w × h. The callers keep it
         // unpublished until render returns. Unknown targets and source aliases use private buffers.
@@ -209,6 +315,9 @@ internal class EffectChain(private val source: String, private val supportsExter
     }
 
     fun releaseBuffers() {
+        transportBuffers.forEach { it.release() }
+        networkFrame.release()
+        networkValid = false
         GLES20.glDeleteTextures(2, textures, 0)
         GLES20.glDeleteFramebuffers(2, fbos, 0)
         textures.fill(0)

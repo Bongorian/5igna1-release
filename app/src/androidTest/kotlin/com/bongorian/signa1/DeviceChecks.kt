@@ -180,7 +180,12 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "raw-echo") {
+            if (action == "transport") {
+                TransportUiChecks.run(this)
+                result.putString("result", FaultRenderChecks.run(activity!!, false, true))
+            } else if (action == "tap") {
+                result.putString("result", TapChecks.run(this))
+            } else if (action == "raw-echo") {
                 checkRawEcho()
                 result.putString("result", "PASS full-chain JPEG/RAW switching, resolution long-press, TIME ECHO current FAULT / past camera timestamp, automatic and manual bursts, RAW bypass, JPEG/DNG/MP4 saving and pixel-exact pinned echo JPEG")
             } else if (action == "pixel-preview") {
@@ -493,6 +498,7 @@ class DeviceChecks : Instrumentation() {
                 val restoreFaults = requireNotNull(faultsBefore)
                 runOnMainSync({
                     activity!!.applyFaultConfig(restoreFaults)
+                    activity!!.tapMode = false
                     activity!!.videoMode = restoreVideo
                     val restoreLocation = restore!!.location
                     restore!!.location = false
@@ -2048,10 +2054,11 @@ class DeviceChecks : Instrumentation() {
         runOnMainSync {
             a.applySettings(CaptureSettings(a.settings).apply { photoFormat = 0; advancedMode = false; experimentalSignals = true })
             a.applyFaultConfig(FaultConfig(true, false, false, false, false, false, .5f, 50,
-                echo = EchoConfig(true, 2)))
+                echo = EchoConfig(true, 1f)))
         }
         await("echo camera", { a.engine.generation > revision && a.ready }, 30000)
         SystemClock.sleep(3000)
+        await("echo ready and idle", { a.engine.timeEcho.ready && !a.engine.timeEcho.replaying }, 8000)
         val before = a.engine.timeEcho.bursts
         runOnMainSync { a.echoButton.performClick() }
         await("manual echo", { a.engine.timeEcho.bursts > before && a.engine.timeEcho.replaying }, 5000)
@@ -2060,7 +2067,7 @@ class DeviceChecks : Instrumentation() {
         a.engine.gl.post {
             try {
                 val shown = a.engine.encoderScratch.frame!!
-                check(a.engine.lastFrameNs - shown.cameraNs >= 1_750_000_000L) { "Expected past camera image" }
+                check(a.engine.lastFrameNs - shown.cameraNs >= 400_000_000L) { "Expected past camera image" }
                 check(kotlin.math.abs(shown.time - a.engine.faultFrame(a.effectState).time) < .1) { "FAULT time rewound" }
             } catch (error: Throwable) { evaluationError = error }
             finally { evaluated.countDown() }
@@ -2076,9 +2083,9 @@ class DeviceChecks : Instrumentation() {
         runOnMainSync { FaultDialog.show(a) }
         SystemClock.sleep(500)
         languageScreenshot("time-echo-editor")
-        runOnMainSync { a.liveEditor!!.echo = EchoConfig(false, 6); a.liveEditor!!.preview() }
+        runOnMainSync { a.liveEditor!!.echo = EchoConfig(false, 0f); a.liveEditor!!.preview() }
         sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK)
-        check(a.faultConfig.echo == EchoConfig(true, 2)) { "Echo cancel mutated committed state" }
+        check(a.faultConfig.echo == EchoConfig(true, 1f)) { "Echo cancel mutated committed state" }
         val rawRevision = a.engine.generation
         runOnMainSync { a.applySettings(CaptureSettings(a.settings).apply { photoFormat = 2 }) }
         await("echo RAW bypass", { a.engine.generation > rawRevision && a.ready }, 30000)
@@ -2146,7 +2153,7 @@ class DeviceChecks : Instrumentation() {
         val displayed = activity!!.engine.presentedFrames.reserve()
         if (displayed == null) throw AssertionError("No acknowledged image")
         val capturedCameraNs = displayed!!.value.frame!!.cameraNs
-        if (echo) check(activity!!.engine.lastFrameNs - capturedCameraNs >= 1_750_000_000L)
+        if (echo) check(activity!!.engine.lastFrameNs - capturedCameraNs >= 400_000_000L)
         val reference = arrayOfNulls<Bitmap>(1)
         val problem = arrayOfNulls<Throwable>(1)
         val read = java.util.concurrent.CountDownLatch(1)
