@@ -4,8 +4,8 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 
-/** RAW16 representation adapter for the SAME immutable fault nodes as RGB/video. */
-internal object RawGlitch {
+/** Frozen pre-optimization implementation for byte-exact differential tests. */
+internal object RawGlitchReference {
     fun read(data: ByteArray, index: Int): Int {
         val p = index * 2
         return (data[p].toInt() and 255) or ((data[p + 1].toInt() and 255) shl 8)
@@ -49,8 +49,6 @@ internal object RawGlitch {
     }
 
     fun apply(input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode): ByteArray {
-        if (n.id == Effects.PIXEL_DAMAGE) return pixelDamage(input, w, h, white, black, n)
-        if (n.id == Effects.ROW_ERROR) return rowError(input, w, h, white, black, n)
         val out = input.clone()
         val seed = n.identity.seed
         val bits = 32 - Integer.numberOfLeadingZeros(white)
@@ -61,6 +59,39 @@ internal object RawGlitch {
             var gain = 1f
             var value = read(input, index)
             when (n.id) {
+                Effects.PIXEL_DAMAGE -> {
+                    if (hash(seed, x, 0) < n.get("columnDensity"))
+                        value =
+                            if (
+                                hash(
+                                    seed + 71,
+                                    x,
+                                    0,
+                                ) < n.get("hotFraction")
+                            )
+                                black + Math.round((white - black) * n.get("hotValue"))
+                            else black
+                    else if (hash(seed, x, y + 1) < n.get("pixelDensity"))
+                        value =
+                            if (
+                                hash(
+                                    seed + 71,
+                                    x,
+                                    y + 1,
+                                ) < n.get("hotFraction")
+                            )
+                                black + Math.round((white - black) * n.get("hotValue"))
+                            else black
+                    value +=
+                        Math.round(
+                            (hash(
+                                seed xor n.get("grainSeed").toLong(),
+                                x,
+                                y,
+                            ) - .5f) * n.get("sensorNoise") * (white - black)
+                        )
+                }
+
                 Effects.EXPOSURE -> {
                     gain =
                         1 -
@@ -75,6 +106,37 @@ internal object RawGlitch {
                                             )
                                             .toFloat())
                     value = black + Math.round((value - black) * gain)
+                }
+
+                Effects.ROW_ERROR -> {
+                    val row = ((y and 1.inv()) / h.toFloat() * n.get("rowGroups")).toInt()
+                    var displacement =
+                        if (hash(seed, row, 0) < n.get("weakRows"))
+                            (hash(
+                                seed + 17,
+                                row,
+                                0,
+                            ) - .5f) * n.get("rowOffset")
+                        else 0f
+                    displacement += ((y and 1.inv()) / h.toFloat() - .5f) * n.get("readoutShear")
+                    sx += Math.round(displacement * w / 2) * 2
+                    value = if (sx < 0 || sx >= w) black else read(input, y * w + sx)
+                    val start = (n.get("linePosition") * h / 2).toInt() * 2
+                    if (y >= start && y < start + n.get("lineHeight") * h) {
+                        val previous = start - 2 + (y and 1)
+                        var retained =
+                            if (previous < 0 || sx < 0 || sx >= w) black
+                            else
+                                read(
+                                    input,
+                                    previous * w + sx,
+                                )
+                        retained = black + Math.round((retained - black) * n.get("lineRetention"))
+                        value =
+                            Math.round(
+                                value * (1 - n.get("lineLoss")) + retained * n.get("lineLoss")
+                            )
+                    }
                 }
 
                 Effects.BIT_ERROR -> {
@@ -126,75 +188,4 @@ internal object RawGlitch {
         }
         return out
     }
-
-    private fun pixelDamage(
-        input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
-    ): ByteArray {
-        val out = input.clone()
-        val seed = n.identity.seed
-        val columnDensity = n.get("columnDensity")
-        val pixelDensity = n.get("pixelDensity")
-        val hotFraction = n.get("hotFraction")
-        val hotValue = black + Math.round((white - black) * n.get("hotValue"))
-        val grainSeed = seed xor n.get("grainSeed").toLong()
-        val sensorNoise = n.get("sensorNoise")
-        // A column fault is identical at every row. Keep its test separate from its value.
-        val damagedColumns = BooleanArray(w)
-        val columnValues = IntArray(w)
-        for (x in 0..<w) {
-            damagedColumns[x] = hash(seed, x, 0) < columnDensity
-            if (damagedColumns[x])
-                columnValues[x] = if (hash(seed + 71, x, 0) < hotFraction) hotValue else black
-        }
-        for (y in 0..<h) for (x in 0..<w) {
-            val index = y * w + x
-            var value = read(input, index)
-            if (damagedColumns[x]) value = columnValues[x]
-            else if (hash(seed, x, y + 1) < pixelDensity)
-                value = if (hash(seed + 71, x, y + 1) < hotFraction) hotValue else black
-            // Preserve operation order and rounding exactly, including noise before clamping.
-            value += Math.round((hash(grainSeed, x, y) - .5f) * sensorNoise * (white - black))
-            write(out, index, max(0, min(white, value)))
-        }
-        return out
-    }
-
-    private fun rowError(
-        input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
-    ): ByteArray {
-        val out = input.clone()
-        val seed = n.identity.seed
-        val rowGroups = n.get("rowGroups")
-        val weakRows = n.get("weakRows")
-        val rowOffset = n.get("rowOffset")
-        val readoutShear = n.get("readoutShear")
-        val start = (n.get("linePosition") * h / 2).toInt() * 2
-        val lineHeight = n.get("lineHeight")
-        val lineRetention = n.get("lineRetention")
-        val lineLoss = n.get("lineLoss")
-        for (y in 0..<h) {
-            val row = ((y and 1.inv()) / h.toFloat() * rowGroups).toInt()
-            var displacement =
-                if (hash(seed, row, 0) < weakRows) (hash(seed + 17, row, 0) - .5f) * rowOffset
-                else 0f
-            displacement += ((y and 1.inv()) / h.toFloat() - .5f) * readoutShear
-            val offset = Math.round(displacement * w / 2) * 2
-            val retain = y >= start && y < start + lineHeight * h
-            val previous = start - 2 + (y and 1)
-            for (x in 0..<w) {
-                val sx = x + offset
-                var value = if (sx < 0 || sx >= w) black else read(input, y * w + sx)
-                if (retain) {
-                    var retained =
-                        if (previous < 0 || sx < 0 || sx >= w) black
-                        else read(input, previous * w + sx)
-                    retained = black + Math.round((retained - black) * lineRetention)
-                    value = Math.round(value * (1 - lineLoss) + retained * lineLoss)
-                }
-                write(out, y * w + x, max(0, min(white, value)))
-            }
-        }
-        return out
-    }
-
 }

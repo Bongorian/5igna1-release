@@ -1,0 +1,866 @@
+[
+  {
+    "label": "before-1",
+    "start": {
+      "status": 0,
+      "batteryC": 38,
+      "plugged": 1
+    },
+    "preview": [
+      {
+        "mask": 0,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10.001,
+        "fps": 29.897010298970102,
+        "cpuMs": 4967,
+        "cpuCorePercent": 49.66503349665034,
+        "cpuMsPerFrame": 16.612040133779264,
+        "renderEmaMs": 2.095272498899296,
+        "frames": 299,
+        "memory": [
+          {
+            "pssKb": 265123,
+            "privateDirtyKb": 223829,
+            "javaPssKb": 5374,
+            "nativePssKb": 69921,
+            "nativeAllocatedKb": 58087,
+            "javaUsedKb": 5028
+          },
+          {
+            "pssKb": 265207,
+            "privateDirtyKb": 223905,
+            "javaPssKb": 5446,
+            "nativePssKb": 69921,
+            "nativeAllocatedKb": 58772,
+            "javaUsedKb": 5093
+          },
+          {
+            "pssKb": 265215,
+            "privateDirtyKb": 223913,
+            "javaPssKb": 5454,
+            "nativePssKb": 69921,
+            "nativeAllocatedKb": 59451,
+            "javaUsedKb": 5109
+          }
+        ]
+      },
+      {
+        "mask": 4106,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10,
+        "fps": 29.7,
+        "cpuMs": 5197,
+        "cpuCorePercent": 51.97,
+        "cpuMsPerFrame": 17.4983164983165,
+        "renderEmaMs": 4.842046826046791,
+        "frames": 297,
+        "memory": [
+          {
+            "pssKb": 295524,
+            "privateDirtyKb": 254106,
+            "javaPssKb": 15790,
+            "nativePssKb": 88789,
+            "nativeAllocatedKb": 107377,
+            "javaUsedKb": 15740
+          },
+          {
+            "pssKb": 296516,
+            "privateDirtyKb": 255098,
+            "javaPssKb": 15978,
+            "nativePssKb": 89593,
+            "nativeAllocatedKb": 108157,
+            "javaUsedKb": 15901
+          },
+          {
+            "pssKb": 297436,
+            "privateDirtyKb": 256018,
+            "javaPssKb": 16146,
+            "nativePssKb": 90345,
+            "nativeAllocatedKb": 109031,
+            "javaUsedKb": 16125
+          }
+        ]
+      }
+    ],
+    "rawSha256": "ddf781b92ef666a42e0f0d708dc9bbb0579646979291c78b26de439ff59fdb8d",
+    "rawWidth": 1920,
+    "rawHeight": 1080,
+    "rawMillis": [
+      855.282154,
+      842.030461,
+      844.037231,
+      843.315077,
+      843.534462,
+      840.281,
+      847.11077,
+      851.237154,
+      837.157769,
+      844.071692,
+      842.888924,
+      850.922539,
+      844.089461,
+      845.498231,
+      843.236538,
+      842.191077,
+      844.275384,
+      847.61023,
+      843.805231,
+      846.696,
+      841.241307,
+      842.121538,
+      849.468231,
+      838.651923,
+      845.586384,
+      842.543385,
+      850.146385,
+      837.301154,
+      841.247769,
+      843.612077
+    ],
+    "checksum": 180,
+    "end": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "variant": "before",
+    "order": 1,
+    "apkSha256": "6f2633105fa1790646fdddb99dc07141224bfef897d1ffaf861fe255f707411d"
+  },
+  {
+    "label": "after-2",
+    "start": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "preview": [
+      {
+        "mask": 0,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10,
+        "fps": 29.9,
+        "cpuMs": 5012,
+        "cpuCorePercent": 50.12,
+        "cpuMsPerFrame": 16.762541806020067,
+        "renderEmaMs": 2.2587281205257823,
+        "frames": 299,
+        "memory": [
+          {
+            "pssKb": 264471,
+            "privateDirtyKb": 223189,
+            "javaPssKb": 5266,
+            "nativePssKb": 69897,
+            "nativeAllocatedKb": 57416,
+            "javaUsedKb": 4997
+          },
+          {
+            "pssKb": 264503,
+            "privateDirtyKb": 223213,
+            "javaPssKb": 5286,
+            "nativePssKb": 69897,
+            "nativeAllocatedKb": 58194,
+            "javaUsedKb": 5061
+          },
+          {
+            "pssKb": 264639,
+            "privateDirtyKb": 223341,
+            "javaPssKb": 5422,
+            "nativePssKb": 69897,
+            "nativeAllocatedKb": 59008,
+            "javaUsedKb": 5110
+          }
+        ]
+      },
+      {
+        "mask": 4106,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10,
+        "fps": 29.9,
+        "cpuMs": 5130,
+        "cpuCorePercent": 51.3,
+        "cpuMsPerFrame": 17.157190635451506,
+        "renderEmaMs": 3.1704447165445058,
+        "frames": 299,
+        "memory": [
+          {
+            "pssKb": 293391,
+            "privateDirtyKb": 252025,
+            "javaPssKb": 15714,
+            "nativePssKb": 88313,
+            "nativeAllocatedKb": 106891,
+            "javaUsedKb": 15725
+          },
+          {
+            "pssKb": 294539,
+            "privateDirtyKb": 253169,
+            "javaPssKb": 15926,
+            "nativePssKb": 89245,
+            "nativeAllocatedKb": 107605,
+            "javaUsedKb": 15917
+          },
+          {
+            "pssKb": 295375,
+            "privateDirtyKb": 254005,
+            "javaPssKb": 16086,
+            "nativePssKb": 89921,
+            "nativeAllocatedKb": 108353,
+            "javaUsedKb": 16078
+          }
+        ]
+      }
+    ],
+    "rawSha256": "ddf781b92ef666a42e0f0d708dc9bbb0579646979291c78b26de439ff59fdb8d",
+    "rawWidth": 1920,
+    "rawHeight": 1080,
+    "rawMillis": [
+      202.674538,
+      193.880846,
+      194.661769,
+      195.164385,
+      199.227,
+      194.824001,
+      198.176308,
+      194.468385,
+      199.589461,
+      193.290693,
+      196.733615,
+      197.127462,
+      198.837,
+      193.115769,
+      193.777769,
+      194.610077,
+      203.609923,
+      193.188,
+      193.690231,
+      196.744692,
+      199.824615,
+      195.169307,
+      194.104,
+      194.042385,
+      199.269539,
+      194.516846,
+      197.28,
+      194.271153,
+      197.933461,
+      196.112615
+    ],
+    "checksum": 180,
+    "end": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "variant": "after",
+    "order": 2,
+    "apkSha256": "853e2678ba3c9e2efa9935df3d412aa24d5ce28b6bbf8932b13d780e602ce50c"
+  },
+  {
+    "label": "after-3",
+    "start": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "preview": [
+      {
+        "mask": 0,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10,
+        "fps": 30,
+        "cpuMs": 4882,
+        "cpuCorePercent": 48.82,
+        "cpuMsPerFrame": 16.273333333333333,
+        "renderEmaMs": 2.188664252488346,
+        "frames": 300,
+        "memory": [
+          {
+            "pssKb": 264957,
+            "privateDirtyKb": 223737,
+            "javaPssKb": 5282,
+            "nativePssKb": 69915,
+            "nativeAllocatedKb": 57914,
+            "javaUsedKb": 5029
+          },
+          {
+            "pssKb": 265043,
+            "privateDirtyKb": 223817,
+            "javaPssKb": 5358,
+            "nativePssKb": 69915,
+            "nativeAllocatedKb": 58663,
+            "javaUsedKb": 5077
+          },
+          {
+            "pssKb": 265059,
+            "privateDirtyKb": 223833,
+            "javaPssKb": 5374,
+            "nativePssKb": 69915,
+            "nativeAllocatedKb": 59342,
+            "javaUsedKb": 5109
+          }
+        ]
+      },
+      {
+        "mask": 4106,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10,
+        "fps": 29.8,
+        "cpuMs": 5312,
+        "cpuCorePercent": 53.12,
+        "cpuMsPerFrame": 17.825503355704697,
+        "renderEmaMs": 3.1519942947193824,
+        "frames": 298,
+        "memory": [
+          {
+            "pssKb": 294227,
+            "privateDirtyKb": 252889,
+            "javaPssKb": 15778,
+            "nativePssKb": 88587,
+            "nativeAllocatedKb": 107213,
+            "javaUsedKb": 15740
+          },
+          {
+            "pssKb": 295183,
+            "privateDirtyKb": 253845,
+            "javaPssKb": 15954,
+            "nativePssKb": 89367,
+            "nativeAllocatedKb": 107892,
+            "javaUsedKb": 15917
+          },
+          {
+            "pssKb": 296091,
+            "privateDirtyKb": 254753,
+            "javaPssKb": 16118,
+            "nativePssKb": 90111,
+            "nativeAllocatedKb": 108641,
+            "javaUsedKb": 16061
+          }
+        ]
+      }
+    ],
+    "rawSha256": "ddf781b92ef666a42e0f0d708dc9bbb0579646979291c78b26de439ff59fdb8d",
+    "rawWidth": 1920,
+    "rawHeight": 1080,
+    "rawMillis": [
+      204.024615,
+      193.679385,
+      196.196308,
+      196.011076,
+      201.193538,
+      191.759077,
+      198.529616,
+      196.743385,
+      201.945923,
+      191.511692,
+      194.800308,
+      197.751615,
+      207.173769,
+      192.531385,
+      198.472616,
+      196.004616,
+      205.219692,
+      192.086462,
+      195.208615,
+      196.081923,
+      200.17177,
+      194.101539,
+      195.953539,
+      198.070769,
+      191.308692,
+      194.515384,
+      197.834462,
+      198.115,
+      193.037923,
+      194.285846
+    ],
+    "checksum": 180,
+    "end": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "variant": "after",
+    "order": 3,
+    "apkSha256": "853e2678ba3c9e2efa9935df3d412aa24d5ce28b6bbf8932b13d780e602ce50c"
+  },
+  {
+    "label": "before-4",
+    "start": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "preview": [
+      {
+        "mask": 0,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10,
+        "fps": 29.9,
+        "cpuMs": 5108,
+        "cpuCorePercent": 51.08,
+        "cpuMsPerFrame": 17.08361204013378,
+        "renderEmaMs": 2.428785904734639,
+        "frames": 299,
+        "memory": [
+          {
+            "pssKb": 265081,
+            "privateDirtyKb": 223789,
+            "javaPssKb": 5294,
+            "nativePssKb": 70235,
+            "nativeAllocatedKb": 57818,
+            "javaUsedKb": 5013
+          },
+          {
+            "pssKb": 265165,
+            "privateDirtyKb": 223865,
+            "javaPssKb": 5366,
+            "nativePssKb": 70235,
+            "nativeAllocatedKb": 58565,
+            "javaUsedKb": 5062
+          },
+          {
+            "pssKb": 265173,
+            "privateDirtyKb": 223873,
+            "javaPssKb": 5374,
+            "nativePssKb": 70235,
+            "nativeAllocatedKb": 59246,
+            "javaUsedKb": 5110
+          }
+        ]
+      },
+      {
+        "mask": 4106,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10,
+        "fps": 30,
+        "cpuMs": 5202,
+        "cpuCorePercent": 52.02,
+        "cpuMsPerFrame": 17.34,
+        "renderEmaMs": 3.378248984448925,
+        "frames": 300,
+        "memory": [
+          {
+            "pssKb": 294433,
+            "privateDirtyKb": 253045,
+            "javaPssKb": 15758,
+            "nativePssKb": 89051,
+            "nativeAllocatedKb": 107268,
+            "javaUsedKb": 15757
+          },
+          {
+            "pssKb": 295585,
+            "privateDirtyKb": 254197,
+            "javaPssKb": 15974,
+            "nativePssKb": 89987,
+            "nativeAllocatedKb": 108047,
+            "javaUsedKb": 15933
+          },
+          {
+            "pssKb": 296533,
+            "privateDirtyKb": 255145,
+            "javaPssKb": 16146,
+            "nativePssKb": 90763,
+            "nativeAllocatedKb": 108958,
+            "javaUsedKb": 16174
+          }
+        ]
+      }
+    ],
+    "rawSha256": "ddf781b92ef666a42e0f0d708dc9bbb0579646979291c78b26de439ff59fdb8d",
+    "rawWidth": 1920,
+    "rawHeight": 1080,
+    "rawMillis": [
+      852.22623,
+      841.740385,
+      843.203077,
+      844.625539,
+      853.484308,
+      840.471077,
+      846.060692,
+      859.499385,
+      842.381846,
+      841.350385,
+      850.373539,
+      857.029231,
+      841.391692,
+      844.765846,
+      847.56977,
+      852.379,
+      850.954847,
+      842.128,
+      845.875385,
+      852.633231,
+      843.504846,
+      845.165769,
+      854.284539,
+      839.758846,
+      841.655461,
+      850.700231,
+      856.907615,
+      843.064923,
+      842.568616,
+      849.188231
+    ],
+    "checksum": 180,
+    "end": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "variant": "before",
+    "order": 4,
+    "apkSha256": "6f2633105fa1790646fdddb99dc07141224bfef897d1ffaf861fe255f707411d"
+  },
+  {
+    "label": "before-5",
+    "start": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "preview": [
+      {
+        "mask": 0,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10.002,
+        "fps": 29.99400119976005,
+        "cpuMs": 5112,
+        "cpuCorePercent": 51.10977804439112,
+        "cpuMsPerFrame": 17.04,
+        "renderEmaMs": 2.2132413180036545,
+        "frames": 300,
+        "memory": [
+          {
+            "pssKb": 259280,
+            "privateDirtyKb": 218037,
+            "javaPssKb": 5394,
+            "nativePssKb": 70077,
+            "nativeAllocatedKb": 57868,
+            "javaUsedKb": 5028
+          },
+          {
+            "pssKb": 259292,
+            "privateDirtyKb": 218045,
+            "javaPssKb": 5398,
+            "nativePssKb": 70077,
+            "nativeAllocatedKb": 58647,
+            "javaUsedKb": 5061
+          },
+          {
+            "pssKb": 259360,
+            "privateDirtyKb": 218113,
+            "javaPssKb": 5466,
+            "nativePssKb": 70077,
+            "nativeAllocatedKb": 59524,
+            "javaUsedKb": 5093
+          }
+        ]
+      },
+      {
+        "mask": 4106,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10,
+        "fps": 30,
+        "cpuMs": 5136,
+        "cpuCorePercent": 51.36,
+        "cpuMsPerFrame": 17.12,
+        "renderEmaMs": 3.2358439000994768,
+        "frames": 300,
+        "memory": [
+          {
+            "pssKb": 288226,
+            "privateDirtyKb": 246877,
+            "javaPssKb": 15742,
+            "nativePssKb": 88585,
+            "nativeAllocatedKb": 107383,
+            "javaUsedKb": 15788
+          },
+          {
+            "pssKb": 289434,
+            "privateDirtyKb": 248085,
+            "javaPssKb": 15954,
+            "nativePssKb": 89581,
+            "nativeAllocatedKb": 108324,
+            "javaUsedKb": 15965
+          },
+          {
+            "pssKb": 290406,
+            "privateDirtyKb": 249057,
+            "javaPssKb": 16146,
+            "nativePssKb": 90361,
+            "nativeAllocatedKb": 109104,
+            "javaUsedKb": 16141
+          }
+        ]
+      }
+    ],
+    "rawSha256": "ddf781b92ef666a42e0f0d708dc9bbb0579646979291c78b26de439ff59fdb8d",
+    "rawWidth": 1920,
+    "rawHeight": 1080,
+    "rawMillis": [
+      857.226539,
+      853.645231,
+      852.009,
+      850.607308,
+      852.301308,
+      847.606692,
+      852.778154,
+      848.818538,
+      853.342847,
+      843.930693,
+      849.757539,
+      853.276923,
+      854.096,
+      847.908616,
+      849.084231,
+      852.030462,
+      853.6,
+      845.996384,
+      851.399308,
+      849.866461,
+      855.695307,
+      845.72,
+      851.234461,
+      851.558846,
+      853.299692,
+      844.840616,
+      853.702385,
+      852.492308,
+      852.134154,
+      843.659385
+    ],
+    "checksum": 180,
+    "end": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "variant": "before",
+    "order": 5,
+    "apkSha256": "6f2633105fa1790646fdddb99dc07141224bfef897d1ffaf861fe255f707411d"
+  },
+  {
+    "label": "after-6",
+    "start": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "preview": [
+      {
+        "mask": 0,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10,
+        "fps": 29.9,
+        "cpuMs": 4970,
+        "cpuCorePercent": 49.7,
+        "cpuMsPerFrame": 16.622073578595316,
+        "renderEmaMs": 1.8516432013098423,
+        "frames": 299,
+        "memory": [
+          {
+            "pssKb": 228793,
+            "privateDirtyKb": 187577,
+            "javaPssKb": 5130,
+            "nativePssKb": 39779,
+            "nativeAllocatedKb": 57568,
+            "javaUsedKb": 4982
+          },
+          {
+            "pssKb": 229649,
+            "privateDirtyKb": 188425,
+            "javaPssKb": 5206,
+            "nativePssKb": 40547,
+            "nativeAllocatedKb": 58250,
+            "javaUsedKb": 5046
+          },
+          {
+            "pssKb": 230625,
+            "privateDirtyKb": 189401,
+            "javaPssKb": 5286,
+            "nativePssKb": 41443,
+            "nativeAllocatedKb": 59030,
+            "javaUsedKb": 5078
+          }
+        ]
+      },
+      {
+        "mask": 4106,
+        "thermal": {
+          "status": 0,
+          "batteryC": 38.4,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "signalW": 1080,
+        "signalH": 1920,
+        "seconds": 10.001,
+        "fps": 29.897010298970102,
+        "cpuMs": 5220,
+        "cpuCorePercent": 52.194780521947806,
+        "cpuMsPerFrame": 17.45819397993311,
+        "renderEmaMs": 4.691874781463793,
+        "frames": 299,
+        "memory": [
+          {
+            "pssKb": 288143,
+            "privateDirtyKb": 246809,
+            "javaPssKb": 15714,
+            "nativePssKb": 88463,
+            "nativeAllocatedKb": 106750,
+            "javaUsedKb": 15726
+          },
+          {
+            "pssKb": 289127,
+            "privateDirtyKb": 247793,
+            "javaPssKb": 15894,
+            "nativePssKb": 89267,
+            "nativeAllocatedKb": 107463,
+            "javaUsedKb": 15886
+          },
+          {
+            "pssKb": 290043,
+            "privateDirtyKb": 248709,
+            "javaPssKb": 16062,
+            "nativePssKb": 90015,
+            "nativeAllocatedKb": 108404,
+            "javaUsedKb": 16110
+          }
+        ]
+      }
+    ],
+    "rawSha256": "ddf781b92ef666a42e0f0d708dc9bbb0579646979291c78b26de439ff59fdb8d",
+    "rawWidth": 1920,
+    "rawHeight": 1080,
+    "rawMillis": [
+      204.416539,
+      189.579693,
+      193.498692,
+      194.379385,
+      197.905231,
+      189.982231,
+      196.634385,
+      194.26,
+      199.539307,
+      189.332923,
+      190.395615,
+      198.165538,
+      199.492385,
+      189.305923,
+      192.293231,
+      194.703385,
+      204.172615,
+      190.693308,
+      190.294384,
+      195.06423,
+      199.928615,
+      193.468,
+      190.877847,
+      194.053847,
+      199.875692,
+      189.565231,
+      191.915923,
+      194.731692,
+      197.468308,
+      190.484538
+    ],
+    "checksum": 180,
+    "end": {
+      "status": 0,
+      "batteryC": 38.4,
+      "plugged": 1
+    },
+    "variant": "after",
+    "order": 6,
+    "apkSha256": "853e2678ba3c9e2efa9935df3d412aa24d5ce28b6bbf8932b13d780e602ce50c"
+  }
+]
