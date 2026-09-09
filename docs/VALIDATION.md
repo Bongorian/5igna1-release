@@ -27,3 +27,5 @@ No multi-hour recording, broad device matrix, GPU energy measurement or controll
 [Complete audit inventory](audit/README.md) separates released development evidence, unreleased fixes, historical measurements and maintained inventories. The Pixel 9 fix is not included in published 1.6.0.
 
 [Rendering/RAW workload investigation](audit/LOAD_INVESTIGATION.md): Pixel 9 test-only prototypes, byte comparisons and performance limits; no production change.
+
+[1.6.1 release follow-up: GPU defaults and TAP verification](audit/GPU_DETAIL_LIGHT.md).

@@ -100,3 +100,12 @@
 
 - The owner requested detailed per-frame CFA/DEMOSAIC GPU measurements and output-preserving calculation/transfer improvements, then authorized view-sized preview processing in a separate LIGHT MODE. LIGHT starts OFF and is mutually exclusive with ADVANCED and EXPERT; merely turning those two off does not enable LIGHT. Preserve saved FAULT values, selected photo/video dimensions, and ADVANCED's exact displayed-frame capture.
 - Work on `codex/gpu-detail-investigation`, using DEV builds and output comparisons. Apply verified non-destructive efficiencies across modes where their conditions hold. Keep unstable shader candidates test-only. This is development authorization, not a new release or store/Pages publication request.
+
+## Owner direction — GPU defaults and TAP controls, 2026-09-10
+
+- On `codex/gpu-adaptive-defaults`, use GPU identity, measured performance and physical preview size to recommend initial output resolution and preview fps. A fresh setup starts LIGHT when Android marks low RAM, RAM is unknown or below 5 GiB, or available CPU cores are at most four. This supersedes the earlier unconditional LIGHT-OFF default; preserve existing choices.
+- Keep the shutter centered in TAP, place save-format selection outside the centered capture-mode group, and play imported video by default on recording start and pause on recording stop, honoring explicit transport choices. Continue DEV testing; no release, main integration or publication is requested.
+
+## Owner direction — 1.6.1 release, 2026-09-10
+
+- The owner requests reduced additional verification, then publication of completed work as 1.6.1 / code 17. Integrate into main, publish the signed GitHub/Obtainium APK with the existing key and update Pages. Preserve previous artifacts and pending reviews; automatic Play draft upload may run.

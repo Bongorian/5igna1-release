@@ -24,3 +24,5 @@
 文書を移したら双方のリンクを直し、文書リンク・一覧の網羅性・翻訳・関連するアプリ検証を実行します。アプリ内ポリシーとローカルHTMLの変更は、該当版の公開時にサイト側にも反映する必要があります。このソースの編集だけでサイトは更新されません。
 
 - [GPU詳細調査とLIGHT MODE](audit/GPU_DETAIL_LIGHT.ja.md) / [English](audit/GPU_DETAIL_LIGHT.md)、[測定値](audit/gpu-detail-light-results.json)：未リリースの表示サイズ上限・LED単独の共通改善。
+
+[1.6.1 release follow-up: GPU defaults and TAP verification](audit/GPU_DETAIL_LIGHT.md).

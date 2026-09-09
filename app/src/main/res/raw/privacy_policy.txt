@@ -33,3 +33,5 @@ The app uses operating-system permissions and app-storage protection. It does no
 Settings offers Feedback / report bug. You review an editable message and choose whether to include the displayed app version, Android version, manufacturer and model (off by default). Opening your email app passes this draft to that app; you decide whether to send it. Copy draft writes the displayed recipient, subject and message to the system clipboard. The app does not attach media, location, identifiers or logs, and does not send reports automatically. Your email service handles messages you send under its own policies.
 
 If you contact us by email, your message and email address are used to reply and provide support. Support records are deleted when no longer needed. This policy will be updated if data handling changes, with an in-app notice when appropriate.
+
+GPU/driver identity and a short synthetic rendering measurement are stored locally to recommend resolution and preview frame rate. No camera image is used by this measurement and no results are transmitted.

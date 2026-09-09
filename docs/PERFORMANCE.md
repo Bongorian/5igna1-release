@@ -4,7 +4,7 @@ Recording stops and saves when you leave the capture screen or lock the device. 
 
 [Guides](README.md) · [日本語](PERFORMANCE.ja.md)
 
-Version 1.4.0 starts with **Recommended for this device**. Camera and encoder capabilities select an actual supported output within these initial pixel budgets, preferring video at up to 30 fps:
+The app starts with **Recommended for this device**. Camera and encoder capabilities select an actual supported output within these initial pixel budgets, preferring video at up to 30 fps:
 
 | Starting tier | JPEG budget | Video budget |
 |---|---:|---:|
@@ -12,7 +12,7 @@ Version 1.4.0 starts with **Recommended for this device**. Camera and encoder ca
 | Otherwise, less than 8 GiB RAM or fewer than 8 available cores | 1,440,000 pixels | 921,600 pixels (HD) |
 | Otherwise | 2,073,600 pixels | 2,073,600 pixels (Full HD) |
 
-These are conservative starting hints, not CPU/GPU benchmark scores. Core count does not measure core speed or GPU performance. If no supported mode fits, the catalog supplies a fallback. Existing manual sizes are retained. Measured rendering cost and thermal feedback then adjust preview cadence; they do not silently change a recording resolution.
+**1.6.1 GPU recommendations:** these RAM/CPU tiers are upper bounds. GPU type, a short measured CFA + DEMOSAIC + CRT workload, and the preview view’s physical pixel area further limit the recommended photo/video sizes. Recognized GPU names are not ranked by speed; software rendering receives a conservative cap, and unknown/unmeasured hardware uses a fallback. The probe fits a per-pixel cost plus fixed overhead and leaves rendering headroom. Results are cached by GPU/driver, OS build and shader version. When hot or unable to complete the short probe, the app uses conservative defaults and retries on a later GL startup. This is a small workload estimate, not a general GPU benchmark. If no supported mode fits, the catalog supplies a fallback. Existing manual sizes are retained. Measured rendering cost and thermal feedback then adjust preview cadence; they do not silently change a recording resolution.
 
 ## Normal capture and ADVANCED MODE
 
@@ -22,9 +22,9 @@ ADVANCED ON retains the three-slot displayed-frame history and pins the displaye
 
 Settings → **Workload and recommendations** → **Use recommended photo and video settings** restores these selections and standard video quality. Resolution pickers also offer Recommended alongside manual sizes and Maximum. On the first upgrade to this policy, the previous maximum-photo default becomes Recommended; exact saved sizes are retained. A subsequent explicit Maximum choice is retained. Empty legacy video selections resolve to Recommended. A selected JPG size is also the saved JPG size; automatic frame pacing does not change it mid-session. RAW still uses a separate exposure and supported sensor faults.
 
-## LIGHT MODE — unreleased development
+## LIGHT MODE — 1.6.1
 
-Settings → Modes → **LIGHT MODE** caps effect rendering to the physical pixel dimensions of the preview view, preserving aspect ratio and never enlarging a smaller input. It starts OFF and is independent of the ordinary state where ADVANCED and EXPERT are both off. Enabling LIGHT disables both; enabling either disables LIGHT. Existing FAULT values are retained.
+Settings → Modes → **LIGHT MODE** caps effect rendering to the physical pixel dimensions of the preview view, preserving aspect ratio and never enlarging a smaller input. On a fresh setup it starts ON for the low-RAM tier above, otherwise OFF. Saved choices are retained, including an explicit OFF; upgrades do not force an existing setup into LIGHT. Turning ADVANCED and EXPERT off does not itself enable LIGHT. Enabling LIGHT disables both; enabling either disables LIGHT. Existing FAULT values are retained.
 
 JPEG capture renders the latest acquired source once at the selected save resolution before reading the immutable result. It does not enlarge the reduced preview. Fine detail and spatial effects can look different between preview and saved image, and the capture frame need not be the last displayed one. The extra full-size render can add shutter-processing time. Camera input size stays unchanged, so this reduces GPU effect work rather than guaranteeing reduced camera/ISP power.
 
@@ -44,7 +44,7 @@ The settings sections are Modes, Workload and recommendations, Photo, Standard v
 
 With EXPERT off, the app monitors Android thermal status, thermal headroom when available (no faster than once per 10 seconds), battery temperature as a fallback signal, time spent submitting/rendering frames, and image size × chain length. Thermal monitoring operates even when LIVE or its temperature input is off. It does not enable faults, change the chain or fabricate thermal glitches. Missing thermal readings remain unknown; measured rendering cost and conservative budgets still apply.
 
-Preview processing has a 24 fps ceiling and steps down through 20, 15, 12, 8 and 6 fps. Lowering the limit skips both fault compilation and expensive image-processing passes on unused preview frames; fault time continues advancing. The camera request is also reduced toward 15 fps for a slowed photo preview where supported. Rate recovery is gradual, with at least 15 seconds of headroom before each increase. Slow camera delivery can make actual preview rate lower than the displayed limit.
+1.6.1 preview recommendations use the same GPU measurement and actual processing size, bounded by camera and display capabilities, with tiers of 60, 30, 24, 20, 15, 12, 8 and 6 fps. Unmeasured hardware starts at up to 24 fps (20 on constrained devices); software rendering at up to 15. Runtime load and heat may lower that limit. Lowering the limit skips both fault compilation and expensive image-processing passes on unused preview frames; fault time continues advancing. The camera request is also reduced toward 15 fps for a slowed photo preview where supported. Rate recovery is gradual, with at least 15 seconds of headroom before each increase. Slow camera delivery can make actual preview rate lower than the displayed limit.
 
 Ordinary recording keeps its chosen dimensions and encoder cadence; reducing preview refresh saves display work, while each recorded camera frame is still processed. Recommended recording resolution is therefore the main reduction for recording workload. No resolution or codec switch is attempted inside a recording.
 

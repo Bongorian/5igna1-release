@@ -345,7 +345,7 @@
     <string name="live_reset">RESET TIME</string>
     <string name="load_recommended">Recommended for this device</string>
     <string name="load_title">Workload and recommendations</string>
-    <string name="load_hint">Display updates adapt to heat and workload. RAM, available CPU cores and supported camera outputs guide initial settings: JPG near 1–2 MP; video VGA/HD/FHD at up to 30 fps. At critical heat, recording is saved and the camera pauses to cool.</string>
+    <string name="load_hint">GPU type, a short performance measurement, screen size, RAM and camera support guide recommended resolution and preview fps. Fresh low-RAM setups start in LIGHT. Heat and workload adjust preview updates; critical heat saves recording and pauses the camera.</string>
     <string name="load_use_recommended">Use recommended photo and video settings</string>
     <string name="load_cooling">Cooling · camera paused</string>
     <string name="load_resumed">Camera resumed after cooling</string>

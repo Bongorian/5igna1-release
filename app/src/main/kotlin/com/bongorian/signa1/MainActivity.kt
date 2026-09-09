@@ -200,7 +200,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                 cameraVideoBeforeTap = b.getBoolean("session.cameraVideoBeforeTap", false)
             }
         }
-        settings = CaptureSettings.load(prefs)
+        settings = CaptureSettings.load(prefs, DeviceProfile(this).constrained)
+        settings.save(prefs)
         advancedMode = settings.advancedMode
         geo = GeoTags(this, Runnable { this.renderGeo() })
         geo.enabled = settings.location
@@ -657,7 +658,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         tapTab.setChecked(tapMode)
         tapPlay.visibility = if (tapMode && tapInput?.video == true) View.VISIBLE else View.GONE
         tapChoose.visibility = if (tapMode) View.VISIBLE else View.GONE
-        flipButton.visibility = if (tapMode) View.GONE else View.VISIBLE
+        flipButton.visibility = if (tapMode) View.INVISIBLE else View.VISIBLE
         torchButton.visibility = if (tapMode) View.GONE else View.VISIBLE
         zoomButton.visibility = if (tapMode) View.GONE else View.VISIBLE
         photoTab.setChecked(!value && !tapMode)

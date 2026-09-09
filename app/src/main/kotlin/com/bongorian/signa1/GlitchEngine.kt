@@ -187,6 +187,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     }
 
     private fun openTap() {
+        deviceProfile.recommend(width,height,context.display?.refreshRate ?: 60f)
         if (options == null) loadCameraCatalog(context.getSystemService(Context.CAMERA_SERVICE) as CameraManager)
         val source = TapSource(this, tapInput ?: return)
         tapSource = source
@@ -203,6 +204,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         signalW = outW
         signalH = outH
         videoChoice = CameraOptions.Video(Size(outW, outH), 30, false)
+        recommendPreview()
         val catalog = options ?: return
         val actual = CaptureSettings(settings)
         val ticket = generation
@@ -227,6 +229,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     val cleanFrame: EffectState.Frame = EffectState.defaults().snapshot(true, 0)
     var signalW: Int = 0
     var signalH: Int = 0
+    private var cameraStreamSize: Size? = null
     val signalMetadata: LinkedHashMap<Long?, TotalCaptureResult?> =
         LinkedHashMap<Long?, TotalCaptureResult?>()
     var faults: FaultModel = FaultModel()
@@ -407,7 +410,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                             settings.photoFormat,
                         )
                         .ids().sumOf { id ->
-                            if (Effects.physical(id) && !settings.experimentalSignals) 0
+                            if (tapInput != null && Effects.point(id).ordinal <= Effects.Point.READOUT.ordinal) 0
+                            else if (Effects.physical(id) && !settings.experimentalSignals) 0
+                            else if (deviceProfile.gpu?.measurement != null) GpuRecommendation.workUnits(id)
                             else if (id == Effects.MOTION_BLUR || id == Effects.SMEAR) 9 else 1
                         }
         adaptiveLoad.sample(
@@ -447,8 +452,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
 
     fun expertCameraFps(): Int {
         if (videoMode && videoChoice != null) return videoChoice!!.fps
-        var best = 30
-        if (characteristics == null) return best
+        if (tapInput != null) return 30
+        var best = 0
+        if (characteristics == null) return 30
         var duration: Long = 0
         if (options != null && signalW > 0 && signalH > 0)
             try {
@@ -457,7 +463,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         .map
                         .getOutputMinFrameDuration<SurfaceTexture?>(
                             SurfaceTexture::class.java,
-                            Size(signalH, signalW),
+                            cameraStreamSize ?: Size(signalH, signalW),
                         )
             } catch (ignored: IllegalArgumentException) {}
         val ceiling =
@@ -468,7 +474,14 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             )
         if (ranges != null)
             for (range in ranges) if (range.upper!! <= ceiling) best = max(best, range.upper!!)
-        return best
+        return if (best > 0) best else min(30,ceiling)
+    }
+
+    private fun recommendPreview() {
+        val size = PreviewSizing.choose(signalW,signalH,width,height,settings.lightMode,false,false)
+        val refresh = context.display?.refreshRate ?: 60f
+        adaptiveLoad.recommend(deviceProfile.initialFps(size.width.toLong()*size.height,refresh,expertCameraFps()),
+            deviceProfile.recommendation?.pixelWorkBudget)
     }
 
     fun loadSummary(): String {
@@ -889,6 +902,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             return
         }
         try {
+            deviceProfile.recommend(width,height,context.display?.refreshRate ?: 60f)
             val manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
             val id = loadCameraCatalog(manager)
             if (options!!.videosFor(settings.codec).isEmpty())
@@ -939,9 +953,11 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             val swap = captureRotation % 180 != 0
             signalW = if (swap) stream.height else stream.width
             signalH = if (swap) stream.width else stream.height
+            cameraStreamSize = stream
             outW = if (swap) output.height else output.width
             outH = if (swap) output.width else output.height
             cameraTexture!!.setDefaultBufferSize(stream.width, stream.height)
+            recommendPreview()
             applyLoadSample(
                 SystemClock.elapsedRealtime(),
                 thermalMonitor.status,
@@ -1306,7 +1322,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                             abs(r.upper!! - fps) * 100 +
                                 ((if (settings.expertMode) -r.lower!! else r.lower)!!)
                         if (
-                            r.upper!! <= (if (settings.expertMode) fps else 30) && candidate < score
+                            r.upper!! <= fps && candidate < score
                         ) {
                             score = candidate
                             best = r
@@ -1383,6 +1399,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             "Signal",
             "GPU=" + GLES20.glGetString(GLES20.GL_RENDERER) + " maxTexture=" + maxTexture,
         )
+        deviceProfile.calibrate(context,shader,thermalMonitor)
+        GLES20.glViewport(0,0,width,height)
         initCameraTexture()
     }
 
@@ -1988,6 +2006,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             recorder!!.start()
             encoderTimeOffset = Long.MIN_VALUE
             recording = true
+            tapSource?.recordingStarted()
+            if (!recording) return
             ready(true)
             ui.post(Runnable@{ listener.recording(true) })
             gl.post(storageWatch)
@@ -2074,6 +2094,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             return
         }
         recording = false
+        tapSource?.recordingStopped()
         gl.removeCallbacks(storageWatch)
         ready(false)
         val result = videoUri
@@ -2087,7 +2108,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         } finally {
             releaseRecorder()
             videoUri = null
-            ready(frameSeen && attached)
+            ready(frameSeen && attached && tapSource?.ready != false)
             ui.post(Runnable@{ listener.recording(false) })
         }
         if (ok)

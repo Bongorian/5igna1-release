@@ -80,6 +80,18 @@ internal object TapChecks {
         test.runOnMainSync { a.enterTap(TapInput(fixtureUri, true)) }
         test.await("TAP video ready", { a.ready && a.engine.tapSource?.ready == true && a.videoMode }, 20000)
         check(!a.engine.tapSource!!.playing)
+        SystemClock.sleep(500)
+        test.runOnMainSync {
+            val parent = a.capture.parent as View
+            check(kotlin.math.abs(a.capture.left + a.capture.width/2 - parent.width/2) <= 1) { "TAP shutter off center" }
+            check(a.flipButton.visibility == View.INVISIBLE)
+        }
+        test.runOnMainSync { a.shoot() }
+        test.await("automatic TAP playback", { a.engine.recording && a.engine.tapSource!!.playing },15000)
+        SystemClock.sleep(1800)
+        val autoSaved = a.latest
+        test.runOnMainSync { a.shoot() }
+        test.await("automatic TAP pause/save", { !a.engine.recording && !a.engine.tapSource!!.playing && a.latest != autoSaved },15000)
         test.runOnMainSync { a.tapPlay.performClick() }
         test.await("preview plays without recorder", { a.engine.tapSource!!.playing }, 3000)
         check(!a.engine.recording)
@@ -104,6 +116,8 @@ internal object TapChecks {
         SystemClock.sleep(1800)
         backgroundSave(test, "camera")
         // Repeat with audio, and verify that returning never restarts the recording.
+        SystemClock.sleep(1000)
+        test.await("camera settled before audio", { a.ready && a.engine.frameSeen },15000)
         test.runOnMainSync { a.sound = true; a.shoot() }
         test.await("audio recording", { a.engine.recording && a.engine.recorderAudio }, 15000)
         SystemClock.sleep(1800)
@@ -111,7 +125,7 @@ internal object TapChecks {
         val permissions = a.packageManager.getPackageInfo(a.packageName, android.content.pm.PackageManager.GET_PERMISSIONS)
             .requestedPermissions.orEmpty()
         check(permissions.none { it.contains("FOREGROUND_SERVICE") || it.endsWith("WAKE_LOCK") || it.endsWith("POST_NOTIFICATIONS") })
-        return "PASS TAP boundary/orientation, image/video import, independent play/record, JPEG and decodable MP4 output; Home/screen-exit stops and saves TAP/camera/audio recording; hidden camera/render/microphone released; return does not restart recording; no FGS/wake/notification permissions"
+        return "PASS centered TAP shutter, automatic record play/stop, TAP boundary/orientation, image/video import, independent play/record, JPEG and decodable MP4 output; Home/screen-exit stops and saves TAP/camera/audio recording; hidden camera/render/microphone released; return does not restart recording; no FGS/wake/notification permissions"
     }
 
     private fun backgroundSave(test: DeviceChecks, label: String, audio: Boolean = false) {

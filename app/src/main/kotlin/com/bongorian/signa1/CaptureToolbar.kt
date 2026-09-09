@@ -26,6 +26,18 @@ internal class CaptureToolbar(private val a: MainActivity) : LinearLayout(a) {
         if (kotlin.math.abs(view.textSize - px) > .1f) view.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
     }
 
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        super.onLayout(changed,l,t,r,b)
+        // Center the mode group where the side controls leave room; on narrow windows keep all
+        // touch targets accessible rather than allowing the LIVE controls to overlap it.
+        val first = a.formatButton.right + a.dp(4f)
+        val last = live.left - a.dp(4f) - modes.measuredWidth
+        if (last >= first) {
+            val x = ((width-modes.measuredWidth)/2).coerceIn(first,last)
+            modes.layout(x,modes.top,x+modes.measuredWidth,modes.bottom)
+        }
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec)
         val buttons = listOf(a.photoTab, a.videoTab, a.tapTab).filter { it.visibility != GONE }

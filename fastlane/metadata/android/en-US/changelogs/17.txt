@@ -1,0 +1,1 @@
+GPU performance and screen-aware recommended sizes and preview fps. Fresh constrained devices start in LIGHT mode. LIGHT reduces preview processing while keeping chosen save sizes. TAP keeps the shutter centered and links source playback to recording by default. Capture modes move to the middle, format selection outside. Includes RAW/GPU and compact UI fixes.

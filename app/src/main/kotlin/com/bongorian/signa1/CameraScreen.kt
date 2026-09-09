@@ -326,7 +326,7 @@ internal fun MainActivity.buildUi() {
     tapTab = CaptureModeButton(this, R.drawable.ic_mode_tap, getString(R.string.tap_mode))
     for (mode in listOf(photoTab, videoTab, tapTab)) modeGroup.addView(mode, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     tools.modes = modeGroup
-    tools.addView(modeGroup, LinearLayout.LayoutParams(-2, dp(56f)))
+    tools.addView(formatButton, LinearLayout.LayoutParams(dp(52f), -1))
     tapTab.setOnClickListener { if (!tapMode) { if (tapInput != null) enterTap(tapInput!!) else chooseTap() } }
     photoTab.setOnClickListener { setVideo(false) }
     videoTab.setOnClickListener { setVideo(true) }
@@ -335,7 +335,7 @@ internal fun MainActivity.buildUi() {
     photoTab.tooltipText = getString(R.string.ui_photo) + " · " + getString(R.string.resolution_hold)
     videoTab.tooltipText = getString(R.string.ui_video) + " · " + getString(R.string.resolution_hold)
     tools.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
-    tools.addView(formatButton, LinearLayout.LayoutParams(dp(52f), -1))
+    tools.addView(modeGroup, LinearLayout.LayoutParams(-2, dp(56f)))
     tools.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
     val live = row()
     tools.live = live
@@ -396,7 +396,9 @@ internal fun MainActivity.buildUi() {
     controls.setGravity(Gravity.CENTER)
     controlsColumn.addView(controls, LinearLayout.LayoutParams(-1, dp(88f)))
     galleryButton = MediaThumbnail(this)
-    controls.addView(galleryButton, LinearLayout.LayoutParams(dp(44f), dp(44f)))
+    val gallerySlot = FrameLayout(this)
+    gallerySlot.addView(galleryButton, FrameLayout.LayoutParams(dp(44f), dp(44f), Gravity.CENTER))
+    controls.addView(gallerySlot, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     galleryButton.setOnClickListener(OnClickListener@{ v: View? -> openGallery() })
     galleryButton.load(latest, latestVideo)
     val spacer = Space(this)

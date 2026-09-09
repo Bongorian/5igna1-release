@@ -68,3 +68,5 @@ Keep historical measurements, hashes and submitted metadata intact. Label the so
 - [Load investigation](audit/LOAD_INVESTIGATION.md) / [日本語](audit/LOAD_INVESTIGATION.ja.md), [measurements](audit/load-investigation-results.json): post-1.6.0 investigation-only prototypes; not shipped changes.
 
 - [GPU detail and LIGHT MODE](audit/GPU_DETAIL_LIGHT.md) / [日本語](audit/GPU_DETAIL_LIGHT.ja.md), [measurements](audit/gpu-detail-light-results.json): unreleased view-sized preview and common standalone LED optimization.
+
+[1.6.1 release follow-up: GPU defaults and TAP verification](audit/GPU_DETAIL_LIGHT.md).

@@ -73,13 +73,15 @@ internal class CaptureSettings {
     }
 
     companion object {
-        fun load(p: SharedPreferences): CaptureSettings {
+        fun load(p: SharedPreferences, initialLight: Boolean = false): CaptureSettings {
             val s = CaptureSettings()
             s.experimentalSignals = p.getBoolean("experimentalSignals", false)
             s.resolutionAudio = p.getBoolean("resolutionAudio", false)
             s.advancedMode = p.getBoolean("advancedMode", false)
             s.expertMode = p.getBoolean("expertMode", false)
-            s.lightMode = p.getBoolean("lightMode", false)
+            val existing = p.contains("photoFormat") || p.contains("photoSize") ||
+                p.contains("advancedMode") || p.contains("expertMode") || p.contains("loadRecommendationsV1")
+            s.lightMode = p.getBoolean("lightMode", initialLight && !existing)
             s.photoFormat = p.getInt("photoFormat", 0)
             if (s.photoFormat == 1) s.photoFormat = 2
             s.jpegQuality = p.getInt("jpegQuality", 95)

@@ -345,7 +345,7 @@
     <string name="live_reset">時間リセット</string>
     <string name="load_recommended">端末に合わせた推奨設定</string>
     <string name="load_title">負荷と推奨設定</string>
-    <string name="load_hint">温度と処理負荷に応じて表示更新を調整します。RAM・CPU数・対応出力を参考に、JPG約1〜2MP、動画VGA／HD／FHD・最大30fpsを初期設定の目安にします。高温の限界状態では録画を保存して冷却休止します。</string>
+    <string name="load_hint">GPUの種類・短い実測・画面サイズ・RAM・カメラ対応から推奨解像度とプレビューfpsを決めます。低RAM区分の新規設定はLIGHTで開始。使用中は負荷と温度に応じて調整し、極端な高温時は録画を保存して撮像を休止します。</string>
     <string name="load_use_recommended">写真・動画を端末の推奨設定にする</string>
     <string name="load_cooling">冷却中 · カメラ休止</string>
     <string name="load_resumed">温度が下がったためカメラを再開しました</string>

@@ -13,7 +13,7 @@ import kotlin.math.sqrt
 
 internal data class TapInput(val uri: Uri, val video: Boolean)
 
-/** Owned imported RGB source. Video transport never starts or stops the output recorder. */
+/** Owned imported RGB source. Output recording follows preview transport only in one direction. */
 internal class TapSource(private val engine: GlitchEngine, val input: TapInput) {
     var texture = 0
         private set
@@ -33,6 +33,7 @@ internal class TapSource(private val engine: GlitchEngine, val input: TapInput) 
     private var stream: SurfaceTexture? = null
     private var surface: Surface? = null
     private var load: Future<*>? = null
+    private val playback = TapPlayback()
 
     private fun createTexture() {
         val id = IntArray(1)
@@ -128,9 +129,25 @@ internal class TapSource(private val engine: GlitchEngine, val input: TapInput) 
 
     fun toggle() {
         if (!ready || !input.video || closed) return
+        val next = !playing
+        playback.manual(next)
+        play(next)
+    }
+
+    fun recordingStarted() {
+        if (ready && input.video && !closed) play(playback.recordingStarted())
+    }
+
+    fun recordingStopped() {
+        playback.recordingStopped()
+        if (ready && input.video && !closed) play(false)
+    }
+
+    private fun play(value: Boolean) {
+        if (playing == value) return
         try {
-            if (playing) player!!.pause() else player!!.start()
-            playing = !playing
+            if (value) player!!.start() else player!!.pause()
+            playing = value
         } catch (error: Exception) { fail(error) }
     }
 

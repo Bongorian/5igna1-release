@@ -35,3 +35,5 @@ Settings offers Feedback / report bug. You review an editable message and choose
 If you contact us by email, your message and email address are used to reply and provide support. Support records are deleted when no longer needed. This policy will be updated if data handling changes, with an in-app notice when appropriate.
 
 [English](PRIVACY.md) · [日本語](PRIVACY.ja.md) · [Guides](README.md)
+
+GPU/driver identity and a short synthetic rendering measurement are stored locally to recommend resolution and preview frame rate. No camera image is used by this measurement and no results are transmitted.

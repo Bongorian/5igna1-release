@@ -13,13 +13,25 @@ internal class AdaptiveLoad {
     var relaxedSince: Long = -1
     var coolSince: Long = -1
     var nextPreviewNs: Long = 0
+    var recommendedFps: Int = 24
+        private set
+    private var calibratedWorkBudget: Double? = null
+
+    fun recommend(fps: Int, workBudget: Double?) {
+        recommendedFps = fps.coerceIn(1,60)
+        calibratedWorkBudget = workBudget?.takeIf { it.isFinite() && it > 0 }
+        if (!expert) previewFps = recommendedFps
+        renderMillis = 0.0
+        relaxedSince = -1
+        resetClock()
+    }
 
     fun setExpert(enabled: Boolean, cameraFps: Int) {
         if (expert != enabled) {
             resetClock()
             coolSince = -1
             relaxedSince = coolSince
-            previewFps = 24
+            previewFps = recommendedFps
         }
         expert = enabled
         if (enabled) {
@@ -72,15 +84,15 @@ internal class AdaptiveLoad {
                 }
             } else coolSince = -1
         }
-        val budget = if (constrained) 90000000.0 else 180000000.0
+        val budget = calibratedWorkBudget ?: if (constrained) 90000000.0 else 180000000.0
         var cap =
             min(
-                if (constrained) 20 else 24,
+                if (calibratedWorkBudget == null && constrained) min(20,recommendedFps) else recommendedFps,
                 (budget / max(1, pixels * max(1L, passes.toLong()))).toInt(),
             )
         if (renderMillis > 0) cap = min(cap, (650 / renderMillis).toInt())
-        cap = min(cap, if (level >= 3) 6 else if (level == 2) 12 else if (level == 1) 20 else 24)
-        var target = 6
+        cap = min(cap, if (level >= 3) 6 else if (level == 2) 12 else if (level == 1) 20 else recommendedFps)
+        var target = min(6,recommendedFps)
         for (rate in RATES) if (rate <= cap) target = rate
         if (target < previewFps) {
             previewFps = target
@@ -88,10 +100,7 @@ internal class AdaptiveLoad {
         } else if (target > previewFps) {
             if (relaxedSince < 0) relaxedSince = nowMillis
             if (nowMillis - relaxedSince >= 15000) {
-                for (rate in RATES) if (rate > previewFps) {
-                    previewFps = rate
-                    break
-                }
+                previewFps = RATES.firstOrNull { it > previewFps && it <= target } ?: target
                 relaxedSince = nowMillis
             }
         } else relaxedSince = -1
@@ -129,10 +138,10 @@ internal class AdaptiveLoad {
     }
 
     fun cameraFps(): Int {
-        return if (expert) previewFps else if (previewFps <= 15) 15 else 30
+        return if (expert) previewFps else if (previewFps <= 15) 15 else if (previewFps <= 30) 30 else 60
     }
 
     companion object {
-        val RATES: IntArray = intArrayOf(6, 8, 12, 15, 20, 24)
+        val RATES: IntArray = intArrayOf(6, 8, 12, 15, 20, 24, 30, 60)
     }
 }

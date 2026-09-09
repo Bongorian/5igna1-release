@@ -20,3 +20,5 @@
 新しい記録には日付・ソース・端末・配布形式・条件・結果・制限を残し、訂正や公開状況は日付付きで追記します。ローカル保存だけのログや撮影結果は、このリポジトリから取得できる証拠と区別します。今回の棚卸しで過去のベンチマークを再実行したわけではありません。
 
 - [GPU詳細調査とLIGHT MODE](GPU_DETAIL_LIGHT.ja.md) / [English](GPU_DETAIL_LIGHT.md)、[測定値](gpu-detail-light-results.json)：未リリースの実装と採用しなかったシェーダー試作。
+
+[1.6.1 release follow-up: GPU defaults and TAP verification](GPU_DETAIL_LIGHT.md).

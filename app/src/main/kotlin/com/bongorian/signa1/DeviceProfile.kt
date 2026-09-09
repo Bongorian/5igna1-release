@@ -7,6 +7,10 @@ import android.content.Context
 internal class DeviceProfile(context: Context) {
     val constrained: Boolean
     private val budget: Budget
+    var gpu: GpuCalibration.Result? = null
+        private set
+    var recommendation: GpuRecommendation.Choice? = null
+        private set
 
     init {
         val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
@@ -21,9 +25,25 @@ internal class DeviceProfile(context: Context) {
         constrained = budget.constrained
     }
 
-    fun photoPixels(): Long = budget.photoPixels
+    fun calibrate(context: Context, shader: String, monitor: ThermalMonitor) {
+        gpu = GpuCalibration.run(context,shader,monitor)
+    }
 
-    fun videoPixels(): Long = budget.videoPixels
+    fun recommend(viewW: Int, viewH: Int, refreshHz: Float): GpuRecommendation.Choice {
+        val result = GpuRecommendation.choose(budget,gpu?.vendor.orEmpty(),gpu?.renderer.orEmpty(),
+            gpu?.measurement,viewW,viewH,refreshHz)
+        recommendation = result
+        return result
+    }
+
+    fun initialFps(pixels: Long, refreshHz: Float, cameraFps: Int): Int {
+        val choice = recommendation ?: recommend(0,0,refreshHz)
+        return GpuRecommendation.fps(choice,gpu?.measurement,pixels,refreshHz,cameraFps)
+    }
+
+    fun photoPixels(): Long = recommendation?.photoPixels ?: budget.photoPixels
+
+    fun videoPixels(): Long = recommendation?.videoPixels ?: budget.videoPixels
 
     data class Budget(val constrained: Boolean, val photoPixels: Long, val videoPixels: Long)
 

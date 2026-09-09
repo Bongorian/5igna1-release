@@ -9,6 +9,15 @@ internal object FormatUiChecks {
             a.applySettings(CaptureSettings(a.settings).apply { photoFormat = 0; rawVideoEnabled = false; rawVideo = false })
         }
         waitReady("JPG")
+        android.os.SystemClock.sleep(500)
+        test.runOnMainSync {
+            val modes = a.photoTab.parent as android.view.View
+            val toolbar = a.formatButton.parent as CaptureToolbar
+            check(a.formatButton.right <= modes.left && modes.right <= toolbar.live.left)
+            val footer = a.capture.parent as android.view.View
+            check(kotlin.math.abs(a.capture.left+a.capture.width/2-footer.width/2)<=1)
+        }
+        test.languageScreenshot("gpu-defaults-toolbar")
         val effects = a.effectState.encode()
         if (a.cameraOptions!!.raws.isNotEmpty()) {
             test.runOnMainSync { a.formatButton.performClick(); check(a.capturePhotoFormat == 2) }

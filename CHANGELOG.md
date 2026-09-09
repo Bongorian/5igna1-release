@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.1] - 2026-09-10
+
+- Recommend photo/video resolution and preview fps using GPU identity, a cached short rendering measurement, screen size and existing memory/camera limits.
+- Start fresh constrained devices in LIGHT MODE; preserve saved choices and selected output dimensions. LIGHT reduces preview processing while photos render at the chosen save size.
+- Keep the TAP shutter centered. Start imported-video playback with recording by default and pause on stop; honor explicit transport choices.
+- Place capture modes centrally and save-format selection outside.
+- Include post-1.6.0 RAW compatibility, compact UI and verified GPU transfer improvements; preserve selected fault processing.
+
 ## [1.6.0] — 2026-09-10
 
 Version name: 1.6.0. Version code: 16.

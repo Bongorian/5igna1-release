@@ -228,7 +228,9 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "responsive") {
+            if (action == "gpu-defaults") {
+                result.putString("result", GpuDefaultsChecks.run(this))
+            } else if (action == "responsive") {
                 result.putString("result", ResponsiveUiChecks.run(this))
             } else if (action == "adaptive-rotation") {
                 result.putString("result", AdaptiveRotationChecks.run(this))

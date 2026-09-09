@@ -345,7 +345,7 @@
     <string name="live_reset">重置时间</string>
     <string name="load_recommended">适合此设备的推荐设置</string>
     <string name="load_title">负载与推荐设置</string>
-    <string name="load_hint">根据温度和负载调整显示更新。根据RAM、可用CPU核心数及相机输出选择初始设置：JPG约1–2MP，视频VGA／HD／FHD、最高30fps。临界高温时保存录像并暂停摄像冷却。</string>
+    <string name="load_hint">GPU类型、短时性能测量、显示尺寸、RAM及相机支持决定推荐分辨率和预览帧率。低RAM设备首次设置启用LIGHT。根据温度和负载调整预览；临界高温时保存录像并暂停摄像。</string>
     <string name="load_use_recommended">照片和视频使用推荐设置</string>
     <string name="load_cooling">冷却中 · 摄像已暂停</string>
     <string name="load_resumed">温度下降，摄像已恢复</string>
