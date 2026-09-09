@@ -27,3 +27,7 @@ Recommended URL: `https://bongorian.github.io/5igna1-release/privacy/`.
 The policy is public HTML without authentication. Its previous app-data content is retained; a separate website-hosting paragraph was added. The Android app displays a bundled offline policy, so moving the web URL does not require an app binary update. Other store metadata linking to the old root can use the same dedicated URL.
 
 Official instructions: https://support.google.com/googleplay/android-developer/answer/9859455
+
+## 1.5.0 content update
+
+The recruitment landing page describes TAP, probability-based TIME ECHO, expanded MEDIA/DISPLAY, SEED transactions and background recording. It preserves the Google Play tester form as its primary action. The three existing developer-owned example captures remain explicitly identified as 1.3.1 imagery. Legacy root language policy URLs redirect to the current policy pages.
