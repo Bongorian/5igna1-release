@@ -44,3 +44,7 @@ A Play draft is [not served to users](https://developers.google.com/android-publ
 ## Verification
 
 Upload logic tests cover preserving rollout settings, draft/version collisions, duplicate uploads, upload hash mismatches and review conflicts. They run in regular Ubuntu/macOS CI and the upload job. Real AAB validation checks the package, version, non-debuggable manifest and existing Play certificate before Google authentication.
+
+## First successful run — 2026-09-09
+
+[GitHub run 34316132266](https://github.com/Bongorian/5igna1-release/actions/runs/34316132266) built the immutable `v1.3.1` source, authenticated through federation, and saved **12 (1.3.1)** as an unpublished Alpha draft. Play Console separately confirmed **11 (1.3.0)** remained published to testers. AAB SHA-256: `26e91fb345cb49d6b08ba06893d68a80fae92ec305accb81fb187fd5919637d3`. Ubuntu and macOS CI also passed for the final upload logic.
