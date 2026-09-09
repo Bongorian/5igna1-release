@@ -66,3 +66,7 @@
 
 - The owner approved implementing per-stage motion/audio/frame-timing/temperature/app-CPU sensitivity and motion blur, thermal noise and smear on the current development branch. Use one Settings switch, default OFF; preserve selections and values while bypassing the additions when OFF. Inputs react with LIVE ON and respect global input controls and permissions. Sensitivity range is 0–4, with native routes defaulting to 1 and unused routes to 0.
 - The owner approved physical DEV installation and testing, then clarified that the earlier confirmation requirement applied only to this implementation discussion. Do not keep asking for routine implementation or testing confirmations. Preserve release applications, submitted artifacts and main.
+
+## Owner direction — 1.3.1 release, 2026-09-09
+
+- The owner requested releasing the current changes as 1.3.1, with experimental features, ADVANCED MODE and audio defaulting to OFF. Publish the verified GitHub/Obtainium APK as 1.3.1 / code 12 with the existing distribution key. Retain saved choices and earlier artifacts/tags. This does not replace the pending Play 1.3.0 submission or the F-Droid submission.

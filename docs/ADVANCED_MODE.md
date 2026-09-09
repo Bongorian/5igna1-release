@@ -1,6 +1,6 @@
 # ADVANCED MODE
 
-This development branch adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. It is not part of published 1.3.0.
+Version 1.3.1 adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. Experimental features, ADVANCED MODE and audio default to OFF; existing saved choices are retained.
 
 [Guides](README.md) · [日本語](ADVANCED_MODE.ja.md)
 

@@ -70,7 +70,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     var ready: Boolean = false
     var recording: Boolean = false
     var videoMode: Boolean = false
-    var sound: Boolean = true
+    var sound: Boolean = false
     var latestVideo: Boolean = false
     var advancedMode: Boolean = false
     var captureCount: Int = 0
@@ -148,7 +148,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         getWindow().decorView.setSystemUiVisibility(0)
         val prefs = getSharedPreferences("signal", 0)
-        sound = prefs.getBoolean("sound", true)
+        sound = prefs.getBoolean("sound", false)
         advancedMode = prefs.getBoolean("advancedMode", false)
         val last = prefs.getString("last", null)
         if (last != null) latest = Uri.parse(last)

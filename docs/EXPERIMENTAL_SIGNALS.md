@@ -2,7 +2,7 @@
 
 [Guides](README.md) · [日本語](EXPERIMENTAL_SIGNALS.ja.md)
 
-This development-branch feature is not included in the published 1.3.0 build. Settings → **Experimental device response** enables per-stage input sensitivity and three image artifacts: MOTION BLUR, THERMAL NOISE and SMEAR. It defaults to OFF and saves immediately. Switching it OFF bypasses these additions while retaining selections and manual values. The original thirteen faults continue to work.
+Available starting with 1.3.1; disabled by default. Settings → **Experimental device response** enables per-stage input sensitivity and three image artifacts: MOTION BLUR, THERMAL NOISE and SMEAR. It defaults to OFF and saves immediately. Switching it OFF bypasses these additions while retaining selections and manual values. The original thirteen faults continue to work.
 
 Enable ADVANCED MODE, open a chain stage and choose INPUT. Motion, audio, frame timing, temperature and app CPU each have a sensitivity from 0 to 4. Zero disconnects that source for that stage; one is standard gain. AUTO restores its original routing: one for a connected source and zero for an unused source. FIX, numeric entry and sliders use the fault editor's Apply/Cancel behavior. Connecting an additional source raises stage activity; it does not create a calibrated physical relationship.
 

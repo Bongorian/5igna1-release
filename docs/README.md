@@ -1,8 +1,8 @@
 # 5igna1 field guide
 
-This development branch adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. It is not part of published 1.3.0.
+Version 1.3.1 adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. Experimental features, ADVANCED MODE and audio default to OFF; existing saved choices are retained.
 
-From your first photograph to a deeper understanding of the signal. These guides describe 1.3.0 / code 11, including the first-launch tutorial. Version 1.0.0 has different controls.
+From your first photograph to a deeper understanding of the signal. These guides describe 1.3.1 / code 12, including the first-launch tutorial. Version 1.0.0 has different controls.
 
 [The project](../README.md) · [日本語ガイド](README.ja.md)
 

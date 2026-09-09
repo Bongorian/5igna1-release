@@ -1,6 +1,6 @@
 # ADVANCED MODE
 
-開発ブランチでは、初期値OFFの[実験的な端末連動](EXPERIMENTAL_SIGNALS.ja.md)を追加しています。FAULT別の5入力感度と、ブレ・熱雑音・スミアを扱います。公開済み1.3.0には含まれません。
+1.3.1では、初期値OFFの[実験的な端末連動](EXPERIMENTAL_SIGNALS.ja.md)を追加しています。FAULT別の5入力感度と、ブレ・熱雑音・スミアを扱います。実験機能・ADVANCED MODE・音声の初期値はOFFで、保存済み設定は保持します。
 
 [ガイド](README.ja.md) · [English](ADVANCED_MODE.md)
 

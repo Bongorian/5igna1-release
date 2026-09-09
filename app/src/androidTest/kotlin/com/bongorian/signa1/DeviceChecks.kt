@@ -67,6 +67,10 @@ class DeviceChecks : Instrumentation() {
                     .edit()
                     .remove(TutorialDialog.SEEN)
                     .commit()
+            if (args!!.getString("action", "") == "release-defaults") {
+                val prefs = getTargetContext().getSharedPreferences("signal", 0)
+                check(!prefs.contains("sound") && !prefs.contains("advancedMode") && !prefs.contains("experimentalSignals")) { "Requires fresh test installation" }
+            }
             val monitor = addMonitor(MainActivity::class.java!!.getName(), null, false)
             getUiAutomation()
                 .executeShellCommand(
@@ -79,6 +83,13 @@ class DeviceChecks : Instrumentation() {
             activity = monitor.waitForActivityWithTimeout(20000) as MainActivity
             removeMonitor(monitor)
             if (activity == null) throw AssertionError("Activity start timeout")
+            if (args!!.getString("action", "") == "release-defaults") {
+                val prefs = getTargetContext().getSharedPreferences("signal", 0)
+                check(!activity!!.sound && !activity!!.advancedMode && !activity!!.settings.experimentalSignals && !activity!!.faultConfig.audio) { "Release defaults must be OFF" }
+                check(!CaptureSettings.load(prefs).experimentalSignals && !FaultPreferences.load(prefs).audio)
+                result.putString("result", "PASS fresh install: experimental, ADVANCED, video audio and LIVE audio all OFF")
+                return
+            }
             if (args!!.getString("action", "") == "tutorial-permission") {
                 await(
                     "guide before permission",

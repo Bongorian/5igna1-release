@@ -1,0 +1,1 @@
+Interactive guide and immediate Settings saving. Optional per-stage device sensitivity, motion blur, thermal noise and smear, including processed RAW. Reduced RAW sampling work. Experimental features, ADVANCED MODE and audio default to OFF; saved choices are retained. High-resolution processed RAW can still take time.
