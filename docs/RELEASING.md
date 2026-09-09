@@ -70,6 +70,8 @@ The [metadata candidate](fdroid/com.bongorian.signa1.yml) uses this repository, 
 
 ## Google Play
 
+Publishing a stable GitHub release now triggers a signed AAB build and upload to an Alpha draft. See [automatic Play uploads](PLAY_AUTOMATION.md) ([日本語](PLAY_AUTOMATION.ja.md)) for setup, verification and retries. Review submission and publication remain owner actions in Play Console.
+
 Play 1.1.0 / code 9 is published to Alpha testers. Version 1.3.0 / code 11 was submitted on 2026-09-09, skipping 1.2.0 on Play. Managed publishing is on; approval and publication are pending. Preserve existing submitted candidates. See the [1.3.0 submission record](PLAY_1_3_0.md). The existing ignored `signing.properties` applies only to Play upload signing. Build with `./tools/build.sh bundlePlayRelease`; see [Play submission materials](../store/google-play/README.md). Billing/Supporter Pack is not implemented, so no product creation is needed for launch.
 
 ## Owner checklist

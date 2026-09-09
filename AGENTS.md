@@ -70,3 +70,8 @@
 ## Owner direction — 1.3.1 release, 2026-09-09
 
 - The owner requested releasing the current changes as 1.3.1, with experimental features, ADVANCED MODE and audio defaulting to OFF. Publish the verified GitHub/Obtainium APK as 1.3.1 / code 12 with the existing distribution key. Retain saved choices and earlier artifacts/tags. This does not replace the pending Play 1.3.0 submission or the F-Droid submission.
+
+## Owner direction — automatic Play uploads, 2026-09-09
+
+- The owner requested free automatic AAB uploads whenever a GitHub release is published. Configure GitHub Actions and the existing Play app for signed Alpha drafts, using the existing Play upload key. This authorizes the required service account, scoped permissions, GitHub environment and integration into main, including the already published 1.3.1 source.
+- Automatic uploads must preserve ongoing reviews, existing releases, tester/country settings and signing identities. Do not automatically submit for review or publish to testers/production. Fail if another draft or review prevents the upload; never cancel review as a fallback.
