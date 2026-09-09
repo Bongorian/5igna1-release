@@ -609,7 +609,10 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         signal = a.button(a.getString(R.string.saved_signal_loading))
         signal.setTextSize(11f)
         signal.setSingleLine(true)
-        signal.ellipsize = TextUtils.TruncateAt.END
+        signal.ellipsize = TextUtils.TruncateAt.MARQUEE
+        signal.marqueeRepeatLimit = -1
+        signal.isSelected = true
+        signal.isHorizontalFadingEdgeEnabled = true
         signal.setTextColor(MainActivity.LIME)
         signal.isEnabled = false
         signal.setOnClickListener { showSignal() }
