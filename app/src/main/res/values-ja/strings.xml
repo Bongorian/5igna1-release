@@ -380,4 +380,19 @@
     <string name="media_play">再生</string>
     <string name="media_gestures">左右で切り替え · 下スワイプで閉じる</string>
     <string name="media_preview_unavailable">このファイルは表示できません。右上の↗から対応アプリで開けます。</string>
+    <string name="tutorial_title">操作チュートリアル</string>
+    <string name="tutorial_skip">スキップ</string>
+    <string name="tutorial_next">次へ</string>
+    <string name="tutorial_done">撮影を始める</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_heading_0">自分だけのFAULTを作る</string>
+    <string name="tutorial_body_0">5igna1は、カメラの映像に意図的なデジタル故障を加えるアプリです。まずは撮影し、故障の表情を調整してみましょう。この説明は設定からいつでも開けます。</string>
+    <string name="tutorial_heading_1">写真・動画を撮る</string>
+    <string name="tutorial_body_1">「写真」／「動画」を選び、大きな撮影ボタンをタップします。動画はもう一度タップすると停止します。形式の表示からJPG／RAWを選べます。使える形式はカメラによって異なります。上部ではライト・位置情報・録音を切り替えられます。</string>
+    <string name="tutorial_heading_2">FAULTを組み合わせる</string>
+    <string name="tutorial_body_2">プレビュー下の＋から故障を選んで組み合わせます。選択中のFAULTをタップすると、各パラメーターを調整できます。編集は「適用」で確定し、「戻る」で破棄します。LEVELスライダーは全体の強さをその場で変更します。シャッフルアイコンでランダムな組み合わせを試せます。</string>
+    <string name="tutorial_heading_3">LIVEで変化を加える</string>
+    <string name="tutorial_body_3">LIVEをオンにすると、時間や、有効にした動き・音などの入力に応じて故障が変化します。「一時停止」で変化を止め、「故障を発生」で一時的な変化を加えられます。音への反応には必要に応じてマイクの許可を求めます。RAWのプレビューは保存結果の近似表示です。</string>
+    <string name="tutorial_heading_4">保存した写真・動画を見る</string>
+    <string name="tutorial_body_4">サムネイルをタップすると保存した写真・動画が開きます。左右のスワイプで前後へ移動し、写真はピンチで拡大できます。動画には再生操作があります。下へスワイプすると撮影画面に戻ります。設定では、この説明の再表示・撮影品質・言語を変更できます。</string>
 </resources>

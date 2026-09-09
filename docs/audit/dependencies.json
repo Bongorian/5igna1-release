@@ -41,11 +41,10 @@
         "androidx.versionedparcelable:versionedparcelable:1.1.1",
         "androidx.viewpager:viewpager:1.0.0",
         "com.google.guava:listenablefuture:1.0",
-        "org.jetbrains.kotlin:kotlin-bom:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
+        "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.20",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4",
@@ -244,24 +243,19 @@
           "sha256": "e4ad7607e5c0477c6f890ef26a49cb8d1bb4dffb650bab4502afee64644e3069"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-          "file": "kotlin-stdlib-common-1.8.22.jar",
-          "sha256": "d0c2365e2437ef70f34586d50f055743f79716bcfe65e4bc7239cdd2669ef7c5"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+          "file": "kotlin-stdlib-jdk7-1.8.0.jar",
+          "sha256": "4c889d1d9803f5f2eb6c1592a6b7e62369ac7660c9eee15aba16fec059163666"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-          "file": "kotlin-stdlib-jdk7-1.8.22.jar",
-          "sha256": "055f5cb24287fa106100995a7b47ab92126b81e832e875f5fa2cf0bd55693d0b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+          "file": "kotlin-stdlib-jdk8-1.8.0.jar",
+          "sha256": "05b62804441b0c9a1920b6b7d5cf7329a4e24b6258478e32b1f046ca01900946"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-          "file": "kotlin-stdlib-jdk8-1.8.22.jar",
-          "sha256": "4198b0eaf090a4f25b6f7e5a59581f4314ba8c9f6cd1d13ee9d348e65ed8f707"
-        },
-        {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
-          "file": "kotlin-stdlib-1.8.22.jar",
-          "sha256": "03a5c3965cc37051128e64e46748e394b6bd4c97fa81c6de6fc72bfd44e3421b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
+          "file": "kotlin-stdlib-2.2.20.jar",
+          "sha256": "8836ccffd3585fadda9901244b20d42901d2f3cd581058d8434e2ffabcf3a3e7"
         },
         {
           "module": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
@@ -311,11 +305,10 @@
         "androidx.vectordrawable:vectordrawable:1.1.0",
         "androidx.versionedparcelable:versionedparcelable:1.1.1",
         "androidx.viewpager:viewpager:1.0.0",
-        "org.jetbrains.kotlin:kotlin-bom:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
+        "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.20",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4",
@@ -474,24 +467,19 @@
           "sha256": "147af4e14a1984010d8f155e5e19d781f03c1d70dfed02a8e0d18428b8fc8682"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-          "file": "kotlin-stdlib-common-1.8.22.jar",
-          "sha256": "d0c2365e2437ef70f34586d50f055743f79716bcfe65e4bc7239cdd2669ef7c5"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+          "file": "kotlin-stdlib-jdk7-1.8.0.jar",
+          "sha256": "4c889d1d9803f5f2eb6c1592a6b7e62369ac7660c9eee15aba16fec059163666"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-          "file": "kotlin-stdlib-jdk7-1.8.22.jar",
-          "sha256": "055f5cb24287fa106100995a7b47ab92126b81e832e875f5fa2cf0bd55693d0b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+          "file": "kotlin-stdlib-jdk8-1.8.0.jar",
+          "sha256": "05b62804441b0c9a1920b6b7d5cf7329a4e24b6258478e32b1f046ca01900946"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-          "file": "kotlin-stdlib-jdk8-1.8.22.jar",
-          "sha256": "4198b0eaf090a4f25b6f7e5a59581f4314ba8c9f6cd1d13ee9d348e65ed8f707"
-        },
-        {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
-          "file": "kotlin-stdlib-1.8.22.jar",
-          "sha256": "03a5c3965cc37051128e64e46748e394b6bd4c97fa81c6de6fc72bfd44e3421b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
+          "file": "kotlin-stdlib-2.2.20.jar",
+          "sha256": "8836ccffd3585fadda9901244b20d42901d2f3cd581058d8434e2ffabcf3a3e7"
         },
         {
           "module": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
@@ -549,11 +537,10 @@
         "androidx.versionedparcelable:versionedparcelable:1.1.1",
         "androidx.viewpager:viewpager:1.0.0",
         "com.google.guava:listenablefuture:1.0",
-        "org.jetbrains.kotlin:kotlin-bom:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
+        "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.20",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4",
@@ -752,24 +739,19 @@
           "sha256": "e4ad7607e5c0477c6f890ef26a49cb8d1bb4dffb650bab4502afee64644e3069"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-          "file": "kotlin-stdlib-common-1.8.22.jar",
-          "sha256": "d0c2365e2437ef70f34586d50f055743f79716bcfe65e4bc7239cdd2669ef7c5"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+          "file": "kotlin-stdlib-jdk7-1.8.0.jar",
+          "sha256": "4c889d1d9803f5f2eb6c1592a6b7e62369ac7660c9eee15aba16fec059163666"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-          "file": "kotlin-stdlib-jdk7-1.8.22.jar",
-          "sha256": "055f5cb24287fa106100995a7b47ab92126b81e832e875f5fa2cf0bd55693d0b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+          "file": "kotlin-stdlib-jdk8-1.8.0.jar",
+          "sha256": "05b62804441b0c9a1920b6b7d5cf7329a4e24b6258478e32b1f046ca01900946"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-          "file": "kotlin-stdlib-jdk8-1.8.22.jar",
-          "sha256": "4198b0eaf090a4f25b6f7e5a59581f4314ba8c9f6cd1d13ee9d348e65ed8f707"
-        },
-        {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
-          "file": "kotlin-stdlib-1.8.22.jar",
-          "sha256": "03a5c3965cc37051128e64e46748e394b6bd4c97fa81c6de6fc72bfd44e3421b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
+          "file": "kotlin-stdlib-2.2.20.jar",
+          "sha256": "8836ccffd3585fadda9901244b20d42901d2f3cd581058d8434e2ffabcf3a3e7"
         },
         {
           "module": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
@@ -819,11 +801,10 @@
         "androidx.vectordrawable:vectordrawable:1.1.0",
         "androidx.versionedparcelable:versionedparcelable:1.1.1",
         "androidx.viewpager:viewpager:1.0.0",
-        "org.jetbrains.kotlin:kotlin-bom:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
+        "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.20",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4",
@@ -982,24 +963,19 @@
           "sha256": "147af4e14a1984010d8f155e5e19d781f03c1d70dfed02a8e0d18428b8fc8682"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-          "file": "kotlin-stdlib-common-1.8.22.jar",
-          "sha256": "d0c2365e2437ef70f34586d50f055743f79716bcfe65e4bc7239cdd2669ef7c5"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+          "file": "kotlin-stdlib-jdk7-1.8.0.jar",
+          "sha256": "4c889d1d9803f5f2eb6c1592a6b7e62369ac7660c9eee15aba16fec059163666"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-          "file": "kotlin-stdlib-jdk7-1.8.22.jar",
-          "sha256": "055f5cb24287fa106100995a7b47ab92126b81e832e875f5fa2cf0bd55693d0b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+          "file": "kotlin-stdlib-jdk8-1.8.0.jar",
+          "sha256": "05b62804441b0c9a1920b6b7d5cf7329a4e24b6258478e32b1f046ca01900946"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-          "file": "kotlin-stdlib-jdk8-1.8.22.jar",
-          "sha256": "4198b0eaf090a4f25b6f7e5a59581f4314ba8c9f6cd1d13ee9d348e65ed8f707"
-        },
-        {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
-          "file": "kotlin-stdlib-1.8.22.jar",
-          "sha256": "03a5c3965cc37051128e64e46748e394b6bd4c97fa81c6de6fc72bfd44e3421b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
+          "file": "kotlin-stdlib-2.2.20.jar",
+          "sha256": "8836ccffd3585fadda9901244b20d42901d2f3cd581058d8434e2ffabcf3a3e7"
         },
         {
           "module": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
@@ -1059,11 +1035,10 @@
         "com.google.guava:listenablefuture:1.0",
         "junit:junit:4.13.2",
         "org.hamcrest:hamcrest-core:1.3",
-        "org.jetbrains.kotlin:kotlin-bom:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
+        "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.20",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4",
@@ -1272,24 +1247,19 @@
           "sha256": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-          "file": "kotlin-stdlib-common-1.8.22.jar",
-          "sha256": "d0c2365e2437ef70f34586d50f055743f79716bcfe65e4bc7239cdd2669ef7c5"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+          "file": "kotlin-stdlib-jdk7-1.8.0.jar",
+          "sha256": "4c889d1d9803f5f2eb6c1592a6b7e62369ac7660c9eee15aba16fec059163666"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-          "file": "kotlin-stdlib-jdk7-1.8.22.jar",
-          "sha256": "055f5cb24287fa106100995a7b47ab92126b81e832e875f5fa2cf0bd55693d0b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+          "file": "kotlin-stdlib-jdk8-1.8.0.jar",
+          "sha256": "05b62804441b0c9a1920b6b7d5cf7329a4e24b6258478e32b1f046ca01900946"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-          "file": "kotlin-stdlib-jdk8-1.8.22.jar",
-          "sha256": "4198b0eaf090a4f25b6f7e5a59581f4314ba8c9f6cd1d13ee9d348e65ed8f707"
-        },
-        {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
-          "file": "kotlin-stdlib-1.8.22.jar",
-          "sha256": "03a5c3965cc37051128e64e46748e394b6bd4c97fa81c6de6fc72bfd44e3421b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
+          "file": "kotlin-stdlib-2.2.20.jar",
+          "sha256": "8836ccffd3585fadda9901244b20d42901d2f3cd581058d8434e2ffabcf3a3e7"
         },
         {
           "module": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
@@ -1349,11 +1319,10 @@
         "com.google.guava:listenablefuture:1.0",
         "junit:junit:4.13.2",
         "org.hamcrest:hamcrest-core:1.3",
-        "org.jetbrains.kotlin:kotlin-bom:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-        "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
+        "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.20",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+        "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4",
@@ -1562,24 +1531,19 @@
           "sha256": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-          "file": "kotlin-stdlib-common-1.8.22.jar",
-          "sha256": "d0c2365e2437ef70f34586d50f055743f79716bcfe65e4bc7239cdd2669ef7c5"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+          "file": "kotlin-stdlib-jdk7-1.8.0.jar",
+          "sha256": "4c889d1d9803f5f2eb6c1592a6b7e62369ac7660c9eee15aba16fec059163666"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-          "file": "kotlin-stdlib-jdk7-1.8.22.jar",
-          "sha256": "055f5cb24287fa106100995a7b47ab92126b81e832e875f5fa2cf0bd55693d0b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+          "file": "kotlin-stdlib-jdk8-1.8.0.jar",
+          "sha256": "05b62804441b0c9a1920b6b7d5cf7329a4e24b6258478e32b1f046ca01900946"
         },
         {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-          "file": "kotlin-stdlib-jdk8-1.8.22.jar",
-          "sha256": "4198b0eaf090a4f25b6f7e5a59581f4314ba8c9f6cd1d13ee9d348e65ed8f707"
-        },
-        {
-          "module": "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
-          "file": "kotlin-stdlib-1.8.22.jar",
-          "sha256": "03a5c3965cc37051128e64e46748e394b6bd4c97fa81c6de6fc72bfd44e3421b"
+          "module": "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
+          "file": "kotlin-stdlib-2.2.20.jar",
+          "sha256": "8836ccffd3585fadda9901244b20d42901d2f3cd581058d8434e2ffabcf3a3e7"
         },
         {
           "module": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4",
@@ -1712,10 +1676,31 @@
         "org.glassfish.jaxb:jaxb-runtime:2.3.2",
         "org.glassfish.jaxb:txw2:2.3.2",
         "org.jdom:jdom2:2.0.6",
+        "org.jetbrains.kotlin.android:org.jetbrains.kotlin.android.gradle.plugin:2.2.20",
+        "org.jetbrains.kotlin:abi-tools-api:2.2.20",
+        "org.jetbrains.kotlin:fus-statistics-gradle-plugin:2.2.20",
+        "org.jetbrains.kotlin:kotlin-build-statistics:2.2.20",
+        "org.jetbrains.kotlin:kotlin-build-tools-api:2.2.20",
+        "org.jetbrains.kotlin:kotlin-compiler-runner:2.2.20",
+        "org.jetbrains.kotlin:kotlin-daemon-client:2.2.20",
+        "org.jetbrains.kotlin:kotlin-gradle-plugin-annotations:2.2.20",
+        "org.jetbrains.kotlin:kotlin-gradle-plugin-api:2.2.20",
+        "org.jetbrains.kotlin:kotlin-gradle-plugin-idea-proto:2.2.20",
+        "org.jetbrains.kotlin:kotlin-gradle-plugin-idea:2.2.20",
+        "org.jetbrains.kotlin:kotlin-gradle-plugin-model:2.2.20",
+        "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20",
+        "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.20",
+        "org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.2.20",
+        "org.jetbrains.kotlin:kotlin-native-utils:2.2.20",
         "org.jetbrains.kotlin:kotlin-reflect:2.1.0",
         "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0",
         "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0",
         "org.jetbrains.kotlin:kotlin-stdlib:2.1.0",
+        "org.jetbrains.kotlin:kotlin-tooling-core:2.2.20",
+        "org.jetbrains.kotlin:kotlin-util-io:2.2.20",
+        "org.jetbrains.kotlin:kotlin-util-klib-metadata:2.2.20",
+        "org.jetbrains.kotlin:kotlin-util-klib:2.2.20",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0",
         "org.jetbrains:annotations:23.0.0",
         "org.jvnet.staxex:stax-ex:1.8.1",
         "org.ow2.asm:asm-analysis:9.7.1",
@@ -2283,6 +2268,81 @@
           "sha256": "1345f11ba606d15603d6740551a8c21947c0215640770ec67271fe78bea97cf5"
         },
         {
+          "module": "org.jetbrains.kotlin:abi-tools-api:2.2.20",
+          "file": "abi-tools-api-2.2.20.jar",
+          "sha256": "f1c866eac5dc088f3fd081100843409bf4f1612bbb998fbaa1f685325cae0d55"
+        },
+        {
+          "module": "org.jetbrains.kotlin:fus-statistics-gradle-plugin:2.2.20",
+          "file": "fus-statistics-gradle-plugin-2.2.20-gradle811.jar",
+          "sha256": "3a69595b6c75fbf92d320168745c698ff7114b8607841050d48498823006e871"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-build-statistics:2.2.20",
+          "file": "kotlin-build-statistics-2.2.20.jar",
+          "sha256": "fb654a4f5bc56368759173129df49107ad09dc5b4172b01775afb3fa72579dd5"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-build-tools-api:2.2.20",
+          "file": "kotlin-build-tools-api-2.2.20.jar",
+          "sha256": "fd9947b3a17621a86fabd953af87f34bd2bb7f8b26dae92c1ed7be7472f44c3b"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-compiler-runner:2.2.20",
+          "file": "kotlin-compiler-runner-2.2.20.jar",
+          "sha256": "faf96834fa2004d78bd8e4420f5828de3d4272427d6474798024ea6e9cf85cdd"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-daemon-client:2.2.20",
+          "file": "kotlin-daemon-client-2.2.20.jar",
+          "sha256": "70ef7cdcdc301077b9b3ba21aa9e9c55a76afb3ffbdfef4ab562a677d18dfa4c"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-gradle-plugin-annotations:2.2.20",
+          "file": "kotlin-gradle-plugin-annotations-2.2.20.jar",
+          "sha256": "4fc32a1be645ca7404e21b24452088f93e8e993eaffd26f36bd35dbf75c60752"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-gradle-plugin-api:2.2.20",
+          "file": "kotlin-gradle-plugin-api-2.2.20-gradle811.jar",
+          "sha256": "7607ee5c7a0ca53fa592ee7c540ee808962a7bad8fee9ed78fe674841463d95d"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-gradle-plugin-api:2.2.20",
+          "file": "kotlin-gradle-plugin-api-2.2.20.jar",
+          "sha256": "7607ee5c7a0ca53fa592ee7c540ee808962a7bad8fee9ed78fe674841463d95d"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-gradle-plugin-idea-proto:2.2.20",
+          "file": "kotlin-gradle-plugin-idea-proto-2.2.20.jar",
+          "sha256": "76d16ee59cde1e6a70556b5d40486ef9f11c1643a87493c19c4df331653837d9"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-gradle-plugin-idea:2.2.20",
+          "file": "kotlin-gradle-plugin-idea-2.2.20.jar",
+          "sha256": "ec969c5f0b099f823846232238f9bd64f3d3741e62ea9050ad2e432fad79d0a0"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-gradle-plugin-model:2.2.20",
+          "file": "kotlin-gradle-plugin-model-2.2.20.jar",
+          "sha256": "53a32152826320601852049a0b6f7538ca8bb57fd09d87accd118bc68d43f8e4"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20",
+          "file": "kotlin-gradle-plugin-2.2.20-gradle811.jar",
+          "sha256": "8dbd5441fd7dea05bdf680af5a1126b4d6a623b5febaa55c451a1138d1783fb4"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.2.20",
+          "file": "kotlin-klib-commonizer-api-2.2.20.jar",
+          "sha256": "3982be45b12930e21819b589db3707c8e84ce257bf2ace7fc62fc8df368f5b3e"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-native-utils:2.2.20",
+          "file": "kotlin-native-utils-2.2.20.jar",
+          "sha256": "5017774a2aea41ff8712137116cd4d8003fe9aba1200c106e65730feb5bb7442"
+        },
+        {
           "module": "org.jetbrains.kotlin:kotlin-reflect:2.1.0",
           "file": "kotlin-reflect-2.1.0.jar",
           "sha256": "b5f608edfa98a8cfa2372cc12d18ada974be1c56c1093eff06cc061f4fc088b2"
@@ -2301,6 +2361,31 @@
           "module": "org.jetbrains.kotlin:kotlin-stdlib:2.1.0",
           "file": "kotlin-stdlib-2.1.0.jar",
           "sha256": "d6f91b7b0f306cca299fec74fb7c34e4874d6f5ec5b925a0b4de21901e119c3f"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-tooling-core:2.2.20",
+          "file": "kotlin-tooling-core-2.2.20.jar",
+          "sha256": "74014ec4f3ef78ce7da7e3e6964f2c526a3121d5c58fef8ca2979e5f344582f4"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-util-io:2.2.20",
+          "file": "kotlin-util-io-2.2.20.jar",
+          "sha256": "d431af6bea6e2dc9889c4fe26b073ce157f111c8608fe95a18bfe08b817cff74"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-util-klib-metadata:2.2.20",
+          "file": "kotlin-util-klib-metadata-2.2.20.jar",
+          "sha256": "bee4901ca53a5a21c0db645901d2b070aff682402417dd5788e0e3593645713b"
+        },
+        {
+          "module": "org.jetbrains.kotlin:kotlin-util-klib:2.2.20",
+          "file": "kotlin-util-klib-2.2.20.jar",
+          "sha256": "ed7c8096b2bbe477ad17c3178deba8c83af5328bab36bfe210910bd5b419234c"
+        },
+        {
+          "module": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0",
+          "file": "kotlinx-coroutines-core-jvm-1.8.0.jar",
+          "sha256": "9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5"
         },
         {
           "module": "org.jetbrains:annotations:23.0.0",
@@ -5559,27 +5644,322 @@
       "packaged_runtime": false
     },
     {
-      "coordinate": "org.jetbrains.kotlin:kotlin-bom:1.8.22",
+      "coordinate": "org.jetbrains.kotlin.android:org.jetbrains.kotlin.android.gradle.plugin:2.2.20",
       "licenses": [
         {
-          "name": "The Apache Software License, Version 2.0",
+          "name": "Apache-2.0",
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
       "license_declaration": {
-        "coordinate": "org.jetbrains.kotlin:kotlin-bom:1.8.22",
-        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-bom/1.8.22/kotlin-bom-1.8.22.pom",
-        "sha256": "c8d794eb761888d34369e677de8eaba0b01f9e8a756cfbff53215ccfa5c58c3f"
+        "coordinate": "org.jetbrains.kotlin.android:org.jetbrains.kotlin.android.gradle.plugin:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/android/org.jetbrains.kotlin.android.gradle.plugin/2.2.20/org.jetbrains.kotlin.android.gradle.plugin-2.2.20.pom",
+        "sha256": "f7d69db41c842aba78cae53750cf2e545ef7ebde6eddde8ee3ed9a00637eb64f"
       },
-      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-bom/1.8.22/kotlin-bom-1.8.22.pom",
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/android/org.jetbrains.kotlin.android.gradle.plugin/2.2.20/org.jetbrains.kotlin.android.gradle.plugin-2.2.20.pom",
       "scm": "https://github.com/JetBrains/kotlin",
       "scopes": [
-        "fdroidReleaseRuntimeClasspath",
-        "fdroidReleaseCompileClasspath",
-        "playReleaseRuntimeClasspath",
-        "playReleaseCompileClasspath",
-        "fdroidDebugUnitTestRuntimeClasspath",
-        "playDebugUnitTestRuntimeClasspath"
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:abi-tools-api:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:abi-tools-api:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools-api/2.2.20/abi-tools-api-2.2.20.pom",
+        "sha256": "1ce2fb35ccd83fcbc90ae5c598dfdbb22952d08547804944a5b21f2c46cac0bd"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools-api/2.2.20/abi-tools-api-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:fus-statistics-gradle-plugin:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:fus-statistics-gradle-plugin:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/fus-statistics-gradle-plugin/2.2.20/fus-statistics-gradle-plugin-2.2.20.pom",
+        "sha256": "3fa826462cbd846d180202f22c5193418cb9cda9f695c9941235a9b1b5c141d9"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/fus-statistics-gradle-plugin/2.2.20/fus-statistics-gradle-plugin-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-build-statistics:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-build-statistics:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-statistics/2.2.20/kotlin-build-statistics-2.2.20.pom",
+        "sha256": "b5d5364f57d21ff14182205e8b695fd6864d9d8aa5780a6edc4209584047c115"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-statistics/2.2.20/kotlin-build-statistics-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-build-tools-api:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-build-tools-api:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-api/2.2.20/kotlin-build-tools-api-2.2.20.pom",
+        "sha256": "02d47d4877ec324b496d93133245cd4d348b652303cf27efa63e38af2fb3cf2a"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-api/2.2.20/kotlin-build-tools-api-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-compiler-runner:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-compiler-runner:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-runner/2.2.20/kotlin-compiler-runner-2.2.20.pom",
+        "sha256": "91bb15248f4ea944b6330f3103f1eb545d13bdd8ad4aec437b747a586e7b17a9"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-runner/2.2.20/kotlin-compiler-runner-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-daemon-client:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-daemon-client:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-client/2.2.20/kotlin-daemon-client-2.2.20.pom",
+        "sha256": "8a136d0f13eb983a6be34ff1e163c9ce79855e4ba2174f45cb42aaa67553f754"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-client/2.2.20/kotlin-daemon-client-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-annotations:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-annotations:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-annotations/2.2.20/kotlin-gradle-plugin-annotations-2.2.20.pom",
+        "sha256": "b1b6e011792d7ca92fecafbffac4a508f76f039c9f7ae8a323d189288825f4fe"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-annotations/2.2.20/kotlin-gradle-plugin-annotations-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-api:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-api:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-api/2.2.20/kotlin-gradle-plugin-api-2.2.20.pom",
+        "sha256": "0b913da0d2188420263a904bb40a640fdb35a535a72f0582fe59641e3a0c4a2e"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-api/2.2.20/kotlin-gradle-plugin-api-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-idea-proto:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-idea-proto:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-idea-proto/2.2.20/kotlin-gradle-plugin-idea-proto-2.2.20.pom",
+        "sha256": "c51ba149c7f29359d25a4ed1212e28b6934e1a4756f552c0007bf1144d289c1d"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-idea-proto/2.2.20/kotlin-gradle-plugin-idea-proto-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-idea:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-idea:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-idea/2.2.20/kotlin-gradle-plugin-idea-2.2.20.pom",
+        "sha256": "36442325445f17bac21f5386bb4938f83e772b834e586053d4145b1a75d9e285"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-idea/2.2.20/kotlin-gradle-plugin-idea-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-model:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin-model:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-model/2.2.20/kotlin-gradle-plugin-model-2.2.20.pom",
+        "sha256": "dee0e307ba6e6f51903c7e433de852675d1e30e7f22cf2465b1825552651edfb"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-model/2.2.20/kotlin-gradle-plugin-model-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin/2.2.20/kotlin-gradle-plugin-2.2.20.pom",
+        "sha256": "b9c3fd2ebd5484d60c5fe0db7aa10878303eeddfc93f942f735c07ba998187cc"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin/2.2.20/kotlin-gradle-plugin-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugins-bom:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugins-bom/2.2.20/kotlin-gradle-plugins-bom-2.2.20.pom",
+        "sha256": "3c6d469e915fbb3096ac4cb8c2f46c79d027c3c590e658a10688a1571eb578d8"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugins-bom/2.2.20/kotlin-gradle-plugins-bom-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.2.20/kotlin-klib-commonizer-api-2.2.20.pom",
+        "sha256": "0b3009b49426bfa177aad94b48109b8ca54c724ea2e6c506826a3a95cf5910e1"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.2.20/kotlin-klib-commonizer-api-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-native-utils:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-native-utils:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-native-utils/2.2.20/kotlin-native-utils-2.2.20.pom",
+        "sha256": "53efbee05a7122189060f5ee5eca687639ceafe29f5e5996de9862a29c672725"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-native-utils/2.2.20/kotlin-native-utils-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
       ],
       "packaged_runtime": false
     },
@@ -5604,19 +5984,19 @@
       "packaged_runtime": false
     },
     {
-      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.20",
       "licenses": [
         {
-          "name": "The Apache License, Version 2.0",
+          "name": "Apache-2.0",
           "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
       ],
       "license_declaration": {
-        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
-        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.8.22/kotlin-stdlib-common-1.8.22.pom",
-        "sha256": "a72b11df08b5322d7a5e8e620789ee3e4cfef38e86c430e7d113bfa9e54c581e"
+        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/2.2.20/kotlin-stdlib-common-2.2.20.pom",
+        "sha256": "fd789cb32e2410ecc683b8739f7b75003d09da33330c3f8a65c269db6b2f6c75"
       },
-      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.8.22/kotlin-stdlib-common-1.8.22.pom",
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/2.2.20/kotlin-stdlib-common-2.2.20.pom",
       "scm": "https://github.com/JetBrains/kotlin",
       "scopes": [
         "fdroidReleaseRuntimeClasspath",
@@ -5626,10 +6006,10 @@
         "fdroidDebugUnitTestRuntimeClasspath",
         "playDebugUnitTestRuntimeClasspath"
       ],
-      "packaged_runtime": true
+      "packaged_runtime": false
     },
     {
-      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
       "licenses": [
         {
           "name": "The Apache License, Version 2.0",
@@ -5637,11 +6017,11 @@
         }
       ],
       "license_declaration": {
-        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
-        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.22/kotlin-stdlib-jdk7-1.8.22.pom",
-        "sha256": "4f958aa993d5984f8f5ebed4146562a5f3a9f695b6049c9f287381379cadab33"
+        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.0/kotlin-stdlib-jdk7-1.8.0.pom",
+        "sha256": "dfa9644a6ae5b898ee475bb1f57e830ba1f770aee6c9c15f8112aa381180184a"
       },
-      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.22/kotlin-stdlib-jdk7-1.8.22.pom",
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.0/kotlin-stdlib-jdk7-1.8.0.pom",
       "scm": "https://github.com/JetBrains/kotlin",
       "scopes": [
         "fdroidReleaseRuntimeClasspath",
@@ -5674,7 +6054,7 @@
       "packaged_runtime": false
     },
     {
-      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
       "licenses": [
         {
           "name": "The Apache License, Version 2.0",
@@ -5682,11 +6062,11 @@
         }
       ],
       "license_declaration": {
-        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22",
-        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.22/kotlin-stdlib-jdk8-1.8.22.pom",
-        "sha256": "928f2187217476313cb816d48070bc7654aa3b9a5ae81d3fc5f8c279cc8f8d9e"
+        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.0/kotlin-stdlib-jdk8-1.8.0.pom",
+        "sha256": "2bb6c7551b97c7ba029f9866582e7aa19d63abfd4cd53da3fc0c462f3ab5fc26"
       },
-      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.22/kotlin-stdlib-jdk8-1.8.22.pom",
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.0/kotlin-stdlib-jdk8-1.8.0.pom",
       "scm": "https://github.com/JetBrains/kotlin",
       "scopes": [
         "fdroidReleaseRuntimeClasspath",
@@ -5719,31 +6099,6 @@
       "packaged_runtime": false
     },
     {
-      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
-      "licenses": [
-        {
-          "name": "The Apache License, Version 2.0",
-          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
-        }
-      ],
-      "license_declaration": {
-        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
-        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.8.22/kotlin-stdlib-1.8.22.pom",
-        "sha256": "596f4a62f3086ad98f0e78b3e257ba5b247cd313bffa9818e509696210e83a37"
-      },
-      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.8.22/kotlin-stdlib-1.8.22.pom",
-      "scm": "https://github.com/JetBrains/kotlin",
-      "scopes": [
-        "fdroidReleaseRuntimeClasspath",
-        "fdroidReleaseCompileClasspath",
-        "playReleaseRuntimeClasspath",
-        "playReleaseCompileClasspath",
-        "fdroidDebugUnitTestRuntimeClasspath",
-        "playDebugUnitTestRuntimeClasspath"
-      ],
-      "packaged_runtime": true
-    },
-    {
       "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.1.0",
       "licenses": [
         {
@@ -5757,6 +6112,111 @@
         "sha256": "134e48c17796c1c1027ecbe6c9f1c75c792f535987ab89e1e1dda43f8c366f5e"
       },
       "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.1.0/kotlin-stdlib-2.1.0.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.20/kotlin-stdlib-2.2.20.pom",
+        "sha256": "4a8b086e6431bcf623637f52b2ff192e1adb913838742e5c0eea70a8dee429c4"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.20/kotlin-stdlib-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "fdroidReleaseRuntimeClasspath",
+        "fdroidReleaseCompileClasspath",
+        "playReleaseRuntimeClasspath",
+        "playReleaseCompileClasspath",
+        "fdroidDebugUnitTestRuntimeClasspath",
+        "playDebugUnitTestRuntimeClasspath"
+      ],
+      "packaged_runtime": true
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-tooling-core:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-tooling-core:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-tooling-core/2.2.20/kotlin-tooling-core-2.2.20.pom",
+        "sha256": "8ef7a9d9062ce7dc3fc655715dd028a9944b7849613e011847c5d6b3b9928171"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-tooling-core/2.2.20/kotlin-tooling-core-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-util-io:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-util-io:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-io/2.2.20/kotlin-util-io-2.2.20.pom",
+        "sha256": "c6a5d01848cd040cfc8f7bae6232d792d705c293a2da7266ae626ccdb35d6a03"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-io/2.2.20/kotlin-util-io-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-util-klib-metadata:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-util-klib-metadata:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-klib-metadata/2.2.20/kotlin-util-klib-metadata-2.2.20.pom",
+        "sha256": "bed0065122065fae77dbc0c46ffc4146a685cbb18b8a3029abd5da3bfaa11027"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-klib-metadata/2.2.20/kotlin-util-klib-metadata-2.2.20.pom",
+      "scm": "https://github.com/JetBrains/kotlin",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-util-klib:2.2.20",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlin:kotlin-util-klib:2.2.20",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-klib/2.2.20/kotlin-util-klib-2.2.20.pom",
+        "sha256": "da6c22477aaf42dda16d859adae9e3ed8abc921ccba7ff516134cc8bd359aa92"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-klib/2.2.20/kotlin-util-klib-2.2.20.pom",
       "scm": "https://github.com/JetBrains/kotlin",
       "scopes": [
         "buildTools"
@@ -5837,6 +6297,26 @@
         "playDebugUnitTestRuntimeClasspath"
       ],
       "packaged_runtime": true
+    },
+    {
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "license_declaration": {
+        "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0",
+        "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.8.0/kotlinx-coroutines-core-jvm-1.8.0.pom",
+        "sha256": "a5633abd53467ceb91622d81f2e982080877145e0b76e1b75788715434885d0b"
+      },
+      "pom": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.8.0/kotlinx-coroutines-core-jvm-1.8.0.pom",
+      "scm": "https://github.com/Kotlin/kotlinx.coroutines",
+      "scopes": [
+        "buildTools"
+      ],
+      "packaged_runtime": false
     },
     {
       "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4",

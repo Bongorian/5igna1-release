@@ -29,6 +29,8 @@ for array in arrays:
 print(f"PASS: {len(base)} translated strings, matching format placeholders and effect arrays")
 
 # Dynamic fault-control labels must exist in every language.
-controls = res.parent / "java/com/bongorian/signa1/Effects.java"
-for key in re.findall(r'c\("([^"\n]+)"', controls.read_text()):
+controls = res.parent / "kotlin/com/bongorian/signa1/Effects.kt"
+keys = re.findall(r'c\(\s*"([^"\n]+)"', controls.read_text())
+assert keys, "No Kotlin fault controls found"
+for key in keys:
     assert "fault_control_" + key in base, key

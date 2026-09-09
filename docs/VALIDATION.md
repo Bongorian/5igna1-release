@@ -101,3 +101,35 @@ Unit tests, lint, both debug builds, 380 localized strings and repository checks
 ## 1.1.0 source integration — 2026-09-08
 
 Allocated versionName 1.1.0 / versionCode 9 for the next release. `lint`, `test`, `assembleFdroidDebug`, `assembleFdroidRelease` (unsigned), `assemblePlayDebug`, `assembleFdroidDebugAndroidTest`, `verifyFossDependencies` and `dependencyInventory` passed. Release metadata, 380 translated strings, repository guards, dependency inventory and whitespace checks passed. Verified release/debug APK IDs and version metadata, 267 local Markdown links, and all three privacy HTML bodies against bundled text. Earlier physical-device checks above cover the unchanged app behavior; this integration changes version metadata and documentation only. Existing v1.0.0 and submitted code-8 artifacts remain the published/submitted baseline; no new signing, store submission, tag or release publication is part of this integration. Store screenshots still represent 1.0.0 and must be refreshed before the next store submission.
+
+
+## Development tutorial — 2026-09-09
+
+Branch `codex/onboarding-tutorial` adds the guide after the submitted Play 1.1.0 / code 9 candidate. It has not been merged into main or submitted to a store. No physical device was connected.
+
+- Android emulator Pixel 9 / API 37: first-launch display, forward/back pages, skip and completion persistence, system Back, activity recreation at page 3, Settings replay with an uncommitted settings draft, and camera recovery passed (`DeviceChecks`, action `tutorial`).
+- With camera permission revoked, the guide remained the active readable window; the permission prompt appeared only after dismissal (`tutorial-permission`).
+- All five pages were visually reviewed in English, Japanese and Simplified Chinese at normal and 1.5× font scale. The body scrolls independently of navigation buttons. Screenshot checks wait for dialog transitions to settle.
+- `lint`, `test`, F-Droid debug / unsigned release, Play debug and instrumentation APK builds passed. Locale validation covers 395 strings; repository, release metadata and whitespace checks passed.
+- Tests use only the debug application ID. Existing version 8 artifacts, signed Play version 9 bundle, main branch and published tag remain unchanged. A future submission must allocate a new release version/code.
+
+## Kotlin rewrite — 2026-09-09
+
+Branch `codex/kotlin-cleanup`, based on the tutorial development branch, migrates all application and test Java sources to Kotlin 2.2.20. The application has 44 Kotlin files, including separate camera screen construction, capture storage, and immutable collection helpers. GLSL shaders and release/build utility languages remain appropriate to their jobs.
+
+- A clean build passed `lint`, `lintPlayDebug`, `test`, F-Droid debug and unsigned release, Play debug, instrumentation packaging, FOSS dependency checks, and the dependency inventory. All 36 JVM test executions passed (nine tests in each of four flavor/build-type combinations). Lint reported no errors; existing resource/style warnings remain.
+- `MigrationGoldenTest` uses fixed SHA-256 expectations captured from Java commit `c0ce2eb` before conversion. All effect IDs at four levels, 120 deterministic frames, and RAW buffers at three sizes produce identical evaluated frames and RAW bytes. Expected hashes were not regenerated from Kotlin results.
+- Pixel 9 / API 37 emulator actions passed: `state`, `effects`, `pixel-preview`, `advanced`, `product-ui`, `capture-contract`, `mixed-preview`, and `tutorial`. These cover edit commit/cancel, all 13 fault shaders and named controls, sparse pixel placement, advanced values, camera interruption/recovery, displayed-frame JPEG pixel equality and metadata, mixed photo/video playback and cleanup, and tutorial persistence/locales.
+- Capture testing caught and corrected an unnecessary non-null requirement on original JPEG metadata bytes; displayed-frame captures correctly allow those bytes to be absent. The tutorial test now waits for window input focus before sending system Back and waits for dismissal, avoiding a WindowManager timing race.
+- Dependency licenses and bundled notices were refreshed, including the Kotlin standard library's ThreeTen BSD notice. The release runtime graphs remain identical across flavors. Translation checks cover 395 strings.
+- No physical device was connected. RAW byte fixtures pass, but hardware RAW/DNG/RAW-video behavior needs a future device run. All emulator operations use `com.bongorian.signa1.debug`. Main, signed submitted bundles, existing keys, and release tags remain unchanged; no store submission is part of this rewrite.
+
+## Kotlin physical-device check — 2026-09-09
+
+The owner connected an Android 16 device (model `25060RK16C`, device `dali`) over USB and authorized installation and debugging. Installed the Kotlin debug application from `43ee376` as `5igna1 DEV`; the release application was not replaced.
+
+- Eight instrumented actions passed: `capture-contract`, `raw-original`, `raw`, `raw-video`, `video`, `state`, `advanced`, and `product-ui`. Camera capability queries reported RAW on both camera IDs; capture checks used the active rear camera.
+- Original and processed 4096×3072 DNG files both opened, unpacked, and developed with LibRaw on the host. The processed capture used ROW ERROR at 70% LEVEL.
+- A short RAW recording produced a finalized ZIP with two original DNG frames, matching dimensions, timestamps, and manifest. This is a short functional check, not an endurance or throughput claim.
+- The silent MP4 decoded fully at 1080×1920, 3.029 seconds, and 30.05 fps, with monotonic timestamps and a correct media time origin. The on-screen preview rate was lower under the existing adaptive policy; the encoded clip retained its 30 fps cadence.
+- JPEG pixels and snapshot metadata matched the pinned displayed frame. Edit commit/cancel, advanced controls, camera interruptions, and stalled-preview recovery passed. No new application defect was found in this run. Captures remain in the device's shared 5igna1 camera folder; test settings were restored.

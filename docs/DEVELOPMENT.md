@@ -9,6 +9,7 @@
 | minSdk | 31（Android 12） |
 | compileSdk / targetSdk | 36 |
 | Android Gradle Plugin | 8.10.1 |
+| Kotlin | 2.2.20（JVM 17） |
 | Gradle Wrapper | 8.11.1 |
 | 推奨JDK | 17（21も使用可能） |
 
@@ -49,21 +50,7 @@ APKは `app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk` に出力しま
 カメラを使わない状態管理・RAW行ずれの短い検査：
 
 ```sh
-mkdir -p build/state-check
-javac -d build/state-check \
-  app/src/main/java/com/bongorian/signa1/Effects.java \
-  app/src/main/java/com/bongorian/signa1/EffectParameters.java \
-  app/src/main/java/com/bongorian/signa1/EffectState.java \
-  app/src/main/java/com/bongorian/signa1/RawGlitch.java \
-  app/src/main/java/com/bongorian/signa1/FaultConfig.java \
-  app/src/main/java/com/bongorian/signa1/FaultNode.java \
-  app/src/main/java/com/bongorian/signa1/FaultModel.java \
-  app/src/main/java/com/bongorian/signa1/FaultParameters.java \
-  app/src/main/java/com/bongorian/signa1/FrameHistory.java \
-  tools/EffectStateCheck.java \
-  tools/PipelineCheck.java
-java -cp build/state-check com.bongorian.signa1.EffectStateCheck
-java -cp build/state-check com.bongorian.signa1.PipelineCheck
+./tools/build.sh testFdroidDebugUnitTest
 ```
 
 通常の小さな変更ではこれらを基本とし、描画・撮影経路を変えた場合だけ、関連する実機検査を追加します。
@@ -113,7 +100,7 @@ adb -s DEVICE exec-out run-as com.bongorian.signa1.debug \
 
 - `tools/check-media.py`：ffprobeとffmpegでJPEGの寸法、短いMP4の時刻・音声同期・フレーム順・全デコードを検査。短い検証動画を対象とします。
 - `tools/check-dng.py`：OSのLibRaw共有ライブラリを自動検出して利用（macOSは `brew install libraw`、必要なら `LIBRAW_LIBRARY` で指定）してDNGを開き、展開・現像できることを検査。
-- `tools/RawGlitchCheck.java`：従来のRAW検査補助。現在の通常の入口は `EffectStateCheck` です。
+- `tools/RawGlitchCheck.kt`：従来のRAW検査補助。現在の通常の入口は `EffectStateCheck` です。
 
 ```sh
 python3 tools/check-media.py test.jpg short-test.mp4

@@ -1,12 +1,24 @@
 # Changelog
 
-## [Unreleased]
+## [1.3.0] — 2026-09-09
 
-Changes after 1.1.0 will be recorded here.
+Version name: 1.3.0. Version code: 11.
 
-## [1.1.0] — unreleased
+- Rewrite the application and behavior checks in Kotlin, retaining the 1.2.0 tutorial.
+- Optimize all six RAW faults with exact region caching and verified unchanged output.
+- Reuse RAW chain buffers and GPU intermediate textures, and remove an extra DNG-save buffer copy.
+- Verify RAW and GPU output equivalence and physical-device JPEG/DNG capture. GPU changes primarily reduce memory; measured offscreen GPU completion time did not improve.
 
-Version name: 1.1.0. Version code: 9. Prepared on 2026-09-08; no new public release or store submission yet.
+## [1.2.0] — 2026-09-09
+
+Version name: 1.2.0. Version code: 10.
+
+- Add an offline five-page first-launch tutorial with Settings replay, skip/back navigation, activity-state restoration and English/Japanese/Simplified Chinese text.
+- Includes the 1.1.0 fault-system redesign.
+
+## [1.1.0] — 2026-09-09
+
+Version name: 1.1.0. Version code: 9. GitHub release from main; the matching Play Alpha update was submitted on 2026-09-09.
 
 - Rebuild the signal path around 13 causal faults, stable identities, named controls, and optional LIVE device inputs. The old 1.0.0 effect IDs/settings are reset during migration; saved captures remain intact.
 - Add random chains and controls, a two-column fault catalog, and ADVANCED parameter editing with AUTO/fixed values.

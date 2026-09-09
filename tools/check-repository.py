@@ -21,8 +21,11 @@ for name in filter(None, tracked):
 actual = hashlib.sha256((ROOT / "gradle/wrapper/gradle-wrapper.jar").read_bytes()).hexdigest()
 if actual != EXPECTED_WRAPPER:
     raise SystemExit("Gradle wrapper differs from the official 8.11.1 checksum")
+core_names = [f"{name}.{extension}" for name in ("Effects", "RawGlitch", "EffectChain", "EffectState", "PhotoRenderer") for extension in ("kt", "java")] + ["effect.glsl"]
+if list((ROOT / "app/src").rglob("*.java")):
+    raise SystemExit("Application and test sources must remain Kotlin")
 for flavor in ("play", "fdroid"):
-    for name in ("Effects.java", "RawGlitch.java", "EffectChain.java", "EffectState.java", "PhotoRenderer.java", "effect.glsl"):
+    for name in core_names:
         if list((ROOT / "app/src" / flavor).rglob(name)):
             raise SystemExit(f"Core processing must stay shared: {flavor}/{name}")
 for name in ("LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md", "CONTRIBUTING.md", "AGENTS.md"):

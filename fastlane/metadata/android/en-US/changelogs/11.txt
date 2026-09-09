@@ -1,0 +1,1 @@
+Includes the tutorial and Kotlin application rewrite. Speeds up all six RAW faults with verified unchanged output, reuses RAW/GPU chain buffers and removes an extra DNG-save copy. Physical-device JPEG and processed DNG checks passed. GPU changes primarily reduce memory.

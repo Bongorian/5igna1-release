@@ -8,7 +8,7 @@ This product includes AndroidX software developed by The Android Open Source
 Project and its contributors, licensed under the Apache License 2.0.
 
 Kotlin standard library and annotations:
-Copyright 2010-2023 JetBrains s.r.o. and Kotlin Programming Language contributors.
+Copyright 2010-2024 JetBrains s.r.o. and Kotlin Programming Language contributors.
 Kotlin coroutines: Copyright JetBrains s.r.o. and the respective contributors.
 Licensed under the Apache License 2.0.
 The standard library includes Apache-2.0 code derived from GWT (Copyright
@@ -16,6 +16,9 @@ The standard library includes Apache-2.0 code derived from GWT (Copyright
 The JVM math implementation includes code derived from Boost special math
 functions, Copyright Eric Ford & Hubert Holin 2001, under the Boost Software
 License 1.0. See licenses/Kotlin-Boost-1.0.txt.
+The time implementation includes code derived from ThreeTen, Copyright (c)
+2007-present, Stephen Colebourne & Michael Nascimento Santos, under the
+BSD 3-Clause license. See licenses/Kotlin-ThreeTen-BSD-3-Clause.txt.
 
 Guava ListenableFuture: Copyright The Guava Authors. Apache License 2.0.
 

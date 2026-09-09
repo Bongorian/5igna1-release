@@ -380,4 +380,19 @@
     <string name="media_play">播放</string>
     <string name="media_gestures">左右滑动切换 · 向下滑动关闭</string>
     <string name="media_preview_unavailable">无法预览此文件。请点击右上角↗在兼容应用中打开。</string>
+    <string name="tutorial_title">操作教程</string>
+    <string name="tutorial_skip">跳过</string>
+    <string name="tutorial_next">下一步</string>
+    <string name="tutorial_done">开始拍摄</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_heading_0">创造自己的FAULT</string>
+    <string name="tutorial_body_0">5igna1为相机画面加入刻意设计的数字故障。先试着拍摄，再调整故障的表现。你随时可以从设置重新打开本教程。</string>
+    <string name="tutorial_heading_1">拍摄照片或视频</string>
+    <string name="tutorial_body_1">选择照片或视频，然后点击大拍摄按钮。再次点击可停止录像。点击格式标签可选择JPG或RAW；可用格式取决于相机。顶部可控制照明、位置和录音。</string>
+    <string name="tutorial_heading_2">组合FAULT</string>
+    <string name="tutorial_body_2">点击预览下方的＋选择并组合故障。点击已选的FAULT可调整各项参数。应用可保留编辑，返回则放弃编辑。LEVEL滑块会立即改变整体强度。点击随机图标可尝试新的故障组合。</string>
+    <string name="tutorial_heading_3">通过LIVE增加变化</string>
+    <string name="tutorial_body_3">开启LIVE后，故障会随时间以及已启用的运动、声音等输入变化。暂停可暂停变化，触发故障可触发短暂变化。声音响应需要时会请求麦克风权限。RAW预览只是保存结果的近似效果。</string>
+    <string name="tutorial_heading_4">查看保存的照片和视频</string>
+    <string name="tutorial_body_4">点击缩略图打开已保存的照片和视频。左右滑动可浏览，双指缩放可放大照片，视频提供播放控件。向下滑动返回相机。设置还包含本教程、拍摄选项和语言。</string>
 </resources>

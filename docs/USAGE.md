@@ -1,5 +1,7 @@
 # Controls reference
 
+On the first launch of a build with the tutorial, a five-page quick start appears before the camera permission prompt. Use Next / Back, or Skip at any time. Finishing, skipping or closing it prevents automatic display on later launches. Open Settings → Quick start to read it again without applying or discarding your pending settings edits. The guide is available in English, Japanese and Simplified Chinese, works offline, and keeps its page when the activity is recreated. Existing users see it once when upgrading to the tutorial build.
+
 [All guides](README.md) · [日本語](USAGE.ja.md)
 
 Photo/Video changes capture mode. The center button or a volume key captures a photo or starts/stops recording. Tap the viewfinder to focus; swipe to select a single fault. Zoom offers 1×/2×; RAW uses 1×. The camera switch selects front/back, and the light is available where supported.
