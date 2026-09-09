@@ -53,3 +53,7 @@ JPG, DNG and MP4 are saved in `DCIM/5igna1`; RAW sequence ZIPs are in `Download/
 If the camera is interrupted or no preview is presented for six seconds, the app attempts to reconnect up to three times while active, outside capture and cooling pauses. Tap the preview to retry after those attempts. Reconnecting never restarts recording. [Troubleshooting](TROUBLESHOOTING.md).
 
 Unreleased development: Settings → Modes → LIGHT MODE reduces display-only processing to the view size. It starts OFF and excludes ADVANCED/EXPERT; saved dimensions remain selected. [Details and exceptions](PERFORMANCE.md).
+
+## Reuse a saved photo’s signal settings — development
+
+In the saved-media viewer, the SIGNAL row shows the current photo’s recorded chain. Tap it to inspect the metadata and choose **Use these settings**. This restores the recorded chain, LEVEL, controls, seeds and detailed overrides, plus the Experimental switch when recorded. It leaves capture format, resolution and LIVE settings unchanged. LIVE time, measured inputs and source media cannot be replayed from these records, so the resulting image is not guaranteed to match. Photos without usable metadata and videos cannot supply a preset. Incomplete or unsupported records remain viewable but cannot be applied. The original photo is never modified.

@@ -228,7 +228,9 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "gpu-defaults") {
+            if (action == "saved-signal") {
+                result.putString("result", SavedSignalChecks.run(this))
+            } else if (action == "gpu-defaults") {
                 result.putString("result", GpuDefaultsChecks.run(this))
             } else if (action == "responsive") {
                 result.putString("result", ResponsiveUiChecks.run(this))

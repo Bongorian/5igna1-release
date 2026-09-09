@@ -502,4 +502,12 @@
     <string name="light_mode">LIGHT MODE</string>
     <string name="light_hint">将预览处理分辨率限制在屏幕中的显示尺寸。照片保持所选保存分辨率，因此细节可能与预览不同。启用后关闭ADVANCED和EXPERT；开启其中任一模式会关闭LIGHT。</string>
     <string name="light_load_hint">LIGHT根据显示区域缩小预览。RGB录制期间和NETWORK保留画面维持原处理分辨率。照片和视频的保存尺寸不变。</string>
+    <string name="saved_signal_loading">正在读取信号链…</string>
+    <string name="saved_signal_label">SIGNAL · %1$s</string>
+    <string name="saved_signal_missing">没有保存的信号链</string>
+    <string name="saved_signal_title">已保存的信号链</string>
+    <string name="saved_signal_use">使用这些设置</string>
+    <string name="saved_signal_scope">应用已保存的信号链、LEVEL、控制值、种子、详细参数以及已记录的实验功能开关。无法恢复LIVE时间进程、设备输入或素材。拍摄格式、分辨率和LIVE设置保持当前值。</string>
+    <string name="saved_signal_incomplete">当前版本无法完整恢复此元数据。可查看以下记录内容。</string>
+    <string name="saved_signal_applied">已应用信号设置</string>
 </resources>

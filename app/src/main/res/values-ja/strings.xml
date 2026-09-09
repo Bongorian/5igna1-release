@@ -502,4 +502,12 @@
     <string name="light_mode">LIGHT MODE</string>
     <string name="light_hint">プレビューを画面内の表示サイズまで小さく処理します。写真は選んだ保存解像度を維持するため、細部がプレビューと異なる場合があります。ADVANCEDとEXPERTをOFFにし、どちらかをONにするとLIGHTを解除します。</string>
     <string name="light_load_hint">LIGHTはプレビューを表示領域に合わせます。RGB録画中とNETWORKの保持画像は元の処理解像度を維持します。写真・動画の保存サイズは変えません。</string>
+    <string name="saved_signal_loading">シグナルチェーンを読込中…</string>
+    <string name="saved_signal_label">SIGNAL · %1$s</string>
+    <string name="saved_signal_missing">保存されたシグナルチェーンはありません</string>
+    <string name="saved_signal_title">保存されたシグナルチェーン</string>
+    <string name="saved_signal_use">この設定を使う</string>
+    <string name="saved_signal_scope">チェーン・LEVEL・操作値・SEED・詳細パラメータと、記録がある場合は実験機能のON/OFFを適用します。LIVEの時間進行・端末入力・入力素材は復元できません。撮影形式・解像度・LIVE設定は現在のままです。</string>
+    <string name="saved_signal_incomplete">このメタデータは現在のバージョンでは完全に復元できません。下に記録内容を表示します。</string>
+    <string name="saved_signal_applied">シグナル設定を適用しました</string>
 </resources>

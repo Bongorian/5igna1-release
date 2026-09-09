@@ -74,6 +74,9 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
     val play: TextView
     val time: TextView
     val external: TextView
+    val signal: TextView
+    var savedSignal: SavedSignal? = null
+    var signalDialog: Dialog? = null
     val seek: SeekBar
     val worker: ExecutorService = Executors.newSingleThreadExecutor()
     val scan: CancellationSignal = CancellationSignal()
@@ -228,6 +231,11 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
     fun showItem() {
         if (closed || items.isEmpty()) return
         val ticket = ++generation
+        signalDialog?.dismiss()
+        signalDialog = null
+        savedSignal = null
+        signal.isEnabled = false
+        signal.text = a.getString(R.string.saved_signal_loading)
         releasePlayback()
         media.removeAllViews()
         image = null
@@ -263,6 +271,26 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         time.setText(if (item.video) "0:00 / —" else a.getString(R.string.media_gestures))
         notice.setText(a.getString(R.string.media_loading))
         notice.setVisibility(View.VISIBLE)
+        if (item.video) {
+            signal.text = a.getString(R.string.saved_signal_missing)
+        } else worker.execute {
+            val metadata = runCatching {
+                a.contentResolver.openInputStream(item.uri)?.use { input ->
+                    val exif = android.media.ExifInterface(input)
+                    val candidates = listOf(android.media.ExifInterface.TAG_USER_COMMENT,
+                        android.media.ExifInterface.TAG_IMAGE_DESCRIPTION).mapNotNull { SavedSignal.read(exif.getAttribute(it)) }
+                    candidates.firstOrNull { it.state != null } ?: candidates.firstOrNull()
+                }
+            }.getOrNull()
+            a.handler.post {
+                if (!closed && ticket == generation) {
+                    savedSignal = metadata
+                    signal.text = metadata?.let { a.getString(R.string.saved_signal_label, it.chain) }
+                        ?: a.getString(R.string.saved_signal_missing)
+                    signal.isEnabled = metadata != null
+                }
+            }
+        }
         if (item.video) {
             video = TextureView(a)
             media.addView(video, FrameLayout.LayoutParams(-1, -1, Gravity.CENTER))
@@ -578,6 +606,14 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         time = a.text("", 11, MainActivity.MUTED)
         time.setGravity(Gravity.CENTER)
         footer.addView(time, LinearLayout.LayoutParams(-1, a.dp(22f)))
+        signal = a.button(a.getString(R.string.saved_signal_loading))
+        signal.setTextSize(11f)
+        signal.setSingleLine(true)
+        signal.ellipsize = TextUtils.TruncateAt.END
+        signal.setTextColor(MainActivity.LIME)
+        signal.isEnabled = false
+        signal.setOnClickListener { showSignal() }
+        footer.addView(signal, LinearLayout.LayoutParams(-1, a.dp(44f)))
         seek = SeekBar(a)
         seek.setMax(1000)
         seek.setContentDescription(a.getString(R.string.media_position))
@@ -643,6 +679,31 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
             }
         )
         dialog.setOnDismissListener(OnDismissListener@{ v: DialogInterface? -> dismiss() })
+    }
+
+    fun showSignal() {
+        val selected = savedSignal ?: return
+        val ticket = generation
+        val body = a.text(selected.chain + "\n\n" + a.getString(R.string.saved_signal_scope) + "\n\n" +
+            (if (selected.state == null) a.getString(R.string.saved_signal_incomplete)+"\n\n" else "") +
+            selected.description.replace(" | ","\n\n"), 13, MainActivity.WHITE)
+        body.setTextIsSelectable(true)
+        signalDialog = SignalSheet.content(a,a.getString(R.string.saved_signal_title),body,
+            if (selected.state != null) R.string.saved_signal_use else 0,
+            Runnable {
+                if (!closed && ticket == generation && savedSignal === selected) {
+                    if (a.engine.photoBusy || a.recording) {
+                        android.widget.Toast.makeText(a,R.string.ui_change_settings_after_capture_finishes,android.widget.Toast.LENGTH_SHORT).show()
+                        return@Runnable
+                    }
+                    a.commitEffects(selected.state!!)
+                    selected.experimental?.let { enabled ->
+                        if (a.settings.experimentalSignals != enabled)
+                            a.applySettings(CaptureSettings(a.settings).apply { experimentalSignals = enabled })
+                    }
+                    android.widget.Toast.makeText(a,R.string.saved_signal_applied,android.widget.Toast.LENGTH_SHORT).show()
+                }
+            }, .75f)
     }
 
     fun releasePlayback() {
@@ -791,6 +852,8 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
     fun dismiss() {
         if (closed) return
         closed = true
+        signalDialog?.dismiss()
+        signalDialog = null
         generation++
         scan.cancel()
         panel.animate().cancel()

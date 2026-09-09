@@ -109,3 +109,7 @@
 ## Owner direction — 1.6.1 release, 2026-09-10
 
 - The owner requests reduced additional verification, then publication of completed work as 1.6.1 / code 17. Integrate into main, publish the signed GitHub/Obtainium APK with the existing key and update Pages. Preserve previous artifacts and pending reviews; automatic Play draft upload may run.
+
+## Owner direction — saved signal reuse, 2026-09-10
+
+- The owner requested showing the current saved photo’s signal-chain metadata and applying its settings from the saved-media viewer. Scope changes to that viewer, its reader/resources and verification; preserve capture output and metadata-writing behavior. Work on `codex/saved-signal-settings`, using DEV checks. This request does not authorize another release.
