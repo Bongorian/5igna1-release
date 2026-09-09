@@ -12,11 +12,11 @@ class RawOptimizationTest {
         val sizes = arrayOf(1 to 1, 1 to 17, 19 to 1, 3 to 5, 32 to 24, 63 to 47)
         val levels = floatArrayOf(0f, .01f, .25f, .55f, .8f, 1f)
         val ranges = arrayOf(1 to 0, 255 to 0, 4095 to 256, 65535 to 1024, 4095 to 4095)
-        val rawMask = Effects.ORDER.filter { Effects.raw(it) }.fold(0) { mask, id -> mask or (1 shl id) }
+        val rawMask = Effects.ORDER.filter { it in Effects.PIXEL_DAMAGE..Effects.CFA_ERROR }.fold(0) { mask, id -> mask or (1 shl id) }
         for (case in 0..<1500) {
             val (w, h) = sizes[(case / 8) % sizes.size]
             val (white, black) = ranges[(case / (8 * sizes.size)) % ranges.size]
-            val rawIds = Effects.ORDER.filter { Effects.raw(it) }
+            val rawIds = Effects.ORDER.filter { it in Effects.PIXEL_DAMAGE..Effects.CFA_ERROR }
             val route = case % 8
             val mask = when {
                 route < rawIds.size -> 1 shl rawIds[route]

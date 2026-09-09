@@ -416,4 +416,23 @@
     <string name="guide_sandbox">PRACTICE ONLY · NOTHING SAVED</string>
     <string name="guide_level">PRACTICE LEVEL · %1$d%%</string>
     <string name="settings_saved_immediately">Selections are saved immediately.</string>
+    <string name="experimental_signals">Experimental device coupling</string>
+    <string name="experimental_signals_hint">Enables per-effect input sensitivity and motion blur, thermal noise and smear. OFF preserves adjustments and bypasses these additions. Extra sampling can increase processing load.</string>
+    <string name="input_sources">DEVICE INPUTS</string>
+    <string name="input_sensitivity_hint">LIVE must be ON. 0 disconnects this input; 1 is standard; up to 4 amplifies it. AUTO restores the existing route (0 for unused sources). Global input switches and permissions still apply.</string>
+    <string name="input_motion">Motion</string>
+    <string name="input_audio">Sound level</string>
+    <string name="input_timing">Frame timing variation</string>
+    <string name="input_thermal">Temperature proxy</string>
+    <string name="input_cpu">App CPU load</string>
+    <string name="physical_artifact">IMAGE ARTIFACT</string>
+    <string name="physical_artifact_hint">Experimental image artifacts simulate normal capture limitations, separately from hardware faults. Temperature is a device proxy, not measured sensor temperature.</string>
+    <string name="fault_control_amount">Amount</string>
+    <string name="fault_control_floor">Constant contribution</string>
+    <string name="fault_control_grain">Grain size</string>
+    <string name="fault_control_length">Trail length</string>
+    <string name="fault_control_threshold">Highlight threshold</string>
+    <string name="fault_description_14">Motion-dependent blur using gyro/acceleration and available exposure metadata. A bounded artistic approximation, not optical reconstruction.</string>
+    <string name="fault_description_15">Grain driven by device temperature and exposure proxies. This does not measure the image sensor temperature.</string>
+    <string name="fault_description_16">Highlight trails along columns, driven by available readout timing. A smear-like simulation, not a claim that this sensor has CCD smear.</string>
 </resources>

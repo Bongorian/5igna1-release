@@ -11,7 +11,8 @@ class MigrationGoldenTest {
     fun preservesFaultFramesAndRawBytes() {
         val raw = MessageDigest.getInstance("SHA-256")
         val frames = MessageDigest.getInstance("SHA-256")
-        for (id in Effects.ORDER) for (level in floatArrayOf(0f, .25f, .8f, 1f)) {
+        // This frozen Java fixture covers the original 0..13 catalog only.
+        for (id in 0..Effects.CRT) for (level in floatArrayOf(0f, .25f, .8f, 1f)) {
             val state = EffectState.defaults().single(id).amount(level)
             val model = FaultModel(123456)
             val input = FaultModel.Inputs()

@@ -19,13 +19,15 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
 
     init {
         a = editor.a
+        if (!a.settings.experimentalSignals && editor.advancedGroup == FaultParameters.Group.INPUT)
+            editor.advancedGroup = FaultParameters.Group.SIGNAL
         if (
             FaultParameters.all(id).stream().noneMatch { spec: FaultParameters.Spec? ->
                 spec!!.group == editor.advancedGroup
             }
         )
             editor.advancedGroup = FaultParameters.Group.SIGNAL
-        reference = FaultModel(0).inspect(id, editor.draft, editor.amount, a.faultConfig)
+        reference = FaultModel(0).inspect(id, editor.draft, editor.amount, a.faultConfig.experimental(a.settings.experimentalSignals))
         a.shownLiveFrame?.let(::update)
     }
 
@@ -133,6 +135,7 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
         groups.addView(row)
         body.addView(groups, LinearLayout.LayoutParams(-1, a.dp(48f)))
         for (group in FaultParameters.Group.entries) {
+            if (group == FaultParameters.Group.INPUT && !a.settings.experimentalSignals) continue
             if (
                 FaultParameters.all(id).stream().noneMatch { spec: FaultParameters.Spec? ->
                     spec!!.group == group
@@ -155,6 +158,8 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
                 }
             )
         }
+        if (editor.advancedGroup == FaultParameters.Group.INPUT) body.addView(
+            a.text(a.getString(R.string.input_sensitivity_hint), 12, MainActivity.MUTED))
         for (spec in FaultParameters.all(id)) if (spec.group == editor.advancedGroup)
             parameter(
                 body,
@@ -174,7 +179,8 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
     fun parameter(body: LinearLayout, spec: FaultParameters.Spec) {
         val manual = editor.draft.manual(id, spec.key)
         val row = a.row()
-        val name = a.text(spec.key, 11, MainActivity.WHITE)
+        val label = if (spec.group == FaultParameters.Group.INPUT) a.getString(inputLabel(spec.key)) else spec.key
+        val name = a.text(label, 11, MainActivity.WHITE)
         val value = a.button(SignalControls.value(current(spec)))
         val mode = a.button(if (manual) "FIX" else "AUTO")
         row.addView(name, LinearLayout.LayoutParams(0, a.dp(44f), 1f))
@@ -213,7 +219,7 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
                 editor.auxiliary =
                     SignalSheet.number(
                         a,
-                        spec.key,
+                        label,
                         SignalControls.value(spec.min) + " … " + SignalControls.value(spec.max),
                         SignalControls.value(current(spec)),
                         spec.step >= 1,
@@ -229,7 +235,7 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
         if (manual) {
             val slider = SeekBar(a)
             slider.setTag("advanced-" + spec.key)
-            slider.setContentDescription(spec.key)
+            slider.setContentDescription(label)
             slider.setMax(1000)
             slider.setProgress(
                 Math.round((current(spec) - spec.min) / (spec.max - spec.min) * 1000)
@@ -266,8 +272,17 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
     }
 
     companion object {
+        fun inputLabel(key: String): Int = when (key) {
+            "motionSensitivity" -> R.string.input_motion
+            "audioSensitivity" -> R.string.input_audio
+            "timingSensitivity" -> R.string.input_timing
+            "thermalSensitivity" -> R.string.input_thermal
+            else -> R.string.input_cpu
+        }
+
         fun groupLabel(group: FaultParameters.Group): Int {
             when (group) {
+                FaultParameters.Group.INPUT -> return R.string.input_sources
                 FaultParameters.Group.TIME -> return R.string.ui_advanced_time
                 FaultParameters.Group.EVENT -> return R.string.ui_advanced_event
                 FaultParameters.Group.PROFILE -> return R.string.ui_advanced_profile

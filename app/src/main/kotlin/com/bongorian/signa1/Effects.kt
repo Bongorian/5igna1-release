@@ -22,6 +22,9 @@ internal object Effects {
     const val STREAM_ERROR: Int = 11
     const val VHS: Int = 12
     const val CRT: Int = 13
+    const val MOTION_BLUR = 14
+    const val THERMAL_NOISE = 15
+    const val SMEAR = 16
     val NAMES: Array<String> =
         arrayOf<String>(
             "CLEAN",
@@ -38,8 +41,13 @@ internal object Effects {
             "STREAM ERROR",
             "VHS",
             "CRT",
+            "MOTION BLUR",
+            "THERMAL NOISE",
+            "SMEAR",
         )
-    val ORDER: IntArray = IntStream.range(0, NAMES.size).toArray()
+    val ORDER: IntArray = intArrayOf(0, MOTION_BLUR, THERMAL_NOISE, PIXEL_DAMAGE, EXPOSURE, SMEAR, ROW_ERROR, BIT_ERROR, ADDRESS_ERROR, CFA_ERROR, DEMOSAIC_ERROR, CHROMA_ERROR, COLOR_MAP, BLOCK_ERROR, STREAM_ERROR, VHS, CRT)
+
+    fun rank(id: Int): Int = ORDER.indexOf(id)
 
     private fun c(key: String, initial: Float): Control {
         return Control(key, initial)
@@ -77,9 +85,16 @@ internal object Effects {
                 c("convergence", .4f),
                 c("sync", .4f),
             ),
+            arrayOf(c("amount", .6f), c("direction", .5f), c("floor", 0f)),
+            arrayOf(c("amount", .6f), c("grain", .2f), c("floor", 0f)),
+            arrayOf(c("amount", .6f), c("length", .6f), c("threshold", .75f)),
         )
 
+    fun physical(id: Int) = id >= MOTION_BLUR && id <= SMEAR
+
     fun point(id: Int): Point {
+        if (id == MOTION_BLUR || id == THERMAL_NOISE) return Point.SENSOR
+        if (id == SMEAR) return Point.READOUT
         if (id <= EXPOSURE) return Point.SENSOR
         if (id == ROW_ERROR) return Point.READOUT
         if (id <= ADDRESS_ERROR) return Point.DATA
@@ -105,7 +120,7 @@ internal object Effects {
     }
 
     fun raw(id: Int): Boolean {
-        return id >= PIXEL_DAMAGE && id <= CFA_ERROR
+        return id >= PIXEL_DAMAGE && id <= CFA_ERROR || physical(id)
     }
 
     fun available(id: Int, video: Boolean, rawOnly: Boolean): Boolean {

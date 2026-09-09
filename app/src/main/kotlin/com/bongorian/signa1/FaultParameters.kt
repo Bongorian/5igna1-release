@@ -11,6 +11,7 @@ internal object FaultParameters {
         for (id in Effects.ORDER) if (id != 0) {
             val p: MutableList<Spec> = ArrayList<Spec>()
             CATALOG.put(id, p)
+            for (key in FaultSensitivity.keys) add(p, Group.INPUT, key, 0, 4, .01f)
             add(
                 p,
                 Group.TIME,
@@ -387,6 +388,9 @@ internal object FaultParameters {
                     )
                 }
 
+                Effects.MOTION_BLUR -> add(p, Group.SIGNAL, "blurX", -.12f, .12f, .001f, "blurY", -.12f, .12f, .001f)
+                Effects.THERMAL_NOISE -> add(p, Group.SIGNAL, "noiseAmplitude", 0, .5f, .001f, "noiseGrain", 1, 16, 1, "grainSeed", 0, 997, .1f)
+                Effects.SMEAR -> add(p, Group.SIGNAL, "smearAmount", 0, 2, .01f, "smearLength", 0, .4f, .001f, "smearThreshold", 0, .99f, .001f)
                 else -> throw IllegalArgumentException("Fault ID")
             }
             CATALOG.put(id, Collections.unmodifiableList<Spec>(p))
@@ -430,6 +434,7 @@ internal object FaultParameters {
     }
 
     internal enum class Group {
+        INPUT,
         TIME,
         EVENT,
         SIGNAL,

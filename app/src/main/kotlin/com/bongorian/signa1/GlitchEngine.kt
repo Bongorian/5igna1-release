@@ -202,7 +202,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                     1,
                 )
             else state.snapshot(videoMode, settings.photoFormat),
-            activeFaultConfig(),
+            activeFaultConfig().experimental(settings.experimentalSignals),
         )
     }
 
@@ -293,8 +293,10 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                             videoMode,
                             settings.photoFormat,
                         )
-                        .ids()
-                        .size
+                        .ids().sumOf { id ->
+                            if (Effects.physical(id) && !settings.experimentalSignals) 0
+                            else if (id == Effects.MOTION_BLUR || id == Effects.SMEAR) 9 else 1
+                        }
         adaptiveLoad.sample(
             now,
             thermal,

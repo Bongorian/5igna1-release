@@ -1,5 +1,7 @@
 # 5igna1
 
+This development branch adds [experimental device response](docs/EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. It is not part of published 1.3.0.
+
 **Every glitch is an encounter.**
 
 A camera for finding images in a broken signal. Shift the readout. Tear the color array. Let a fault arrive, and photograph the moment it makes.

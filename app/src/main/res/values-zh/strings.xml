@@ -416,4 +416,23 @@
     <string name="guide_sandbox">仅供练习 · 不会保存</string>
     <string name="guide_level">练习LEVEL · %1$d%%</string>
     <string name="settings_saved_immediately">选择的设置会立即保存。</string>
+    <string name="experimental_signals">实验性设备联动</string>
+    <string name="experimental_signals_hint">启用每个效果的输入灵敏度，以及运动模糊、热噪声和拖影。关闭时保留调整值并旁路新增功能。额外采样可能增加处理负载。</string>
+    <string name="input_sources">设备输入</string>
+    <string name="input_sensitivity_hint">开启LIVE后响应。0断开输入，1为标准，最高4倍。AUTO恢复原有联动（未连接的输入为0）。全局输入开关和权限仍然优先。</string>
+    <string name="input_motion">设备运动</string>
+    <string name="input_audio">音量</string>
+    <string name="input_timing">帧时间波动</string>
+    <string name="input_thermal">温度代理信息</string>
+    <string name="input_cpu">应用CPU负载</string>
+    <string name="physical_artifact">成像现象</string>
+    <string name="physical_artifact_hint">实验性成像现象模拟正常拍摄的局限，与硬件故障区分。温度来自设备代理信息，并非图像传感器实测温度。</string>
+    <string name="fault_control_amount">强度</string>
+    <string name="fault_control_floor">固定贡献</string>
+    <string name="fault_control_grain">颗粒大小</string>
+    <string name="fault_control_length">拖影长度</string>
+    <string name="fault_control_threshold">高光阈值</string>
+    <string name="fault_description_14">根据陀螺仪、加速度和可用曝光时间产生运动模糊。采用有限采样的艺术模拟，并非光学重建。</string>
+    <string name="fault_description_15">根据设备温度和曝光代理信息增强颗粒噪声，不代表测量了图像传感器内部温度。</string>
+    <string name="fault_description_16">根据可用读出时间沿列延伸高光，模拟拖影，不代表此设备实际发生了CCD拖影。</string>
 </resources>

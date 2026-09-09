@@ -1,5 +1,7 @@
 # ADVANCED MODE
 
+開発ブランチでは、初期値OFFの[実験的な端末連動](EXPERIMENTAL_SIGNALS.ja.md)を追加しています。FAULT別の5入力感度と、ブレ・熱雑音・スミアを扱います。公開済み1.3.0には含まれません。
+
 [ガイド](README.ja.md) · [English](ADVANCED_MODE.md)
 
 設定（歯車）で **ADVANCED MODE** を一括ONにし、選択中のチェーンのチップをタップします。個々のFAULTにモード切り替えはありません。プレビューは編集領域の上に残ります。モードは表示設定なので、OFFにしても固定値は保持します。設定のモード切り替えはその場で保存されます。FAULTの編集内容はチェックで適用し、×・戻る・アプリを離れる操作で下書きを破棄します。
@@ -89,3 +91,18 @@ LIVEが操作するのはFAULT時間で、カメラの撮影時刻は進み続�
 | CRT | PROFILE | `phosphorMix` | 0 … 1 |
 | CRT | SIGNAL | `convergenceOffset` | -.5 … .5 |
 | CRT | SIGNAL | `syncOffset` | -.5 … .5 |
+
+## 実験機能の追加項目
+
+設定の実験機能スイッチで有効になります。全項目に「端末入力」が加わり、上の従来13 FAULTの一覧に以下を追加します。
+
+| Stage | Group | Parameter | Range |
+|---|---|---|---|
+| All | INPUT | `motionSensitivity`, `audioSensitivity`, `timingSensitivity`, `thermalSensitivity`, `cpuSensitivity` | 0 … 4 |
+| MOTION BLUR | SIGNAL | `blurX`, `blurY` | -.12 … .12 |
+| THERMAL NOISE | SIGNAL | `noiseAmplitude` | 0 … .5 |
+| THERMAL NOISE | SIGNAL | `noiseGrain` | 1 … 16 |
+| THERMAL NOISE | SIGNAL | `grainSeed` | 0 … 997 |
+| SMEAR | SIGNAL | `smearAmount` | 0 … 2 |
+| SMEAR | SIGNAL | `smearLength` | 0 … .4 |
+| SMEAR | SIGNAL | `smearThreshold` | 0 … .99 |

@@ -101,8 +101,8 @@ class CoreBehaviorTest {
             org.junit.Assert.assertTrue(generated.ids().size >= 2 && generated.ids().size <= 5)
             var previous = 0
             for (id in generated.ids()) {
-                org.junit.Assert.assertTrue(Effects.raw(id) && id > previous)
-                previous = id
+                org.junit.Assert.assertTrue(Effects.raw(id) && Effects.rank(id) > previous)
+                previous = Effects.rank(id)
                 for (control in Effects.CONTROLS[id]) {
                     val value = generated.parameters().get(id, control.key)
                     org.junit.Assert.assertTrue(

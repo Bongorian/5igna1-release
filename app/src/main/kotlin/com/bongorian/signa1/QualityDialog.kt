@@ -97,6 +97,11 @@ internal class QualityDialog(a: MainActivity) {
                 if (!syncing) persist()
             },
         )
+        mode(R.string.experimental_signals, R.string.experimental_signals_hint,
+            draft.experimentalSignals, "experimental-signals") { checked ->
+            draft.experimentalSignals = checked
+            persist()
+        }
         if (options == null) {
             note(activity.getString(R.string.camera_settings_unavailable))
             appSection()

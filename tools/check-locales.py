@@ -21,7 +21,7 @@ for directory, strings in translations.items():
         assert placeholder.findall(value) == placeholder.findall(base[key]), (directory, key)
 
 arrays = ET.parse(res / "values/effect_strings.xml").getroot()
-expected = {"effect_descriptions": 14}
+expected = {"effect_descriptions": 17}
 for array in arrays:
     assert len(array) == expected[array.attrib["name"]]
     for item in array:

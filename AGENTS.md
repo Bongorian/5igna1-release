@@ -61,3 +61,8 @@
 
 - The owner requested a development branch for an interactive guide, investigating/improving heat, and assessing image/noise/other-frame injection boundaries. Work on `codex/interactive-guide-thermal-inputs`; preserve main, published releases and the submitted code-11 artifacts. Injection is an assessment, not a requested feature implementation. Continue authorized debug-only physical-device testing.
 - The owner subsequently requested immediate persistence in the Settings panel, replacing its Apply action. This supersedes settings draft/cancel semantics for `QualityDialog`; effect and LIVE editors retain their existing apply/cancel behavior.
+
+## Owner direction — experimental device response, 2026-09-09
+
+- The owner approved implementing per-stage motion/audio/frame-timing/temperature/app-CPU sensitivity and motion blur, thermal noise and smear on the current development branch. Use one Settings switch, default OFF; preserve selections and values while bypassing the additions when OFF. Inputs react with LIVE ON and respect global input controls and permissions. Sensitivity range is 0–4, with native routes defaulting to 1 and unused routes to 0.
+- The owner approved physical DEV installation and testing, then clarified that the earlier confirmation requirement applied only to this implementation discussion. Do not keep asking for routine implementation or testing confirmations. Preserve release applications, submitted artifacts and main.

@@ -27,7 +27,7 @@ object FaultModelCheck {
     fun main(args: Array<String>) {
         val off = FaultConfig.defaults()
         val live = FaultConfig(true, true, true, true, true, true, .5f, 50)
-        val state = EffectState.defaults().chain(-1)
+        val state = EffectState.defaults().chain((1 shl (Effects.CRT + 1)) - 2)
         val m = FaultModel(7)
         val input = FaultModel.Inputs()
         val start = sample(m, state, 0.0, off, input)

@@ -315,6 +315,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     fun availableEffects(): IntArray {
         return Effects.choices(videoMode, !videoMode && settings.photoFormat == 2)
+            .filter { settings.experimentalSignals || !Effects.physical(it) }.toIntArray()
     }
 
     fun uiEffects(): IntArray {
@@ -325,7 +326,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                     videoMode,
                     settings.photoFormat,
                 )
-                .ids()
+                .ids().filter { settings.experimentalSignals || !Effects.physical(it) }.toIntArray()
     }
 
     fun nextAvailable(delta: Int): Int {
@@ -512,7 +513,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun effectAvailable(id: Int): Boolean {
-        return !rawOriginal() &&
+        return !rawOriginal() && (settings.experimentalSignals || !Effects.physical(id)) &&
             Effects.available(
                 id,
                 videoMode,

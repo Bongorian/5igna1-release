@@ -1,0 +1,25 @@
+# Experimental device response
+
+[Guides](README.md) · [日本語](EXPERIMENTAL_SIGNALS.ja.md)
+
+This development-branch feature is not included in the published 1.3.0 build. Settings → **Experimental device response** enables per-stage input sensitivity and three image artifacts: MOTION BLUR, THERMAL NOISE and SMEAR. It defaults to OFF and saves immediately. Switching it OFF bypasses these additions while retaining selections and manual values. The original thirteen faults continue to work.
+
+Enable ADVANCED MODE, open a chain stage and choose INPUT. Motion, audio, frame timing, temperature and app CPU each have a sensitivity from 0 to 4. Zero disconnects that source for that stage; one is standard gain. AUTO restores its original routing: one for a connected source and zero for an unused source. FIX, numeric entry and sliders use the fault editor's Apply/Cancel behavior. Connecting an additional source raises stage activity; it does not create a calibrated physical relationship.
+
+Measured inputs react only with LIVE ON. Global input switches and permissions still apply. LIVE PAUSE freezes the state. A manually fixed rendering value or an artifact's floor can produce a constant effect without incoming measurements. Sensitivity zero removes that input contribution, not the fault's base pattern or time evolution.
+
+| Image artifact | Model | RAW processing |
+|---|---|---|
+| MOTION BLUR | Gyroscope angular speed and motion, scaled by exposure time; direction and floor are artistic controls | Nine samples of the same Bayer phase |
+| THERMAL NOISE | Grain whose strength follows temperature and exposure | Bounded sample noise |
+| SMEAR | Bright regions spread vertically, modulated by readout timing | Eight samples of the same Bayer phase |
+
+Processing order is MOTION BLUR → THERMAL NOISE → PIXEL DAMAGE → EXPOSURE → SMEAR → the remaining original faults. The three additions are imaging phenomena, distinct from the original hardware-fault models. They are bounded artistic approximations: no optical calibration, actual CCD charge transfer, or previous-frame accumulation is performed. Temperature uses the app's existing battery/Android thermal inputs, not a camera-die thermometer. App CPU is app process activity, not whole-device CPU utilization.
+
+Preview, JPEG and ordinary video use the RGB implementation. Processed RAW photos add the three artifacts to the existing six Bayer-supported faults; camera RGB and RAW are different representations and will not match exactly. Original RAW and the original RAW-video ZIP route remain unprocessed. Saved processed captures retain the compiled state and experimental-mode flag.
+
+Blur and smear read several neighboring samples per pixel, so enabling them can increase processing work. Ordinary workload/heat protection remains controlled by the existing settings; this switch does not enable EXPERT MODE.
+
+The emulator check covers GPU output and repeatability for all three artifacts, OFF bypass, input editing/apply/cancel/persistence, and displayed-JPEG/metadata consistency. Unit checks cover source isolation, legacy OFF output, RAW bounds and Bayer phase, copy/HOLD, and stored-parameter compatibility. On the connected physical device, the same UI/GPU/JPEG checks passed. A 4096×3072 processed DNG with all three artifacts and ROW ERROR opened, unpacked and developed with LibRaw; its description contains all three stages and `experimental=true`. Two silent 20-second MP4s at 1080×1920, with the experimental switch OFF and ON, both decoded at 30.05 fps with valid timestamps. These are short checks, not sustained-load certification.
+
+An initial RAW run exceeded the 40-second test deadline. Precomputing the blur/smear sampling coordinates preserved direct-sampling output in regression tests and allowed the same resolution to save in about 17 seconds on this debug build. High-resolution processed RAW can still take substantial time. USB-connected battery readings during the OFF video were 35.9°C and during ON were 35.9–36.4°C; this sequential, short run does not isolate the feature's heating effect or predict long-term temperatures. See [validation record](audit/experimental-signals-results.json).

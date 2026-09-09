@@ -187,6 +187,11 @@ class DeviceChecks : Instrumentation() {
                     "result",
                     "PASS anchored format menu, top utilities, live fault meters, camera interruption and stalled-preview recovery",
                 )
+            } else if (action == "experimental") {
+                result.putString("gpu", ExperimentalSignalChecks.run(getTargetContext()))
+                checkExperimentalControls()
+                checkCaptureContract(true)
+                result.putString("result", "PASS experimental gate, per-stage controls/apply/cancel/persistence, GPU artifacts, displayed JPEG and metadata")
             } else if (action == "settings-auto") {
                 checkImmediateSettings()
                 result.putString("result", "PASS immediate selection, disk persistence, rapid changes, no Apply, close/recreate/reopen")
@@ -305,6 +310,7 @@ class DeviceChecks : Instrumentation() {
             } else {
                 val chosen = CaptureSettings(original)
                 chosen.rawVideo = false
+                chosen.experimentalSignals = args!!.getString("experimental", "false") == "true"
                 chosen.location = args!!.getString("gps", "false") == "true"
                 chosen.jpegQuality = Integer.parseInt(args!!.getString("quality", "100"))
                 chosen.videoQuality = Integer.parseInt(args!!.getString("bitrate", "3"))
@@ -332,6 +338,10 @@ class DeviceChecks : Instrumentation() {
                     val mask = Integer.parseInt(args!!.getString("chainMask", "0"))
                     var selected = activity!!.effectState.single(preset)
                     if (mask != 0) selected = selected.chain(mask)
+                    if (chosen.experimentalSignals) selected = selected.edit(true, selected.mask,
+                        selected.parameters().override(Effects.MOTION_BLUR, "blurX", .04f)
+                            .override(Effects.THERMAL_NOISE, "noiseAmplitude", .12f)
+                            .override(Effects.SMEAR, "smearAmount", 1f))
                     activity!!.commitEffects(selected.amount(power / 100f))
                 })
                 await(
@@ -380,7 +390,8 @@ class DeviceChecks : Instrumentation() {
                         20000,
                     )
                 } else {
-                    activity!!.engine.photo()
+                    await("acknowledged photo frame", { activity!!.engine.presentedFrames.acknowledged() > 0 }, 20000)
+                    runOnMainSync { activity!!.engine.photo() }
                 }
                 await(
                     "saved",
@@ -454,6 +465,7 @@ class DeviceChecks : Instrumentation() {
             }
         } catch (error: Throwable) {
             result.putString("failure", android.util.Log.getStackTraceString(error))
+            activity?.engine?.let { e -> result.putString("captureState", "busy=${e.photoBusy} pending=${e.pending != null} ack=${e.presentedFrames.acknowledged()} attached=${e.attached} cooling=${e.cooling} still=${e.stillReader != null} format=${e.settings.photoFormat}") }
         } finally {
             if (activity != null && original != null) {
                 val restore = original
@@ -507,6 +519,76 @@ class DeviceChecks : Instrumentation() {
         removeMonitor(monitor)
         if (activity == null) throw AssertionError("Recreation timeout")
         waitForIdleSync()
+    }
+
+    internal fun checkExperimentalControls() {
+        val advancedBefore = activity!!.advancedMode
+        val languageBefore = AppLanguage.current()
+        try {
+            changeLanguage("ja")
+            runOnMainSync {
+                val off = CaptureSettings(activity!!.settings)
+                off.experimentalSignals = false
+                activity!!.applySettings(off)
+                activity!!.commitEffects(EffectState.defaults().single(Effects.PIXEL_DAMAGE))
+            }
+            await("experimental off ready", { activity!!.ready }, 20000)
+            lateinit var q: QualityDialog
+            runOnMainSync {
+                q = QualityDialog(activity!!); q.show()
+                q.content!!.findViewWithTag<View>("experimental-signals").performClick()
+                if (!activity!!.settings.experimentalSignals || !CaptureSettings.load(activity!!.getSharedPreferences("signal", 0)).experimentalSignals)
+                    throw AssertionError("Experimental switch not immediately saved")
+                activity!!.advancedMode = true
+            }
+            saveUi("experimental-settings-ja.png")
+            runOnMainSync { q.sheet!!.dismiss() }
+            await("experimental on ready", { activity!!.ready }, 20000)
+            lateinit var edit: EffectDialog
+            runOnMainSync {
+                edit = EffectDialog(activity!!, true); edit.show()
+                edit.body!!.findViewWithTag<View>("group-INPUT").performClick()
+                edit.body!!.findViewWithTag<View>("auto-thermalSensitivity").performClick()
+                edit.draft = edit.draft.override(Effects.PIXEL_DAMAGE, "thermalSensitivity", 3f)
+                edit.preview(); edit.renderBody()
+            }
+            saveUi("experimental-inputs-ja.png")
+            runOnMainSync { edit.sheet!!.dismiss() }
+            if (activity!!.effectState.parameters().manual(Effects.PIXEL_DAMAGE, "thermalSensitivity"))
+                throw AssertionError("Cancelled input sensitivity leaked")
+            runOnMainSync {
+                edit = EffectDialog(activity!!, true); edit.show()
+                edit.draft = edit.draft.override(Effects.PIXEL_DAMAGE, "thermalSensitivity", 3f)
+                edit.sheet!!.window!!.decorView.findViewWithTag<View>("apply").performClick()
+            }
+            if (activity!!.effectState.parameters().overrides(Effects.PIXEL_DAMAGE)["thermalSensitivity"] != 3f)
+                throw AssertionError("Sensitivity not committed")
+            val selected = activity!!.effectState.chain(activity!!.effectState.mask or (1 shl Effects.THERMAL_NOISE))
+            runOnMainSync {
+                activity!!.commitEffects(selected)
+                q = QualityDialog(activity!!); q.show()
+                q.content!!.findViewWithTag<View>("experimental-signals").performClick()
+                q.sheet!!.dismiss()
+            }
+            await("experimental bypass", { activity!!.ready }, 20000)
+            if (!activity!!.effectState.enabled(Effects.THERMAL_NOISE) || activity!!.effectState.parameters().overrides(Effects.PIXEL_DAMAGE)["thermalSensitivity"] != 3f)
+                throw AssertionError("Switch discarded saved experimental data")
+            val m = FaultModel(7).apply(activity!!.effectState.snapshot(false, 0), activity!!.faultConfig.experimental(false))
+            if (m.ids().any { Effects.physical(it) }) throw AssertionError("Experimental stage not bypassed")
+            runOnMainSync {
+                edit = EffectDialog(activity!!, true); edit.show()
+                if (edit.body!!.findViewWithTag<View>("group-INPUT") != null)
+                    throw AssertionError("Input controls visible while disabled")
+                edit.sheet!!.dismiss()
+            }
+            recreateTutorialActivity()
+            await("experimental preference restored", { activity!!.ready }, 20000)
+            if (activity!!.settings.experimentalSignals || !activity!!.effectState.enabled(Effects.THERMAL_NOISE))
+                throw AssertionError("Experiment preference/selection lost on recreation")
+        } finally {
+            runOnMainSync { activity!!.advancedMode = advancedBefore; activity!!.savePrefs() }
+            changeLanguage(languageBefore)
+        }
     }
 
     internal fun checkImmediateSettings() {
@@ -1851,21 +1933,26 @@ class DeviceChecks : Instrumentation() {
     }
 
     @Throws(Exception::class)
-    internal fun checkCaptureContract() {
+    internal fun checkCaptureContract(experimental: Boolean = false) {
         val settings = CaptureSettings(activity!!.settings)
         settings.photoFormat = 0
         settings.rawVideo = false
-        settings.photoSize = "auto"
+        settings.photoSize = if (experimental) "recommended" else "auto"
+        settings.experimentalSignals = experimental
         settings.jpegQuality = 100
         val generation = activity!!.engine.generation
         runOnMainSync({
             activity!!.videoMode = false
             activity!!.applySettings(settings)
-            activity!!.commitEffects(
-                EffectState.defaults()
-                    .chain((1 shl Effects.ROW_ERROR) or (1 shl Effects.VHS) or (1 shl Effects.CRT))
-                    .amount(.8f)
-            )
+            var captured = EffectState.defaults()
+                .chain((1 shl Effects.ROW_ERROR) or (1 shl Effects.VHS) or (1 shl Effects.CRT))
+                .amount(.8f)
+            if (experimental) captured = captured.edit(true,
+                captured.mask or (1 shl Effects.MOTION_BLUR) or (1 shl Effects.THERMAL_NOISE) or (1 shl Effects.SMEAR),
+                captured.parameters().override(Effects.MOTION_BLUR, "blurX", .04f)
+                    .override(Effects.THERMAL_NOISE, "noiseAmplitude", .12f)
+                    .override(Effects.SMEAR, "smearAmount", 1f))
+            activity!!.commitEffects(captured)
         })
         await(
             "live signal",
@@ -1943,7 +2030,8 @@ class DeviceChecks : Instrumentation() {
                 if (
                     description == null ||
                         !description!!.contains("cameraNs=" + capturedCameraNs) ||
-                        !description!!.contains("VHS")
+                        !description!!.contains("VHS") ||
+                        (experimental && !description.contains("experimental=true"))
                 )
                     throw AssertionError("Capture lost timestamp/state metadata")
             })

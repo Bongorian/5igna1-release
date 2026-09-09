@@ -195,7 +195,7 @@ private constructor(
                     "Missing controls"
                 }
             }
-            require(seen.size == Effects.NAMES.size - 1) { "Missing faults" }
+            require((1..Effects.CRT).all { it in seen }) { "Missing legacy faults" }
             return p
         }
     }

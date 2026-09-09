@@ -1,5 +1,7 @@
 # ADVANCED MODE
 
+This development branch adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. It is not part of published 1.3.0.
+
 [Guides](README.md) · [日本語](ADVANCED_MODE.ja.md)
 
 Open Settings (gear) and enable **ADVANCED MODE**, then tap any selected chain chip. The preview remains above the editor. The mode is a UI preference: turning it off preserves manual values. The Settings mode switch saves immediately. In the fault editor, Apply commits the draft; ×, Back or leaving the app discards it.
@@ -89,3 +91,18 @@ The following catalog is the complete editable set; range limits also appear in 
 | CRT | PROFILE | `phosphorMix` | 0 … 1 |
 | CRT | SIGNAL | `convergenceOffset` | -.5 … .5 |
 | CRT | SIGNAL | `syncOffset` | -.5 … .5 |
+
+## Experimental additions
+
+Enabled by the separate experimental Settings switch. INPUT is available on every stage; these additions are outside the original thirteen-fault catalog above.
+
+| Stage | Group | Parameter | Range |
+|---|---|---|---|
+| All | INPUT | `motionSensitivity`, `audioSensitivity`, `timingSensitivity`, `thermalSensitivity`, `cpuSensitivity` | 0 … 4 |
+| MOTION BLUR | SIGNAL | `blurX`, `blurY` | -.12 … .12 |
+| THERMAL NOISE | SIGNAL | `noiseAmplitude` | 0 … .5 |
+| THERMAL NOISE | SIGNAL | `noiseGrain` | 1 … 16 |
+| THERMAL NOISE | SIGNAL | `grainSeed` | 0 … 997 |
+| SMEAR | SIGNAL | `smearAmount` | 0 … 2 |
+| SMEAR | SIGNAL | `smearLength` | 0 … .4 |
+| SMEAR | SIGNAL | `smearThreshold` | 0 … .99 |

@@ -50,9 +50,9 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         amount = base.amount
         ids =
             Arrays.stream(Effects.ORDER)
-                .filter(IntPredicate { id: Int -> id != Effects.CLEAN })
+                .filter(IntPredicate { id: Int -> id != Effects.CLEAN && (a.settings.experimentalSignals || !Effects.physical(id)) })
                 .toArray()
-        focused = base.selected()
+        focused = base.ids().firstOrNull { it in ids } ?: Effects.CLEAN
         tuning = single && focused != Effects.CLEAN
     }
 
@@ -178,7 +178,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
 
     fun renderRoute() {
         route!!.removeAllViews()
-        for (id in Effects.ordered(mask, false)) {
+        for (id in Effects.ordered(mask, false).filter { a.settings.experimentalSignals || !Effects.physical(it) }) {
             val chip = a.button(Effects.name(id))
             chip.setTextSize(10f)
             val focus = tuning && id == focused
@@ -215,7 +215,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             val title = a.row()
             val name =
                 a.text(
-                    Effects.name(id) + " · " + Effects.stage(id),
+                    Effects.name(id) + " · " + (if (Effects.physical(id)) a.getString(R.string.physical_artifact) else Effects.stage(id)),
                     10,
                     MainActivity.MUTED,
                 )
@@ -279,7 +279,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         } else {
             val hint =
                 a.text(
-                    a.getString(R.string.fault_catalog_hint),
+                    a.getString(R.string.fault_catalog_hint) + (if (a.settings.experimentalSignals) "\n" + a.getString(R.string.physical_artifact_hint) else ""),
                     MainActivity.TEXT_BODY,
                     MainActivity.MUTED,
                 )
@@ -319,6 +319,10 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                         v!!.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
                     }
                 )
+            }
+            if (ids.size % 2 == 0) {
+                row = a.row()
+                body!!.addView(row, LinearLayout.LayoutParams(-1, a.dp(65f)))
             }
             val clear = action(R.string.ui_clear_selection)
             clear.setTextSize(10f)
@@ -374,7 +378,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             (if (selected) "✓ " else "") +
                 Effects.name(id) +
                 "\n" +
-                stage +
+                (if (Effects.physical(id)) a.getString(R.string.physical_artifact) else stage) +
                 (if (available) "" else " · " + (if (a.videoMode) "MP4" else "JPG"))
         )
         view.setTextColor(
@@ -432,6 +436,11 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     companion object {
         fun controlLabel(key: String): Int {
             when (key) {
+                "amount" -> return R.string.fault_control_amount
+                "floor" -> return R.string.fault_control_floor
+                "grain" -> return R.string.fault_control_grain
+                "length" -> return R.string.fault_control_length
+                "threshold" -> return R.string.fault_control_threshold
                 "density" -> return R.string.fault_control_density
                 "hot" -> return R.string.fault_control_hot
                 "columns" -> return R.string.fault_control_columns

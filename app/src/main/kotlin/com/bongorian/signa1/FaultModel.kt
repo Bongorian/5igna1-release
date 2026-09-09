@@ -17,6 +17,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
         var ay: Float = 0f
         var az: Float = 0f
         var tilt: Float = 0f
+        var angularSpeed: Float = 0f
         var rotation: Float = 0f
         var audio: Float = 0f
         var cpu: Float = 0f
@@ -35,6 +36,11 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
     private var cueAge = Double.POSITIVE_INFINITY
     private var liveWasEnabled = false
     private var heldSignalNs: Long = 0
+    private var cpuPressure = 0f
+    private var timingPressure = 0f
+    private var audioDisplacement = 0f
+    private var audioVelocity = 0f
+    private var angularSpeed = 0f
     var displacement: Float = 0f
     var velocity: Float = 0f
     var shock: Float = 0f
@@ -58,6 +64,11 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
         n.cueAge = cueAge
         n.liveWasEnabled = liveWasEnabled
         n.heldSignalNs = heldSignalNs
+        n.cpuPressure = cpuPressure
+        n.timingPressure = timingPressure
+        n.audioDisplacement = audioDisplacement
+        n.audioVelocity = audioVelocity
+        n.angularSpeed = angularSpeed
         n.displacement = displacement
         n.velocity = velocity
         n.shock = shock
@@ -77,6 +88,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
 
     fun reset() {
         lastSeconds = Double.NaN
+        cpuPressure = 0f; timingPressure = 0f; audioDisplacement = 0f; audioVelocity = 0f; angularSpeed = 0f
         rotation = 0f
         tilt = rotation
         readout = tilt
@@ -146,6 +158,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
         val hit: Float = clamp((acceleration - .06f) * gain, 0f, 1f)
         shock = max(hit, follow(shock, 0f, dt, .38f))
         tilt = if (motionAvailable) clamp(input.tilt, -1f, 1f) else 0f
+        angularSpeed = if (motionAvailable) clamp(input.angularSpeed, 0f, 12f) else 0f
         rotation = if (motionAvailable) clamp(input.rotation, -6f, 6f) else 0f
         audio =
             follow(
@@ -180,18 +193,26 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
                 else 0f,
             )
         pressure = follow(pressure, demand, dt, if (demand > pressure) .045f else .45f)
+        val cpuDemand = if (config.enabled && config.cpu) clamp((input.cpu - .28f) * 1.4f * gain, 0f, 1f) else 0f
+        cpuPressure = follow(cpuPressure, cpuDemand, dt, if (cpuDemand > cpuPressure) .045f else .45f)
+        timingPressure = follow(timingPressure, readout, dt, if (readout > timingPressure) .045f else .45f)
+        val audioForce = audio * .10f * sin(elapsed * 2 * Math.PI * 37).toFloat()
         val force =
             (-ax * .75f + rotation * .045f) * gain +
                 audio * .10f * sin(elapsed * 2 * Math.PI * 37).toFloat()
         val steps = max(1, ceil((dt * 120).toDouble()).toInt())
         val step = dt / steps
         for (i in 0..<steps) {
+            audioVelocity += (-100 * audioDisplacement - 12 * audioVelocity + audioForce * 80) * step
+            audioDisplacement = clamp(audioDisplacement + audioVelocity * step, -1f, 1f)
+            audioVelocity = clamp(audioVelocity, -8f, 8f)
             velocity += (-100 * (displacement - tilt * .10f) - 12 * velocity + force * 80) * step
             displacement = clamp(displacement + velocity * step, -1f, 1f)
             velocity = clamp(velocity, -8f, 8f)
         }
         // Disabling/unavailable inputs cannot leave a hidden bias coupled into future frames.
         if (!config.enabled) {
+            cpuPressure = 0f; timingPressure = 0f; audioDisplacement = 0f; audioVelocity = 0f; angularSpeed = 0f
             rotation = 0f
             tilt = rotation
             readout = tilt
@@ -224,7 +245,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
 
     fun apply(base: EffectState.Frame, config: FaultConfig): EffectState.Frame {
         val nodes: MutableList<FaultNode> = ArrayList<FaultNode>()
-        val ids = base.ids()
+        val ids = base.ids().filter { config.experimental || !Effects.physical(it) }.toIntArray()
         val time = time(config)
         val cue = cue(config)
         if (base.amount > 0)
@@ -243,7 +264,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
                 // A fully gated stage bypasses its profile as well as its mechanism.
                 if (level > 0) nodes.add(compile(ids[index], base.parameters, level, config))
             }
-        return EffectState.Frame(ids, base.amount, base.parameters, sensorNs, time, nodes)
+        return EffectState.Frame(ids, base.amount, base.parameters, sensorNs, time, nodes, config.experimental)
     }
 
     fun inspect(id: Int, controls: EffectParameters, level: Float, config: FaultConfig): FaultNode {
@@ -253,9 +274,21 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
     private fun compile(
         id: Int,
         controls: EffectParameters,
-        level: Float,
+        baseLevel: Float,
         config: FaultConfig,
     ): FaultNode {
+        val gains = FaultSensitivity.values(controls, id, config.experimental)
+        var extra = 0f
+        if (config.enabled && config.experimental) for (source in gains.indices) {
+            if (!FaultSensitivity.native(id, source)) extra += gains[source] * when (source) {
+                0 -> if (config.motion) clamp(max(shock, angularSpeed / 6f), 0f, 1f) else 0f
+                1 -> if (config.audio) audio else 0f
+                2 -> if (config.timing) readout else 0f
+                3 -> if (config.thermal) temperature else 0f
+                else -> if (config.cpu) cpuPressure else 0f
+            }
+        }
+        val level = if (extra == 0f) baseLevel else clamp(baseLevel + (1 - baseLevel) * extra, 0f, 1f)
         val seed = controls.identity(id)
         val initial = FaultNode.Identity(seed)
         val identity =
@@ -300,9 +333,16 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
             )
         val motion = Motion(time, drift, phase)
         val coupling = (if (config.enabled) 1 else 0).toFloat()
-        val pressure = this.pressure * coupling
-        val heat = temperature * coupling
-        val move = displacement * coupling
+        // Keep the original arithmetic exactly when native gains are unchanged.
+        val pressure = (if (gains[2] == 1f && gains[4] == 1f) this.pressure
+            else max(timingPressure * gains[2], cpuPressure * gains[4])) * coupling
+        val heat = temperature * coupling * gains[3]
+        val move = (if (gains[0] == 1f && gains[1] == 1f) displacement
+            else (displacement - audioDisplacement) * gains[0] + audioDisplacement * gains[1]) * coupling
+        val rotation = this.rotation * gains[0]
+        val readout = this.readout * gains[2]
+        val audio = this.audio * gains[1]
+        val timingAvailable = this.timingAvailable && gains[2] > 0f
         val period =
             controls.resolved(
                 id,
@@ -411,6 +451,9 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
                 "eventPattern",
                 event.pattern,
             )
+        if (config.experimental) FaultSensitivity.keys.forEachIndexed { source, key ->
+            if (controls.manual(id, key)) internal[key] = gains[source]
+        }
         val warped =
             config.enabled &&
                 (config.performance.clock != LivePerformance.FREE ||
@@ -455,6 +498,8 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
                 var scan = 4 + bands * 160
                 var integrate = 1f
                 if (timingAvailable) {
+                    val basePhase = exposurePhase
+                    val baseScan = scan
                     val hz = config.mains * 2.0
                     exposurePhase =
                         ((((signalNs % 1000000000L) * 1e-9 * hz % 1) * Math.PI * 2 +
@@ -463,6 +508,11 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
                     scan = (skewNs * 1e-9 * hz * Math.PI * 2).toFloat() * (1 + bands * 8)
                     val x = Math.PI * exposureNs * 1e-9 * hz
                     integrate = if (x < 1e-6) 1f else (sin(x) / x).toFloat()
+                    if (gains[2] != 1f) {
+                        exposurePhase = basePhase + (exposurePhase - basePhase) * gains[2]
+                        scan = clamp(baseScan + (scan - baseScan) * gains[2], 0f, 2000f)
+                        integrate = clamp(1 + (integrate - 1) * gains[2], -1f, 1f)
+                    }
                 }
                 put(
                     p,
@@ -641,6 +691,22 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
                 )
             }
 
+            Effects.MOTION_BLUR -> {
+                val exposure = if (timingAvailable) clamp(exposureNs * 1e-9f * gains[2], 0f, .1f) else 1f / 60f
+                val movement = if (config.enabled) (angularSpeed * exposure * 8f + shock * .2f) * gains[0] else 0f
+                val length = clamp(level * controls.get(id, "amount") * (controls.get(id, "floor") * .025f + movement * .08f), 0f, .12f)
+                val angle = controls.get(id, "direction") * Math.PI * 2
+                put(p, "blurX", length * kotlin.math.cos(angle).toFloat(), "blurY", length * sin(angle).toFloat())
+            }
+            Effects.THERMAL_NOISE -> {
+                val exposure = if (timingAvailable) clamp(exposureNs * 1e-9f * 30f * gains[2], 0f, 4f) else 1f
+                val amplitude = level * controls.get(id, "amount") * (controls.get(id, "floor") * .08f + heat * (.06f + .10f * exposure))
+                put(p, "noiseAmplitude", clamp(amplitude, 0f, .5f), "noiseGrain", 1 + controls.get(id, "grain") * 15, "grainSeed", random(seed xor mix(signalNs) xor 0x4e4f495345L) * 997)
+            }
+            Effects.SMEAR -> {
+                val readoutDrive = if (config.enabled && timingAvailable) clamp(skewNs * 1e-9f * 45f * gains[2] + readout, 0f, 4f) else 0f
+                put(p, "smearAmount", clamp(level * controls.get(id, "amount") * readoutDrive, 0f, 2f), "smearLength", controls.get(id, "length") * .4f, "smearThreshold", controls.get(id, "threshold") * .99f)
+            }
             else -> throw IllegalArgumentException("Fault ID")
         }
         for (value in controls.overrides(id).entries) {
