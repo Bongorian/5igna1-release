@@ -31,3 +31,7 @@ Official instructions: https://support.google.com/googleplay/android-developer/a
 ## 1.5.0 content update
 
 The recruitment landing page describes TAP, probability-based TIME ECHO, expanded MEDIA/DISPLAY, SEED transactions and background recording. It preserves the Google Play tester form as its primary action. The three existing developer-owned example captures remain explicitly identified as 1.3.1 imagery. Legacy root language policy URLs redirect to the current policy pages.
+
+## Release synchronization
+
+Every application release includes a GitHub Pages update. Compare the released source, changelog, user guide and bundled privacy policies with this site; update the displayed version, feature/operation text, versioned guide links and relevant privacy disclosures. Check screenshot captions and retain historical image labels until the images themselves are replaced. Preserve the tester form and distinguish GitHub release availability from Play review/publication status. Publish to `codex/privacy-pages`, wait for deployment, and verify the public landing and policy pages before reporting the release complete.
