@@ -67,7 +67,7 @@ https://github.com/Bongorian/5igna1-release
 
 ### Google Play
 
-The closed test is active with 1.0.0. The 1.1.0 update was submitted to the same Alpha track on 2026-09-09. The official store link will appear here after publication.
+The closed test is active with 1.1.0. The 1.3.0 update was submitted to the same Alpha track on 2026-09-09; approval and managed publication are pending. [Submission record](docs/PLAY_1_3_0.md). The official store link will appear here after production publication.
 
 ### F-Droid
 

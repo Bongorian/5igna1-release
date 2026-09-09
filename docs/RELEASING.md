@@ -1,6 +1,6 @@
 # Releasing 5igna1
 
-Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current source is the 1.3.0 / code 11 optimized Kotlin release. GitHub 1.1.0 / code 9 uses the existing main source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
+Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current source is the 1.3.0 / code 11 optimized Kotlin release. GitHub 1.1.0 / code 9 retains its original tagged source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
 
 ## Distribution and identity
 
@@ -70,7 +70,7 @@ The [metadata candidate](fdroid/com.bongorian.signa1.yml) uses this repository, 
 
 ## Google Play
 
-The owner reports the 1.0.0 closed test awaiting review (2026-09-08). Keep that submitted candidate stable; prepare a later submission separately. The existing ignored `signing.properties` applies only to Play upload signing. Build with `./tools/build.sh bundlePlayRelease`; see [Play submission materials](../store/google-play/README.md). Billing/Supporter Pack is not implemented, so no product creation is needed for launch.
+Play 1.1.0 / code 9 is published to Alpha testers. Version 1.3.0 / code 11 was submitted on 2026-09-09, skipping 1.2.0 on Play. Managed publishing is on; approval and publication are pending. Preserve existing submitted candidates. See the [1.3.0 submission record](PLAY_1_3_0.md). The existing ignored `signing.properties` applies only to Play upload signing. Build with `./tools/build.sh bundlePlayRelease`; see [Play submission materials](../store/google-play/README.md). Billing/Supporter Pack is not implemented, so no product creation is needed for launch.
 
 ## Owner checklist
 
