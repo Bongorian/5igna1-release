@@ -25,12 +25,9 @@ RAWモード選択時に、RAWとプレビューの出力構成を問い合わ�
 
 空き容量不足・書込みエラーでは停止します。確定済みZIP区間は残し、保存途中の不完全な区間は削除します。プロセス強制終了で残った未公開のRAW ZIPは次の起動時に清掃します。
 
-## 調査した方式
+## 実装方式
 
-1. Camera2のRAW_SENSORを連続取得し、DngCreatorでDNG連番にする方式。Androidの公開APIで実装でき、フレームごとの撮影情報を保持できます。今回採用しました。
-2. RAWフレーム・音声・撮影情報を専用コンテナへ記録し、後からDNG等へ展開する方式。MotionCamのMCRAWが実例で、公式のデコーダーはRAWからDNG、音声からWAVへの抽出例を公開しています。専用コンテナの記録・圧縮や音声同期は今回実装していません。
-
-現在の通常動画は現像済み画像をAVC / HEVCで圧縮するMP4です。RAW記録ではそのエンコーダーを経由せず、センサー画素を保持します。
+Camera2のRAW_SENSORを連続取得し、DngCreatorでDNG連番として保存します。各フレームには対応する撮影情報を使います。通常動画は現像済み画像をAVC／HEVCで圧縮するMP4ですが、RAW記録はそのエンコーダーを経由せずセンサー画素を保持します。
 
 ## 参照した一次資料（2026-09-08）
 
@@ -38,8 +35,7 @@ RAWモード選択時に、RAWとプレビューの出力構成を問い合わ�
 - [StreamConfigurationMap: 寸法・フレーム時間・stall時間](https://developer.android.com/reference/android/hardware/camera2/params/StreamConfigurationMap)
 - [CameraDevice: 出力構成の対応確認](https://developer.android.com/reference/android/hardware/camera2/CameraDevice#isSessionConfigurationSupported(android.hardware.camera2.params.SessionConfiguration))
 - [DngCreator: RAW画素と撮影情報からDNGを保存](https://developer.android.com/reference/android/hardware/camera2/DngCreator)
-- [MotionCam公式MCRAW decoder](https://github.com/mirsadm/motioncam-decoder)
 
-## 今回の確認
+## 検証範囲
 
 K80の背面4096×3072と前面2592×1944はAPI上の上限目安12fpsとして列挙。背面は実際に2fps設定でDNG連番2枚を保存し、ZIP・DNG寸法・撮影時刻・manifestを検証しました。12fpsの持続録画は未検証です。AndroidエミュレーターはRAWを公開していますが必要なDNG情報が不足しており、設定を無効化して通常動画へ戻ることを確認しました。

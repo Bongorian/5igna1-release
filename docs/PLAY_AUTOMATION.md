@@ -56,3 +56,7 @@ Upload logic tests cover preserving rollout settings, draft/version collisions, 
 ## 1.5.0
 
 1.5.0 / code 14 uploaded successfully as an Alpha draft on 2026-09-09. This does not submit it for review or publish it to testers. [Run](https://github.com/Bongorian/5igna1-release/actions/runs/34352867100).
+
+## 1.5.1
+
+1.5.1 / code 15 uploaded successfully as an unpublished Alpha draft on 2026-09-09. AAB SHA-256: `bd937cd0bbc55ea68db3e37ae5c5277e85634f2c6856329605a7b5991df99d5b`. The released source removes recording foreground services and their permissions. Review submission and tester publication remain separate Console actions. [Run](https://github.com/Bongorian/5igna1-release/actions/runs/34356251537).

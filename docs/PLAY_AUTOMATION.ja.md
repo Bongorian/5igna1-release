@@ -56,3 +56,7 @@ Google側はリポジトリと所有者の数値ID、対象ワークフロー、
 ## 1.5.0
 
 2026-09-09に1.5.0 / code 14をAlpha下書きへアップロードできました。審査送信やテスターへの公開は別の操作です。 [Run](https://github.com/Bongorian/5igna1-release/actions/runs/34352867100).
+
+## 1.5.1
+
+2026-09-09に1.5.1 / code 15を未公開のAlpha下書きへアップロードしました。AAB SHA-256: `bd937cd0bbc55ea68db3e37ae5c5277e85634f2c6856329605a7b5991df99d5b`。録画用フォアグラウンドサービスと対応する権限を削除したリリースソースから作成しました。審査提出とテスターへの公開はConsoleでの別操作です。 [Run](https://github.com/Bongorian/5igna1-release/actions/runs/34356251537).

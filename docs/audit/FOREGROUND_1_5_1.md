@@ -31,3 +31,11 @@ The assertions wait for resource cleanup as well as file publication because tho
 ## Limits
 
 The tests verify termination, file validity and resource release. They do not quantify battery savings, prove compatibility across all devices, or guarantee a file after encoder failure, insufficient storage or forced process termination. Finalizing accepted RAW frames can continue briefly after the screen closes; it does not capture additional frames.
+
+## Publication
+
+GitHub release [v1.5.1](https://github.com/Bongorian/5igna1-release/releases/tag/v1.5.1) points to `51f1b8d823c9cf87d26fcbc2608cfcc8caaab6fe`. APK SHA-256: `7ae9e3876327e02c944f95d3c395e26afb1f71841b5ee4db967194eaebbc5e9d`. The public APK and checksum were downloaded anonymously and matched the verified local artifacts. The existing distribution certificate and all prior releases were preserved.
+
+The duplicate tag-triggered APK preparation run was cancelled after the verified local APK was published; it did not replace release assets. The GitHub Pages update completed in [run 34356292045](https://github.com/Bongorian/5igna1-release/actions/runs/34356292045), with app recording/privacy descriptions aligned to 1.5.1 and the existing tester form retained.
+
+[Play upload 34356251537](https://github.com/Bongorian/5igna1-release/actions/runs/34356251537) completed successfully and uploaded 1.5.1 / code 15 as an Alpha draft. AAB SHA-256: `bd937cd0bbc55ea68db3e37ae5c5277e85634f2c6856329605a7b5991df99d5b`. It did not submit for review or publish to testers.

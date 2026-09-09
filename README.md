@@ -16,7 +16,7 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 
 ## One damaged system, fleeting moments
 
-This source is **1.5.1 (versionCode 15)**. It includes experimental TAP input, probability-based TIME ECHO, expanded MEDIA/DISPLAY models and corrected SEED controls. It includes the Kotlin/RAW optimizations and interactive offline guide. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
+This source is **1.5.1 (versionCode 15)**. The offline quick start introduces capture and fault controls. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 
@@ -50,6 +50,14 @@ JPEG snapshots the processed camera image when the shutter is handled. ADVANCED 
 Tap + to add CHROMA ERROR or VHS to explore another part of the signal path. [First photograph](docs/GETTING_STARTED.md) · [Creative starting points](docs/RECIPES.md).
 
 All processing runs on your device. No ads, accounts, analytics or Internet permission. Japanese, English and Simplified Chinese are available, with the same core features in every distribution.
+
+## Explore time, sources and workload
+
+Hold PHOTO/VIDEO to select resolution. Settings recommends a conservative starting size and adjusts preview workload under load. ADVANCED exposes internal controls and retains displayed frames; EXPERT removes app-level preview and cooling limits. [Performance modes](docs/PERFORMANCE.md).
+
+Experimental **TIME ECHO** inserts past frames using the current fault state. **TAP** accepts a selected image or video after READOUT and before DATA. Source playback and processed-output recording have separate controls. [Experimental features](docs/EXPERIMENTAL_SIGNALS.md).
+
+Leaving the capture screen stops preview, inputs, source playback and recording. The recorded file is finalized; returning does not restart recording. Photo processing waits while hidden. [Recording and permissions](docs/RECORDING.md).
 
 ## Download and update
 
@@ -100,11 +108,3 @@ GPS tagging starts off. Audio recording is optional. DNG needs a RAW developer, 
 ## License
 
 5igna1 by **Bongorian**. Project code is licensed under [Apache License 2.0](LICENSE). See [NOTICE](NOTICE), [third-party licenses](THIRD_PARTY_LICENSES.md), and [asset provenance](docs/audit/ASSETS.md).
-
-The development build includes conservative device recommendations and automatic preview workload reduction. [Heat and workload](docs/PERFORMANCE.md).
-
-Settings groups ADVANCED and EXPERT under Modes. ADVANCED exposes internal values; EXPERT removes app-level preview workload and cooling limits for maximum available speed. [Performance modes](docs/PERFORMANCE.md).
-
-Development additions: hold PHOTO/VIDEO for resolution; experimental [TIME ECHO](docs/LIVE_FAULT.md#time-echo-experimental) inserts past camera frames using the current FAULT state.
-
-Experimental **TAP** accepts selected photos/videos after READOUT and before DATA, with independent video playback and output recording. Ordinary processing stops or waits when the app is hidden; only an active video recording may continue. [Experimental inputs](docs/EXPERIMENTAL_SIGNALS.md).

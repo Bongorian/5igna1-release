@@ -21,7 +21,7 @@ Normal video supports H.264/H.265 and optional sound, subject to camera/encoder 
 
 New photographs (JPG/DNG) and ordinary videos (MP4) all save to **DCIM/5igna1**, a shared camera album. Existing files are not moved. Experimental RAW sequence ZIPs save to **Download/5igna1**.
 
-The development build includes conservative device recommendations and automatic preview workload reduction. [Heat and workload](PERFORMANCE.md).
+The app includes conservative device recommendations and automatic preview workload reduction. [Heat and workload](PERFORMANCE.md).
 
 ## Resolution-linked audio (experimental)
 
