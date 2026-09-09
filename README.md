@@ -14,7 +14,7 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 
 ## One damaged system, fleeting moments
 
-This source is **1.2.0 (versionCode 10)**, with an offline first-launch tutorial that can be replayed from Settings. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
+This source is **1.3.0 (versionCode 11)**, with the Kotlin rewrite, optimized RAW processing and an offline first-launch tutorial that can be replayed from Settings. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 

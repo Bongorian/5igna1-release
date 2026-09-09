@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.0] — 2026-09-09
+
+Version name: 1.3.0. Version code: 11.
+
+- Rewrite the application and behavior checks in Kotlin, retaining the 1.2.0 tutorial.
+- Optimize all six RAW faults with exact region caching and verified unchanged output.
+- Reuse RAW chain buffers and GPU intermediate textures, and remove an extra DNG-save buffer copy.
+- Verify RAW and GPU output equivalence and physical-device JPEG/DNG capture. GPU changes primarily reduce memory; measured offscreen GPU completion time did not improve.
+
 ## [1.2.0] — 2026-09-09
 
 Version name: 1.2.0. Version code: 10.

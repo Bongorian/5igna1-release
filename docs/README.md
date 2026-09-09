@@ -1,6 +1,6 @@
 # 5igna1 field guide
 
-From your first photograph to a deeper understanding of the signal. These guides describe 1.2.0 / code 10, including the first-launch tutorial. Version 1.0.0 has different controls.
+From your first photograph to a deeper understanding of the signal. These guides describe 1.3.0 / code 11, including the first-launch tutorial. Version 1.0.0 has different controls.
 
 [The project](../README.md) · [日本語ガイド](README.ja.md)
 
