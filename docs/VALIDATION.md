@@ -123,3 +123,13 @@ Branch `codex/kotlin-cleanup`, based on the tutorial development branch, migrate
 - Capture testing caught and corrected an unnecessary non-null requirement on original JPEG metadata bytes; displayed-frame captures correctly allow those bytes to be absent. The tutorial test now waits for window input focus before sending system Back and waits for dismissal, avoiding a WindowManager timing race.
 - Dependency licenses and bundled notices were refreshed, including the Kotlin standard library's ThreeTen BSD notice. The release runtime graphs remain identical across flavors. Translation checks cover 395 strings.
 - No physical device was connected. RAW byte fixtures pass, but hardware RAW/DNG/RAW-video behavior needs a future device run. All emulator operations use `com.bongorian.signa1.debug`. Main, signed submitted bundles, existing keys, and release tags remain unchanged; no store submission is part of this rewrite.
+
+## Kotlin physical-device check — 2026-09-09
+
+The owner connected an Android 16 device (model `25060RK16C`, device `dali`) over USB and authorized installation and debugging. Installed the Kotlin debug application from `43ee376` as `5igna1 DEV`; the release application was not replaced.
+
+- Eight instrumented actions passed: `capture-contract`, `raw-original`, `raw`, `raw-video`, `video`, `state`, `advanced`, and `product-ui`. Camera capability queries reported RAW on both camera IDs; capture checks used the active rear camera.
+- Original and processed 4096×3072 DNG files both opened, unpacked, and developed with LibRaw on the host. The processed capture used ROW ERROR at 70% LEVEL.
+- A short RAW recording produced a finalized ZIP with two original DNG frames, matching dimensions, timestamps, and manifest. This is a short functional check, not an endurance or throughput claim.
+- The silent MP4 decoded fully at 1080×1920, 3.029 seconds, and 30.05 fps, with monotonic timestamps and a correct media time origin. The on-screen preview rate was lower under the existing adaptive policy; the encoded clip retained its 30 fps cadence.
+- JPEG pixels and snapshot metadata matched the pinned displayed frame. Edit commit/cancel, advanced controls, camera interruptions, and stalled-preview recovery passed. No new application defect was found in this run. Captures remain in the device's shared 5igna1 camera folder; test settings were restored.

@@ -43,3 +43,7 @@
 - The owner requested a complete, lean Kotlin rewrite. Continue on `codex/kotlin-cleanup`, based on the tutorial development branch. Application and test sources belong in Kotlin source sets; shaders stay GLSL and build/release utilities use their existing suitable languages.
 - Preserve the submitted Play bundle, main, release tags, and signing material. Validate the development rewrite with debug builds and the emulator; this work does not authorize another store submission.
 - Keep migration golden hashes fixed to the pre-rewrite Java output. Do not replace their expected values with Kotlin output to make a refactor pass.
+
+## Owner direction — physical Kotlin debugging, 2026-09-09
+
+- The owner explicitly authorized installing and debugging the Kotlin build on the connected physical device. Use `com.bongorian.signa1.debug` and preserve the installed release application. Short camera/RAW/video test captures are within this debugging scope; keep release submissions and main unchanged.
