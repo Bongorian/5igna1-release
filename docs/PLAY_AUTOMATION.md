@@ -48,3 +48,7 @@ Upload logic tests cover preserving rollout settings, draft/version collisions, 
 ## First successful run — 2026-09-09
 
 [GitHub run 34316132266](https://github.com/Bongorian/5igna1-release/actions/runs/34316132266) built the immutable `v1.3.1` source, authenticated through federation, and saved **12 (1.3.1)** as an unpublished Alpha draft. Play Console separately confirmed **11 (1.3.0)** remained published to testers. AAB SHA-256: `26e91fb345cb49d6b08ba06893d68a80fae92ec305accb81fb187fd5919637d3`. Ubuntu and macOS CI also passed for the final upload logic.
+
+## 1.4.0 upload — 2026-09-09
+
+[Run 34327243407](https://github.com/Bongorian/5igna1-release/actions/runs/34327243407) successfully uploaded 1.4.0 / code 13 as an Alpha draft after the GitHub release was published. AAB SHA-256: `e30842447f1d95f375a61ad5a088dec35bdd69381b426701a4c5241b11d1f64e`. Existing-draft and review guards remained enabled; no conflicting release or review was removed. This confirms draft upload, not review submission or tester delivery.

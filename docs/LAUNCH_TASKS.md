@@ -6,7 +6,7 @@ Last documented check: **2026-09-09 (Japan time)**. This is a dated maintainer s
 |---|---|---|
 | GitHub / Obtainium | 1.4.0 / code 13 published; earlier tags retained | [Latest GitHub release](https://github.com/Bongorian/5igna1-release/releases/latest) |
 | Google Play Alpha | 1.3.0 / code 11 published to selected testers | [1.3.0 record](PLAY_1_3_0.md) |
-| Google Play Alpha draft | 1.3.1 / code 12 uploaded as an unpublished draft; review/publication require Console action | [First automated upload](PLAY_AUTOMATION.md#first-successful-run--2026-09-09) |
+| Google Play Alpha draft | 1.4.0 / code 13 uploaded as an unpublished draft; review/publication require Console action | [Automatic upload records](PLAY_AUTOMATION.md) |
 | F-Droid | Owner-reported 1.0.0 / code 8 submission awaiting merge; later release work did not replace it | [Candidate audit](FDROID_READINESS.md) |
 | Current release | 1.4.0 / code 13: revised device/capture/audio policies | [Guide scope](README.md) |
 
