@@ -63,7 +63,7 @@ internal object FaultRenderChecks {
             .put("plugged", battery.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0))
     }
 
-    fun run(context: Context, benchmark: Boolean, transportOnly: Boolean = false): String {
+    fun run(context: Context, benchmark: Boolean, transportOnly: Boolean = false, investigation: Boolean = false): String {
         val display = EglLease.acquire()
         var egl = EGL14.EGL_NO_CONTEXT
         var surface = EGL14.EGL_NO_SURFACE
@@ -79,7 +79,7 @@ internal object FaultRenderChecks {
             surface = EGL14.eglCreatePbufferSurface(display,configs[0],
                 intArrayOf(EGL14.EGL_WIDTH,1,EGL14.EGL_HEIGHT,1,EGL14.EGL_NONE),0)
             check(EGL14.eglMakeCurrent(display,surface,surface,egl))
-            val report = if (transportOnly) transportCompare(context) else compare(context, benchmark)
+            val report = if (investigation) LoadInvestigation.gpu(context) else if (transportOnly) transportCompare(context) else compare(context, benchmark)
             val directory = File(context.filesDir, "verification").also { it.mkdirs() }
             File(directory, "fault-render.json").writeText(report.toString(2))
             return report.toString()

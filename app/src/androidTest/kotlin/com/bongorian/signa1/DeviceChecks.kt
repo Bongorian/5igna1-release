@@ -170,6 +170,18 @@ class DeviceChecks : Instrumentation() {
             effectsBefore = activity!!.effectState
             faultsBefore = activity!!.faultConfig
             video = activity!!.videoMode
+            if (args!!.getString("action", "") == "load-investigation") {
+                runOnMainSync { activity!!.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                if (args!!.getString("part", "gpu") == "gpu") {
+                    runOnMainSync { activity!!.engine.detach() }
+                    val closed = java.util.concurrent.CountDownLatch(1)
+                    activity!!.engine.gl.post { closed.countDown() }
+                    check(closed.await(10, java.util.concurrent.TimeUnit.SECONDS))
+                    result.putString("report", FaultRenderChecks.run(targetContext, false, investigation = true))
+                } else result.putString("report", LoadInvestigation.raw(this))
+                result.putString("result", "PASS load investigation")
+                return
+            }
             if (args!!.getString("action", "") == "gpu-optimization") {
                 runOnMainSync {
                     activity!!.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

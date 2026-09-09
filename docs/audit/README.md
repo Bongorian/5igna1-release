@@ -37,3 +37,5 @@ The validation index had omitted 1.6.0 UI/display records and the unreleased Pix
 - Record source commit/tag, date, device, build flavor, workload, result and limits in new verification records. State whether evidence is checked-in, externally linked or only local.
 - Update this inventory and the validation index when adding an audit. Link every new file from the documentation map and run the documentation check.
 - These records do not establish universal device coverage. Local test logs/captures mentioned in reports are not automatically available from a clean checkout; this stocktake did not rerun historical benchmarks.
+
+- [Load investigation](LOAD_INVESTIGATION.md) / [日本語](LOAD_INVESTIGATION.ja.md), [measurements](load-investigation-results.json): post-1.6.0 investigation-only prototypes; not shipped changes.
