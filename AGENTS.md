@@ -47,3 +47,7 @@
 ## Owner direction — physical Kotlin debugging, 2026-09-09
 
 - The owner explicitly authorized installing and debugging the Kotlin build on the connected physical device. Use `com.bongorian.signa1.debug` and preserve the installed release application. Short camera/RAW/video test captures are within this debugging scope; keep release submissions and main unchanged.
+
+## Owner direction — GitHub releases, 2026-09-09
+
+- The owner explicitly authorized publishing current main as 1.1.0 / code 9, the tutorial branch as 1.2.0 / code 10, and the optimized Kotlin branch as 1.3.0 / code 11. Publish verified GitHub APKs using the existing distribution key, with 1.3.0 as latest. This supersedes earlier development-only restrictions for these GitHub releases. Preserve existing tags, signing keys and submitted store artifacts; this request does not change store submissions.

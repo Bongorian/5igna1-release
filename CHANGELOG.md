@@ -1,12 +1,15 @@
 # Changelog
 
-## [Unreleased]
+## [1.2.0] — 2026-09-09
 
-- Add an offline five-page first-launch tutorial with Settings replay, skip/back navigation, activity-state restoration and English/Japanese/Simplified Chinese text. This remains development-only and is not part of the submitted 1.1.0 / code 9 bundle.
+Version name: 1.2.0. Version code: 10.
 
-## [1.1.0] — unreleased
+- Add an offline five-page first-launch tutorial with Settings replay, skip/back navigation, activity-state restoration and English/Japanese/Simplified Chinese text.
+- Includes the 1.1.0 fault-system redesign.
 
-Version name: 1.1.0. Version code: 9. Prepared on 2026-09-08; no new public release or store submission yet.
+## [1.1.0] — 2026-09-09
+
+Version name: 1.1.0. Version code: 9. GitHub release from main; the matching Play Alpha update was submitted on 2026-09-09.
 
 - Rebuild the signal path around 13 causal faults, stable identities, named controls, and optional LIVE device inputs. The old 1.0.0 effect IDs/settings are reset during migration; saved captures remain intact.
 - Add random chains and controls, a two-column fault catalog, and ADVANCED parameter editing with AUTO/fixed values.
