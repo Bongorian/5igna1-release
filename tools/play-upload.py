@@ -116,8 +116,10 @@ def upload(play, aab, version, code, notes):
                 raise ValueError('Uploaded bundle identity/hash mismatch')
         play.request('PUT', base + '/tracks/alpha', updated)
         play.request('POST', base + ':validate')
-        # The default API behavior cancels an existing review. Never use that default.
-        play.request('POST', base + ':commit?changesNotSentForReview=true&changesInReviewBehavior=ERROR_IF_IN_REVIEW')
+        # Only the new draft differs from the fetched track. Draft status prevents rollout.
+        # changesNotSentForReview is rejection-specific and is rejected by this app.
+        # The default review behavior cancels an existing review. Never use that default.
+        play.request('POST', base + ':commit?changesInReviewBehavior=ERROR_IF_IN_REVIEW')
         committed = True
         print(f'Uploaded Alpha draft: {version} / {code}; SHA-256 {digest}')
     finally:

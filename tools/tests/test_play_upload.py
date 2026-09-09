@@ -71,7 +71,7 @@ class PlayUploadTests(unittest.TestCase):
         self.assertEqual(len(puts), 1)
         self.assertEqual(puts[0][2]['releases'][-1]['status'], 'draft')
         commits = [c[1] for c in api.calls if ':commit?' in c[1]]
-        self.assertEqual(commits, ['/edits/42:commit?changesNotSentForReview=true&changesInReviewBehavior=ERROR_IF_IN_REVIEW'])
+        self.assertEqual(commits, ['/edits/42:commit?changesInReviewBehavior=ERROR_IF_IN_REVIEW'])
         self.assertFalse(any(c[0] == 'DELETE' for c in api.calls))
 
     def test_existing_review_error_cleans_up_without_retry_or_cancellation(self):

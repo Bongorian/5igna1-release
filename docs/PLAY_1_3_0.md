@@ -2,7 +2,11 @@
 
 Submitted on 2026-09-09 (Japan time). Application: `com.bongorian.signa1`. Version: **1.3.0 / code 11**. App source: `08bdb71295ca1c073d07c1f9a5f4d1c250bb95ee`, whose source tree matches `v1.3.0`.
 
-## Scope and state
+## Current status
+
+On 2026-09-09, the Alpha track was checked during automatic-upload setup. Play Console confirmed **11 (1.3.0) published to selected testers at 12:43 Japan time**. The submission-time details below remain as a historical record.
+
+## Scope and state at submission
 
 Console confirmed **1.1.0 / code 9** was already published on the existing **closed-test Alpha** track. Version 1.2.0 / code 10 was skipped on Play. This update includes its tutorial and the Kotlin/RAW/buffer optimizations in 1.3.0.
 
