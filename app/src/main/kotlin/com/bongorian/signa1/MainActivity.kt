@@ -313,7 +313,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         val icon = ImageView(this)
         icon.setImageResource(resource)
         icon.setScaleType(ImageView.ScaleType.CENTER_INSIDE)
-        icon.setPadding(dp(12f), dp(12f), dp(12f), dp(12f))
+        icon.setPadding(dp(14f), dp(14f), dp(14f), dp(14f))
         icon.setContentDescription(description)
         icon.setTooltipText(description)
         icon.setFocusable(true)
@@ -474,10 +474,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
         val original = rawOriginal()
         val active = uiEffects()
-        formatButton.setText(
-            if (tapMode) "TAP ▾" else if (videoMode) (if (captureRawVideo) "RAW\nZIP ▾" else "MP4 ▾")
-            else if (capturePhotoFormat == 0) "JPG ▾" else "RAW ▾"
-        )
+        renderFormat()
         selectedRoute.removeAllViews()
         for (id in effectState.ids().filter { !tapMode || Effects.point(it).ordinal > Effects.Point.READOUT.ordinal }) {
             val enabled = effectAvailable(id)
@@ -486,7 +483,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                     Effects.label(id) +
                         (if (enabled) "" else " · " + (if (videoMode) "MP4" else "JPG"))
                 )
-            chip.setTextSize(10f)
+            chip.setTextSize(12f)
             chip.setTextColor(if (enabled) LIME else MUTED)
             val cp = LinearLayout.LayoutParams(-2, dp(44f))
             cp.rightMargin = dp(6f)
@@ -599,41 +596,31 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         d.show()
     }
 
-    fun showFormat(): Dialog? {
-        if (tapMode) { chooseTap(); return null }
-        if (recording || engine.photoBusy) return null
-        val labels: Array<String> =
-            if (videoMode)
-                (if (cameraOptions != null && cameraOptions!!.rawVideoAvailable())
-                    arrayOf<String>(
-                        "MP4",
-                        "RAW ZIP",
-                    )
-                else arrayOf<String>("MP4"))
-            else
-                (if (cameraOptions != null && !cameraOptions!!.raws.isEmpty())
-                    arrayOf<String>(
-                        "JPG",
-                        "RAW",
-                    )
-                else arrayOf<String>("JPG"))
-        return SignalSheet.anchoredPick(
-            this,
-            formatButton,
-            getString(R.string.ui_save_format),
-            labels,
-            if (videoMode) (if (captureRawVideo) 1 else 0)
-            else (if (capturePhotoFormat == 0) 0 else 1),
-            IntConsumer@{ index: Int ->
-                val next = CaptureSettings(settings)
-                if (videoMode) next.rawVideo = index == 1
-                else {
-                    next.photoFormat = if (index == 0) 0 else 2
-                    next.photoSize = "recommended"
-                }
-                applySettings(next)
-            },
-        )
+    fun canCycleFormat(): Boolean = !tapMode && if (videoMode)
+        settings.rawVideoEnabled && cameraOptions?.rawVideoAvailable() == true
+        else cameraOptions?.raws?.isNotEmpty() == true
+
+    fun renderFormat() {
+        val label = if (videoMode) (if (captureRawVideo) "RAW\nZIP" else "MP4")
+            else if (capturePhotoFormat == 0) "JPG" else "RAW"
+        formatButton.text = label
+        formatButton.isEnabled = canCycleFormat() && !recording && !engine.photoBusy
+        formatButton.contentDescription = if (canCycleFormat())
+            getString(R.string.format_cycle_hint, label.replace('\n', ' '))
+            else getString(R.string.ui_save_format) + ": " + label.replace('\n', ' ')
+        formatButton.tooltipText = formatButton.contentDescription
+    }
+
+    fun cycleFormat() {
+        if (recording || engine.photoBusy || !canCycleFormat()) return
+        val next = CaptureSettings(settings)
+        if (videoMode) next.rawVideo = !captureRawVideo
+        else {
+            next.photoFormat = if (capturePhotoFormat == 0) 2 else 0
+            next.photoSize = "recommended"
+        }
+        applySettings(next)
+        formatButton.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
     }
 
     fun randomChain() {
@@ -888,6 +875,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     override fun recording(value: Boolean) {
         recording = value
+        renderFormat()
         for (mode in listOf(photoTab, videoTab, tapTab)) {
             mode.isEnabled = !value
             mode.alpha = if (value) .5f else 1f

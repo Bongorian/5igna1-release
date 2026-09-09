@@ -29,6 +29,7 @@ internal object AdaptiveUiChecks {
             val formatParent = a.formatButton.parent as android.view.ViewGroup
             check(formatParent.indexOfChild(a.formatButton) > formatParent.indexOfChild(a.photoTab.parent as View))
             check(a.formatButton.width >= a.dp(48f))
+            check(a.faultSwitch.maxLines == if (root.wide) 2 else 1)
             check(a.faultSwitch.width >= a.dp(48f)) { "LIVE label squeezed" }
             val modes = listOf(a.photoTab, a.videoTab, a.tapTab)
             for ((video, tap) in listOf(false to false, true to false, false to true)) {
@@ -48,7 +49,12 @@ internal object AdaptiveUiChecks {
             check(a.effectEditorSpace != null)
             check(a.cameraRoot.controlsColumn.visibility == if (a.cameraRoot.wide) View.INVISIBLE else View.GONE)
             check(a.previewArea.height > a.dp(80f))
-            if (a.cameraRoot.wide) check(editor.sheet!!.window!!.attributes.width == a.cameraRoot.controlsColumn.width)
+            if (a.cameraRoot.wide) {
+                val expected = IntArray(2); a.cameraRoot.controlsColumn.getLocationOnScreen(expected)
+                val actual = IntArray(2); editor.sheet!!.window!!.decorView.getLocationOnScreen(actual)
+                check(editor.sheet!!.window!!.decorView.width == a.cameraRoot.controlsColumn.width)
+                check(kotlin.math.abs(actual[0]-expected[0]) <= 1) { "Editor double-counted right system inset" }
+            }
         }
         test.languageScreenshot("adaptive-editor")
         test.runOnMainSync { editor.sheet!!.dismiss() }

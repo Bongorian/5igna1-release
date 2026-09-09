@@ -10,6 +10,13 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
     lateinit var previewColumn: LinearLayout
     lateinit var controlsColumn: LinearLayout
     lateinit var controlsScroll: ScrollView
+    private var safe = android.graphics.Insets.NONE
+
+    fun applySafeInsets(value: android.graphics.Insets) {
+        safe = value
+        requestLayout()
+    }
+
     var wide = false
         private set
 
@@ -20,6 +27,11 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val fullWidth = MeasureSpec.getSize(widthMeasureSpec)
+        val margin = a.dp(if (fullWidth - safe.left - safe.right < a.dp(400f)) 12f else 18f)
+        if (paddingLeft != margin + safe.left || paddingRight != margin + safe.right ||
+            paddingTop != a.dp(8f) + safe.top || paddingBottom != a.dp(4f) + safe.bottom)
+            setPadding(margin + safe.left, a.dp(8f) + safe.top, margin + safe.right, a.dp(4f) + safe.bottom)
         val w = (MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight).coerceAtLeast(1)
         val h = (MeasureSpec.getSize(heightMeasureSpec) - paddingTop - paddingBottom).coerceAtLeast(1)
         wide = w >= a.dp(600f) && w > h

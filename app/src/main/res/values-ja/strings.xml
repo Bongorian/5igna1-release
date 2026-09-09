@@ -363,7 +363,7 @@
     <string name="expert_active">EXPERT · 上限なし</string>
     <string name="expert_load_hint">プレビューの間引きを解除し、処理できる最大の頻度で描画します。写真は選んだサイズで対応する最大撮像頻度を要求します。解像度と動画fpsは下で選べます。</string>
     <string name="settings_metadata_hint">写真に日時・機種・露出・ISO・加工内容を記録。位置情報ONでは、取得できた現在地を写真のGPSと動画の位置タグに保存します。測位できない場合はGPSなしで保存します。</string>
-    <string name="settings_raw_enable">DNG連番を保存</string>
+    <string name="settings_raw_enable">RAW動画の切り替えを有効にする</string>
     <string name="capture_gps_on">GPS · ON</string>
     <string name="capture_gps_off">GPS · OFF</string>
     <string name="fault_state_hint">突発的な故障の発生量。0%でも固定加工や固有の変化は続きます。</string>
@@ -403,14 +403,14 @@
     <string name="guide_heading_5">いまの信号を撮る</string>
     <string name="guide_heading_6">撮れた結果を確かめる</string>
     <string name="guide_heading_7">実験を続けるために</string>
-    <string name="guide_body_0">光る操作部をたどってみましょう。タップすると下の練習用信号が変わります。設定の変更や写真の保存は行いません。</string>
-    <string name="guide_body_1">＋からFAULTを選ぶと、信号処理の順番で作用します。光るボタンをタップして、練習用信号の乱れを試しましょう。</string>
-    <string name="guide_body_2">LEVELは全体の強さです。練習用スライダーを動かして違いを確認できます。カメラの設定は変わりません。</string>
-    <string name="guide_body_3">LIVEはFAULTの振る舞いを時間とともに変化させます。タップして練習用信号の別の状態を比べましょう。この図はカメラ映像ではありません。</string>
-    <string name="guide_body_4">加工した画像はJPEG、対応カメラのセンサー値はRAWで保存できます。RAWのプレビューは近似表示です。</string>
-    <string name="guide_body_5">シャッターで写真を撮影します。動画モードでは録画の開始と停止を行います。ガイド中は練習用信号だけが変わります。</string>
-    <string name="guide_body_6">サムネイルから保存した撮影結果を開けます。撮影後はここで仕上がりを確認しましょう。ガイド中は保存しません。</string>
-    <string name="guide_body_7">解像度とEXPERTは処理負荷に影響します。推奨設定に戻すと負荷の自動調整が有効になります。このガイドは設定から再表示できます。</string>
+    <string name="guide_body_0">光る操作部をたどり、設定の変更や保存をせずに練習できます。カメラとビデオのアイコンで撮影モードを選びます。横画面では左にプレビュー、右に操作部が並びます。</string>
+    <string name="guide_body_1">＋からFAULTを追加すると、信号処理の順番で作用します。選択済みFAULTをタップして調整し、適用で確定、戻るで破棄します。MEDIAとDISPLAYはモデルを選べます。SEEDは乱れの個体、RESEEDは調整値を保った個体の変更です。シャッフルはタップで組み直し、長押しでチェーン全体をRESEEDします。</string>
+    <string name="guide_body_2">LEVELは全体の強さをすぐに変えます。この練習用スライダーで違いを比べましょう。カメラ／ビデオのアイコンを長押しすると解像度を選べます。RAWのプレビューは対応するセンサー処理の近似で、RGB専用のFAULTはRAWには作用しません。</string>
+    <string name="guide_body_3">LIVEはFAULTの時間進行と変化を調整します。隣の調整アイコンから設定できます。一時停止でFAULTの変化を止め、トリガーで一時的な乱れ、リセットで時間を戻します。カメラ映像は動き続けます。LIVE OFFでも固有の動きを持つFAULTがあり、端末への反応には各入力の有効化が必要です。</string>
+    <string name="guide_body_4">対応カメラでは、撮影モードとLIVEの間の形式表示をタップするとJPG ↔ RAWが切り替わります。動画は通常MP4です。設定でRAW動画の切り替えを有効にすると、対応カメラではMP4 ↔ RAW ZIPを選べます。RAW動画は無加工のDNG連番で、音声は付きません。下のボタンで切り替えを練習しましょう。</string>
+    <string name="guide_body_5">シャッターで写真を撮影し、動画では録画の開始と停止を行います。アプリを離れると録画を停止して保存します。実験機能を有効にすると、TAPから画像や動画を読み込み、後段のFAULTを通してJPG／MP4で保存できます。ガイド中は練習用信号だけが変わります。</string>
+    <string name="guide_body_6">サムネイルから保存結果を開きます。左右スワイプで移動、写真はピンチで拡大、動画は再生操作ができます。下へスワイプするとカメラへ戻ります。ライト・位置情報・音声の操作は上部にあり、横画面では右上に並びます。</string>
+    <string name="guide_body_7">歯車から設定を開き、変更はその場で保存されます。RAW ZIPへ切り替える前に、ここでRAW動画を有効にします。実験機能でTAPや端末への反応、ADVANCED MODEでFAULTの詳細パラメーターを使えます。推奨解像度では負荷を自動調整します。このガイドも設定から再表示できます。</string>
     <string name="guide_try">光る操作部をタップして試す</string>
     <string name="guide_tried">練習用信号を変更しました · もう一度</string>
     <string name="guide_sandbox">練習用 · 保存されません</string>
@@ -497,4 +497,6 @@
     <string name="feedback_copied">下書きをコピーしました</string>
     <string name="feedback_email">メールアプリを開く</string>
     <string name="feedback_no_email">メールアプリが見つかりません。下書きをコピーして、お使いのメールサービスから送信してください。</string>
+    <string name="format_cycle_hint">%1$s · タップで保存形式を切り替え</string>
+    <string name="guide_format_sample">練習：%1$s · タップで切り替え</string>
 </resources>

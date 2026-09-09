@@ -2,7 +2,6 @@ package com.bongorian.signa1
 
 import android.app.Dialog
 import android.graphics.Color
-import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.text.InputType
 import android.view.Gravity
@@ -198,79 +197,6 @@ internal object SignalSheet {
         return dialog
     }
 
-    fun anchoredPick(
-        a: MainActivity,
-        anchor: View,
-        title: String?,
-        labels: Array<String>,
-        selected: Int,
-        chosen: (Int) -> Unit,
-    ): Dialog {
-        val dialog = Dialog(a)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        val list = LinearLayout(a)
-        list.setOrientation(LinearLayout.VERTICAL)
-        list.setPadding(a.dp(8f), a.dp(8f), a.dp(8f), a.dp(8f))
-        list.setBackground(a.bg(MainActivity.BG, MainActivity.PANEL))
-        val heading = a.text(title, 11, MainActivity.MUTED)
-        heading.setPadding(a.dp(12f), a.dp(8f), a.dp(12f), a.dp(12f))
-        list.addView(heading)
-        for (n in labels.indices) {
-            val index = n
-            val option = a.button(labels[n] + (if (n == selected) "   ✓" else ""))
-            option.setTag("choice-" + n)
-            option.setSelected(n == selected)
-            option.setGravity(Gravity.CENTER_VERTICAL)
-            option.setTextColor(if (n == selected) MainActivity.LIME else MainActivity.WHITE)
-            option.setBackground(
-                if (n == selected)
-                    a.bg(
-                        MainActivity.PANEL,
-                        0,
-                    )
-                else ColorDrawable(Color.TRANSPARENT)
-            )
-            val p = LinearLayout.LayoutParams(-1, a.dp(48f))
-            if (n > 0) p.topMargin = a.dp(4f)
-            list.addView(option, p)
-            option.setOnClickListener(
-                OnClickListener@{ v: View? ->
-                    dialog.dismiss()
-                    chosen(index)
-                }
-            )
-        }
-        ButtonSpacing.apply(a, list)
-        dialog.setContentView(list)
-        val window = dialog.window
-        window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        window.setGravity(Gravity.TOP or Gravity.LEFT)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-        var lp = window.attributes
-        lp.dimAmount = .18f
-        window.setAttributes(lp)
-        dialog.setCanceledOnTouchOutside(true)
-        dialog.show()
-        val position = IntArray(2)
-        anchor.getLocationOnScreen(position)
-        val visible = Rect()
-        a.window.decorView.getWindowVisibleDisplayFrame(visible)
-        lp = window.attributes
-        lp.width = a.dp(212f)
-        lp.height = -2
-        lp.x =
-            max(
-                a.dp(8f),
-                min(
-                    position[0] - visible.left,
-                    visible.width() - lp.width - a.dp(8f),
-                ),
-            )
-        lp.y = max(0, position[1] + anchor.height + a.dp(6f) - visible.top)
-        window.setAttributes(lp)
-        return dialog
-    }
-
     fun number(
         a: MainActivity,
         title: String?,
@@ -326,17 +252,41 @@ internal object SignalSheet {
     }
 
     fun placeEditor(a: MainActivity, dialog: Dialog, height: Int): Int {
-        val usable = a.cameraRoot.height - a.cameraRoot.paddingTop - a.cameraRoot.paddingBottom
+        val root = a.cameraRoot
+        val usable = root.height - root.paddingTop - root.paddingBottom
+        val bounds = a.windowManager.currentWindowMetrics.bounds
+        val origin = IntArray(2)
+        root.getLocationOnScreen(origin)
         val window = dialog.window!!
-        if (a.cameraRoot.wide) {
-            window.setGravity(Gravity.END or Gravity.CENTER_VERTICAL)
-            window.attributes = window.attributes.apply { x = a.cameraRoot.paddingRight }
-            window.setLayout(a.cameraRoot.controlsColumn.width, usable)
-            return usable
+        val width: Int
+        val editorHeight: Int
+        val x: Int
+        val y: Int
+        if (root.wide) {
+            val controls = IntArray(2)
+            root.controlsColumn.getLocationOnScreen(controls)
+            width = root.controlsColumn.width
+            editorHeight = usable
+            x = controls[0] - bounds.left
+            y = origin[1] + root.paddingTop - bounds.top
+        } else {
+            val innerWidth = root.width - root.paddingLeft - root.paddingRight
+            width = min(innerWidth, a.dp(720f))
+            editorHeight = min(height, usable)
+            x = origin[0] + root.paddingLeft + (innerWidth-width)/2 - bounds.left
+            y = origin[1] + root.height - root.paddingBottom - editorHeight - bounds.top
         }
-        window.setGravity(Gravity.BOTTOM)
-        window.setLayout(a.cameraRoot.width - a.dp(16f), height)
-        return height
+        // Coordinates already include the app's safe insets. Do not apply them a second time.
+        window.setDecorFitsSystemWindows(false)
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+        window.attributes = window.attributes.apply {
+            fitInsetsTypes = 0
+            layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+            gravity = Gravity.TOP or Gravity.LEFT
+            this.x = x; this.y = y
+            this.width = width; this.height = editorHeight
+        }
+        return editorHeight
     }
 
     fun resize(a: MainActivity, dialog: Dialog, fraction: Float) {

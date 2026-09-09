@@ -6,9 +6,9 @@
 
 Choose Photo or Video, then use the center button or a volume key to capture or start/stop recording. Tap the viewfinder to focus. Zoom offers 1×/2×; RAW uses 1×. The camera switch selects front/back where supported.
 
-The top toolbar contains the format menu, light, GPS, video audio and Settings. Light and GPS turn lime when enabled; a long press reveals their status. Audio starts OFF. Turn it on for video sound; experimental RAW video is always silent. App information is in Settings.
+The top toolbar contains light, GPS, video audio and Settings; in landscape these sit above the right-hand controls. The viewfinder occupies the left side. Light and GPS turn lime when enabled; a long press reveals their status. Audio starts OFF. Turn it on for video sound; experimental RAW video is always silent. App information is in Settings.
 
-The format menu selects JPG/RAW for photos and MP4/RAW ZIP for video. Changing format preserves the selected fault route and its controls. RAW applies only supported faults; MEDIA and DISPLAY remain visible in the catalog with a format-switch action when needed. [Formats and capture limits](FORMATS.md).
+Tap the format label between capture mode and LIVE to cycle JPG/RAW on supported cameras. Video stays MP4 until RAW video switching is enabled in Settings; it can then cycle MP4/RAW ZIP where supported. Switching back to MP4 keeps that opt-in; disabling it in Settings returns recording format to MP4. TAP exports JPG or MP4 according to the imported media. Changing format preserves the selected fault route and its controls. RAW applies only supported faults; MEDIA and DISPLAY remain visible in the catalog with a format-switch action when needed. [Formats and capture limits](FORMATS.md).
 
 Keep the capture screen active while recording. Switching apps, going Home or locking the device stops recording and saves the recorded portion. Returning opens preview without restarting recording. This applies to camera, TAP and RAW recording. [Recording and permissions](RECORDING.md).
 
@@ -42,7 +42,7 @@ ADVANCED exposes internal parameters and retains displayed frames for JPEG captu
 
 The app recommends a conservative initial size for the device; manual sizes and Maximum remain available. Automatic preview workload reduction limits work under load. EXPERT removes app-level preview and cooling limits. [Performance modes](PERFORMANCE.md).
 
-The eight-step Quick start highlights the actual controls and offers an isolated LEVEL practice signal. The camera pauses during the guide. Skip, close or finish to dismiss it; replay it from Settings. It works offline in English, Japanese and Simplified Chinese.
+The eight-step Quick start highlights the actual controls and offers isolated LEVEL and format-switching practice. It covers capture icons and resolution long-press, SEED/RESEED, LIVE timing, TAP and immediately saved Settings. The camera pauses during the guide. Skip, close or finish to dismiss it; replay it from Settings. It works offline in English, Japanese and Simplified Chinese.
 
 ## View saved captures
 

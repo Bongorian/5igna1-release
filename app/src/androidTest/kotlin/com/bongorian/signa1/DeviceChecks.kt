@@ -191,7 +191,9 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "adaptive-rotation") {
+            if (action == "responsive") {
+                result.putString("result", ResponsiveUiChecks.run(this))
+            } else if (action == "adaptive-rotation") {
                 result.putString("result", AdaptiveRotationChecks.run(this))
             } else if (action == "adaptive") {
                 result.putString("result", AdaptiveUiChecks.run(this))
@@ -253,7 +255,7 @@ class DeviceChecks : Instrumentation() {
                 checkFormatUi()
                 result.putString(
                     "result",
-                    "PASS JPG/RAW picker, dismiss without change, RAW selection, legacy original migration and custom toggle",
+                    "PASS direct JPG/RAW and MP4/RAW ZIP cycling, RAW video opt-in persistence and opt-out, recording guard, TAP fixed exports and legacy migration",
                 )
             } else if (action == "chain-format") {
                 checkChainFormat()
@@ -737,6 +739,7 @@ class DeviceChecks : Instrumentation() {
         }
         await("camera after recommendation", { activity!!.ready }, 20000)
         val language = AppLanguage.current()
+        var tutorialFailure: Throwable? = null
         try {
             for (tag in arrayOf<String>("ja", "en", "zh")) {
                 changeLanguage(tag)
@@ -781,8 +784,13 @@ class DeviceChecks : Instrumentation() {
                     activity!!.savePrefs()
                 })
             }
+        } catch (failure: Throwable) {
+            tutorialFailure = failure
+            throw failure
         } finally {
-            changeLanguage(language)
+            try { changeLanguage(language) } catch (cleanup: Throwable) {
+                if (tutorialFailure != null) tutorialFailure.addSuppressed(cleanup) else throw cleanup
+            }
         }
         runOnMainSync({ activity!!.showTutorial() })
         // Dialog.show returns before WindowManager necessarily assigns input focus.
@@ -874,16 +882,17 @@ class DeviceChecks : Instrumentation() {
         val before = activity
         val monitor = addMonitor(MainActivity::class.java!!.getName(), null, false)
         runOnMainSync({ AppLanguage.select(tags) })
-        val next = monitor.waitForActivityWithTimeout(20000) as MainActivity
+        val deadline = SystemClock.elapsedRealtime() + 30000
+        var complete = false
+        while (SystemClock.elapsedRealtime() < deadline) {
+            val next = monitor.waitForActivityWithTimeout(250) as? MainActivity
+            if (next != null) activity = next
+            val current = activity!!
+            complete = current !== before && !current.isDestroyed && current.resumed && current.ready && current.engine.frameSeen
+            if (complete) break
+        }
         removeMonitor(monitor)
-        if (next == null || next === before)
-            throw AssertionError("Locale did not recreate activity: " + tags)
-        activity = next
-        await(
-            "localized camera ready",
-            { activity!!.resumed && activity!!.ready && activity!!.engine.frameSeen },
-            25000,
-        )
+        check(complete) { "Localized camera $tags: destroyed=${activity!!.isDestroyed}, resumed=${activity!!.resumed}, tutorial=${activity!!.tutorial?.page}, attached=${activity!!.engine.attached}" }
         if (before!!.engine.attached) throw AssertionError("Old camera remains attached")
     }
 
@@ -1049,6 +1058,7 @@ class DeviceChecks : Instrumentation() {
         }
         val raw = CaptureSettings(activity!!.settings)
         raw.location = false
+        raw.rawVideoEnabled = true
         raw.rawVideo = true
         raw.rawVideoFps = 2
         raw.rawVideoSize = activity!!.cameraOptions!!.rawVideos.get(0).size.toString()
@@ -1224,26 +1234,14 @@ class DeviceChecks : Instrumentation() {
         })
         SystemClock.sleep(500)
         saveUi("product-main.png")
-        val menu = arrayOfNulls<Dialog>(1)
-        runOnMainSync({ menu[0] = activity!!.showFormat() })
-        waitForIdleSync()
-        SystemClock.sleep(400)
-        runOnMainSync({
-            val button = IntArray(2)
-            val popup = IntArray(2)
-            activity!!.formatButton!!.getLocationOnScreen(button)
-            menu[0]!!.getWindow()!!.getDecorView().getLocationOnScreen(popup)
-            if (
-                popup[1] < button[1] + activity!!.formatButton!!.getHeight() - activity!!.dp(8f) ||
-                    popup[1] >
-                        button[1] + activity!!.formatButton!!.getHeight() + activity!!.dp(44f)
-            )
-                throw AssertionError(
-                    "Format popup is not anchored: " + popup[1] + " / " + button[1]
-                )
-        })
-        saveUi("product-format-menu.png")
-        runOnMainSync({ menu[0]!!.dismiss() })
+        val originalFormat = activity!!.capturePhotoFormat
+        if (activity!!.canCycleFormat()) {
+            runOnMainSync { activity!!.formatButton.performClick() }
+            await("cycled format", { activity!!.ready && activity!!.capturePhotoFormat != originalFormat }, 20000)
+            saveUi("product-format-cycle.png")
+            runOnMainSync { activity!!.formatButton.performClick() }
+            await("restored format", { activity!!.ready && activity!!.capturePhotoFormat == originalFormat }, 20000)
+        }
         runOnMainSync({ activity!!.liveChainStatus!!.performClick() })
         waitForIdleSync()
         SystemClock.sleep(500)
@@ -3275,75 +3273,7 @@ class DeviceChecks : Instrumentation() {
     }
 
     @Throws(Exception::class)
-    internal fun checkFormatUi() {
-        runOnMainSync({
-            activity!!.videoMode = false
-            val settings = CaptureSettings(activity!!.settings)
-            settings.photoFormat = 0
-            activity!!.applySettings(settings)
-        })
-        await("JPG ready", { activity!!.ready && activity!!.settings.photoFormat == 0 }, 20000)
-        val before = activity!!.effectState
-        val picker = arrayOfNulls<Dialog>(1)
-        runOnMainSync({
-            picker[0] = activity!!.showFormat()
-            if (picker[0]!!.getWindow()!!.getDecorView().findViewWithTag<View>("choice-2") != null)
-                throw AssertionError("Original RAW still offered")
-            if (findText(picker[0]!!.getWindow()!!.getDecorView(), "RAW") == null)
-                throw AssertionError("RAW missing")
-        })
-        waitForIdleSync()
-        SystemClock.sleep(200)
-        saveUi("jpg-raw-picker.png")
-        runOnMainSync({ picker[0]!!.dismiss() })
-        waitForIdleSync()
-        if (activity!!.settings.photoFormat != 0) throw AssertionError("Dismiss changed format")
-        runOnMainSync({
-            picker[0] = activity!!.showFormat()
-            picker[0]!!
-                .getWindow()!!
-                .getDecorView()
-                .findViewWithTag<View>("choice-1")
-                .performClick()
-        })
-        await("RAW ready", { activity!!.ready && activity!!.settings.photoFormat == 2 }, 20000)
-        if (before.encode() != activity!!.effectState.encode())
-            throw AssertionError("Format lost effect settings")
-        val fixture = getTargetContext().getSharedPreferences("formatMigrationTest", 0)
-        try {
-            fixture.edit().putInt("photoFormat", 1).commit()
-            if (CaptureSettings.load(fixture).photoFormat != 2)
-                throw AssertionError("Legacy original RAW not migrated")
-        } finally {
-            fixture.edit().clear().commit()
-        }
-        runOnMainSync({
-            val legacy = CaptureSettings(activity!!.settings)
-            legacy.photoFormat = 1
-            activity!!.applySettings(legacy)
-            if (activity!!.settings.photoFormat != 2) throw AssertionError("Legacy format applied")
-            val toggle = SignalToggle(activity!!, "Test", false)
-            val changed = intArrayOf(0)
-            toggle.setOnCheckedChangeListener({ v, checked -> changed[0]++ })
-            toggle.performClick()
-            if (!toggle.isChecked() || changed[0] != 1) throw AssertionError("Custom toggle failed")
-        })
-        await("migrated RAW ready", { activity!!.ready }, 20000)
-        runOnMainSync({ picker[0] = FaultDialog.show(activity!!) })
-        waitForIdleSync()
-        SystemClock.sleep(200)
-        saveUi("custom-live-settings.png")
-        runOnMainSync({ picker[0]!!.dismiss() })
-        runOnMainSync({
-            val quality = QualityDialog(activity!!)
-            quality.show()
-            picker[0] = quality.sheet
-        })
-        waitForIdleSync()
-        SystemClock.sleep(200)
-        saveUi("custom-capture-settings.png")
-        runOnMainSync({ picker[0]!!.dismiss() })
-    }
+    internal fun checkFormatUi() { FormatUiChecks.run(this) }
 
     @Throws(Exception::class)
     internal fun saveUi(name: String) {

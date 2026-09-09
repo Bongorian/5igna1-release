@@ -363,7 +363,7 @@
     <string name="expert_active">EXPERT · uncapped</string>
     <string name="expert_load_hint">EXPERT removes preview pacing limits and renders as fast as processing allows. Photo preview requests the fastest supported capture rate at the selected size. Choose resolution and video fps below.</string>
     <string name="settings_metadata_hint">Photos include the date, device, exposure, ISO and effects. With location enabled, an available location is added to photo GPS and video location tags. No location tag is added when a fix is unavailable.</string>
-    <string name="settings_raw_enable">Save DNG sequence</string>
+    <string name="settings_raw_enable">Enable RAW video switching</string>
     <string name="capture_gps_on">GPS · ON</string>
     <string name="capture_gps_off">GPS · OFF</string>
     <string name="fault_state_hint">Transient event intensity. Fixed faults and intrinsic motion can still be active at 0%.</string>
@@ -403,14 +403,14 @@
     <string name="guide_heading_5">Capture the signal</string>
     <string name="guide_heading_6">Review your captures</string>
     <string name="guide_heading_7">Make room to experiment</string>
-    <string name="guide_body_0">Follow the highlighted controls. Tap them to change the practice signal below. Practice does not change your settings or save media.</string>
-    <string name="guide_body_1">Use ＋ to select faults. They run in signal-processing order. Tap the highlighted button to try a broken test signal.</string>
-    <string name="guide_body_2">LEVEL controls the overall amount. Drag the practice slider to see the difference; your camera setting stays as it was.</string>
-    <string name="guide_body_3">LIVE varies fault behavior over time. Tap to compare another sample of the practice signal. This demo is not a live camera feed.</string>
-    <string name="guide_body_4">Choose JPEG for the processed image or RAW for sensor samples on supported cameras. The RAW preview is an approximation.</string>
-    <string name="guide_body_5">Tap the shutter for a photo, or start and stop a video in video mode. In this guide, tapping only changes the practice signal.</string>
-    <string name="guide_body_6">The thumbnail opens your saved captures. Check your image there after shooting. Nothing is saved during this guide.</string>
-    <string name="guide_body_7">Resolution and EXPERT affect processing load. Use recommended settings to restore adaptive load control. Replay this guide from Settings.</string>
+    <string name="guide_body_0">Follow the highlighted controls to practice without changing settings or saving media. The camera and video icons choose capture mode. In landscape, the viewfinder sits on the left and controls on the right.</string>
+    <string name="guide_body_1">Use ＋ to add faults in signal-processing order. Tap a selected fault to edit it; Apply keeps changes and Back discards them. MEDIA and DISPLAY each offer different models. SEED fixes the identity; RESEED changes it while keeping controls. Tap shuffle for a new chain, or hold it to reseed the chain.</string>
+    <string name="guide_body_2">LEVEL changes overall strength immediately. Drag this practice slider to compare. Hold the camera or video icon to choose resolution. RAW previews approximate the supported sensor effects; RGB-only effects do not process RAW samples.</string>
+    <string name="guide_body_3">LIVE controls fault timing and variation. The adjacent sliders icon opens its settings. PAUSE holds fault evolution, TRIGGER produces a burst and RESET restarts fault time. The camera keeps moving. Some faults have their own motion even with LIVE off; device reactions require their inputs to be enabled.</string>
+    <string name="guide_body_4">Tap the format label between capture mode and LIVE to cycle JPG ↔ RAW on supported cameras. Video stays MP4 unless RAW video switching is enabled in Settings; supported cameras can then cycle MP4 ↔ RAW ZIP. RAW video saves original DNG frames without audio. Try the format button below.</string>
+    <string name="guide_body_5">Tap the shutter to take a photo or to start and stop video recording. Leaving the app stops recording and saves it. With Experimental features enabled, TAP imports an image or video for downstream faults; it exports JPG or MP4. The guide only changes the practice signal.</string>
+    <string name="guide_body_6">The thumbnail opens saved captures. Swipe sideways to browse, pinch photos to zoom and use playback controls for video. Swipe down to return. The light, location and audio controls sit at the top, on the right in landscape.</string>
+    <string name="guide_body_7">The gear opens Settings; changes save immediately. Enable RAW video here before switching to RAW ZIP. Experimental features expose TAP and device responses; ADVANCED MODE exposes detailed fault parameters. Use recommended resolution for adaptive load control. Replay this guide from Settings.</string>
     <string name="guide_try">TRY THE HIGHLIGHTED CONTROL</string>
     <string name="guide_tried">PRACTICE UPDATED · TAP AGAIN</string>
     <string name="guide_sandbox">PRACTICE ONLY · NOTHING SAVED</string>
@@ -497,4 +497,6 @@
     <string name="feedback_copied">Draft copied</string>
     <string name="feedback_email">Open email app</string>
     <string name="feedback_no_email">No email app found. Copy the draft and send it using your preferred email service.</string>
+    <string name="format_cycle_hint">%1$s · Tap to switch save format</string>
+    <string name="guide_format_sample">Practice: %1$s · tap to switch</string>
 </resources>

@@ -13,6 +13,7 @@ internal class CaptureSettings {
     var videoKey: String = "recommended"
     var codec: String = "video/avc"
     var location: Boolean = false
+    var rawVideoEnabled: Boolean = false
     var rawVideo: Boolean = false
     var expertMode: Boolean = false
     var experimentalSignals: Boolean = false
@@ -35,7 +36,8 @@ internal class CaptureSettings {
         videoKey = other.videoKey
         codec = other.codec
         location = other.location
-        rawVideo = other.rawVideo
+        rawVideoEnabled = other.rawVideoEnabled
+        rawVideo = other.rawVideo && rawVideoEnabled
         rawVideoSize = other.rawVideoSize
         rawVideoFps = other.rawVideoFps
     }
@@ -54,7 +56,8 @@ internal class CaptureSettings {
             .putString("videoKey", videoKey)
             .putString("codec", codec)
             .putBoolean("location", location)
-            .putBoolean("rawVideo", rawVideo)
+            .putBoolean("rawVideoEnabled", rawVideoEnabled)
+            .putBoolean("rawVideo", rawVideo && rawVideoEnabled)
             .putString("rawVideoSize", rawVideoSize)
             .putInt("rawVideoFps", rawVideoFps)
             .apply()
@@ -78,7 +81,9 @@ internal class CaptureSettings {
             if (s.videoKey!!.isEmpty()) s.videoKey = "recommended"
             s.codec = p.getString("codec", "video/avc") ?: "video/avc"
             s.location = p.getBoolean("location", false)
-            s.rawVideo = p.getBoolean("rawVideo", false)
+            // Preserve an existing RAW-video choice as an explicit opt-in on upgrade.
+            s.rawVideoEnabled = p.getBoolean("rawVideoEnabled", p.getBoolean("rawVideo", false))
+            s.rawVideo = s.rawVideoEnabled && p.getBoolean("rawVideo", false)
             s.rawVideoSize = p.getString("rawVideoSize", "") ?: ""
             s.rawVideoFps = max(1, min(30, p.getInt("rawVideoFps", 12)))
             return s

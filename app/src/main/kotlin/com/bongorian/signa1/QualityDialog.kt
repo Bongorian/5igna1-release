@@ -287,13 +287,15 @@ internal class QualityDialog(a: MainActivity) {
             SignalToggle(
                 activity,
                 activity.getString(R.string.settings_raw_enable),
-                draft.rawVideo && options.rawVideoAvailable(),
+                draft.rawVideoEnabled && options.rawVideoAvailable(),
             )
+        rawMode!!.tag = "raw-video-enable"
         rawMode!!.setEnabled(options.rawVideoAvailable())
         content!!.addView(rawMode, LinearLayout.LayoutParams(-1, activity.dp(48f)))
         rawMode!!.setOnCheckedChangeListener(
             OnCheckedChangeListener@{ button: CompoundButton?, checked: Boolean ->
-                draft.rawVideo = checked
+                draft.rawVideoEnabled = checked
+                if (!checked) draft.rawVideo = false
                 persist()
             }
         )
@@ -458,7 +460,7 @@ internal class QualityDialog(a: MainActivity) {
             )
         if (options == null) return
         val raw = options.rawVideo(draft)
-        val active = draft.rawVideo && options.rawVideoAvailable()
+        val active = draft.rawVideoEnabled && options.rawVideoAvailable()
         rawInfo!!.setVisibility(
             if (active || !options.rawVideoAvailable()) View.VISIBLE else View.GONE
         )

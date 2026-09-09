@@ -44,7 +44,7 @@ internal object FaultDialog {
     }
 
     fun timeButtons(a: MainActivity, row: LinearLayout, vararg buttons: TextView?) {
-        timeButtons(a, row, buttons[0], buttons[1], buttons[2], 40)
+        timeButtons(a, row, buttons[0], buttons[1], buttons[2], 44)
     }
 
     fun timeButtons(

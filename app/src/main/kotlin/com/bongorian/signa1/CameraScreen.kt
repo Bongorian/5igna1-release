@@ -43,12 +43,7 @@ internal fun MainActivity.buildUi() {
                 insets!!.getInsets(
                     WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout()
                 )
-            root.setPadding(
-                dp(18f) + safe.left,
-                dp(8f) + safe.top,
-                dp(18f) + safe.right,
-                dp(4f) + safe.bottom,
-            )
+            root.applySafeInsets(safe)
             insets
         }
     )
@@ -71,13 +66,14 @@ internal fun MainActivity.buildUi() {
     root.utilityBlock = utility
     previewColumn.addView(utility, LinearLayout.LayoutParams(-1, -2))
     val header = row()
-    utility.addView(header, LinearLayout.LayoutParams(-1, dp(49f)))
+    utility.addView(header, LinearLayout.LayoutParams(-1, dp(48f)))
     formatButton = button("")
-    formatButton.setTextSize(10f)
+    formatButton.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
+    formatButton.setTextSize(11f)
     formatButton.setPadding(dp(2f), 0, dp(2f), 0)
-    formatButton.setOnClickListener(OnClickListener@{ v: View? -> showFormat() })
+    formatButton.setOnClickListener(OnClickListener@{ v: View? -> cycleFormat() })
     torchButton = iconButton(R.drawable.ic_flash, getString(R.string.ui_light_off))
-    header.addView(torchButton, LinearLayout.LayoutParams(dp(44f), dp(44f)))
+    header.addView(torchButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     renderTorch()
     torchButton.setOnClickListener(
         OnClickListener@{ v: View? ->
@@ -86,11 +82,11 @@ internal fun MainActivity.buildUi() {
         }
     )
     geoButton = iconButton(R.drawable.ic_location, getString(R.string.ui_capture_location_settings))
-    header.addView(geoButton, LinearLayout.LayoutParams(dp(44f), dp(44f)))
+    header.addView(geoButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     geoButton.setOnClickListener(OnClickListener@{ v: View? -> showLocation() })
     renderGeo()
     micButton = iconButton(R.drawable.ic_mic, getString(R.string.ui_audio_on))
-    header.addView(micButton, LinearLayout.LayoutParams(dp(44f), dp(44f)))
+    header.addView(micButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     renderAudio()
     micButton.setOnClickListener(
         OnClickListener@{ v: View? ->
@@ -105,11 +101,11 @@ internal fun MainActivity.buildUi() {
         iconButton(R.drawable.ic_settings, getString(R.string.ui_capture_and_language_settings))
     settingsButton.tag = "guide-settings"
     header.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
-    header.addView(settingsButton, LinearLayout.LayoutParams(dp(44f), dp(44f)))
+    header.addView(settingsButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     settingsButton.setOnClickListener(OnClickListener@{ v: View? -> showSettings() })
     val info = row()
     utility.addView(info, LinearLayout.LayoutParams(-1, dp(27f)))
-    status = text("CONNECTING…", 10, LIME)
+    status = text("CONNECTING…", 11, LIME)
     status.setTypeface(Typeface.MONOSPACE)
     status.setSingleLine(true)
     status.setEllipsize(TextUtils.TruncateAt.END)
@@ -218,12 +214,12 @@ internal fun MainActivity.buildUi() {
     liveTag.setTag("fx")
     val lens = row()
     lens.setGravity(Gravity.CENTER)
-    val lensP = FrameLayout.LayoutParams(dp(56f), dp(42f), Gravity.TOP or Gravity.END)
+    val lensP = FrameLayout.LayoutParams(dp(56f), dp(48f), Gravity.TOP or Gravity.END)
     lensP.topMargin = dp(12f)
     viewfinder.addView(lens, lensP)
     zoomButton = button(if (zoom == 1f) "1×" else "2×")
     zoomButton.setBackground(bg(-0x33ede8ee, 0))
-    lens.addView(zoomButton, LinearLayout.LayoutParams(dp(50f), dp(38f)))
+    lens.addView(zoomButton, LinearLayout.LayoutParams(dp(50f), dp(44f)))
     zoomButton.setOnClickListener(
         OnClickListener@{ v: View? ->
             zoom = (if (zoom == 1f) 2 else 1).toFloat()
@@ -251,9 +247,10 @@ internal fun MainActivity.buildUi() {
     scroll.addView(selectedRoute)
     val add = button("＋")
     add.tag = "guide-add"
-    add.setTextSize(22f)
+    add.setTextSize(20f)
+    add.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
     add.setContentDescription(getString(R.string.fault_add_remove))
-    chainRow.addView(add, LinearLayout.LayoutParams(dp(44f), dp(44f)))
+    chainRow.addView(add, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     add.setOnClickListener(OnClickListener@{ v: View? -> showChain() })
     val random =
         iconButton(
@@ -310,11 +307,11 @@ internal fun MainActivity.buildUi() {
             }
         }
     )
-    val tools = row()
-    controlBody.addView(tools, LinearLayout.LayoutParams(-1, dp(56f)))
+    val tools = CaptureToolbar(this)
+    controlBody.addView(tools, LinearLayout.LayoutParams(-1, -2))
     val modeGroup = row().apply {
-        background = bg(PANEL, 0)
-        setPadding(dp(2f), dp(4f), dp(2f), dp(4f))
+        background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
+        setPadding(dp(2f), 0, dp(2f), 0)
         accessibilityDelegate = object : View.AccessibilityDelegate() {
             override fun onInitializeAccessibilityNodeInfo(host: View, info: android.view.accessibility.AccessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(host, info)
@@ -328,6 +325,7 @@ internal fun MainActivity.buildUi() {
     videoTab = CaptureModeButton(this, R.drawable.ic_mode_video, getString(R.string.ui_video))
     tapTab = CaptureModeButton(this, R.drawable.ic_mode_tap, getString(R.string.tap_mode))
     for (mode in listOf(photoTab, videoTab, tapTab)) modeGroup.addView(mode, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    tools.modes = modeGroup
     tools.addView(modeGroup, LinearLayout.LayoutParams(-2, dp(56f)))
     tapTab.setOnClickListener { if (!tapMode) { if (tapInput != null) enterTap(tapInput!!) else chooseTap() } }
     photoTab.setOnClickListener { setVideo(false) }
@@ -336,12 +334,13 @@ internal fun MainActivity.buildUi() {
     videoTab.setOnLongClickListener { ResolutionPicker.show(this, true); true }
     photoTab.tooltipText = getString(R.string.ui_photo) + " · " + getString(R.string.resolution_hold)
     videoTab.tooltipText = getString(R.string.ui_video) + " · " + getString(R.string.resolution_hold)
-    tools.addView(Space(this), LinearLayout.LayoutParams(dp(4f), 1))
+    tools.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
     tools.addView(formatButton, LinearLayout.LayoutParams(dp(52f), -1))
-    tools.addView(Space(this), LinearLayout.LayoutParams(dp(4f), 1))
+    tools.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
     val live = row()
-    live.setBackground(bg(PANEL, 0))
-    tools.addView(live, LinearLayout.LayoutParams(0, -1, 1f))
+    tools.live = live
+    live.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
+    tools.addView(live, LinearLayout.LayoutParams(-2, -1))
     faultSwitch = ToggleButton(this)
     faultSwitch.setTextOn("LIVE\nON")
     faultSwitch.setTextOff("LIVE\nOFF")
@@ -352,8 +351,9 @@ internal fun MainActivity.buildUi() {
     faultSwitch.setChecked(faultConfig.enabled)
     faultSwitch.setTextColor(if (faultConfig.enabled) LIME else MUTED)
     faultSwitch.setContentDescription(getString(R.string.ui_toggle_live_fault))
-    live.addView(faultSwitch, LinearLayout.LayoutParams(0, -1, 1f))
+    live.addView(faultSwitch, LinearLayout.LayoutParams(dp(64f), -1))
     val reactions = iconButton(R.drawable.ic_tune, getString(R.string.ui_live_fault_settings))
+    tools.tune = reactions
     reactions.setPadding(dp(11f), dp(11f), dp(11f), dp(11f))
     live.addView(reactions, LinearLayout.LayoutParams(dp(42f), -1))
     reactions.setOnClickListener(OnClickListener@{ v: View? -> FaultDialog.show(this) })
@@ -391,12 +391,12 @@ internal fun MainActivity.buildUi() {
     echoButton = button(getString(R.string.echo_trigger))
     echoButton.contentDescription = getString(R.string.echo_hint)
     echoButton.setOnClickListener { engine.triggerEcho() }
-    controlBody.addView(echoButton, LinearLayout.LayoutParams(-1, dp(40f)))
+    controlBody.addView(echoButton, LinearLayout.LayoutParams(-1, dp(44f)))
     val controls = row()
     controls.setGravity(Gravity.CENTER)
     controlsColumn.addView(controls, LinearLayout.LayoutParams(-1, dp(88f)))
     galleryButton = MediaThumbnail(this)
-    controls.addView(galleryButton, LinearLayout.LayoutParams(dp(54f), dp(54f)))
+    controls.addView(galleryButton, LinearLayout.LayoutParams(dp(44f), dp(44f)))
     galleryButton.setOnClickListener(OnClickListener@{ v: View? -> openGallery() })
     galleryButton.load(latest, latestVideo)
     val spacer = Space(this)
@@ -411,8 +411,8 @@ internal fun MainActivity.buildUi() {
             R.drawable.ic_camera_flip,
             getString(R.string.ui_switch_front_and_rear_cameras),
         )
-    flipButton.setBackground(bg(PANEL, 0))
-    controls.addView(flipButton, LinearLayout.LayoutParams(dp(54f), dp(54f)))
+    flipButton.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), dp(2f))
+    controls.addView(flipButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     flipButton.setOnClickListener(
         OnClickListener@{ v: View? ->
             if (!recording) {

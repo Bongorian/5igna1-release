@@ -251,7 +251,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         route!!.removeAllViews()
         for (id in Effects.ordered(mask, false).filter { a.settings.experimentalSignals || !Effects.physical(it) }) {
             val chip = a.button(Effects.label(id))
-            chip.setTextSize(10f)
+            chip.setTextSize(12f)
             val focus = tuning && id == focused
             chip.setTextColor(
                 if (focus) MainActivity.BG
@@ -350,7 +350,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         } else {
             val hint =
                 a.text(
-                    a.getString(R.string.fault_catalog_hint) + (if (a.settings.experimentalSignals) "\n" + a.getString(R.string.physical_artifact_hint) else ""),
+                    a.getString(R.string.fault_catalog_hint),
                     MainActivity.TEXT_BODY,
                     MainActivity.MUTED,
                 )
@@ -360,14 +360,16 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             for (i in ids.indices) {
                 if (i % 2 == 0) {
                     row = a.row()
-                    body!!.addView(row, LinearLayout.LayoutParams(-1, a.dp(65f)))
+                    body!!.addView(row, LinearLayout.LayoutParams(-1, -2))
+                    row.minimumHeight = a.dp(65f)
                 }
                 val id = ids[i]
                 val choice = a.button("")
-                choice.setTextSize(11f)
+                choice.setTextSize(12f)
+                choice.minHeight = a.dp(60f)
                 choice.setPadding(a.dp(6f), a.dp(4f), a.dp(6f), a.dp(4f))
                 choices.put(id, choice)
-                val p = LinearLayout.LayoutParams(0, a.dp(60f), 1f)
+                val p = LinearLayout.LayoutParams(0, -2, 1f)
                 p.setMargins(a.dp(2f), 0, a.dp(2f), 0)
                 row!!.addView(choice, p)
                 paintChoice(id)

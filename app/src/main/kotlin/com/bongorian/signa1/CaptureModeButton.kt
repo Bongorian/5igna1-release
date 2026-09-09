@@ -9,8 +9,8 @@ import android.widget.RadioButton
 internal class CaptureModeButton(a: MainActivity, icon: Int, label: String) : AppCompatImageView(a), Checkable {
     init {
         setImageResource(icon)
-        scaleType = ScaleType.CENTER_INSIDE
-        setPadding(a.dp(12f), a.dp(12f), a.dp(12f), a.dp(12f))
+        scaleType = ScaleType.FIT_CENTER
+        setPadding(a.dp(14f), a.dp(14f), a.dp(14f), a.dp(14f))
         contentDescription = label
         tooltipText = label
         isClickable = true
@@ -23,7 +23,8 @@ internal class CaptureModeButton(a: MainActivity, icon: Int, label: String) : Ap
     override fun setChecked(checked: Boolean) {
         isSelected = checked
         val a = context as MainActivity
-        background = a.bg(if (checked) MainActivity.LIME else MainActivity.PANEL, 0)
+        background = android.graphics.drawable.InsetDrawable(
+            a.bg(if (checked) MainActivity.LIME else MainActivity.PANEL, 0), a.dp(2f))
         setColorFilter(if (checked) MainActivity.BG else MainActivity.MUTED)
     }
 

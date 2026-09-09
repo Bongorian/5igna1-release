@@ -363,7 +363,7 @@
     <string name="expert_active">EXPERT · 不限帧率</string>
     <string name="expert_load_hint">EXPERT取消预览限速，尽可能快速渲染。照片预览请求所选尺寸支持的最高采集频率。可在下方选择分辨率和视频帧率。</string>
     <string name="settings_metadata_hint">照片记录日期、设备、曝光、ISO 和效果信息。启用位置后，会将已获取的位置写入照片 GPS 和视频位置标签。未定位时不添加位置标签。</string>
-    <string name="settings_raw_enable">保存DNG序列</string>
+    <string name="settings_raw_enable">启用RAW视频格式切换</string>
     <string name="capture_gps_on">GPS · ON</string>
     <string name="capture_gps_off">GPS · OFF</string>
     <string name="fault_state_hint">突发故障的强度。即使为0%，固定处理和固有变化也可能继续。</string>
@@ -403,14 +403,14 @@
     <string name="guide_heading_5">捕捉当前信号</string>
     <string name="guide_heading_6">查看拍摄结果</string>
     <string name="guide_heading_7">继续探索</string>
-    <string name="guide_body_0">跟随高亮的控件。点击后，下方的练习信号会改变。练习不会修改设置或保存照片。</string>
-    <string name="guide_body_1">使用＋选择FAULT，它们按信号处理顺序生效。点击高亮按钮，尝试改变练习信号。</string>
-    <string name="guide_body_2">LEVEL控制整体强度。拖动练习滑块查看差异，相机设置保持原样。</string>
-    <string name="guide_body_3">LIVE让FAULT随时间变化。点击以比较练习信号的另一种状态。此图不是实时相机画面。</string>
-    <string name="guide_body_4">JPEG保存处理后的图像，支持的相机可用RAW保存传感器采样值。RAW预览是近似效果。</string>
-    <string name="guide_body_5">点击快门拍照；在视频模式中开始或停止录像。本指南中，点击仅改变练习信号。</string>
-    <string name="guide_body_6">缩略图可打开已保存的拍摄结果。拍摄后可在此查看。指南不会保存任何照片。</string>
-    <string name="guide_body_7">分辨率和EXPERT会影响处理负载。使用推荐设置可恢复自动负载调节。可从设置再次打开本指南。</string>
+    <string name="guide_body_0">跟随高亮控件练习，不会修改设置或保存媒体。相机和摄像机图标用于选择拍摄模式。横屏时，预览位于左侧，控件位于右侧。</string>
+    <string name="guide_body_1">用＋添加FAULT，它们按信号处理顺序生效。点击已选FAULT进行调整；应用保留修改，返回放弃修改。MEDIA和DISPLAY提供不同模型。SEED确定故障个体，RESEED保留参数并更换个体。点击随机图标重新组合，长按则为整个链重新生成种子。</string>
+    <string name="guide_body_2">LEVEL立即调整整体强度。拖动练习滑块比较效果。长按相机或摄像机图标可选择分辨率。RAW预览是受支持传感器处理的近似效果；仅适用于RGB的FAULT不会处理RAW采样。</string>
+    <string name="guide_body_3">LIVE控制故障时间和变化，旁边的调节图标打开设置。暂停冻结故障变化，触发产生短暂故障，重置重新开始故障时间。相机画面继续更新。关闭LIVE后，部分FAULT仍有自身运动；设备响应需要启用相应输入。</string>
+    <string name="guide_body_4">点击拍摄模式与LIVE之间的格式标签，在支持的相机上循环切换JPG ↔ RAW。视频默认为MP4；在设置中启用RAW视频切换后，支持的相机可切换MP4 ↔ RAW ZIP。RAW视频保存原始DNG序列，不包含音频。使用下方按钮练习切换。</string>
+    <string name="guide_body_5">点击快门拍照，或开始和停止录像。离开应用会停止录像并保存。启用实验功能后，TAP可导入图片或视频，经过后续FAULT处理后保存为JPG或MP4。指南中只会改变练习信号。</string>
+    <string name="guide_body_6">缩略图打开已保存的拍摄结果。左右滑动浏览，双指缩放照片，使用视频播放控件。向下滑动返回相机。照明、位置和音频控件位于顶部，横屏时位于右上方。</string>
+    <string name="guide_body_7">齿轮打开设置，修改立即保存。切换RAW ZIP前，先在这里启用RAW视频。实验功能提供TAP和设备响应，ADVANCED MODE提供详细故障参数。推荐分辨率支持自动负载调节。也可从设置重新打开本指南。</string>
     <string name="guide_try">点击高亮控件试一试</string>
     <string name="guide_tried">练习信号已改变 · 再试一次</string>
     <string name="guide_sandbox">仅供练习 · 不会保存</string>
@@ -497,4 +497,6 @@
     <string name="feedback_copied">已复制草稿</string>
     <string name="feedback_email">打开邮件应用</string>
     <string name="feedback_no_email">未找到邮件应用。请复制草稿并使用您选择的邮件服务发送。</string>
+    <string name="format_cycle_hint">%1$s · 点击切换保存格式</string>
+    <string name="guide_format_sample">练习：%1$s · 点击切换</string>
 </resources>

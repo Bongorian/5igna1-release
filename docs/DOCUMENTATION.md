@@ -63,3 +63,6 @@ Update the relevant reference and its Japanese edition when behavior changes. Ke
 Keep historical measurements, hashes and submitted metadata intact. Label the source/date instead of rewriting old results as current coverage. When moving a document, repair inbound and outbound links. Run the local documentation link/coverage check, locale checks and relevant application tests before committing. Policy-copy changes require a separate site update when the corresponding app version is published; editing this application checkout does not deploy the site.
 
 - [Adaptive windows and feedback](audit/ADAPTIVE_WINDOW_FEEDBACK.md): development scope, device verification and SDK-free Play diagnostics.
+
+- [UI display polish](audit/UI_DISPLAY_POLISH.md): development rotation, display and diagnostics verification.
+- [Compact capture controls](audit/COMPACT_CAPTURE_UI.md): format cycling, RAW video opt-in, responsive controls and refreshed guide verification.
