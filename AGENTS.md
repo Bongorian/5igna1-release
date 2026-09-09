@@ -56,3 +56,8 @@
 
 - The owner explicitly requested distributing 1.3.0 on Play while skipping 1.2.0. The existing Alpha track accepted 1.3.0 / code 11 for review, using the existing Play upload key and unchanged tester/country settings. Managed publishing remains on; approval and the subsequent publication action are pending. See docs/PLAY_1_3_0.md.
 - Preserve the submitted code-11 AAB and prior artifacts. Any changed application code in a future submission needs a higher versionCode.
+
+## Owner direction — interactive guide and thermal audit, 2026-09-09
+
+- The owner requested a development branch for an interactive guide, investigating/improving heat, and assessing image/noise/other-frame injection boundaries. Work on `codex/interactive-guide-thermal-inputs`; preserve main, published releases and the submitted code-11 artifacts. Injection is an assessment, not a requested feature implementation. Continue authorized debug-only physical-device testing.
+- The owner subsequently requested immediate persistence in the Settings panel, replacing its Apply action. This supersedes settings draft/cancel semantics for `QualityDialog`; effect and LIVE editors retain their existing apply/cancel behavior.

@@ -105,7 +105,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     val previewAcknowledgement: Runnable =
         object : Runnable {
             override fun run() {
-                if (!resumed || mediaPreview != null) return
+                if (!resumed || mediaPreview != null || tutorial != null) return
                 if (preview.isAvailable())
                     engine.previewPresented(preview.surfaceTexture!!.timestamp)
                 handler.postDelayed(this, 100)
@@ -776,7 +776,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun resumeCameraPreview() {
-        if (!resumed || mediaPreview != null) return
+        if (!resumed || mediaPreview != null || tutorial != null) return
         handler.removeCallbacks(previewAcknowledgement)
         handler.post(previewAcknowledgement)
         if (
@@ -801,7 +801,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun ready(value: Boolean) {
-        ready = value && resumed && mediaPreview == null
+        ready = value && resumed && mediaPreview == null && tutorial == null
         capture.setAlpha(if (ready) 1f else .4f)
     }
 
@@ -855,7 +855,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         resumed = true
         handler.removeCallbacks(previewAcknowledgement)
         handler.post(previewAcknowledgement)
-        geo.start()
+        if (tutorialPage < 0 && tutorial == null) geo.start()
         galleryButton.load(latest, latestVideo)
         if (tutorialPage >= 0 && tutorial == null) showTutorial()
         if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
@@ -883,15 +883,25 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         super.onPause()
     }
 
-    fun showTutorial() {
-        if (tutorial != null) return
-        tutorial = TutorialDialog(this, max(0, tutorialPage))
+    fun showTutorial() = showTutorial(null)
+
+    fun showTutorial(host: android.app.Dialog?) {
+        if (tutorial != null || recording || engine.photoBusy) return
+        tutorial = TutorialDialog(this, max(0, tutorialPage), host)
+        ready(false)
+        handler.removeCallbacks(previewAcknowledgement)
+        geo.stop()
+        engine.detach()
         tutorial!!.show()
     }
 
     fun tutorialClosed() {
         tutorial = null
         tutorialPage = -1
+        if (resumed) {
+            geo.start()
+            resumeCameraPreview()
+        }
         getSharedPreferences("signal", 0).edit().putBoolean(TutorialDialog.SEEN, true).apply()
         if (
             resumed &&
@@ -929,6 +939,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             return
         }
         if (code == 1) {
+            if (tutorial != null) return
             if (
                 checkSelfPermission(Manifest.permission.CAMERA) ==
                     PackageManager.PERMISSION_GRANTED &&
@@ -953,7 +964,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             }
         }
         if (code == 3) {
-            if (resumed) geo.start()
+            if (resumed && tutorial == null) geo.start()
             renderGeo()
             showLocation()
         }
@@ -977,6 +988,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         if (
             resumed &&
                 mediaPreview == null &&
+                tutorial == null &&
                 checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
         )
             engine.attach(

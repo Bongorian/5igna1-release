@@ -8,7 +8,7 @@ Settings → **Workload and recommendations** → **Use recommended photo and vi
 
 ## EXPERT MODE
 
-Settings → Modes → **EXPERT MODE** removes app-level thermal pauses, adaptive workload caps and timed preview frame skipping. Photo preview requests the fastest advertised normal capture rate compatible with the chosen stream; video uses its selected fps. Actual throughput remains limited by the camera, GPU, display and retained-frame availability. Resolution choices are preserved, so a smaller manual size can still be faster. EXPERT is independent of ADVANCED (internal parameter display), is saved only on Apply, and starts off by default.
+Settings → Modes → **EXPERT MODE** removes app-level thermal pauses, adaptive workload caps and timed preview frame skipping. Photo preview requests the fastest advertised normal capture rate compatible with the chosen stream; video uses its selected fps. Actual throughput remains limited by the camera, GPU, display and retained-frame availability. Resolution choices are preserved, so a smaller manual size can still be faster. EXPERT is independent of ADVANCED (internal parameter display), is saved as soon as you toggle it, and starts off by default.
 
 EXPERT skips workload thermal polling and never stops a recording in response to the app's thermal thresholds. Turning it off restores automatic control. Heat and battery use can increase. Android/device thermal protections and supported-format, memory-buffer and storage checks remain in effect. This mode does not overclock the device or bypass Android's controls.
 

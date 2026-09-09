@@ -230,6 +230,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     private var effectState: EffectState = EffectState.defaults()
     private var previewEffects: EffectState? = null
     private val configRevision = AtomicLong()
+    // Surface lifecycle changes must not discard the latest settings selection.
+    private val settingsRevision = AtomicLong()
     private var appliedRevision: Long = 0
 
     fun setLocationEnabled(value: Boolean) {
@@ -638,10 +640,11 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
 
     fun configure(next: CaptureSettings, video: Boolean, effects: EffectState) {
         val copy = CaptureSettings(next)
+        val selection = settingsRevision.incrementAndGet()
         val revision = configRevision.incrementAndGet()
         gl.post(
             Runnable@{
-                if (recording || photoBusy) return@Runnable
+                if (recording || photoBusy || selection != settingsRevision.get()) return@Runnable
                 appliedRevision = revision
                 settings = copy
                 if (!settings.expertMode) thermalMonitor.sample(SystemClock.elapsedRealtime())
@@ -853,7 +856,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                     CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM
                 )
             maxZoom = if (mz == null) 1f else min(4f, mz)
-            settings.save(context.getSharedPreferences("signal", 0))
+            if (appliedRevision == configRevision.get())
+                settings.save(context.getSharedPreferences("signal", 0))
             val catalog = requireNotNull(options)
             val actual = CaptureSettings(settings)
             val ow = outW

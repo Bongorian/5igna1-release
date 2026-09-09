@@ -395,4 +395,25 @@
     <string name="tutorial_body_3">Enable LIVE for variation over time and reactions to enabled inputs such as motion and sound. PAUSE freezes the variation; TRIGGER triggers a burst. Microphone access is requested when audio reaction needs it. RAW previews are approximations of the saved result.</string>
     <string name="tutorial_heading_4">Review what you saved</string>
     <string name="tutorial_body_4">Tap the thumbnail to open saved photos and videos. Swipe left or right to browse, pinch photos to zoom, and use playback controls for video. Swipe down to return to the camera. Settings also contains this guide, capture options and language.</string>
+    <string name="guide_heading_0">Meet your signal</string>
+    <string name="guide_heading_1">Build a fault chain</string>
+    <string name="guide_heading_2">Dial the intensity</string>
+    <string name="guide_heading_3">Let LIVE vary it</string>
+    <string name="guide_heading_4">Choose your format</string>
+    <string name="guide_heading_5">Capture the signal</string>
+    <string name="guide_heading_6">Review your captures</string>
+    <string name="guide_heading_7">Make room to experiment</string>
+    <string name="guide_body_0">Follow the highlighted controls. Tap them to change the practice signal below. Practice does not change your settings or save media.</string>
+    <string name="guide_body_1">Use ＋ to select faults. They run in signal-processing order. Tap the highlighted button to try a broken test signal.</string>
+    <string name="guide_body_2">LEVEL controls the overall amount. Drag the practice slider to see the difference; your camera setting stays as it was.</string>
+    <string name="guide_body_3">LIVE varies fault behavior over time. Tap to compare another sample of the practice signal. This demo is not a live camera feed.</string>
+    <string name="guide_body_4">Choose JPEG for the processed image or RAW for sensor samples on supported cameras. The RAW preview is an approximation.</string>
+    <string name="guide_body_5">Tap the shutter for a photo, or start and stop a video in video mode. In this guide, tapping only changes the practice signal.</string>
+    <string name="guide_body_6">The thumbnail opens your saved captures. Check your image there after shooting. Nothing is saved during this guide.</string>
+    <string name="guide_body_7">Resolution and EXPERT affect processing load. Use recommended settings to restore adaptive load control. Replay this guide from Settings.</string>
+    <string name="guide_try">TRY THE HIGHLIGHTED CONTROL</string>
+    <string name="guide_tried">PRACTICE UPDATED · TAP AGAIN</string>
+    <string name="guide_sandbox">PRACTICE ONLY · NOTHING SAVED</string>
+    <string name="guide_level">PRACTICE LEVEL · %1$d%%</string>
+    <string name="settings_saved_immediately">Selections are saved immediately.</string>
 </resources>

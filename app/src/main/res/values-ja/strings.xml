@@ -395,4 +395,25 @@
     <string name="tutorial_body_3">LIVEをオンにすると、時間や、有効にした動き・音などの入力に応じて故障が変化します。「一時停止」で変化を止め、「故障を発生」で一時的な変化を加えられます。音への反応には必要に応じてマイクの許可を求めます。RAWのプレビューは保存結果の近似表示です。</string>
     <string name="tutorial_heading_4">保存した写真・動画を見る</string>
     <string name="tutorial_body_4">サムネイルをタップすると保存した写真・動画が開きます。左右のスワイプで前後へ移動し、写真はピンチで拡大できます。動画には再生操作があります。下へスワイプすると撮影画面に戻ります。設定では、この説明の再表示・撮影品質・言語を変更できます。</string>
+    <string name="guide_heading_0">信号に触れる</string>
+    <string name="guide_heading_1">FAULTを組み立てる</string>
+    <string name="guide_heading_2">強さを探る</string>
+    <string name="guide_heading_3">LIVEで変化をつくる</string>
+    <string name="guide_heading_4">保存形式を選ぶ</string>
+    <string name="guide_heading_5">いまの信号を撮る</string>
+    <string name="guide_heading_6">撮れた結果を確かめる</string>
+    <string name="guide_heading_7">実験を続けるために</string>
+    <string name="guide_body_0">光る操作部をたどってみましょう。タップすると下の練習用信号が変わります。設定の変更や写真の保存は行いません。</string>
+    <string name="guide_body_1">＋からFAULTを選ぶと、信号処理の順番で作用します。光るボタンをタップして、練習用信号の乱れを試しましょう。</string>
+    <string name="guide_body_2">LEVELは全体の強さです。練習用スライダーを動かして違いを確認できます。カメラの設定は変わりません。</string>
+    <string name="guide_body_3">LIVEはFAULTの振る舞いを時間とともに変化させます。タップして練習用信号の別の状態を比べましょう。この図はカメラ映像ではありません。</string>
+    <string name="guide_body_4">加工した画像はJPEG、対応カメラのセンサー値はRAWで保存できます。RAWのプレビューは近似表示です。</string>
+    <string name="guide_body_5">シャッターで写真を撮影します。動画モードでは録画の開始と停止を行います。ガイド中は練習用信号だけが変わります。</string>
+    <string name="guide_body_6">サムネイルから保存した撮影結果を開けます。撮影後はここで仕上がりを確認しましょう。ガイド中は保存しません。</string>
+    <string name="guide_body_7">解像度とEXPERTは処理負荷に影響します。推奨設定に戻すと負荷の自動調整が有効になります。このガイドは設定から再表示できます。</string>
+    <string name="guide_try">光る操作部をタップして試す</string>
+    <string name="guide_tried">練習用信号を変更しました · もう一度</string>
+    <string name="guide_sandbox">練習用 · 保存されません</string>
+    <string name="guide_level">練習用LEVEL · %1$d%%</string>
+    <string name="settings_saved_immediately">選んだ設定はすぐに保存されます。</string>
 </resources>

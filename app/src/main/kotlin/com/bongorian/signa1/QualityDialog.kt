@@ -29,6 +29,7 @@ internal class QualityDialog(a: MainActivity) {
     var rawInfo: TextView? = null
     var rawMode: SignalToggle? = null
     var content: LinearLayout? = null
+    private var syncing = false
 
     init {
         activity = a
@@ -65,7 +66,7 @@ internal class QualityDialog(a: MainActivity) {
             selected,
             IntConsumer@{ n: Int ->
                 chosen(n)
-                refresh()
+                persist()
             },
         )
     }
@@ -77,13 +78,14 @@ internal class QualityDialog(a: MainActivity) {
         content!!.setPadding(0, 0, 0, activity!!.dp(8f))
         content!!.setBackgroundColor(MainActivity.BG)
         scroll.addView(content)
+        note(activity.getString(R.string.settings_saved_immediately))
         heading(activity.getString(R.string.settings_modes))
         mode(
             R.string.ui_advanced_mode,
             R.string.ui_advanced_settings_hint,
             advanced,
             "advanced-mode",
-            Consumer@{ checked: Boolean? -> advanced = checked!! },
+            Consumer@{ checked: Boolean? -> advanced = checked!!; saveAdvanced() },
         )
         mode(
             R.string.expert_mode,
@@ -92,7 +94,7 @@ internal class QualityDialog(a: MainActivity) {
             "expert-mode",
             Consumer@{ checked: Boolean? ->
                 draft.expertMode = checked!!
-                refresh()
+                if (!syncing) persist()
             },
         )
         if (options == null) {
@@ -101,13 +103,7 @@ internal class QualityDialog(a: MainActivity) {
             refresh()
             scroll.removeView(content)
             sheet =
-                SignalSheet.show(
-                    activity,
-                    activity.getString(R.string.ui_settings),
-                    activity.getString(R.string.settings_summary),
-                    content,
-                    Runnable { this.apply() },
-                )
+                SignalSheet.content(activity, activity.getString(R.string.ui_settings), content, 0, null, .87f)
             return
         }
         heading(activity.getString(R.string.load_title))
@@ -117,10 +113,14 @@ internal class QualityDialog(a: MainActivity) {
         recommend.setText(activity.getString(R.string.load_use_recommended))
         recommend.setOnClickListener(
             OnClickListener@{ v: View? ->
+                syncing = true
+                draft.expertMode = false
+                content?.findViewWithTag<SignalToggle>("expert-mode")?.isChecked = false
                 draft.photoSize = "recommended"
                 draft.videoKey = "recommended"
                 draft.videoQuality = 1
-                refresh()
+                syncing = false
+                persist()
             }
         )
         heading(activity.getString(R.string.settings_photo))
@@ -293,7 +293,7 @@ internal class QualityDialog(a: MainActivity) {
         rawMode!!.setOnCheckedChangeListener(
             OnCheckedChangeListener@{ button: CompoundButton?, checked: Boolean ->
                 draft.rawVideo = checked
-                refresh()
+                persist()
             }
         )
         rawInfo =
@@ -346,6 +346,7 @@ internal class QualityDialog(a: MainActivity) {
         gps.setOnCheckedChangeListener(
             OnCheckedChangeListener@{ b: CompoundButton?, checked: Boolean ->
                 draft.location = checked
+                persist()
             }
         )
         content!!.addView(gps, LinearLayout.LayoutParams(-1, activity.dp(48f)))
@@ -354,13 +355,7 @@ internal class QualityDialog(a: MainActivity) {
         refresh()
         scroll.removeView(content)
         sheet =
-            SignalSheet.show(
-                activity,
-                activity.getString(R.string.ui_settings),
-                activity.getString(R.string.settings_summary),
-                content,
-                Runnable { this.apply() },
-            )
+            SignalSheet.content(activity, activity.getString(R.string.ui_settings), content, 0, null, .87f)
     }
 
     fun note(label: String?): TextView {
@@ -390,15 +385,20 @@ internal class QualityDialog(a: MainActivity) {
         val tutorial = field()
         tutorial.setTag("settings-tutorial")
         tutorial.setText(activity.getString(R.string.tutorial_title))
-        tutorial.setOnClickListener(OnClickListener@{ v: View? -> activity.showTutorial() })
+        tutorial.setOnClickListener(OnClickListener@{ v: View? -> activity.showTutorial(sheet) })
         languageField = field()
         languageField!!.setOnClickListener(
             OnClickListener@{ v: View? ->
-                pick(
+                SignalSheet.pick(
+                    activity,
                     activity.getString(R.string.language_title),
                     AppLanguage.labels(activity),
                     AppLanguage.index(language),
-                    IntConsumer@{ n: Int -> language = AppLanguage.TAGS[n] },
+                    IntConsumer@{ n: Int ->
+                        language = AppLanguage.TAGS[n]
+                        sheet?.dismiss()
+                        AppLanguage.select(language)
+                    },
                 )
             }
         )
@@ -413,10 +413,9 @@ internal class QualityDialog(a: MainActivity) {
         privacy.setOnClickListener(OnClickListener@{ v: View? -> AboutDialog.show(activity) })
     }
 
-    fun apply() {
-        saveAdvanced()
-        activity!!.applySettings(draft)
-        AppLanguage.select(language)
+    private fun persist() {
+        activity.applySettings(draft)
+        refresh()
     }
 
     fun saveAdvanced() {

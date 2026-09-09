@@ -1,0 +1,301 @@
+{
+  "v130_before": {
+    "label": "before",
+    "start": {
+      "status": 0,
+      "batteryC": 37.8,
+      "plugged": 1
+    },
+    "preview": [
+      {
+        "phase": "recommended",
+        "start": {
+          "status": 0,
+          "batteryC": 37.8,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "targetPreviewFps": 20,
+        "cameraTargetFps": 30,
+        "seconds": 12.004,
+        "fps": 14.245251582805732,
+        "cpuMs": 3210,
+        "cpuCorePercent": 26.741086304565144,
+        "renderEmaMs": 3.0174293161589545,
+        "frames": 171,
+        "memory": {
+          "pssKb": 225151,
+          "privateDirtyKb": 191675,
+          "javaPssKb": 5490,
+          "nativePssKb": 48854,
+          "nativeAllocatedKb": 53009,
+          "javaUsedKb": 5336
+        },
+        "end": {
+          "status": 0,
+          "batteryC": 37.8,
+          "plugged": 1
+        }
+      },
+      {
+        "phase": "maximum",
+        "start": {
+          "status": 0,
+          "batteryC": 37.8,
+          "plugged": 1
+        },
+        "width": 3072,
+        "height": 4096,
+        "targetPreviewFps": 6,
+        "cameraTargetFps": 15,
+        "seconds": 12.001,
+        "fps": 5.999500041663195,
+        "cpuMs": 3121,
+        "cpuCorePercent": 26.006166152820597,
+        "renderEmaMs": 7.890316587187113,
+        "frames": 72,
+        "memory": {
+          "pssKb": 422256,
+          "privateDirtyKb": 390338,
+          "javaPssKb": 8598,
+          "nativePssKb": 58998,
+          "nativeAllocatedKb": 77354,
+          "javaUsedKb": 8472
+        },
+        "end": {
+          "status": 0,
+          "batteryC": 37.8,
+          "plugged": 1
+        }
+      },
+      {
+        "phase": "expert-maximum",
+        "start": {
+          "status": 0,
+          "batteryC": 37.8,
+          "plugged": 1
+        },
+        "width": 3072,
+        "height": 4096,
+        "targetPreviewFps": 30,
+        "cameraTargetFps": 30,
+        "seconds": 12,
+        "fps": 29.916666666666668,
+        "cpuMs": 5492,
+        "cpuCorePercent": 45.766666666666666,
+        "renderEmaMs": 2.775284218847764,
+        "frames": 359,
+        "memory": {
+          "pssKb": 443056,
+          "privateDirtyKb": 406598,
+          "javaPssKb": 5846,
+          "nativePssKb": 36790,
+          "nativeAllocatedKb": 53898,
+          "javaUsedKb": 5636
+        },
+        "end": {
+          "status": 0,
+          "batteryC": 37.8,
+          "plugged": 1
+        }
+      },
+      {
+        "phase": "expert-guide",
+        "start": {
+          "status": 0,
+          "batteryC": 37.8,
+          "plugged": 1
+        },
+        "width": 3072,
+        "height": 4096,
+        "targetPreviewFps": 30,
+        "cameraTargetFps": 30,
+        "seconds": 12.001,
+        "fps": 29.91417381884843,
+        "cpuMs": 5410,
+        "cpuCorePercent": 45.079576701941505,
+        "renderEmaMs": 3.219850962892384,
+        "frames": 359,
+        "memory": {
+          "pssKb": 514049,
+          "privateDirtyKb": 477091,
+          "javaPssKb": 17050,
+          "nativePssKb": 87377,
+          "nativeAllocatedKb": 106765,
+          "javaUsedKb": 17044
+        },
+        "end": {
+          "status": 0,
+          "batteryC": 37.8,
+          "plugged": 1
+        }
+      }
+    ],
+    "end": {
+      "status": 0,
+      "batteryC": 37.8,
+      "plugged": 1
+    }
+  },
+  "v110_comparison": {
+    "label": "v110",
+    "start": {
+      "status": 0,
+      "batteryC": 37.5,
+      "plugged": 1
+    },
+    "preview": [
+      {
+        "phase": "recommended",
+        "start": {
+          "status": 0,
+          "batteryC": 37.5,
+          "plugged": 1
+        },
+        "width": 1080,
+        "height": 1920,
+        "targetPreviewFps": 20,
+        "cameraTargetFps": 30,
+        "seconds": 12.001,
+        "fps": 20.081659861678194,
+        "cpuMs": 3562,
+        "cpuCorePercent": 29.680859928339306,
+        "renderEmaMs": 2.148684239204561,
+        "frames": 241,
+        "memory": {
+          "pssKb": 228433,
+          "privateDirtyKb": 192843,
+          "javaPssKb": 5987,
+          "nativePssKb": 61736,
+          "nativeAllocatedKb": 57836,
+          "javaUsedKb": 5680
+        },
+        "end": {
+          "status": 0,
+          "batteryC": 37.5,
+          "plugged": 1
+        }
+      },
+      {
+        "phase": "maximum",
+        "start": {
+          "status": 0,
+          "batteryC": 37.5,
+          "plugged": 1
+        },
+        "width": 3072,
+        "height": 4096,
+        "targetPreviewFps": 6,
+        "cameraTargetFps": 15,
+        "seconds": 12,
+        "fps": 6,
+        "cpuMs": 1474,
+        "cpuCorePercent": 12.283333333333333,
+        "renderEmaMs": 2.853113368565781,
+        "frames": 72,
+        "memory": {
+          "pssKb": 478518,
+          "privateDirtyKb": 446878,
+          "javaPssKb": 8724,
+          "nativePssKb": 64152,
+          "nativeAllocatedKb": 82288,
+          "javaUsedKb": 8528
+        },
+        "end": {
+          "status": 0,
+          "batteryC": 37.5,
+          "plugged": 1
+        }
+      },
+      {
+        "phase": "expert-maximum",
+        "start": {
+          "status": 0,
+          "batteryC": 37.5,
+          "plugged": 1
+        },
+        "width": 3072,
+        "height": 4096,
+        "targetPreviewFps": 30,
+        "cameraTargetFps": 30,
+        "seconds": 12,
+        "fps": 30.083333333333332,
+        "cpuMs": 4742,
+        "cpuCorePercent": 39.516666666666666,
+        "renderEmaMs": 3.8153976575159256,
+        "frames": 361,
+        "memory": {
+          "pssKb": 481710,
+          "privateDirtyKb": 445819,
+          "javaPssKb": 6276,
+          "nativePssKb": 40348,
+          "nativeAllocatedKb": 56669,
+          "javaUsedKb": 5997
+        },
+        "end": {
+          "status": 0,
+          "batteryC": 37.5,
+          "plugged": 1
+        }
+      }
+    ],
+    "end": {
+      "status": 0,
+      "batteryC": 37.5,
+      "plugged": 1
+    }
+  },
+  "guide_after": {
+    "label": "after-guide-valid",
+    "start": {
+      "status": 0,
+      "batteryC": 37.5,
+      "plugged": 1
+    },
+    "preview": [
+      {
+        "phase": "expert-guide",
+        "start": {
+          "status": 0,
+          "batteryC": 37.5,
+          "plugged": 1
+        },
+        "width": 3072,
+        "height": 4096,
+        "targetPreviewFps": 30,
+        "cameraTargetFps": 30,
+        "seconds": 12.059,
+        "fps": 0,
+        "cpuMs": 166,
+        "cpuCorePercent": 1.3765652209967658,
+        "renderEmaMs": 3.9656261807562747,
+        "frames": 0,
+        "memory": {
+          "pssKb": 178853,
+          "privateDirtyKb": 151539,
+          "javaPssKb": 12637,
+          "nativePssKb": 38486,
+          "nativeAllocatedKb": 50697,
+          "javaUsedKb": 15400
+        },
+        "end": {
+          "status": 0,
+          "batteryC": 37.5,
+          "plugged": 1
+        }
+      }
+    ],
+    "end": {
+      "status": 0,
+      "batteryC": 37.5,
+      "plugged": 1
+    }
+  },
+  "limitations": [
+    "Single physical device; AC powered; short samples; no wattmeter/GPU energy or surface temperature measurement.",
+    "Old/new sequential samples are not a controlled thermal regression experiment.",
+    "Camera timeouts and a 60-second guide sample with user navigation were excluded.",
+    "After guide sample checks foreground and guide presence every 100 ms."
+  ]
+}

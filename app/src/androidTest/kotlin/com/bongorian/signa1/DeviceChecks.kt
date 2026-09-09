@@ -118,7 +118,7 @@ class DeviceChecks : Instrumentation() {
                 checkTutorial()
                 result.putString(
                     "result",
-                    "PASS first launch, page restoration, skip/back/completion, settings draft isolation, all locales and camera recovery",
+                    "PASS first launch, page restoration, skip/back/completion, immediate settings persistence, all locales and camera recovery",
                 )
                 return
             }
@@ -187,6 +187,9 @@ class DeviceChecks : Instrumentation() {
                     "result",
                     "PASS anchored format menu, top utilities, live fault meters, camera interruption and stalled-preview recovery",
                 )
+            } else if (action == "settings-auto") {
+                checkImmediateSettings()
+                result.putString("result", "PASS immediate selection, disk persistence, rapid changes, no Apply, close/recreate/reopen")
             } else if (action == "expert") {
                 checkExpert(result)
             } else if (action == "load-record") {
@@ -506,6 +509,48 @@ class DeviceChecks : Instrumentation() {
         waitForIdleSync()
     }
 
+    internal fun checkImmediateSettings() {
+        val beforeAdvanced = activity!!.advancedMode
+        try {
+            runOnMainSync {
+                val q = QualityDialog(activity!!)
+                q.show()
+                if (findText(q.sheet!!.window!!.decorView, activity!!.getString(R.string.ui_apply)) != null)
+                    throw AssertionError("Apply remains in Settings")
+                q.content!!.findViewWithTag<View>("advanced-mode").performClick()
+                if (activity!!.advancedMode == beforeAdvanced)
+                    throw AssertionError("Advanced not immediate")
+                q.jpeg!!.performClick()
+                val choices = android.view.inspector.WindowInspector.getGlobalWindowViews()
+                    .first { it.findViewWithTag<View>("choice-0") != null }
+                choices.findViewWithTag<View>("choice-0").performClick()
+                if (activity!!.settings.jpegQuality != 85 || CaptureSettings.load(activity!!.getSharedPreferences("signal", 0)).jpegQuality != 85)
+                    throw AssertionError("JPEG selection not saved immediately")
+                // Several changes within one UI turn must converge on the latest request.
+                repeat(4) { q.content!!.findViewWithTag<View>("expert-mode").performClick() }
+                q.content!!.findViewWithTag<View>("load-recommend").performClick()
+                q.sheet!!.dismiss()
+            }
+            await("latest settings configured", { activity!!.ready && !activity!!.settings.expertMode }, 20000)
+            if (activity!!.settings.jpegQuality != 85 || activity!!.settings.photoSize != "recommended")
+                throw AssertionError("Older configuration overwrote selection")
+            recreateTutorialActivity()
+            await("camera after settings recreation", { activity!!.ready }, 20000)
+            lateinit var reopened: QualityDialog
+            runOnMainSync {
+                reopened = QualityDialog(activity!!)
+                val q = reopened
+                q.show()
+                if (q.draft.jpegQuality != 85 || q.draft.expertMode || q.advanced == beforeAdvanced)
+                    throw AssertionError("Settings lost on recreation")
+            }
+            saveUi("settings-immediate.png")
+            runOnMainSync { reopened.sheet!!.dismiss() }
+        } finally {
+            runOnMainSync { activity!!.advancedMode = beforeAdvanced; activity!!.savePrefs() }
+        }
+    }
+
     @Throws(Exception::class)
     internal fun checkTutorial() {
         await(
@@ -536,6 +581,31 @@ class DeviceChecks : Instrumentation() {
         recreateTutorialActivity()
         if (activity!!.tutorial != null) throw AssertionError("Tutorial repeated after skip")
         await("camera after guide", { activity!!.ready && activity!!.engine.frameSeen }, 20000)
+        val savedSettings = CaptureSettings(activity!!.settings)
+        try {
+            runOnMainSync {
+                val q = QualityDialog(activity!!)
+                q.show()
+                q.draft.expertMode = true
+                q.content!!.findViewWithTag<SignalToggle>("expert-mode").isChecked = true
+                q.content!!.findViewWithTag<View>("load-recommend").performClick()
+                if (q.draft.expertMode || q.content!!.findViewWithTag<SignalToggle>("expert-mode").isChecked)
+                    throw AssertionError("Recommended keeps EXPERT")
+                if (activity!!.settings.expertMode || CaptureSettings.load(activity!!.getSharedPreferences("signal", 0)).expertMode)
+                    throw AssertionError("Recommended not immediately saved")
+                if (findText(q.sheet!!.window!!.decorView, activity!!.getString(R.string.ui_apply)) != null)
+                    throw AssertionError("Settings still has Apply")
+                q.sheet!!.dismiss()
+                val reopened = QualityDialog(activity!!)
+                reopened.show()
+                if (reopened.draft.expertMode || reopened.draft.photoSize != "recommended")
+                    throw AssertionError("Settings lost on reopening")
+                reopened.sheet!!.dismiss()
+            }
+        } finally {
+            runOnMainSync { activity!!.applySettings(savedSettings) }
+        }
+        await("camera after recommendation", { activity!!.ready }, 20000)
         val language = AppLanguage.current()
         try {
             for (tag in arrayOf<String>("ja", "en", "zh")) {
@@ -545,15 +615,26 @@ class DeviceChecks : Instrumentation() {
                 runOnMainSync({
                     settings[0] = QualityDialog(activity!!)
                     settings[0]!!.show()
-                    settings[0]!!.advanced = !before
+                    settings[0]!!.content!!.findViewWithTag<View>("advanced-mode").performClick()
                     settings[0]!!
                         .content!!
                         .findViewWithTag<View>("settings-tutorial")
                         .performClick()
                 })
-                for (page in 0..4) {
+                for (page in 0 until TutorialDialog.PAGE_COUNT) {
                     if (activity!!.tutorial!!.page != page) throw AssertionError("Unexpected page")
                     SystemClock.sleep(900)
+                    val guide = activity!!.tutorial!!
+                    if (activity!!.ready || activity!!.engine.attached)
+                        throw AssertionError("Camera active behind guide")
+                    if (page > 0 && guide.targetBounds.isEmpty)
+                        throw AssertionError("Missing real control highlight")
+                    val beforeEffect = activity!!.effectState.encode()
+                    val beforeCount = activity!!.captureCount
+                    tutorialClick("tutorial-practice")
+                    if (page > 0) tutorialClick("tutorial-target")
+                    if (beforeEffect != activity!!.effectState.encode() || beforeCount != activity!!.captureCount)
+                        throw AssertionError("Guide changed capture state")
                     languageScreenshot("tutorial-" + tag + "-" + page)
                     tutorialClick("tutorial-next")
                 }
@@ -561,10 +642,14 @@ class DeviceChecks : Instrumentation() {
                     activity!!.tutorial != null ||
                         !settings[0]!!.sheet!!.isShowing() ||
                         settings[0]!!.advanced == before ||
-                        activity!!.advancedMode != before
+                        activity!!.advancedMode == before
                 )
-                    throw AssertionError("Tutorial changed settings draft")
-                runOnMainSync({ settings[0]!!.sheet!!.dismiss() })
+                    throw AssertionError("Tutorial lost saved settings")
+                runOnMainSync({
+                    settings[0]!!.sheet!!.dismiss()
+                    activity!!.advancedMode = before
+                    activity!!.savePrefs()
+                })
             }
         } finally {
             changeLanguage(language)
@@ -2060,7 +2145,7 @@ class DeviceChecks : Instrumentation() {
             panel[0] = QualityDialog(requireNotNull(activity))
             panel[0]!!.show()
             panel[0]!!.content!!.findViewWithTag<View>("expert-mode").performClick()
-            if (activity!!.settings.expertMode) throw AssertionError("Expert applied before save")
+            if (!activity!!.settings.expertMode) throw AssertionError("Expert not immediately saved")
         })
         waitForIdleSync()
         SystemClock.sleep(400)
@@ -2074,16 +2159,12 @@ class DeviceChecks : Instrumentation() {
         SystemClock.sleep(900)
         saveUi("expert-settings-bottom.png")
         runOnMainSync({ panel[0]!!.sheet!!.dismiss() })
-        if (activity!!.settings.expertMode) throw AssertionError("Expert cancel committed")
+        if (!activity!!.settings.expertMode) throw AssertionError("Expert lost on close")
         runOnMainSync({
             panel[0] = QualityDialog(activity!!)
             panel[0]!!.show()
-            panel[0]!!.content!!.findViewWithTag<View>("expert-mode").performClick()
-            findText(
-                    panel[0]!!.sheet!!.getWindow()!!.getDecorView(),
-                    activity!!.getString(R.string.ui_apply),
-                )!!
-                .performClick()
+            if (!panel[0]!!.draft.expertMode) throw AssertionError("Expert lost on reopen")
+            panel[0]!!.sheet!!.dismiss()
         })
         await(
             "expert enabled",
@@ -2156,7 +2237,7 @@ class DeviceChecks : Instrumentation() {
             })
             result.putString(
                 "result",
-                "PASS expert UI cancel/apply/persistence, uncapped preview " +
+                "PASS expert UI immediate persistence, uncapped preview " +
                     rendered +
                     " frames/2s, simulated critical heat ignored during recording, manual stop saved, normal thermal protection restored",
             )
@@ -2263,8 +2344,8 @@ class DeviceChecks : Instrumentation() {
         SystemClock.sleep(400)
         saveUi("adaptive-settings.png")
         runOnMainSync({ panel[0]!!.sheet!!.dismiss() })
-        if (activity!!.settings.photoSize != oldSize)
-            throw AssertionError("Cancelled recommendation changed settings")
+        if (activity!!.settings.photoSize != "recommended" || activity!!.settings.expertMode)
+            throw AssertionError("Recommendation not saved on selection")
         val migration = activity!!.getSharedPreferences("loadMigrationTest", 0)
         try {
             migration.edit().clear().putString("photoSize", "max").commit()
@@ -2485,23 +2566,19 @@ class DeviceChecks : Instrumentation() {
                 settingsEditor[0] = QualityDialog(activity!!)
                 settingsEditor[0]!!.show()
                 settingsEditor[0]!!.content!!.findViewWithTag<View>("advanced-mode").performClick()
-                if (activity!!.advancedMode)
-                    throw AssertionError("Global mode committed before Apply")
+                if (!activity!!.advancedMode)
+                    throw AssertionError("Global mode not saved immediately")
             })
             waitForIdleSync()
             SystemClock.sleep(300)
             saveUi("advanced-global-setting.png")
             runOnMainSync({ settingsEditor[0]!!.sheet!!.dismiss() })
-            if (activity!!.advancedMode) throw AssertionError("Cancelled global mode applied")
+            if (!activity!!.advancedMode) throw AssertionError("Global mode lost on close")
             runOnMainSync({
                 settingsEditor[0] = QualityDialog(activity!!)
                 settingsEditor[0]!!.show()
-                settingsEditor[0]!!.content!!.findViewWithTag<View>("advanced-mode").performClick()
-                findText(
-                        settingsEditor[0]!!.sheet!!.getWindow()!!.getDecorView(),
-                        activity!!.getString(R.string.ui_apply),
-                    )!!
-                    .performClick()
+                if (!settingsEditor[0]!!.advanced) throw AssertionError("Global mode lost on reopen")
+                settingsEditor[0]!!.sheet!!.dismiss()
             })
             await("global mode applied", { activity!!.ready && activity!!.advancedMode }, 20000)
             if (!activity!!.getSharedPreferences("signal", 0).getBoolean("advancedMode", false))

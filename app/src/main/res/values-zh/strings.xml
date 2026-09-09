@@ -395,4 +395,25 @@
     <string name="tutorial_body_3">开启LIVE后，故障会随时间以及已启用的运动、声音等输入变化。暂停可暂停变化，触发故障可触发短暂变化。声音响应需要时会请求麦克风权限。RAW预览只是保存结果的近似效果。</string>
     <string name="tutorial_heading_4">查看保存的照片和视频</string>
     <string name="tutorial_body_4">点击缩略图打开已保存的照片和视频。左右滑动可浏览，双指缩放可放大照片，视频提供播放控件。向下滑动返回相机。设置还包含本教程、拍摄选项和语言。</string>
+    <string name="guide_heading_0">触摸信号</string>
+    <string name="guide_heading_1">组合FAULT</string>
+    <string name="guide_heading_2">调整强度</string>
+    <string name="guide_heading_3">用LIVE产生变化</string>
+    <string name="guide_heading_4">选择保存格式</string>
+    <string name="guide_heading_5">捕捉当前信号</string>
+    <string name="guide_heading_6">查看拍摄结果</string>
+    <string name="guide_heading_7">继续探索</string>
+    <string name="guide_body_0">跟随高亮的控件。点击后，下方的练习信号会改变。练习不会修改设置或保存照片。</string>
+    <string name="guide_body_1">使用＋选择FAULT，它们按信号处理顺序生效。点击高亮按钮，尝试改变练习信号。</string>
+    <string name="guide_body_2">LEVEL控制整体强度。拖动练习滑块查看差异，相机设置保持原样。</string>
+    <string name="guide_body_3">LIVE让FAULT随时间变化。点击以比较练习信号的另一种状态。此图不是实时相机画面。</string>
+    <string name="guide_body_4">JPEG保存处理后的图像，支持的相机可用RAW保存传感器采样值。RAW预览是近似效果。</string>
+    <string name="guide_body_5">点击快门拍照；在视频模式中开始或停止录像。本指南中，点击仅改变练习信号。</string>
+    <string name="guide_body_6">缩略图可打开已保存的拍摄结果。拍摄后可在此查看。指南不会保存任何照片。</string>
+    <string name="guide_body_7">分辨率和EXPERT会影响处理负载。使用推荐设置可恢复自动负载调节。可从设置再次打开本指南。</string>
+    <string name="guide_try">点击高亮控件试一试</string>
+    <string name="guide_tried">练习信号已改变 · 再试一次</string>
+    <string name="guide_sandbox">仅供练习 · 不会保存</string>
+    <string name="guide_level">练习LEVEL · %1$d%%</string>
+    <string name="settings_saved_immediately">选择的设置会立即保存。</string>
 </resources>
