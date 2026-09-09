@@ -12,7 +12,7 @@
 | 撮影仕様 | [FORMATS](FORMATS.ja.md)が通常／ADVANCED撮影・RAW・音声の基準 |
 | 実装資料 | [ARCHITECTURE](ARCHITECTURE.ja.md)が所有権・状態・ライフサイクル、[RAW](raw-pipeline.ja.md)が表現変換 |
 | 開発手順 | [building](building.md)が環境とビルド、[DEVELOPMENT](DEVELOPMENT.ja.md)が端末検証の実行方法 |
-| 検証結果 | [VALIDATION](VALIDATION.ja.md)が索引と制限、audit配下が条件付きの実行記録 |
+| 検証結果 | [VALIDATION](VALIDATION.ja.md)が索引と制限、[auditの棚卸し](audit/README.ja.md)が公開版・未公開修正・過去記録・台帳を分類 |
 | 配布運用 | [RELEASING](RELEASING.md)が手順、[LAUNCH_TASKS](LAUNCH_TASKS.md)が日時付きの状態と残作業、[Play自動化](PLAY_AUTOMATION.ja.md)が設定と再試行 |
 | 過去の記録 | 旧リリース報告・design・auditは当時の判断と測定の根拠。現在の機能説明として読まない |
 | 監査資料 | 素材の出典・ハッシュ、依存一覧、F-Droid提出候補をそれぞれの対象に限定して管理 |

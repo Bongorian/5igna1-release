@@ -45,3 +45,7 @@ Replaced the eight Japanese/English phone screenshots with unedited captures of 
 ### Scope review — 2026-09-09
 
 All 26 recorded file hashes match this checkout. Store screenshots remain the submitted 1.1.0 UI, not screenshots of the newest development controls. The separately hosted landing page and its owner-supplied photograph are maintained on the `codex/privacy-pages` site branch, outside this application asset inventory.
+
+### 棚卸し — 2026-09-10
+
+`assets.json` の29件について、対象ファイルの存在とSHA-256の一致を確認しました。上記26件の確認は2026-09-09時点の記録です。その後追加した撮影モードアイコン3件を含む現況が29件です。ストア画像の撮影版とサイト側の素材台帳の区別は維持します。

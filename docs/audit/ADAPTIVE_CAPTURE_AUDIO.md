@@ -1,6 +1,6 @@
 # Device recommendations, normal capture and linked audio
 
-Development branch `codex/adaptive-capture-audio`, based on `b5b5768` after published 1.3.1; checked on 2026-09-09. These changes are unreleased. [Current behavior](../FORMATS.md) · [Device budgets](../PERFORMANCE.md) · [Validation index](../VALIDATION.md)
+Development branch `codex/adaptive-capture-audio`, based on `b5b5768` after published 1.3.1; checked on 2026-09-09. This describes the pre-release test date; the 1.4.0 publication follow-up is recorded below. [Current behavior](../FORMATS.md) · [Device budgets](../PERFORMANCE.md) · [Validation index](../VALIDATION.md)
 
 ## Review and implementation
 

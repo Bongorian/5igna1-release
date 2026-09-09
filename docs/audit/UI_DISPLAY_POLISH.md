@@ -1,5 +1,7 @@
 # UI and display polish — development verification, 2026-09-09
 
+Scope update — 2026-09-10: this development change shipped in [1.6.0](../../CHANGELOG.md). Original test conditions below remain historical. For final capture controls and guide behavior, see [compact controls](COMPACT_CAPTURE_UI.md). See the [audit inventory](README.md) for the separate unreleased Pixel 9 fix.
+
 Development branch: `codex/adaptive-window-modes`. This is not a release or store submission.
 
 ## Changes

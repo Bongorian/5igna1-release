@@ -29,6 +29,7 @@ Start with the user guides to learn the app, the implementation references to ch
 | [raw-pipeline](raw-pipeline.md) / [日本語](raw-pipeline.ja.md) | RAW representation adapter; avoid duplicating the full format guide |
 | [building](building.md) | Toolchain, flavors, output paths and static checks |
 | [DEVELOPMENT](DEVELOPMENT.md) / [日本語](DEVELOPMENT.ja.md) | How to run device tests; separate from results |
+| [Audit inventory](audit/README.md) / [日本語](audit/README.ja.md) | Audit file roles, release membership, superseded descriptions and stocktake findings |
 | [VALIDATION](VALIDATION.md) / [日本語](VALIDATION.ja.md) | Current evidence index and remaining limits; dated results live in audit |
 | [RELEASING](RELEASING.md) | Repeatable signing, versioning and publication procedure |
 | [LAUNCH_TASKS](LAUNCH_TASKS.md) | Dated channel status and remaining owner actions |
@@ -41,6 +42,8 @@ Start with the user guides to learn the app, the implementation references to ch
 
 | Files | Retained purpose |
 |---|---|
+| [Pixel 9 DNG sizes](audit/PIXEL_9_DNG_SIZES.md) | Unreleased after 1.6.0; shared size filtering and physical DEV results |
+| [Adaptive windows](audit/ADAPTIVE_WINDOW_FEEDBACK.md), [display polish](audit/UI_DISPLAY_POLISH.md), [compact controls](audit/COMPACT_CAPTURE_UI.md) | Development evidence for changes included in 1.6.0; final controls supersede intermediate UI descriptions |
 | [DISTRIBUTION_REPORT](DISTRIBUTION_REPORT.md) | Initial 1.0.0 launch preparation |
 | [PLAY_1_1_0](PLAY_1_1_0.md), [PLAY_1_3_0](PLAY_1_3_0.md) | Dated Play submissions and confirmed follow-up status |
 | [1.5.1 lifecycle validation](audit/FOREGROUND_1_5_1.md) | Stop/save, released resources and packaged permissions |
@@ -61,10 +64,3 @@ Start with the user guides to learn the app, the implementation references to ch
 Update the relevant reference and its Japanese edition when behavior changes. Keep volatile counts in dated test records, versions in the guide scope/release records, and channel status in LAUNCH_TASKS. The application version is authoritative in `app/build.gradle`; a development tree sharing a release’s version string is still unreleased.
 
 Keep historical measurements, hashes and submitted metadata intact. Label the source/date instead of rewriting old results as current coverage. When moving a document, repair inbound and outbound links. Run the local documentation link/coverage check, locale checks and relevant application tests before committing. Policy-copy changes require a separate site update when the corresponding app version is published; editing this application checkout does not deploy the site.
-
-- [Adaptive windows and feedback](audit/ADAPTIVE_WINDOW_FEEDBACK.md): development scope, device verification and SDK-free Play diagnostics.
-
-- [UI display polish](audit/UI_DISPLAY_POLISH.md): development rotation, display and diagnostics verification.
-- [Compact capture controls](audit/COMPACT_CAPTURE_UI.md): format cycling, RAW video opt-in, responsive controls and refreshed guide verification.
-
-- [Pixel 9 DNG sizes](audit/PIXEL_9_DNG_SIZES.md): shared RAW size filtering and physical DEV capture verification after 1.6.0.

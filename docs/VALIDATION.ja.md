@@ -6,7 +6,11 @@
 
 | 対象 | 記録 |
 |---|---|
+| 1.6.0以降の未公開修正：Pixel 9のRAW/DNGサイズ適合 | [Pixel 9 DEV検証](audit/PIXEL_9_DNG_SIZES.md) |
+| 1.6.0：可変ウィンドウ・回転・フィードバック | [画面と操作の検証](audit/ADAPTIVE_WINDOW_FEEDBACK.md) |
+| 1.6.0：SEED・NETWORK／LED・小型UIとガイド | [表示改善](audit/UI_DISPLAY_POLISH.md)・[最終UI](audit/COMPACT_CAPTURE_UI.md) |
 | 1.5.1：画面離脱時の録画終了・保存、サービス権限の削除 | [ライフサイクル検証](audit/FOREGROUND_1_5_1.md) |
+| 1.5.0：TAP・MEDIA／DISPLAY・SEED | [実機検証](audit/TAP_MEDIA_1_5_0.md) |
 | 1.4.0の端末判定・通常撮影・解像度連動音声 | [撮影ポリシーの検証](audit/ADAPTIVE_CAPTURE_AUDIO.md) |
 | 1.3.1の操作ガイド・設定の即時保存 | [操作ガイドと負荷調査](audit/GUIDE_AND_THERMAL.ja.md) |
 | 1.3.1の端末入力感度・追加現象 | [実験機能](EXPERIMENTAL_SIGNALS.ja.md)・[実行結果](audit/experimental-signals-results.json) |
@@ -18,10 +22,5 @@
 
 数時間の連続録画、広範な機種確認、GPU電力測定、長時間の条件統一した温度比較は行っていません。不具合報告には版・機種・OS・形式・解像度／fps・ADVANCED／EXPERT設定と再現手順を添えてください。
 
-## 1.5.0
 
-[Physical TAP, MEDIA/DISPLAY and SEED checks](audit/TAP_MEDIA_1_5_0.md).
-
-## Development
-
-[Adaptive windows, icon modes and feedback](audit/ADAPTIVE_WINDOW_FEEDBACK.md).
+[監査資料の棚卸し](audit/README.ja.md)で公開版に収録した開発検証、未公開修正、過去の測定、維持する台帳を区別しています。Pixel 9修正は公開済み1.6.0には含まれません。

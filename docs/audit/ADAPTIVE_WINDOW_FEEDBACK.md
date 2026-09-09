@@ -1,5 +1,7 @@
 # Adaptive windows and feedback — development verification
 
+Scope update — 2026-09-10: this development change shipped in [1.6.0](../../CHANGELOG.md). Original test conditions below remain historical. For final capture controls and guide behavior, see [compact controls](COMPACT_CAPTURE_UI.md). See the [audit inventory](README.md) for the separate unreleased Pixel 9 fix.
+
 Date: 2026-09-09. Development branch: `codex/adaptive-window-modes`, based on 1.5.1. This is not a published release.
 
 The camera activity allows rotation and resizing. Layout follows the current available window: wide landscape windows use preview and controls side by side; portrait and narrow windows stack them. Controls scroll independently and capture stays accessible. Effect editors occupy the control side in wide windows. Camera dimensions and RAW orientation follow the display; TAP keeps the selected media orientation. Configuration changes recreate the activity and can stop/save an active recording, following the foreground-only capture policy; recording never resumes automatically.

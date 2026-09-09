@@ -1,5 +1,7 @@
 # Compact capture controls — 2026-09-10
 
+Scope update — 2026-09-10: this development change shipped in [1.6.0](../../CHANGELOG.md). Original test conditions below remain historical. See the [audit inventory](README.md) for the separate unreleased Pixel 9 fix.
+
 Development work on `codex/adaptive-window-modes`, after 1.5.1. This is not a release record.
 
 ## Behavior
