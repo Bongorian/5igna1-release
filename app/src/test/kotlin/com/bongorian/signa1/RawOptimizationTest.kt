@@ -90,4 +90,22 @@ class RawOptimizationTest {
         }
     }
 
+
+    @Test
+    fun scratchBuffersDoNotEscapeIntoOtherCaptures() {
+        val input = ByteArray(17 * 13 * 2).also(Random(997)::nextBytes)
+        val original = input.clone()
+        val config = FaultConfig.defaults()
+        val frame = FaultModel(37).apply(EffectState.defaults().chain(126).snapshot(false,2),config)
+        val first = RawGlitch.chain(input,17,13,4095,256,frame)
+        val expected = RawGlitchReference.chain(input,17,13,4095,256,frame)
+        val next = RawGlitch.chain(first,17,13,4095,256,frame)
+        assertArrayEquals(expected,first)
+        assertArrayEquals(original,input)
+        assertNotSame(first,next)
+        next.fill(0)
+        assertArrayEquals(expected,first)
+        assertArrayEquals(original,input)
+    }
+
 }

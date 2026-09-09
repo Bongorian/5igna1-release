@@ -15,7 +15,6 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -92,9 +91,8 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
                         else (if (shot.rotation == 90) 6 else if (shot.rotation == 270) 8 else 1)
                     )
                     if (shot.location != null) dng.setLocation(shot.location)
-                    val packed = ByteBuffer.allocateDirect(data.size).order(ByteOrder.nativeOrder())
-                    packed.put(data).flip()
-                    dng.writeByteBuffer(out!!, Size(w, h), packed, 0)
+                    // DngCreator also accepts array-backed buffers, as in the RAW video writer.
+                    dng.writeByteBuffer(out!!, Size(w, h), ByteBuffer.wrap(data), 0)
                 }
             }
         }

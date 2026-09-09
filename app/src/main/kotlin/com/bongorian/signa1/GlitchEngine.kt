@@ -1392,6 +1392,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                             signalW,
                             signalH,
                             rendered.fbo,
+                            rendered.texture,
                         )
                         rendered.frame = state
                         didRender = true

@@ -148,6 +148,20 @@ class DeviceChecks : Instrumentation() {
             effectsBefore = activity!!.effectState
             faultsBefore = activity!!.faultConfig
             video = activity!!.videoMode
+            if (args!!.getString("action", "") == "gpu-optimization") {
+                runOnMainSync {
+                    activity!!.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
+                result.putString("dngBuffers", DngBufferChecks.run(activity!!.engine))
+                runOnMainSync { activity!!.engine.detach() }
+                val closed = java.util.concurrent.CountDownLatch(1)
+                activity!!.engine.gl.post { closed.countDown() }
+                check(closed.await(10, java.util.concurrent.TimeUnit.SECONDS)) { "Camera detach" }
+                result.putString("report", FaultRenderChecks.run(getTargetContext(),
+                    args!!.getString("benchmark", "false") == "true"))
+                result.putString("result", "PASS byte-exact GPU renderer comparison")
+                return
+            }
             if (args!!.getString("liveFault", "false") == "true")
                 runOnMainSync({
                     activity!!.applyFaultConfig(

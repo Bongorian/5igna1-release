@@ -36,10 +36,20 @@ internal object RawGlitch {
         ) {
             "RAW dimensions/levels"
         }
-        var output = input.clone()
-        for (node in frame.nodes) if (Effects.raw(node.id))
-            output = apply(output, w, h, white, black, node)
-        return output
+        var current = input
+        var first: ByteArray? = null
+        var second: ByteArray? = null
+        for (node in frame.nodes) if (Effects.raw(node.id)) {
+            val output = if (current === first) {
+                second ?: ByteArray(input.size).also { second = it }
+            } else {
+                first ?: ByteArray(input.size).also { first = it }
+            }
+            applyInto(current, output, w, h, white, black, node)
+            current = output
+        }
+        // Even an empty chain returns owned storage rather than exposing its input.
+        return if (current === input) input.clone() else current
     }
 
     private fun hash(seed: Long, x: Int, y: Int): Float {
@@ -49,23 +59,29 @@ internal object RawGlitch {
     }
 
     fun apply(input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode): ByteArray =
+        input.clone().also { applyInto(input, it, w, h, white, black, n) }
+
+    private fun applyInto(
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+    ) {
+        // Every stage writes every output sample; its source remains untouched until it finishes.
         when (n.id) {
-            Effects.PIXEL_DAMAGE -> pixelDamage(input, w, h, white, black, n)
-            Effects.EXPOSURE -> exposure(input, w, h, white, black, n)
-            Effects.ROW_ERROR -> rowError(input, w, h, white, black, n)
-            Effects.BIT_ERROR -> bitError(input, w, h, white, n)
-            Effects.ADDRESS_ERROR -> addressError(input, w, h, white, black, n)
-            Effects.CFA_ERROR -> cfaError(input, w, h, white, n)
-            else -> input.clone().also { out ->
-                for (index in 0..<w * h)
-                    write(out, index, max(0, min(white, read(input, index))))
+            Effects.PIXEL_DAMAGE -> pixelDamage(input, out, w, h, white, black, n)
+            Effects.EXPOSURE -> exposure(input, out, w, h, white, black, n)
+            Effects.ROW_ERROR -> rowError(input, out, w, h, white, black, n)
+            Effects.BIT_ERROR -> bitError(input, out, w, h, white, n)
+            Effects.ADDRESS_ERROR -> addressError(input, out, w, h, white, black, n)
+            Effects.CFA_ERROR -> cfaError(input, out, w, h, white, n)
+            else -> for (y in 0..<h) for (x in 0..<w) {
+                val index = y * w + x
+                write(out, index, max(0, min(white, read(input, index))))
             }
         }
+    }
 
     private fun exposure(
-        input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
-    ): ByteArray {
-        val out = input.clone()
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+    ) {
         val depth = n.get("exposureDepth")
         val integration = n.get("integration")
         val scanPhase = n.get("scanPhase")
@@ -80,13 +96,11 @@ internal object RawGlitch {
                 write(out, index, max(0, min(white, value)))
             }
         }
-        return out
     }
 
     private fun bitError(
-        input: ByteArray, w: Int, h: Int, white: Int, n: FaultNode,
-    ): ByteArray {
-        val out = input.clone()
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, n: FaultNode,
+    ) {
         val seed = n.identity.seed xor n.event.pattern.toLong()
         val block = max(2, n.get("bitBlock").toInt())
         val blockHeight = max(1, block / 2)
@@ -108,13 +122,11 @@ internal object RawGlitch {
                 write(out, index, max(0, min(white, value)))
             }
         }
-        return out
     }
 
     private fun addressError(
-        input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
-    ): ByteArray {
-        val out = input.clone()
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+    ) {
         val seed = n.identity.seed
         val bytes = max(2, n.get("addressRegion").toInt())
         val offset = n.get("byteOffset").toInt()
@@ -140,13 +152,11 @@ internal object RawGlitch {
             }
             write(out, index, max(0, min(white, value)))
         }
-        return out
     }
 
     private fun cfaError(
-        input: ByteArray, w: Int, h: Int, white: Int, n: FaultNode,
-    ): ByteArray {
-        val out = input.clone()
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, n: FaultNode,
+    ) {
         val seed = n.identity.seed
         val region = max(2, n.get("cfaRegion").toInt())
         val coverage = n.get("cfaCoverage")
@@ -170,13 +180,11 @@ internal object RawGlitch {
                 write(out, index, max(0, min(white, value)))
             }
         }
-        return out
     }
 
     private fun pixelDamage(
-        input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
-    ): ByteArray {
-        val out = input.clone()
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+    ) {
         val seed = n.identity.seed
         val columnDensity = n.get("columnDensity")
         val pixelDensity = n.get("pixelDensity")
@@ -202,13 +210,11 @@ internal object RawGlitch {
             value += Math.round((hash(grainSeed, x, y) - .5f) * sensorNoise * (white - black))
             write(out, index, max(0, min(white, value)))
         }
-        return out
     }
 
     private fun rowError(
-        input: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
-    ): ByteArray {
-        val out = input.clone()
+        input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode,
+    ) {
         val seed = n.identity.seed
         val rowGroups = n.get("rowGroups")
         val weakRows = n.get("weakRows")
@@ -240,7 +246,6 @@ internal object RawGlitch {
                 write(out, y * w + x, max(0, min(white, value)))
             }
         }
-        return out
     }
 
 }

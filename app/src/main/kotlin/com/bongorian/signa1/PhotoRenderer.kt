@@ -225,7 +225,7 @@ internal object PhotoRenderer {
             val matrix =
                 floatArrayOf(1f, 0f, 0f, 0f, 0f, -1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 1f, 0f, 1f)
             val chain = EffectChain(shaderSource(context), false)
-            chain.render(textures[0], false, matrix, frame, width, height, width, height, fbo[0])
+            chain.render(textures[0], false, matrix, frame, width, height, width, height, fbo[0], textures[1])
             output = SignalBuffer.readPixels(width, height)
             chain.release()
             return output
