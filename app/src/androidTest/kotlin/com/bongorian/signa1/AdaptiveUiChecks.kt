@@ -25,6 +25,11 @@ internal object AdaptiveUiChecks {
             check(root.controlsColumn.bottom <= root.height - root.paddingBottom)
             if (root.wide) check(root.previewColumn.right < root.controlsColumn.left)
             else check(root.previewColumn.bottom <= root.controlsColumn.top)
+            check(root.utilityBlock.parent === if (root.wide) root.controlsColumn else root.previewColumn)
+            val formatParent = a.formatButton.parent as android.view.ViewGroup
+            check(formatParent.indexOfChild(a.formatButton) > formatParent.indexOfChild(a.photoTab.parent as View))
+            check(a.formatButton.width >= a.dp(48f))
+            check(a.faultSwitch.width >= a.dp(48f)) { "LIVE label squeezed" }
             val modes = listOf(a.photoTab, a.videoTab, a.tapTab)
             for ((video, tap) in listOf(false to false, true to false, false to true)) {
                 a.videoMode = video; a.tapMode = tap; a.renderCaptureMode()

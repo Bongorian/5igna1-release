@@ -475,7 +475,7 @@
     <string name="transport_stall">Congestion / frame stalls</string>
     <string name="transport_pitch">LED module pitch</string>
     <string name="transport_module_loss">Failed modules</string>
-    <string name="transport_refresh">Refresh bands</string>
+    <string name="transport_refresh">Refresh flicker</string>
     <string name="transport_vhs_hint">Tape bandwidth, tracking slips, dropout and noise. Media-scale resolution is optional.</string>
     <string name="transport_dvd_hint">Decoded DVD block damage and loss. Media-scale resolution is optional.</string>
     <string name="transport_digital_media_hint">Passes the input to the next stage unchanged.</string>
@@ -483,7 +483,7 @@
     <string name="transport_crt_hint">Scan and phosphor appearance, convergence and sync faults.</string>
     <string name="transport_digital_display_hint">After analog media, choose how to enlarge the reduced image for output.</string>
     <string name="transport_network_hint">Congestion holds the preceding frame; LIVE advances stalls and packet loss.</string>
-    <string name="transport_led_hint">LED spacing, failed modules and refresh bands.</string>
+    <string name="transport_led_hint">LED spacing, square failed modules and refresh flicker.</string>
     <string name="seed_no_target">No active fault uses a seed.</string>
     <string name="seed_chain_done">Regenerated active fault seeds. Controls unchanged.</string>
     <string name="seed_fixed_hint">Fixed values and fixed EVENT SEED are retained. Return them to AUTO to follow the new seed.</string>

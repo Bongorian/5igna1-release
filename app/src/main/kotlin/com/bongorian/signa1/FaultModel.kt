@@ -724,7 +724,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
                 p["transportDamage"] = level * controls.get(id, "convergence")
                 p["transportLoss"] = level * controls.get(id, "scan")
                 val slot = floor(time / .7).toLong()
-                // A fixed network state with LIVE OFF; bounded, deterministic congestion with LIVE ON.
+                // Intrinsic payload variation follows fault time; automatic congestion requires LIVE.
                 p["networkStall"] = if (config.enabled && random(seed xor mix(slot)) < level * controls.get(id, "sync") * .8f) 1f else 0f
                 p["refreshBand"] = level * controls.get(id, "sync") * .5f
                 p["networkSeed"] = random(seed xor mix(slot)) * 997f

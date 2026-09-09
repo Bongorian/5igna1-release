@@ -491,10 +491,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     private fun updateOrientation() {
         displayDegrees = displayDegrees()
         captureRotation = CameraOrientation.relative(sensorRotation, displayDegrees, front)
-        android.opengl.Matrix.setIdentityM(displayMatrix, 0)
-        android.opengl.Matrix.translateM(displayMatrix, 0, .5f, .5f, 0f)
-        android.opengl.Matrix.rotateM(displayMatrix, 0, displayDegrees.toFloat(), 0f, 0f, 1f)
-        android.opengl.Matrix.translateM(displayMatrix, 0, -.5f, -.5f, 0f)
+        CameraOrientation.textureTransform(displayDegrees).copyInto(displayMatrix)
     }
     var maxTexture: Int = 4096
 

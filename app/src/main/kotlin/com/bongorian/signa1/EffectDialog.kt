@@ -178,9 +178,10 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     }
 
     private fun refreshSeedControls() {
-        val y = scroll?.scrollY ?: 0
-        renderBody()
-        scroll?.post { scroll?.scrollTo(0, y) }
+        body?.findViewWithTag<TextView>("identity-seed")?.apply {
+            text = "SEED\n" + draft.identity(focused)
+            contentDescription = "SEED " + draft.identity(focused)
+        }
         preview()
     }
 

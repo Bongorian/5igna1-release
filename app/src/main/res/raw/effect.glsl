@@ -154,14 +154,24 @@ void main(){
         }
     }else if(mode==FX_CRT && transportKind>.5){
         if(transportKind>1.5 && transportKind<2.5){
-            vec2 block=floor(p*vec2(40.,24.));
-            if(hash(block+networkSeed)<transportDamage*.3)c=sampleAt((block+.5)/vec2(40.,24.))*.55;
+            // Corrupt payload appears as short noisy scanline runs, not missing tiles.
+            vec2 px=floor(p*sourceSize);
+            vec2 run=vec2(floor(px.x/24.),floor(px.y/2.));
+            float damaged=step(damageHash(run+networkSeed),transportDamage*.5);
+            float grain=damageHash(px+networkSeed);
+            vec3 noise=vec3(grain,damageHash(px+networkSeed+31.),damageHash(px+networkSeed+71.));
+            vec3 torn=sampleAt(p+vec2((damageHash(run+networkSeed+9.)-.5)*.08,0.));
+            c=mix(c,mix(torn,noise,.55+.35*transportLoss),damaged);
         }else if(transportKind>2.5){
-            vec2 grid=vec2(mix(300.,60.,transportLoss),mix(180.,36.,transportLoss));
-            vec2 cell=floor(p*grid);
-            c=sampleAt((cell+.5)/grid);
-            if(hash(floor(cell/8.)+identitySeed)<transportDamage*.2)c*=.08;
-            c*=1.-refreshBand*(.5+.5*sin(p.y*35.+syncOffset*100.));
+            // Equal pixel pitch makes failed cabinet modules square at every aspect ratio.
+            float pitch=max(1.,floor(min(sourceSize.x,sourceSize.y)/mix(180.,36.,transportLoss)));
+            vec2 cell=floor(p*sourceSize/pitch);
+            vec2 module=floor(cell/8.);
+            c=sampleAt((cell+.5)*pitch/sourceSize);
+            float failed=step(damageHash(module+identitySeed),transportDamage*.3);
+            float flicker=damageHash(module+identitySeed+floor(syncOffset*100.));
+            c*=mix(1.,.08,failed);
+            c*=1.-refreshBand*step(flicker,.5);
         }
     }else if(mode==FX_VHS){
         p.x+=trackingOffset+sin(p.y*70.+trackingPhase)*trackingWave;

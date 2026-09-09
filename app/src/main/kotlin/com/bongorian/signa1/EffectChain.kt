@@ -242,7 +242,8 @@ internal class EffectChain(private val source: String, private val supportsExter
             buffer.allocate(ow, oh)
             if (!network || !networkValid || node.get("networkStall") < .5f) {
                 drawStage(input, first && oes, if (first) requireNotNull(transform) else IDENTITY,
-                    node, iw, ih, buffer.fbo, ow, oh)
+                    node, if (node.id == Effects.CRT && kind == 3) ow else iw,
+                    if (node.id == Effects.CRT && kind == 3) oh else ih, buffer.fbo, ow, oh)
                 if (network) { networkValid = true; networkIdentity = node.identity.seed }
             }
             input = buffer.texture; iw = ow; ih = oh; first = false

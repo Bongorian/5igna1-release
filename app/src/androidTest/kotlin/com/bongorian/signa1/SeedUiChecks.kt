@@ -42,6 +42,21 @@ internal object SeedUiChecks {
                     ButtonSpacing.apply(a, editor.body!!)
                     check((reroll.layoutParams as android.view.ViewGroup.MarginLayoutParams).leftMargin == margin) { "Spacing accumulates" }
                 }
+                var y = 0
+                lateinit var originalSeed: View
+                test.runOnMainSync {
+                    editor.scroll!!.scrollTo(0, a.dp(32f))
+                    y = editor.scroll!!.scrollY
+                    if (mode) check(y > 0) { "Advanced editor did not exercise a scrolled RESEED" }
+                    originalSeed = editor.body!!.findViewWithTag("identity-seed")
+                    editor.body!!.findViewWithTag<View>("reseed").performClick()
+                    check(editor.body!!.findViewWithTag<View>("identity-seed") === originalSeed) { "RESEED rebuilt the editor" }
+                    check(editor.scroll!!.scrollY == y) { "RESEED jumped synchronously" }
+                }
+                repeat(8) {
+                    SystemClock.sleep(16)
+                    test.runOnMainSync { check(editor.scroll!!.scrollY == y) { "RESEED jumped after layout" } }
+                }
                 test.languageScreenshot("seed-$mode")
                 test.runOnMainSync { editor.sheet!!.dismiss() }
                 check(a.effectState.parameters().identity(Effects.PIXEL_DAMAGE) == EffectParameters.defaults().identity(Effects.PIXEL_DAMAGE)) { "Cancel changed seed" }

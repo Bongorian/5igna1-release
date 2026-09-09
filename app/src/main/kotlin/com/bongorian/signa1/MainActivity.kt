@@ -475,7 +475,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         val original = rawOriginal()
         val active = uiEffects()
         formatButton.setText(
-            if (tapMode) "TAP ▾" else if (videoMode) (if (captureRawVideo) "RAW ZIP ▾" else "MP4 ▾")
+            if (tapMode) "TAP ▾" else if (videoMode) (if (captureRawVideo) "RAW\nZIP ▾" else "MP4 ▾")
             else if (capturePhotoFormat == 0) "JPG ▾" else "RAW ▾"
         )
         selectedRoute.removeAllViews()

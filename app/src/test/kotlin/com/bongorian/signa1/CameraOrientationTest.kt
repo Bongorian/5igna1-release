@@ -14,4 +14,13 @@ class CameraOrientationTest {
         assertArrayEquals(intArrayOf(1, 6, 3, 8), IntArray(4) { CameraOrientation.exif(it * 90, false) })
         assertArrayEquals(intArrayOf(2, 7, 4, 5), IntArray(4) { CameraOrientation.exif(it * 90, true) })
     }
+    @Test fun textureCoordinatesFollowDisplayRotation() {
+        val expected = arrayOf(floatArrayOf(0f,0f), floatArrayOf(0f,1f), floatArrayOf(1f,1f), floatArrayOf(1f,0f))
+        for (rotation in 0..3) {
+            val m = CameraOrientation.textureTransform(rotation*90)
+            assertEquals(expected[rotation][0], m[12], 0f)
+            assertEquals(expected[rotation][1], m[13], 0f)
+            assertEquals(1f, m[0]*m[5]-m[1]*m[4], 0f)
+        }
+    }
 }

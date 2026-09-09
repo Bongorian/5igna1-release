@@ -6,6 +6,7 @@ import android.widget.ScrollView
 
 /** Measures against the current window, including split-screen and freeform resizing. */
 internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
+    lateinit var utilityBlock: LinearLayout
     lateinit var previewColumn: LinearLayout
     lateinit var controlsColumn: LinearLayout
     lateinit var controlsScroll: ScrollView
@@ -22,6 +23,11 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
         val w = (MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight).coerceAtLeast(1)
         val h = (MeasureSpec.getSize(heightMeasureSpec) - paddingTop - paddingBottom).coerceAtLeast(1)
         wide = w >= a.dp(600f) && w > h
+        val utilityParent = if (wide) controlsColumn else previewColumn
+        if (utilityBlock.parent !== utilityParent) {
+            (utilityBlock.parent as? LinearLayout)?.removeView(utilityBlock)
+            utilityParent.addView(utilityBlock, 0, LayoutParams(-1, -2))
+        }
         orientation = if (wide) HORIZONTAL else VERTICAL
         val controlW = if (wide) (w * .38f).toInt().coerceIn(a.dp(300f), a.dp(400f)) else w
         val content = controlsScroll.getChildAt(0)

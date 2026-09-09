@@ -67,13 +67,15 @@ internal fun MainActivity.buildUi() {
     root.addView(previewColumn)
     root.addView(controlsColumn)
     controlsColumn.addView(controlScroll, LinearLayout.LayoutParams(-1, 0, 1f))
+    val utility = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+    root.utilityBlock = utility
+    previewColumn.addView(utility, LinearLayout.LayoutParams(-1, -2))
     val header = row()
-    previewColumn.addView(header, LinearLayout.LayoutParams(-1, dp(49f)))
+    utility.addView(header, LinearLayout.LayoutParams(-1, dp(49f)))
     formatButton = button("")
-    formatButton.setTextSize(12f)
+    formatButton.setTextSize(10f)
+    formatButton.setPadding(dp(2f), 0, dp(2f), 0)
     formatButton.setOnClickListener(OnClickListener@{ v: View? -> showFormat() })
-    header.addView(formatButton, LinearLayout.LayoutParams(dp(68f), dp(44f)))
-    header.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
     torchButton = iconButton(R.drawable.ic_flash, getString(R.string.ui_light_off))
     header.addView(torchButton, LinearLayout.LayoutParams(dp(44f), dp(44f)))
     renderTorch()
@@ -102,18 +104,11 @@ internal fun MainActivity.buildUi() {
     val settingsButton =
         iconButton(R.drawable.ic_settings, getString(R.string.ui_capture_and_language_settings))
     settingsButton.tag = "guide-settings"
+    header.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
     header.addView(settingsButton, LinearLayout.LayoutParams(dp(44f), dp(44f)))
     settingsButton.setOnClickListener(OnClickListener@{ v: View? -> showSettings() })
-    for (n in 1..<header.childCount - 1) {
-        val child = header.getChildAt(n)
-        if (child is TextView) {
-            child.setBackgroundColor(Color.TRANSPARENT)
-            child.setPadding(dp(2f), 0, dp(2f), 0)
-            child.setSingleLine(true)
-        }
-    }
     val info = row()
-    previewColumn.addView(info, LinearLayout.LayoutParams(-1, dp(27f)))
+    utility.addView(info, LinearLayout.LayoutParams(-1, dp(27f)))
     status = text("CONNECTING…", 10, LIME)
     status.setTypeface(Typeface.MONOSPACE)
     status.setSingleLine(true)
@@ -319,7 +314,7 @@ internal fun MainActivity.buildUi() {
     controlBody.addView(tools, LinearLayout.LayoutParams(-1, dp(56f)))
     val modeGroup = row().apply {
         background = bg(PANEL, 0)
-        setPadding(dp(4f), dp(4f), dp(4f), dp(4f))
+        setPadding(dp(2f), dp(4f), dp(2f), dp(4f))
         accessibilityDelegate = object : View.AccessibilityDelegate() {
             override fun onInitializeAccessibilityNodeInfo(host: View, info: android.view.accessibility.AccessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(host, info)
@@ -341,17 +336,19 @@ internal fun MainActivity.buildUi() {
     videoTab.setOnLongClickListener { ResolutionPicker.show(this, true); true }
     photoTab.tooltipText = getString(R.string.ui_photo) + " · " + getString(R.string.resolution_hold)
     videoTab.tooltipText = getString(R.string.ui_video) + " · " + getString(R.string.resolution_hold)
-    tools.addView(Space(this), LinearLayout.LayoutParams(dp(8f), 1))
+    tools.addView(Space(this), LinearLayout.LayoutParams(dp(4f), 1))
+    tools.addView(formatButton, LinearLayout.LayoutParams(dp(52f), -1))
+    tools.addView(Space(this), LinearLayout.LayoutParams(dp(4f), 1))
     val live = row()
     live.setBackground(bg(PANEL, 0))
     tools.addView(live, LinearLayout.LayoutParams(0, -1, 1f))
     faultSwitch = ToggleButton(this)
-    faultSwitch.setTextOn("LIVE · ON")
-    faultSwitch.setTextOff("LIVE · OFF")
-    typography(faultSwitch, 10, true)
+    faultSwitch.setTextOn("LIVE\nON")
+    faultSwitch.setTextOff("LIVE\nOFF")
+    typography(faultSwitch, 9, true)
     faultSwitch.setAllCaps(false)
     faultSwitch.setBackgroundColor(Color.TRANSPARENT)
-    faultSwitch.setPadding(dp(8f), 0, 0, 0)
+    faultSwitch.setPadding(0, 0, 0, 0)
     faultSwitch.setChecked(faultConfig.enabled)
     faultSwitch.setTextColor(if (faultConfig.enabled) LIME else MUTED)
     faultSwitch.setContentDescription(getString(R.string.ui_toggle_live_fault))

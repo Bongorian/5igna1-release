@@ -143,15 +143,55 @@ internal object FaultRenderChecks {
             val led = defaults.with(Effects.CRT, "transport", 1f).with(Effects.CRT, "scan", 1f)
                 .with(Effects.CRT, "convergence", 0f).with(Effects.CRT, "sync", 0f)
             check(solid.contentEquals(render(led, display))) { "LED added element-gap lines" }
+            checkTransportFaultGeometry(context)
             upload(false)
             // Reuse the same specialized programs after switching away from transport models.
             chain.releaseBuffers()
             check(clean.contentEquals(render(digital, media)))
-            return JSONObject().put("result", "PASS digital identity, 16 media/display combinations, media resolution, cable models, upconversion, network frame hold/resume, LED without black gaps")
+            return JSONObject().put("result", "PASS digital identity, 16 media/display combinations, media resolution, cable models, upconversion, network frame hold/resume, noisy payload corruption and LIVE timing, square LED modules in both aspect ratios without black gaps")
                 .put("uniqueFrames", hashes.size)
         } finally {
             image.recycle(); chain.release(); source.release(); target.release()
         }
+    }
+
+    private fun checkTransportFaultGeometry(context: Context) {
+        val chain = EffectChain(PhotoRenderer.shaderSource(context), false)
+        val source = SignalBuffer(); val target = SignalBuffer()
+        try {
+            for ((w,h) in listOf(960 to 720, 720 to 960)) {
+                source.allocate(w,h); target.allocate(w,h)
+                val bitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888).apply { eraseColor(android.graphics.Color.WHITE) }
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,source.texture)
+                GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bitmap,0); bitmap.recycle()
+                fun render(kind: Float, live: Boolean = false, time: Double = 0.0): ByteArray {
+                    val p = EffectParameters.defaults().with(Effects.CRT,"transport",kind)
+                        .override(Effects.CRT,"transportDamage",1f).override(Effects.CRT,"transportLoss",0f)
+                        .override(Effects.CRT,"refreshBand",0f).override(Effects.CRT,"networkStall",0f)
+                    val state=EffectState.defaults().edit(true,1 shl Effects.CRT,p).amount(1f)
+                    chain.render(source.texture,false,identity,frame(state,live,time),w,h,w,h,target.fbo,target.texture)
+                    return pixels(target,ByteBuffer.allocateDirect(w*h*4))
+                }
+                val led=render(1f)
+                check(led.contentEquals(render(1f))) { "Fixed LED seed changed" }
+                val module=(minOf(w,h)/180).coerceAtLeast(1)*8
+                var failures=0
+                for (y in 0 until h step module) for (x in 0 until w step module) {
+                    val value=led[(y*w+x)*4].toInt() and 255
+                    if(value<128) failures++
+                    for (dy in 0 until minOf(module,h-y)) for (dx in 0 until minOf(module,w-x)) {
+                        check(kotlin.math.abs((led[((y+dy)*w+x+dx)*4].toInt() and 255)-value)<=1) { "LED module is not a coherent square at $w x $h" }
+                    }
+                }
+                check(failures>0) { "LED has no failed modules" }
+                val network=render(2f/3)
+                check(network.contentEquals(render(2f/3))) { "Fixed NETWORK seed changed" }
+                check(!render(2f/3, true, .7).contentEquals(render(2f/3, true, 4.2))) { "LIVE ON did not advance NETWORK noise" }
+                val values=network.indices.filter { it%4!=3 }.map { network[it].toInt() and 255 }.toSet()
+                check(values.size>100) { "NETWORK corruption is flat blocks instead of noise" }
+                check(network.count { (it.toInt() and 255)<240 }>w*h/4) { "NETWORK corruption missing" }
+            }
+        } finally { chain.release(); source.release(); target.release() }
     }
 
     private fun compare(context: Context, benchmark: Boolean): JSONObject {
@@ -218,6 +258,10 @@ internal object FaultRenderChecks {
                         for (live in listOf(false, true))
                             checkFrame(EffectState.defaults().single(id).amount(level),live,.77,oes,"id=$id level=$level")
                     for (control in Effects.CONTROLS[id]) {
+                        // The frozen pre-transport renderer has no media buffers or profile reset.
+                        // Profile controls are verified by transportCompare, not this legacy oracle.
+                        if ((id == Effects.VHS && control.key in setOf("transport", "reduce", "cable")) ||
+                            (id == Effects.CRT && control.key in setOf("transport", "upconvert"))) continue
                         val state = EffectState.defaults().single(id)
                         for (value in floatArrayOf(0f, 1f)) {
                             val changed = state.edit(false,state.mask,state.parameters().with(id,control.key,value))
