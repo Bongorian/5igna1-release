@@ -15,12 +15,14 @@ internal class CaptureSettings {
     var location: Boolean = false
     var rawVideo: Boolean = false
     var expertMode: Boolean = false
+    var experimentalSignals: Boolean = false
     var rawVideoSize: String = ""
     var rawVideoFps: Int = 12
 
     constructor()
 
     constructor(other: CaptureSettings) {
+        experimentalSignals = other.experimentalSignals
         expertMode = other.expertMode
         photoFormat = other.photoFormat
         jpegQuality = other.jpegQuality
@@ -36,6 +38,7 @@ internal class CaptureSettings {
 
     fun save(p: SharedPreferences) {
         p.edit()
+            .putBoolean("experimentalSignals", experimentalSignals)
             .putBoolean("expertMode", expertMode)
             .putBoolean("loadRecommendationsV1", true)
             .putInt("photoFormat", photoFormat)
@@ -54,6 +57,7 @@ internal class CaptureSettings {
     companion object {
         fun load(p: SharedPreferences): CaptureSettings {
             val s = CaptureSettings()
+            s.experimentalSignals = p.getBoolean("experimentalSignals", false)
             s.expertMode = p.getBoolean("expertMode", false)
             s.photoFormat = p.getInt("photoFormat", 0)
             if (s.photoFormat == 1) s.photoFormat = 2

@@ -26,6 +26,7 @@ jobs:
       - run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
       - name: Check release metadata, translations and wrapper
         run: |
+          python3 -m unittest discover -s tools/tests -p 'test_play_upload.py'
           python3 tools/release.py check
           python3 tools/check-locales.py
           python3 tools/check-repository.py

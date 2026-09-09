@@ -87,6 +87,7 @@ internal fun MainActivity.buildUi() {
     )
     val settingsButton =
         iconButton(R.drawable.ic_settings, getString(R.string.ui_capture_and_language_settings))
+    settingsButton.tag = "guide-settings"
     header.addView(settingsButton, LinearLayout.LayoutParams(dp(44f), dp(44f)))
     settingsButton.setOnClickListener(OnClickListener@{ v: View? -> showSettings() })
     for (n in 1..<header.childCount - 1) {
@@ -228,6 +229,7 @@ internal fun MainActivity.buildUi() {
     selectedRoute = row()
     scroll.addView(selectedRoute)
     val add = button("＋")
+    add.tag = "guide-add"
     add.setTextSize(22f)
     add.setContentDescription(getString(R.string.fault_add_remove))
     chainRow.addView(add, LinearLayout.LayoutParams(dp(44f), dp(44f)))

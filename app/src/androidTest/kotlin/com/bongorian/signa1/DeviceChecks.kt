@@ -67,6 +67,10 @@ class DeviceChecks : Instrumentation() {
                     .edit()
                     .remove(TutorialDialog.SEEN)
                     .commit()
+            if (args!!.getString("action", "") == "release-defaults") {
+                val prefs = getTargetContext().getSharedPreferences("signal", 0)
+                check(!prefs.contains("sound") && !prefs.contains("advancedMode") && !prefs.contains("experimentalSignals")) { "Requires fresh test installation" }
+            }
             val monitor = addMonitor(MainActivity::class.java!!.getName(), null, false)
             getUiAutomation()
                 .executeShellCommand(
@@ -79,6 +83,13 @@ class DeviceChecks : Instrumentation() {
             activity = monitor.waitForActivityWithTimeout(20000) as MainActivity
             removeMonitor(monitor)
             if (activity == null) throw AssertionError("Activity start timeout")
+            if (args!!.getString("action", "") == "release-defaults") {
+                val prefs = getTargetContext().getSharedPreferences("signal", 0)
+                check(!activity!!.sound && !activity!!.advancedMode && !activity!!.settings.experimentalSignals && !activity!!.faultConfig.audio) { "Release defaults must be OFF" }
+                check(!CaptureSettings.load(prefs).experimentalSignals && !FaultPreferences.load(prefs).audio)
+                result.putString("result", "PASS fresh install: experimental, ADVANCED, video audio and LIVE audio all OFF")
+                return
+            }
             if (args!!.getString("action", "") == "tutorial-permission") {
                 await(
                     "guide before permission",
@@ -118,7 +129,7 @@ class DeviceChecks : Instrumentation() {
                 checkTutorial()
                 result.putString(
                     "result",
-                    "PASS first launch, page restoration, skip/back/completion, settings draft isolation, all locales and camera recovery",
+                    "PASS first launch, page restoration, skip/back/completion, immediate settings persistence, all locales and camera recovery",
                 )
                 return
             }
@@ -187,6 +198,14 @@ class DeviceChecks : Instrumentation() {
                     "result",
                     "PASS anchored format menu, top utilities, live fault meters, camera interruption and stalled-preview recovery",
                 )
+            } else if (action == "experimental") {
+                result.putString("gpu", ExperimentalSignalChecks.run(getTargetContext()))
+                checkExperimentalControls()
+                checkCaptureContract(true)
+                result.putString("result", "PASS experimental gate, per-stage controls/apply/cancel/persistence, GPU artifacts, displayed JPEG and metadata")
+            } else if (action == "settings-auto") {
+                checkImmediateSettings()
+                result.putString("result", "PASS immediate selection, disk persistence, rapid changes, no Apply, close/recreate/reopen")
             } else if (action == "expert") {
                 checkExpert(result)
             } else if (action == "load-record") {
@@ -302,6 +321,7 @@ class DeviceChecks : Instrumentation() {
             } else {
                 val chosen = CaptureSettings(original)
                 chosen.rawVideo = false
+                chosen.experimentalSignals = args!!.getString("experimental", "false") == "true"
                 chosen.location = args!!.getString("gps", "false") == "true"
                 chosen.jpegQuality = Integer.parseInt(args!!.getString("quality", "100"))
                 chosen.videoQuality = Integer.parseInt(args!!.getString("bitrate", "3"))
@@ -329,6 +349,10 @@ class DeviceChecks : Instrumentation() {
                     val mask = Integer.parseInt(args!!.getString("chainMask", "0"))
                     var selected = activity!!.effectState.single(preset)
                     if (mask != 0) selected = selected.chain(mask)
+                    if (chosen.experimentalSignals) selected = selected.edit(true, selected.mask,
+                        selected.parameters().override(Effects.MOTION_BLUR, "blurX", .04f)
+                            .override(Effects.THERMAL_NOISE, "noiseAmplitude", .12f)
+                            .override(Effects.SMEAR, "smearAmount", 1f))
                     activity!!.commitEffects(selected.amount(power / 100f))
                 })
                 await(
@@ -377,7 +401,8 @@ class DeviceChecks : Instrumentation() {
                         20000,
                     )
                 } else {
-                    activity!!.engine.photo()
+                    await("acknowledged photo frame", { activity!!.engine.presentedFrames.acknowledged() > 0 }, 20000)
+                    runOnMainSync { activity!!.engine.photo() }
                 }
                 await(
                     "saved",
@@ -451,6 +476,7 @@ class DeviceChecks : Instrumentation() {
             }
         } catch (error: Throwable) {
             result.putString("failure", android.util.Log.getStackTraceString(error))
+            activity?.engine?.let { e -> result.putString("captureState", "busy=${e.photoBusy} pending=${e.pending != null} ack=${e.presentedFrames.acknowledged()} attached=${e.attached} cooling=${e.cooling} still=${e.stillReader != null} format=${e.settings.photoFormat}") }
         } finally {
             if (activity != null && original != null) {
                 val restore = original
@@ -506,6 +532,118 @@ class DeviceChecks : Instrumentation() {
         waitForIdleSync()
     }
 
+    internal fun checkExperimentalControls() {
+        val advancedBefore = activity!!.advancedMode
+        val languageBefore = AppLanguage.current()
+        try {
+            changeLanguage("ja")
+            runOnMainSync {
+                val off = CaptureSettings(activity!!.settings)
+                off.experimentalSignals = false
+                activity!!.applySettings(off)
+                activity!!.commitEffects(EffectState.defaults().single(Effects.PIXEL_DAMAGE))
+            }
+            await("experimental off ready", { activity!!.ready }, 20000)
+            lateinit var q: QualityDialog
+            runOnMainSync {
+                q = QualityDialog(activity!!); q.show()
+                q.content!!.findViewWithTag<View>("experimental-signals").performClick()
+                if (!activity!!.settings.experimentalSignals || !CaptureSettings.load(activity!!.getSharedPreferences("signal", 0)).experimentalSignals)
+                    throw AssertionError("Experimental switch not immediately saved")
+                activity!!.advancedMode = true
+            }
+            saveUi("experimental-settings-ja.png")
+            runOnMainSync { q.sheet!!.dismiss() }
+            await("experimental on ready", { activity!!.ready }, 20000)
+            lateinit var edit: EffectDialog
+            runOnMainSync {
+                edit = EffectDialog(activity!!, true); edit.show()
+                edit.body!!.findViewWithTag<View>("group-INPUT").performClick()
+                edit.body!!.findViewWithTag<View>("auto-thermalSensitivity").performClick()
+                edit.draft = edit.draft.override(Effects.PIXEL_DAMAGE, "thermalSensitivity", 3f)
+                edit.preview(); edit.renderBody()
+            }
+            saveUi("experimental-inputs-ja.png")
+            runOnMainSync { edit.sheet!!.dismiss() }
+            if (activity!!.effectState.parameters().manual(Effects.PIXEL_DAMAGE, "thermalSensitivity"))
+                throw AssertionError("Cancelled input sensitivity leaked")
+            runOnMainSync {
+                edit = EffectDialog(activity!!, true); edit.show()
+                edit.draft = edit.draft.override(Effects.PIXEL_DAMAGE, "thermalSensitivity", 3f)
+                edit.sheet!!.window!!.decorView.findViewWithTag<View>("apply").performClick()
+            }
+            if (activity!!.effectState.parameters().overrides(Effects.PIXEL_DAMAGE)["thermalSensitivity"] != 3f)
+                throw AssertionError("Sensitivity not committed")
+            val selected = activity!!.effectState.chain(activity!!.effectState.mask or (1 shl Effects.THERMAL_NOISE))
+            runOnMainSync {
+                activity!!.commitEffects(selected)
+                q = QualityDialog(activity!!); q.show()
+                q.content!!.findViewWithTag<View>("experimental-signals").performClick()
+                q.sheet!!.dismiss()
+            }
+            await("experimental bypass", { activity!!.ready }, 20000)
+            if (!activity!!.effectState.enabled(Effects.THERMAL_NOISE) || activity!!.effectState.parameters().overrides(Effects.PIXEL_DAMAGE)["thermalSensitivity"] != 3f)
+                throw AssertionError("Switch discarded saved experimental data")
+            val m = FaultModel(7).apply(activity!!.effectState.snapshot(false, 0), activity!!.faultConfig.experimental(false))
+            if (m.ids().any { Effects.physical(it) }) throw AssertionError("Experimental stage not bypassed")
+            runOnMainSync {
+                edit = EffectDialog(activity!!, true); edit.show()
+                if (edit.body!!.findViewWithTag<View>("group-INPUT") != null)
+                    throw AssertionError("Input controls visible while disabled")
+                edit.sheet!!.dismiss()
+            }
+            recreateTutorialActivity()
+            await("experimental preference restored", { activity!!.ready }, 20000)
+            if (activity!!.settings.experimentalSignals || !activity!!.effectState.enabled(Effects.THERMAL_NOISE))
+                throw AssertionError("Experiment preference/selection lost on recreation")
+        } finally {
+            runOnMainSync { activity!!.advancedMode = advancedBefore; activity!!.savePrefs() }
+            changeLanguage(languageBefore)
+        }
+    }
+
+    internal fun checkImmediateSettings() {
+        val beforeAdvanced = activity!!.advancedMode
+        try {
+            runOnMainSync {
+                val q = QualityDialog(activity!!)
+                q.show()
+                if (findText(q.sheet!!.window!!.decorView, activity!!.getString(R.string.ui_apply)) != null)
+                    throw AssertionError("Apply remains in Settings")
+                q.content!!.findViewWithTag<View>("advanced-mode").performClick()
+                if (activity!!.advancedMode == beforeAdvanced)
+                    throw AssertionError("Advanced not immediate")
+                q.jpeg!!.performClick()
+                val choices = android.view.inspector.WindowInspector.getGlobalWindowViews()
+                    .first { it.findViewWithTag<View>("choice-0") != null }
+                choices.findViewWithTag<View>("choice-0").performClick()
+                if (activity!!.settings.jpegQuality != 85 || CaptureSettings.load(activity!!.getSharedPreferences("signal", 0)).jpegQuality != 85)
+                    throw AssertionError("JPEG selection not saved immediately")
+                // Several changes within one UI turn must converge on the latest request.
+                repeat(4) { q.content!!.findViewWithTag<View>("expert-mode").performClick() }
+                q.content!!.findViewWithTag<View>("load-recommend").performClick()
+                q.sheet!!.dismiss()
+            }
+            await("latest settings configured", { activity!!.ready && !activity!!.settings.expertMode }, 20000)
+            if (activity!!.settings.jpegQuality != 85 || activity!!.settings.photoSize != "recommended")
+                throw AssertionError("Older configuration overwrote selection")
+            recreateTutorialActivity()
+            await("camera after settings recreation", { activity!!.ready }, 20000)
+            lateinit var reopened: QualityDialog
+            runOnMainSync {
+                reopened = QualityDialog(activity!!)
+                val q = reopened
+                q.show()
+                if (q.draft.jpegQuality != 85 || q.draft.expertMode || q.advanced == beforeAdvanced)
+                    throw AssertionError("Settings lost on recreation")
+            }
+            saveUi("settings-immediate.png")
+            runOnMainSync { reopened.sheet!!.dismiss() }
+        } finally {
+            runOnMainSync { activity!!.advancedMode = beforeAdvanced; activity!!.savePrefs() }
+        }
+    }
+
     @Throws(Exception::class)
     internal fun checkTutorial() {
         await(
@@ -536,6 +674,31 @@ class DeviceChecks : Instrumentation() {
         recreateTutorialActivity()
         if (activity!!.tutorial != null) throw AssertionError("Tutorial repeated after skip")
         await("camera after guide", { activity!!.ready && activity!!.engine.frameSeen }, 20000)
+        val savedSettings = CaptureSettings(activity!!.settings)
+        try {
+            runOnMainSync {
+                val q = QualityDialog(activity!!)
+                q.show()
+                q.draft.expertMode = true
+                q.content!!.findViewWithTag<SignalToggle>("expert-mode").isChecked = true
+                q.content!!.findViewWithTag<View>("load-recommend").performClick()
+                if (q.draft.expertMode || q.content!!.findViewWithTag<SignalToggle>("expert-mode").isChecked)
+                    throw AssertionError("Recommended keeps EXPERT")
+                if (activity!!.settings.expertMode || CaptureSettings.load(activity!!.getSharedPreferences("signal", 0)).expertMode)
+                    throw AssertionError("Recommended not immediately saved")
+                if (findText(q.sheet!!.window!!.decorView, activity!!.getString(R.string.ui_apply)) != null)
+                    throw AssertionError("Settings still has Apply")
+                q.sheet!!.dismiss()
+                val reopened = QualityDialog(activity!!)
+                reopened.show()
+                if (reopened.draft.expertMode || reopened.draft.photoSize != "recommended")
+                    throw AssertionError("Settings lost on reopening")
+                reopened.sheet!!.dismiss()
+            }
+        } finally {
+            runOnMainSync { activity!!.applySettings(savedSettings) }
+        }
+        await("camera after recommendation", { activity!!.ready }, 20000)
         val language = AppLanguage.current()
         try {
             for (tag in arrayOf<String>("ja", "en", "zh")) {
@@ -545,15 +708,26 @@ class DeviceChecks : Instrumentation() {
                 runOnMainSync({
                     settings[0] = QualityDialog(activity!!)
                     settings[0]!!.show()
-                    settings[0]!!.advanced = !before
+                    settings[0]!!.content!!.findViewWithTag<View>("advanced-mode").performClick()
                     settings[0]!!
                         .content!!
                         .findViewWithTag<View>("settings-tutorial")
                         .performClick()
                 })
-                for (page in 0..4) {
+                for (page in 0 until TutorialDialog.PAGE_COUNT) {
                     if (activity!!.tutorial!!.page != page) throw AssertionError("Unexpected page")
                     SystemClock.sleep(900)
+                    val guide = activity!!.tutorial!!
+                    if (activity!!.ready || activity!!.engine.attached)
+                        throw AssertionError("Camera active behind guide")
+                    if (page > 0 && guide.targetBounds.isEmpty)
+                        throw AssertionError("Missing real control highlight")
+                    val beforeEffect = activity!!.effectState.encode()
+                    val beforeCount = activity!!.captureCount
+                    tutorialClick("tutorial-practice")
+                    if (page > 0) tutorialClick("tutorial-target")
+                    if (beforeEffect != activity!!.effectState.encode() || beforeCount != activity!!.captureCount)
+                        throw AssertionError("Guide changed capture state")
                     languageScreenshot("tutorial-" + tag + "-" + page)
                     tutorialClick("tutorial-next")
                 }
@@ -561,10 +735,14 @@ class DeviceChecks : Instrumentation() {
                     activity!!.tutorial != null ||
                         !settings[0]!!.sheet!!.isShowing() ||
                         settings[0]!!.advanced == before ||
-                        activity!!.advancedMode != before
+                        activity!!.advancedMode == before
                 )
-                    throw AssertionError("Tutorial changed settings draft")
-                runOnMainSync({ settings[0]!!.sheet!!.dismiss() })
+                    throw AssertionError("Tutorial lost saved settings")
+                runOnMainSync({
+                    settings[0]!!.sheet!!.dismiss()
+                    activity!!.advancedMode = before
+                    activity!!.savePrefs()
+                })
             }
         } finally {
             changeLanguage(language)
@@ -1766,21 +1944,26 @@ class DeviceChecks : Instrumentation() {
     }
 
     @Throws(Exception::class)
-    internal fun checkCaptureContract() {
+    internal fun checkCaptureContract(experimental: Boolean = false) {
         val settings = CaptureSettings(activity!!.settings)
         settings.photoFormat = 0
         settings.rawVideo = false
-        settings.photoSize = "auto"
+        settings.photoSize = if (experimental) "recommended" else "auto"
+        settings.experimentalSignals = experimental
         settings.jpegQuality = 100
         val generation = activity!!.engine.generation
         runOnMainSync({
             activity!!.videoMode = false
             activity!!.applySettings(settings)
-            activity!!.commitEffects(
-                EffectState.defaults()
-                    .chain((1 shl Effects.ROW_ERROR) or (1 shl Effects.VHS) or (1 shl Effects.CRT))
-                    .amount(.8f)
-            )
+            var captured = EffectState.defaults()
+                .chain((1 shl Effects.ROW_ERROR) or (1 shl Effects.VHS) or (1 shl Effects.CRT))
+                .amount(.8f)
+            if (experimental) captured = captured.edit(true,
+                captured.mask or (1 shl Effects.MOTION_BLUR) or (1 shl Effects.THERMAL_NOISE) or (1 shl Effects.SMEAR),
+                captured.parameters().override(Effects.MOTION_BLUR, "blurX", .04f)
+                    .override(Effects.THERMAL_NOISE, "noiseAmplitude", .12f)
+                    .override(Effects.SMEAR, "smearAmount", 1f))
+            activity!!.commitEffects(captured)
         })
         await(
             "live signal",
@@ -1858,7 +2041,8 @@ class DeviceChecks : Instrumentation() {
                 if (
                     description == null ||
                         !description!!.contains("cameraNs=" + capturedCameraNs) ||
-                        !description!!.contains("VHS")
+                        !description!!.contains("VHS") ||
+                        (experimental && !description.contains("experimental=true"))
                 )
                     throw AssertionError("Capture lost timestamp/state metadata")
             })
@@ -2060,7 +2244,7 @@ class DeviceChecks : Instrumentation() {
             panel[0] = QualityDialog(requireNotNull(activity))
             panel[0]!!.show()
             panel[0]!!.content!!.findViewWithTag<View>("expert-mode").performClick()
-            if (activity!!.settings.expertMode) throw AssertionError("Expert applied before save")
+            if (!activity!!.settings.expertMode) throw AssertionError("Expert not immediately saved")
         })
         waitForIdleSync()
         SystemClock.sleep(400)
@@ -2074,16 +2258,12 @@ class DeviceChecks : Instrumentation() {
         SystemClock.sleep(900)
         saveUi("expert-settings-bottom.png")
         runOnMainSync({ panel[0]!!.sheet!!.dismiss() })
-        if (activity!!.settings.expertMode) throw AssertionError("Expert cancel committed")
+        if (!activity!!.settings.expertMode) throw AssertionError("Expert lost on close")
         runOnMainSync({
             panel[0] = QualityDialog(activity!!)
             panel[0]!!.show()
-            panel[0]!!.content!!.findViewWithTag<View>("expert-mode").performClick()
-            findText(
-                    panel[0]!!.sheet!!.getWindow()!!.getDecorView(),
-                    activity!!.getString(R.string.ui_apply),
-                )!!
-                .performClick()
+            if (!panel[0]!!.draft.expertMode) throw AssertionError("Expert lost on reopen")
+            panel[0]!!.sheet!!.dismiss()
         })
         await(
             "expert enabled",
@@ -2156,7 +2336,7 @@ class DeviceChecks : Instrumentation() {
             })
             result.putString(
                 "result",
-                "PASS expert UI cancel/apply/persistence, uncapped preview " +
+                "PASS expert UI immediate persistence, uncapped preview " +
                     rendered +
                     " frames/2s, simulated critical heat ignored during recording, manual stop saved, normal thermal protection restored",
             )
@@ -2263,8 +2443,8 @@ class DeviceChecks : Instrumentation() {
         SystemClock.sleep(400)
         saveUi("adaptive-settings.png")
         runOnMainSync({ panel[0]!!.sheet!!.dismiss() })
-        if (activity!!.settings.photoSize != oldSize)
-            throw AssertionError("Cancelled recommendation changed settings")
+        if (activity!!.settings.photoSize != "recommended" || activity!!.settings.expertMode)
+            throw AssertionError("Recommendation not saved on selection")
         val migration = activity!!.getSharedPreferences("loadMigrationTest", 0)
         try {
             migration.edit().clear().putString("photoSize", "max").commit()
@@ -2485,23 +2665,19 @@ class DeviceChecks : Instrumentation() {
                 settingsEditor[0] = QualityDialog(activity!!)
                 settingsEditor[0]!!.show()
                 settingsEditor[0]!!.content!!.findViewWithTag<View>("advanced-mode").performClick()
-                if (activity!!.advancedMode)
-                    throw AssertionError("Global mode committed before Apply")
+                if (!activity!!.advancedMode)
+                    throw AssertionError("Global mode not saved immediately")
             })
             waitForIdleSync()
             SystemClock.sleep(300)
             saveUi("advanced-global-setting.png")
             runOnMainSync({ settingsEditor[0]!!.sheet!!.dismiss() })
-            if (activity!!.advancedMode) throw AssertionError("Cancelled global mode applied")
+            if (!activity!!.advancedMode) throw AssertionError("Global mode lost on close")
             runOnMainSync({
                 settingsEditor[0] = QualityDialog(activity!!)
                 settingsEditor[0]!!.show()
-                settingsEditor[0]!!.content!!.findViewWithTag<View>("advanced-mode").performClick()
-                findText(
-                        settingsEditor[0]!!.sheet!!.getWindow()!!.getDecorView(),
-                        activity!!.getString(R.string.ui_apply),
-                    )!!
-                    .performClick()
+                if (!settingsEditor[0]!!.advanced) throw AssertionError("Global mode lost on reopen")
+                settingsEditor[0]!!.sheet!!.dismiss()
             })
             await("global mode applied", { activity!!.ready && activity!!.advancedMode }, 20000)
             if (!activity!!.getSharedPreferences("signal", 0).getBoolean("advancedMode", false))

@@ -47,6 +47,9 @@ constructor(
     fun inspect(): Map<String, Float> =
         LinkedHashMap(internal)
             .apply {
+                FaultSensitivity.keys.forEachIndexed { source, key ->
+                    if (!containsKey(key)) put(key, FaultSensitivity.initial(id, source))
+                }
                 putAll(profile)
                 putAll(mechanism)
             }

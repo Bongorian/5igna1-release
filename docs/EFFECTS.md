@@ -1,5 +1,7 @@
 # Fault points and controls
 
+Version 1.3.1 adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. Experimental features, ADVANCED MODE and audio default to OFF; existing saved choices are retained.
+
 [All guides](README.md) · [日本語](EFFECTS.ja.md)
 
 Choose a damaged system, then watch what happens inside it. CLEAN is an empty route. The thirteen faults are applied in signal order, regardless of the order in which you select them.

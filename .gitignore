@@ -36,3 +36,6 @@ fdroid-signing.properties
 # Python tool caches
 __pycache__/
 *.pyc
+
+# Short-lived Google authentication files
+gha-creds-*.json

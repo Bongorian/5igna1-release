@@ -1,0 +1,67 @@
+{
+  "date": "2026-09-09",
+  "scope": "Development debug only; experimental device response",
+  "unitTests": {
+    "count": 22,
+    "result": "PASS",
+    "includes": "Legacy golden hashes unchanged; per-source isolation; OFF bypass; same-CFA RAW; direct versus precomputed coordinates"
+  },
+  "lint": "PASS fdroidDebug",
+  "locales": "PASS 435 matching strings and placeholders",
+  "emulator": "PASS GPU artifacts, settings persistence/apply/cancel, displayed JPEG and metadata",
+  "physical": {
+    "gpu": "PASS all 3 artifacts; deterministic per-device rendering; OFF bypass",
+    "uiAndJpeg": "PASS",
+    "raw": {
+      "dimensions": [
+        4096,
+        3072
+      ],
+      "stages": [
+        "MOTION BLUR",
+        "THERMAL NOISE",
+        "SMEAR",
+        "ROW ERROR"
+      ],
+      "validation": "PASS LibRaw open/unpack/develop, experimental metadata",
+      "captureToSaveSecondsApprox": 17,
+      "initialIssue": "40-second timeout while processing; resolved by precomputing per-axis blur/smear coordinates"
+    },
+    "video": [
+      {
+        "experimental": false,
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "seconds": 20.035,
+        "fps": 30.05,
+        "batteryC": [
+          35.9,
+          35.9
+        ],
+        "validation": "PASS decode and timestamps"
+      },
+      {
+        "experimental": true,
+        "dimensions": [
+          1080,
+          1920
+        ],
+        "seconds": 20.102,
+        "fps": 30.05,
+        "batteryC": [
+          35.9,
+          36.4
+        ],
+        "validation": "PASS decode and timestamps"
+      }
+    ],
+    "limitations": [
+      "USB connected; short sequential observations, not controlled thermal benchmark",
+      "Silent video; sustained heat and battery drain not evaluated",
+      "Temperature is battery/Android proxy; no camera-die measurement",
+      "High-resolution processed RAW remains slow in debug build"
+    ]
+  }
+}

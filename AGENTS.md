@@ -56,3 +56,22 @@
 
 - The owner explicitly requested distributing 1.3.0 on Play while skipping 1.2.0. The existing Alpha track accepted 1.3.0 / code 11 for review, using the existing Play upload key and unchanged tester/country settings. Managed publishing remains on; approval and the subsequent publication action are pending. See docs/PLAY_1_3_0.md.
 - Preserve the submitted code-11 AAB and prior artifacts. Any changed application code in a future submission needs a higher versionCode.
+
+## Owner direction — interactive guide and thermal audit, 2026-09-09
+
+- The owner requested a development branch for an interactive guide, investigating/improving heat, and assessing image/noise/other-frame injection boundaries. Work on `codex/interactive-guide-thermal-inputs`; preserve main, published releases and the submitted code-11 artifacts. Injection is an assessment, not a requested feature implementation. Continue authorized debug-only physical-device testing.
+- The owner subsequently requested immediate persistence in the Settings panel, replacing its Apply action. This supersedes settings draft/cancel semantics for `QualityDialog`; effect and LIVE editors retain their existing apply/cancel behavior.
+
+## Owner direction — experimental device response, 2026-09-09
+
+- The owner approved implementing per-stage motion/audio/frame-timing/temperature/app-CPU sensitivity and motion blur, thermal noise and smear on the current development branch. Use one Settings switch, default OFF; preserve selections and values while bypassing the additions when OFF. Inputs react with LIVE ON and respect global input controls and permissions. Sensitivity range is 0–4, with native routes defaulting to 1 and unused routes to 0.
+- The owner approved physical DEV installation and testing, then clarified that the earlier confirmation requirement applied only to this implementation discussion. Do not keep asking for routine implementation or testing confirmations. Preserve release applications, submitted artifacts and main.
+
+## Owner direction — 1.3.1 release, 2026-09-09
+
+- The owner requested releasing the current changes as 1.3.1, with experimental features, ADVANCED MODE and audio defaulting to OFF. Publish the verified GitHub/Obtainium APK as 1.3.1 / code 12 with the existing distribution key. Retain saved choices and earlier artifacts/tags. This does not replace the pending Play 1.3.0 submission or the F-Droid submission.
+
+## Owner direction — automatic Play uploads, 2026-09-09
+
+- The owner requested free automatic AAB uploads whenever a GitHub release is published. Configure GitHub Actions and the existing Play app for signed Alpha drafts, using the existing Play upload key. This authorizes the required service account, scoped permissions, GitHub environment and integration into main, including the already published 1.3.1 source.
+- Automatic uploads must preserve ongoing reviews, existing releases, tester/country settings and signing identities. Do not automatically submit for review or publish to testers/production. Fail if another draft or review prevents the upload; never cancel review as a fallback.

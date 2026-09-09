@@ -87,6 +87,7 @@ private constructor(
         cameraNs: Long,
         time: Double,
         nodes: List<FaultNode>,
+        val experimental: Boolean = false,
     ) {
         private val route: IntArray
         val amount: Float
@@ -98,21 +99,17 @@ private constructor(
         init {
             var previous = 0
             for (id in ids) {
-                require(!(id <= previous || id >= Effects.NAMES.size)) { "Non-causal fault route" }
-                previous = id
+                require(!(Effects.rank(id) <= previous || id >= Effects.NAMES.size)) { "Non-causal fault route" }
+                previous = Effects.rank(id)
             }
             previous = 0
             for (n in nodes) {
                 require(
-                    !(n.id <= previous ||
-                        Arrays.binarySearch(
-                            ids,
-                            n.id,
-                        ) < 0)
+                    !(Effects.rank(n.id) <= previous || n.id !in ids)
                 ) {
                     "Fault node outside route"
                 }
-                previous = n.id
+                previous = Effects.rank(n.id)
             }
             this.route = ids.clone()
             this.amount = amount
@@ -134,7 +131,7 @@ private constructor(
                     .toArray()
             val selected: MutableList<FaultNode> = ArrayList<FaultNode>()
             for (n in nodes) if (Effects.point(n.id).ordinal <= point.ordinal) selected.add(n)
-            return Frame(prefix, amount, parameters, cameraNs, time, selected)
+            return Frame(prefix, amount, parameters, cameraNs, time, selected, experimental)
         }
 
         fun describe(): String {
@@ -146,6 +143,8 @@ private constructor(
                     .append(" LEVEL=")
                     .append(amount)
                     .append(parameters.describe(route))
+            if (experimental || route.any { id -> FaultSensitivity.keys.any { parameters.manual(id, it) } })
+                s.append(" experimental=").append(experimental)
             for (n in nodes) s.append(" | ").append(n.describe())
             return s.toString()
         }

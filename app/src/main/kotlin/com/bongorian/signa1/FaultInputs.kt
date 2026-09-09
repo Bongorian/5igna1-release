@@ -114,6 +114,7 @@ internal class FaultInputs(val context: Context, val handler: Handler) : SensorE
         hasGyro = gravityReady
         hasAccel = hasGyro
         accelNs = 0
+        values.angularSpeed = 0f
         values.rotation = 0f
         values.tilt = values.rotation
         values.az = values.tilt
@@ -164,6 +165,7 @@ internal class FaultInputs(val context: Context, val handler: Handler) : SensorE
             values.tilt = FaultModel.clamp(gx / 9.80665f, -1f, 1f)
             values.motionAvailable = true
         } else if (event.sensor.type == Sensor.TYPE_GYROSCOPE) {
+            values.angularSpeed = kotlin.math.sqrt(event.values[0] * event.values[0] + event.values[1] * event.values[1] + event.values[2] * event.values[2])
             values.rotation = FaultModel.clamp(event.values[2], -6f, 6f)
             values.motionAvailable = true
         }

@@ -20,6 +20,7 @@ uniform float quantLevels,blockColumns,blockError,blockOffset;
 uniform float streamLoss,streamColumns,concealment;
 uniform float tapeBandwidth,trackingOffset,trackingWave,trackingPhase,trackingSlip,tapeDropout,dropoutPosition,tapeNoise;
 uniform float scanDepth,scanLines,phosphorMix,convergenceOffset,syncOffset;
+uniform float blurX,blurY,noiseAmplitude,noiseGrain,smearAmount,smearLength,smearThreshold;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 // Pixel sites need a bounded hash: mobile sin() loses entropy for large coordinate arguments,
 // turning sparse damage into broad solid regions. RAW has its own integer-domain hash.
@@ -58,7 +59,27 @@ vec3 toYuv(vec3 c){return vec3(dot(c,vec3(.299,.587,.114)),dot(c,vec3(-.14713,-.
 vec3 fromYuv(vec3 c){return vec3(c.x+1.13983*c.z,c.x-.39465*c.y-.5806*c.z,c.x+2.03211*c.y);}
 void main(){
     vec2 p=uv;vec3 clean=sampleAt(p),c=clean;
-    if(mode==FX_PIXEL_DAMAGE){
+    if(mode==FX_MOTION_BLUR){
+        if(abs(blurX)+abs(blurY)>0.){
+            c=vec3(0.);
+            for(int i=0;i<9;i++)c+=sampleAt(p+vec2(blurX,blurY)*(float(i)/8.-.5));
+            c/=9.;
+        }
+    }else if(mode==FX_THERMAL_NOISE){
+        vec2 px=floor(p*sourceSize/max(1.,noiseGrain));
+        float noise=damageHash(px+grainSeed)+damageHash(px+grainSeed+19.)+damageHash(px+grainSeed+73.)-1.5;
+        c+=noise*noiseAmplitude;
+    }else if(mode==FX_SMEAR){
+        if(smearAmount>0.&&smearLength>0.){
+            vec3 trail=vec3(0.);
+            for(int i=0;i<8;i++){
+                vec3 source=sampleAt(p+vec2(0.,(float(i)/7.-.5)*smearLength));
+                float brightness=dot(source,vec3(.299,.587,.114));
+                trail+=source*max(0.,brightness-smearThreshold)/max(.01,1.-smearThreshold);
+            }
+            c+=trail*(smearAmount/8.);
+        }
+    }else if(mode==FX_PIXEL_DAMAGE){
         vec2 px=floor(p*sourceSize);float col=damageHash(vec2(px.x,identitySeed)),site=damageHash(px+identitySeed);
         if(col<columnDensity)c=damageHash(vec2(px.x,identitySeed+71.))<hotFraction?vec3(hotValue):vec3(0.);
         else if(site<pixelDensity)c=damageHash(px+identitySeed+71.)<hotFraction?vec3(hotValue):vec3(0.);

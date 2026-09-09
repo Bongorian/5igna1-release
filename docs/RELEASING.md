@@ -1,6 +1,6 @@
 # Releasing 5igna1
 
-Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current source is the 1.3.0 / code 11 optimized Kotlin release. GitHub 1.1.0 / code 9 retains its original tagged source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
+Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current source is 1.3.1 / code 12, adding the interactive guide and optional experimental device response. GitHub 1.1.0 / code 9 retains its original tagged source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
 
 ## Distribution and identity
 
@@ -35,11 +35,11 @@ python3 tools/release.py package --certificate-sha256 YOUR_CONFIRMED_CERTIFICATE
 
 Replace the fingerprint with the adopted release certificate, recorded in [DISTRIBUTION_CERTIFICATE.md](DISTRIBUTION_CERTIFICATE.md). The packager verifies the signature, certificate, ID, version, non-debug mode, and fdroidRelease metadata. It rejects an unsigned/debug/unexpected certificate or an attempt to replace a different file under an existing name.
 
-For the 1.3.0 publication, attach these files after signing and verification:
+For the 1.3.1 publication, attach these files after signing and verification:
 
 ```text
-5igna1-v1.3.0.apk
-5igna1-v1.3.0.apk.sha256
+5igna1-v1.3.1.apk
+5igna1-v1.3.1.apk.sha256
 ```
 
 ## Initial or manual release
@@ -69,6 +69,8 @@ The normal push/PR workflow runs without release credentials on Ubuntu and macOS
 The [metadata candidate](fdroid/com.bongorian.signa1.yml) uses this repository, the fdroid flavor, and v1.0.0. Run `fdroid lint` and `fdroid build --test com.bongorian.signa1` in the F-Droid setup, then follow [the official submission procedure](https://f-droid.org/en/docs/Inclusion_How-To/). Do not submit private signing keys. [Readiness](FDROID_READINESS.md)
 
 ## Google Play
+
+Publishing a stable GitHub release now triggers a signed AAB build and upload to an Alpha draft. See [automatic Play uploads](PLAY_AUTOMATION.md) ([日本語](PLAY_AUTOMATION.ja.md)) for setup, verification and retries. Review submission and publication remain owner actions in Play Console.
 
 Play 1.1.0 / code 9 is published to Alpha testers. Version 1.3.0 / code 11 was submitted on 2026-09-09, skipping 1.2.0 on Play. Managed publishing is on; approval and publication are pending. Preserve existing submitted candidates. See the [1.3.0 submission record](PLAY_1_3_0.md). The existing ignored `signing.properties` applies only to Play upload signing. Build with `./tools/build.sh bundlePlayRelease`; see [Play submission materials](../store/google-play/README.md). Billing/Supporter Pack is not implemented, so no product creation is needed for launch.
 

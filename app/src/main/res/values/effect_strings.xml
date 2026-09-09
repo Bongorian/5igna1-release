@@ -15,5 +15,8 @@
         <item>@string/fault_description_11</item>
         <item>@string/fault_description_12</item>
         <item>@string/fault_description_13</item>
+        <item>@string/fault_description_14</item>
+        <item>@string/fault_description_15</item>
+        <item>@string/fault_description_16</item>
     </string-array>
 </resources>

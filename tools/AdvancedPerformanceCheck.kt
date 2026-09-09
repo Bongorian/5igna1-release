@@ -27,7 +27,7 @@ object AdvancedPerformanceCheck {
     @JvmStatic
     fun main(args: Array<String>) {
         val state = EffectState.defaults().chain(-1)
-        val off = FaultConfig.defaults()
+        val off = FaultConfig.defaults().experimental(true)
         val model = FaultModel(73)
         sample(model, state, 0.0, off)
         for (id in state.ids()) {

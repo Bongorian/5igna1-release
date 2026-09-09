@@ -1,0 +1,135 @@
+name: Upload Play AAB
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing published release tag, for example v1.3.1
+        required: true
+        type: string
+      verify_only:
+        description: Build and validate without uploading to Play
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: play-alpha-upload
+  cancel-in-progress: false
+jobs:
+  upload:
+    if: vars.PLAY_UPLOAD_ENABLED == 'true' && (github.event_name == 'workflow_dispatch' || !github.event.release.prerelease)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: google-play
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
+      UPLOAD_CERTIFICATE: d7f9c8f29340fe4701f826c64f64beebd68e1b4ccb77af096a229d4cb3f12524
+    steps:
+      - name: Check out workflow tools
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+      - name: Resolve the published release to its immutable commit
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+          tag = os.environ['RELEASE_TAG']
+          if not re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+', tag):
+              raise SystemExit('A stable vX.Y.Z tag is required')
+          repo = os.environ['GITHUB_REPOSITORY']
+          def api(path):
+              return json.loads(subprocess.check_output(['gh', 'api', f'repos/{repo}/{path}']))
+          release = api(f'releases/tags/{tag}')
+          if release['draft'] or release['prerelease']:
+              raise SystemExit('Only a published stable release may be uploaded')
+          ref = api(f'git/ref/tags/{tag}')['object']
+          while ref['type'] == 'tag':
+              ref = api('git/tags/' + ref['sha'])['object']
+          if ref['type'] != 'commit' or not re.fullmatch(r'[0-9a-f]{40}', ref['sha']):
+              raise SystemExit('Tag must resolve to a commit')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('sha=' + ref['sha'] + '\n')
+          PY
+      - name: Check out the exact released source
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ steps.release.outputs.sha }}
+          path: release-source
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+      - run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
+      - name: Check source and upload logic
+        run: |
+          python3 -m unittest discover -s tools/tests -p 'test_play_upload.py'
+          cd release-source
+          python3 tools/release.py check --tag "$RELEASE_TAG"
+          python3 tools/check-repository.py
+          python3 tools/check-locales.py
+      - name: Build with the existing Play upload key
+        working-directory: release-source
+        env:
+          PLAY_KEYSTORE_BASE64: ${{ secrets.PLAY_UPLOAD_KEYSTORE_BASE64 }}
+          SIGNAL_PLAY_STORE_PASSWORD: ${{ secrets.PLAY_UPLOAD_STORE_PASSWORD }}
+          SIGNAL_PLAY_KEY_ALIAS: ${{ secrets.PLAY_UPLOAD_KEY_ALIAS }}
+          SIGNAL_PLAY_KEY_PASSWORD: ${{ secrets.PLAY_UPLOAD_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          export SIGNAL_PLAY_KEYSTORE="$RUNNER_TEMP/play-upload.p12"
+          trap 'rm -f "$SIGNAL_PLAY_KEYSTORE"' EXIT
+          python3 - <<'PY'
+          import base64, os
+          from pathlib import Path
+          for key in ('PLAY_KEYSTORE_BASE64', 'SIGNAL_PLAY_STORE_PASSWORD', 'SIGNAL_PLAY_KEY_ALIAS', 'SIGNAL_PLAY_KEY_PASSWORD'):
+              if not os.environ.get(key):
+                  raise SystemExit('Missing configured Play signing secret: ' + key)
+          path = Path(os.environ['SIGNAL_PLAY_KEYSTORE'])
+          path.write_bytes(base64.b64decode(os.environ['PLAY_KEYSTORE_BASE64'], validate=True))
+          path.chmod(0o600)
+          PY
+          ./gradlew --no-daemon lintPlayRelease testPlayReleaseUnitTest bundlePlayRelease verifyFossDependencies dependencyInventory
+          python3 tools/audit-dependencies.py --check
+      - name: Validate AAB identity and signature
+        run: |
+          curl --fail --silent --show-error --location --output "$RUNNER_TEMP/bundletool.jar" https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar
+          printf '%s  %s\n' 'a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29' "$RUNNER_TEMP/bundletool.jar" | sha256sum --check --strict
+          python3 tools/play-upload.py --source release-source --tag "$RELEASE_TAG" --aab release-source/app/build/outputs/bundle/playRelease/app-play-release.aab --bundletool "$RUNNER_TEMP/bundletool.jar" --certificate-sha256 "$UPLOAD_CERTIFICATE" --verify-only
+      - name: Authenticate with short-lived Google credentials
+        if: ${{ !inputs.verify_only }}
+        id: auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          workload_identity_provider: ${{ vars.PLAY_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.PLAY_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/androidpublisher
+          create_credentials_file: false
+          export_environment_variables: false
+      - name: Upload an Alpha draft
+        if: ${{ !inputs.verify_only }}
+        env:
+          PLAY_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: |
+          python3 tools/play-upload.py --source release-source --tag "$RELEASE_TAG" --aab release-source/app/build/outputs/bundle/playRelease/app-play-release.aab --bundletool "$RUNNER_TEMP/bundletool.jar" --certificate-sha256 "$UPLOAD_CERTIFICATE"
+      - name: Record outcome
+        env:
+          VERIFY_ONLY: ${{ inputs.verify_only }}
+        run: |
+          if [ "$VERIFY_ONLY" = true ]; then
+            echo 'AAB built and verified. No Play upload requested.' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'AAB uploaded or already present on Alpha. Review and publication remain in Play Console.' >> "$GITHUB_STEP_SUMMARY"
+          fi

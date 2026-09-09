@@ -2,6 +2,8 @@
 
 [Guides](README.md) · [日本語](GETTING_STARTED.ja.md)
 
+The first-launch guide highlights eight real controls. Tap a highlight or the practice button, and drag the practice LEVEL slider. The test signal is a sandbox: it does not change camera settings or save media. Camera processing pauses while the guide is open. Replay it from **Settings → Quick start**; your selected settings are preserved. Settings save immediately when selected; close with × or Back. **Use recommended settings** also turns EXPERT off immediately, restoring adaptive load control.
+
 Allow camera access, select Photo, and choose **JPEG · displayed signal** in settings. Start with the standard live resolution and leave GPS off unless you want location tags.
 
 Tap **+**, select **ROW ERROR**, then tap its chip in the chain. Find a vertical edge or a moving subject. In the fault controls, displacement changes the sideways readout error, bands change its structure, and loss introduces short incidents. The background previews your edit. The checkmark keeps it; Back cancels it.

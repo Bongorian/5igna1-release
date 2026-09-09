@@ -52,6 +52,58 @@ internal object RawGlitch {
         return if (current === input) input.clone() else current
     }
 
+    /** Bounded same-CFA-color sampling; these are artistic sensor-domain approximations. */
+    private fun physical(input: ByteArray, out: ByteArray, w: Int, h: Int, white: Int, black: Int, n: FaultNode) {
+        fun coordinate(p: Int, delta: Float, limit: Int): Int {
+            val shifted = p + 2 * kotlin.math.round(delta / 2f).toInt()
+            return shifted.coerceIn(p and 1, limit - 1 - ((limit - 1 - p) and 1))
+        }
+        val range = (white - black).coerceAtLeast(1).toFloat()
+        val blurX = n.mechanism["blurX"] ?: 0f
+        val blurY = n.mechanism["blurY"] ?: 0f
+        val grain = (n.mechanism["noiseGrain"] ?: 1f).coerceAtLeast(1f)
+        val grainSeed = (n.mechanism["grainSeed"] ?: 0f).toRawBits().toLong() xor n.identity.seed
+        val amplitude = n.mechanism["noiseAmplitude"] ?: 0f
+        val smearLength = n.mechanism["smearLength"] ?: 0f
+        val smearThreshold = n.mechanism["smearThreshold"] ?: 0f
+        val smearAmount = n.mechanism["smearAmount"] ?: 0f
+        // Coordinates depend on the axis, not on each pixel. Precompute once per pass.
+        val blurColumns = if (n.id == Effects.MOTION_BLUR) Array(9) { i ->
+            IntArray(w) { x -> coordinate(x, blurX * w * (i / 8f - .5f), w) }
+        } else emptyArray()
+        val blurRows = if (n.id == Effects.MOTION_BLUR) Array(9) { i ->
+            IntArray(h) { y -> coordinate(y, blurY * h * (i / 8f - .5f), h) * w }
+        } else emptyArray()
+        val smearRows = if (n.id == Effects.SMEAR) Array(8) { i ->
+            IntArray(h) { y -> coordinate(y, (i / 7f - .5f) * smearLength * h, h) * w }
+        } else emptyArray()
+        for (y in 0 until h) for (x in 0 until w) {
+            val index = y * w + x
+            val original = read(input, index).toFloat()
+            val value = when (n.id) {
+                Effects.MOTION_BLUR -> {
+                    var sum = 0f
+                    for (i in 0..8) sum += read(input, blurRows[i][y] + blurColumns[i][x])
+                    sum / 9f
+                }
+                Effects.THERMAL_NOISE -> {
+                    val px = (x / grain).toInt(); val py = (y / grain).toInt()
+                    val noise = hash(grainSeed, px, py) + hash(grainSeed + 19, px, py) + hash(grainSeed + 73, px, py) - 1.5f
+                    original + noise * amplitude * range
+                }
+                else -> {
+                    var sum = 0f
+                    if (smearLength > 0f) for (i in 0..7) {
+                        val light = ((read(input, smearRows[i][y] + x) - black) / range).coerceIn(0f, 1f)
+                        sum += light * (light - smearThreshold).coerceAtLeast(0f) / (1 - smearThreshold).coerceAtLeast(.01f)
+                    }
+                    original + sum * smearAmount * range / 8f
+                }
+            }
+            write(out, index, kotlin.math.round(value).toInt().coerceIn(0, white))
+        }
+    }
+
     private fun hash(seed: Long, x: Int, y: Int): Float {
         return FaultModel.random(
             seed xor FaultModel.mix((x.toLong() shl 32) xor (y.toLong() and 0xffffffffL))
@@ -66,6 +118,7 @@ internal object RawGlitch {
     ) {
         // Every stage writes every output sample; its source remains untouched until it finishes.
         when (n.id) {
+            Effects.MOTION_BLUR, Effects.THERMAL_NOISE, Effects.SMEAR -> physical(input, out, w, h, white, black, n)
             Effects.PIXEL_DAMAGE -> pixelDamage(input, out, w, h, white, black, n)
             Effects.EXPOSURE -> exposure(input, out, w, h, white, black, n)
             Effects.ROW_ERROR -> rowError(input, out, w, h, white, black, n)

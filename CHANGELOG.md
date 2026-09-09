@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.1] — 2026-09-09
+
+Version name: 1.3.1. Version code: 12.
+
+- Add an interactive first-launch guide with practice controls and paused camera processing.
+- Save Settings changes immediately and restore adaptive protection when choosing recommended settings.
+- Add experimental per-stage device input sensitivity, motion blur, thermal noise and smear for RGB and processed RAW.
+- Precompute RAW blur/smear sampling positions to reduce processing work. High-resolution processed RAW can still take several seconds.
+- Default experimental features, ADVANCED MODE and video audio to OFF; LIVE audio input also defaults to OFF. Existing saved choices are retained.
+- Verify physical-device JPEG, processed DNG and 30fps MP4, plus 22 behavior tests. Long-duration thermal behavior remains unverified.
+
 ## [1.3.0] — 2026-09-09
 
 Version name: 1.3.0. Version code: 11.

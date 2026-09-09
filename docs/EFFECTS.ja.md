@@ -1,5 +1,7 @@
 # FAULT POINTと操作値
 
+1.3.1では、初期値OFFの[実験的な端末連動](EXPERIMENTAL_SIGNALS.ja.md)を追加しています。FAULT別の5入力感度と、ブレ・熱雑音・スミアを扱います。実験機能・ADVANCED MODE・音声の初期値はOFFで、保存済み設定は保持します。
+
 [English](EFFECTS.md) · [ガイド](README.ja.md)
 
 同じ壊れた系の個性を保ち、その中で起こる一瞬の事故を撮ります。CLEANはFAULTが選択されていない状態です。選んだ順序にかかわらず、信号の因果順で適用します。

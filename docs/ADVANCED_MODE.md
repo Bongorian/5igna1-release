@@ -1,8 +1,10 @@
 # ADVANCED MODE
 
+Version 1.3.1 adds [experimental device response](EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. Experimental features, ADVANCED MODE and audio default to OFF; existing saved choices are retained.
+
 [Guides](README.md) · [日本語](ADVANCED_MODE.ja.md)
 
-Open Settings (gear) and enable **ADVANCED MODE**, then tap any selected chain chip. The preview remains above the editor. The mode is a UI preference: turning it off preserves manual values. Apply commits the draft; ×, Back or leaving the app discards it.
+Open Settings (gear) and enable **ADVANCED MODE**, then tap any selected chain chip. The preview remains above the editor. The mode is a UI preference: turning it off preserves manual values. The Settings mode switch saves immediately. In the fault editor, Apply commits the draft; ×, Back or leaving the app discards it.
 
 **AUTO** follows the fault model and displays its current compiled value. Tap AUTO to FIX the current value, use its slider, or tap the number for precise input. Each value has a finite allowed range. Tap FIX to return that value to AUTO. ALL AUTO clears all fixed values and the event identity for this fault. Basic controls continue to affect values that are automatic; fixed values take precedence. Reset restores the selected fault's defaults and removes overrides. Random chain clears overrides for newly selected faults; reseed preserves fixed values.
 
@@ -89,3 +91,18 @@ The following catalog is the complete editable set; range limits also appear in 
 | CRT | PROFILE | `phosphorMix` | 0 … 1 |
 | CRT | SIGNAL | `convergenceOffset` | -.5 … .5 |
 | CRT | SIGNAL | `syncOffset` | -.5 … .5 |
+
+## Experimental additions
+
+Enabled by the separate experimental Settings switch. INPUT is available on every stage; these additions are outside the original thirteen-fault catalog above.
+
+| Stage | Group | Parameter | Range |
+|---|---|---|---|
+| All | INPUT | `motionSensitivity`, `audioSensitivity`, `timingSensitivity`, `thermalSensitivity`, `cpuSensitivity` | 0 … 4 |
+| MOTION BLUR | SIGNAL | `blurX`, `blurY` | -.12 … .12 |
+| THERMAL NOISE | SIGNAL | `noiseAmplitude` | 0 … .5 |
+| THERMAL NOISE | SIGNAL | `noiseGrain` | 1 … 16 |
+| THERMAL NOISE | SIGNAL | `grainSeed` | 0 … 997 |
+| SMEAR | SIGNAL | `smearAmount` | 0 … 2 |
+| SMEAR | SIGNAL | `smearLength` | 0 … .4 |
+| SMEAR | SIGNAL | `smearThreshold` | 0 … .99 |
