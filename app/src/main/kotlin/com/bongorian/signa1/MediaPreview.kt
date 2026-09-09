@@ -613,7 +613,6 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         signal.setTextColor(MainActivity.LIME)
         signal.isEnabled = false
         signal.setOnClickListener { showSignal() }
-        footer.addView(signal, LinearLayout.LayoutParams(-1, a.dp(44f)))
         seek = SeekBar(a)
         seek.setMax(1000)
         seek.setContentDescription(a.getString(R.string.media_position))
@@ -658,6 +657,10 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         controls.addView(next, np)
         next.setOnClickListener(OnClickListener@{ v: View? -> move(1) })
         footer.addView(controls)
+        // Keep media navigation together, with a separate full-width signal action below it.
+        val signalPosition = LinearLayout.LayoutParams(-1, a.dp(44f))
+        signalPosition.topMargin = a.dp(12f)
+        footer.addView(signal, signalPosition)
         panel.addView(footer)
         bindGestures()
         dialog.setContentView(panel)
@@ -684,10 +687,25 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
     fun showSignal() {
         val selected = savedSignal ?: return
         val ticket = generation
-        val body = a.text(selected.chain + "\n\n" + a.getString(R.string.saved_signal_scope) + "\n\n" +
-            (if (selected.state == null) a.getString(R.string.saved_signal_incomplete)+"\n\n" else "") +
-            selected.description.replace(" | ","\n\n"), 13, MainActivity.WHITE)
-        body.setTextIsSelectable(true)
+        val body = LinearLayout(a).apply { orientation = LinearLayout.VERTICAL }
+        fun block(text: String, size: Int, color: Int, gap: Int, medium: Boolean = false): TextView {
+            val label = a.text(text,size,color)
+            a.typography(label,size,medium)
+            label.setTextIsSelectable(true)
+            body.addView(label,LinearLayout.LayoutParams(-1,-2).apply { topMargin = a.dp(gap.toFloat()) })
+            return label
+        }
+        block(a.getString(R.string.saved_signal_heading),10,MainActivity.MUTED,0,true).letterSpacing = .12f
+        block(selected.chain,18,MainActivity.WHITE,8,true)
+        selected.state?.let { block(a.getString(R.string.saved_signal_level,Math.round(it.amount*100)),12,MainActivity.LIME,12,true) }
+        block(a.getString(R.string.saved_signal_scope),11,MainActivity.MUTED,20)
+        if (selected.state == null) block(a.getString(R.string.saved_signal_incomplete),11,MainActivity.MUTED,12)
+        body.addView(View(a).apply { setBackgroundColor(MainActivity.PANEL) },
+            LinearLayout.LayoutParams(-1,a.dp(1f)).apply { topMargin = a.dp(20f); bottomMargin = a.dp(16f) })
+        block(a.getString(R.string.saved_signal_metadata),10,MainActivity.MUTED,0,true).letterSpacing = .12f
+        val data = block(selected.description.replace(" | ","\n\n"),10,MainActivity.MUTED,10)
+        data.typeface = android.graphics.Typeface.MONOSPACE
+        data.setLineSpacing(a.dp(3f).toFloat(),1f)
         signalDialog = SignalSheet.content(a,a.getString(R.string.saved_signal_title),body,
             if (selected.state != null) R.string.saved_signal_use else 0,
             Runnable {

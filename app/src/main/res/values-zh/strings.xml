@@ -510,4 +510,7 @@
     <string name="saved_signal_scope">应用已保存的信号链、LEVEL、控制值、种子、详细参数以及已记录的实验功能开关。无法恢复LIVE时间进程、设备输入或素材。拍摄格式、分辨率和LIVE设置保持当前值。</string>
     <string name="saved_signal_incomplete">当前版本无法完整恢复此元数据。可查看以下记录内容。</string>
     <string name="saved_signal_applied">已应用信号设置</string>
+    <string name="saved_signal_heading">SIGNAL CHAIN</string>
+    <string name="saved_signal_metadata">METADATA</string>
+    <string name="saved_signal_level">LEVEL  %1$d%%</string>
 </resources>

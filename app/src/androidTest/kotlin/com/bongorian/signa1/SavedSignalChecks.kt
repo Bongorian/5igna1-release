@@ -39,6 +39,8 @@ internal object SavedSignalChecks {
             test.await("saved chain metadata",{viewer!!.savedSignal?.state!=null},15000)
             check(viewer!!.savedSignal!!.state!!.encode()==expected.encode())
             check(a.effectState.encode()==original.encode()) { "Viewing changed settings" }
+            SystemClock.sleep(400)
+            test.languageScreenshot("saved-signal-footer")
             test.runOnMainSync { viewer!!.signal.performClick() }
             SystemClock.sleep(500)
             test.languageScreenshot("saved-signal-details")

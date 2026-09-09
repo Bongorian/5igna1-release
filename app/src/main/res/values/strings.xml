@@ -510,4 +510,7 @@
     <string name="saved_signal_scope">Applies the saved chain, LEVEL, controls, seeds, detailed parameters and recorded Experimental switch. LIVE timing, device inputs and source media cannot be restored. Capture format, resolution and LIVE settings stay as they are.</string>
     <string name="saved_signal_incomplete">This metadata cannot be fully restored with this version. You can inspect it below.</string>
     <string name="saved_signal_applied">Signal settings applied</string>
+    <string name="saved_signal_heading">SIGNAL CHAIN</string>
+    <string name="saved_signal_metadata">METADATA</string>
+    <string name="saved_signal_level">LEVEL  %1$d%%</string>
 </resources>

@@ -510,4 +510,7 @@
     <string name="saved_signal_scope">チェーン・LEVEL・操作値・SEED・詳細パラメータと、記録がある場合は実験機能のON/OFFを適用します。LIVEの時間進行・端末入力・入力素材は復元できません。撮影形式・解像度・LIVE設定は現在のままです。</string>
     <string name="saved_signal_incomplete">このメタデータは現在のバージョンでは完全に復元できません。下に記録内容を表示します。</string>
     <string name="saved_signal_applied">シグナル設定を適用しました</string>
+    <string name="saved_signal_heading">SIGNAL CHAIN</string>
+    <string name="saved_signal_metadata">METADATA</string>
+    <string name="saved_signal_level">LEVEL  %1$d%%</string>
 </resources>
