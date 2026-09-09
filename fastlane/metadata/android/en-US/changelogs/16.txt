@@ -1,0 +1,1 @@
+Responsive portrait, landscape and resizable capture layouts. Smaller controls and one-line portrait LIVE. Tap to cycle JPG/RAW; enable RAW video switching in Settings to choose RAW ZIP. Updated interactive guide in three languages. Improved camera rotation, seed editing, NETWORK noise and square LED faults. Optional feedback drafts.

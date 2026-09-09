@@ -87,3 +87,7 @@
 ## Owner direction — 1.5.1 release, 2026-09-09
 
 - The owner requested stopping and saving all recording on leaving the app, removing background recording services and unnecessary permissions, and releasing 1.5.1 / code 15. Publish the verified GitHub/Obtainium APK with the existing key; configured Play automation may upload an Alpha draft. Preserve earlier releases and reviews. Organize public documentation for first-time readers, separating current behavior from dated evidence.
+
+## Owner direction — 1.6.0 release, 2026-09-10
+
+- The owner requested releasing the verified adaptive window, display polish and compact capture/guide changes as 1.6.0 / code 16. Integrate the source into main and publish the signed GitHub/Obtainium APK with the existing distribution key. Configured Play automation may upload an Alpha draft; preserve existing reviews, releases and signing identities.

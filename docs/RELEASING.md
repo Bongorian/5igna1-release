@@ -1,6 +1,6 @@
 # Releasing 5igna1
 
-Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current release source is 1.5.1 / code 15. Changes after its tag require a higher version/code before packaging. GitHub 1.1.0 / code 9 retains its original tagged source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
+Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current release source is 1.6.0 / code 16. Changes after its tag require a higher version/code before packaging. GitHub 1.1.0 / code 9 retains its original tagged source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
 
 ## Distribution and identity
 

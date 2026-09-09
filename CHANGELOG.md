@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0] — 2026-09-10
+
+Version name: 1.6.0. Version code: 16.
+
+- Adapt capture and effect editors to rotation, narrow windows and resizable layouts; correct camera display rotation.
+- Refine capture icons and button sizing, keep portrait LIVE on one line, and align landscape editors with the controls.
+- Cycle JPG/RAW directly from the format button; allow MP4/RAW ZIP switching only when RAW video switching is enabled in Settings.
+- Refresh all eight interactive guide pages in English, Japanese and Chinese, with isolated format practice and visible targets on small screens.
+- Preserve the seed field and scroll position while reseeding.
+- Refine NETWORK scanline noise and coherent square LED module faults.
+- Add editable feedback drafts with optional device details, off by default.
+
 ## [1.5.1] — 2026-09-09
 
 - Stop and save camera, TAP and RAW recording when the capture screen loses foreground activity, including Home, app switching and screen lock. Returning never restarts recording.

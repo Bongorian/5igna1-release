@@ -2,7 +2,7 @@
 
 [Guide index](README.md) · [日本語](DOCUMENTATION.ja.md)
 
-Start with the user guides to learn the app, the implementation references to change it, or the dated audit records to inspect evidence. Current guides describe 1.5.1; documents at earlier release tags describe those versions.
+Start with the user guides to learn the app, the implementation references to change it, or the dated audit records to inspect evidence. Current guides describe 1.6.0; documents at earlier release tags describe those versions.
 
 ## Current references
 

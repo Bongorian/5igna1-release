@@ -37,8 +37,8 @@ android {
         minSdk 31
         targetSdk 36
         // Keep these literals readable by F-Droid's update checker.
-        versionCode 15
-        versionName '1.5.1'
+        versionCode 16
+        versionName '1.6.0'
         resValue 'string', 'app_name', '5igna1'
         buildConfigField 'String', 'APP_NAME', '"5igna1"'
         testInstrumentationRunner 'com.bongorian.signa1.DeviceChecks'
