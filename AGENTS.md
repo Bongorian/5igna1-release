@@ -37,3 +37,7 @@
 
 - The owner requested first-launch and Settings-accessible tutorials on a development branch, with no physical device connected. Keep this work on `codex/onboarding-tutorial`; use the emulator and debug builds.
 - This feature is not part of the signed Play 1.1.0 / code 9 submission. Preserve that bundle and main; allocate a higher versionCode before any future submission of changed application code.
+
+## Owner direction — GitHub releases, 2026-09-09
+
+- The owner explicitly authorized publishing current main as 1.1.0 / code 9, the tutorial branch as 1.2.0 / code 10, and the optimized Kotlin branch as 1.3.0 / code 11. Publish verified GitHub APKs using the existing distribution key, with 1.3.0 as latest. This supersedes earlier development-only restrictions for these GitHub releases. Preserve existing tags, signing keys and submitted store artifacts; this request does not change store submissions.

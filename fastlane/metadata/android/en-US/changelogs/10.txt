@@ -1,0 +1,1 @@
+Adds an offline five-page tutorial on first launch, with replay from Settings. Includes skip/back navigation, restored progress, and English, Japanese and Simplified Chinese text. Includes the 1.1.0 fault-system redesign.
