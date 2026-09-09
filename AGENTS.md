@@ -113,3 +113,7 @@
 ## Owner direction — saved signal reuse, 2026-09-10
 
 - The owner requested showing the current saved photo’s signal-chain metadata and applying its settings from the saved-media viewer. Scope changes to that viewer, its reader/resources and verification; preserve capture output and metadata-writing behavior. Work on `codex/saved-signal-settings`, using DEV checks. This request does not authorize another release.
+
+## Owner direction — 1.6.2 release, 2026-09-10
+
+- Publish saved-photo signal reuse and viewer styling as 1.6.2 / code 18 with minimal additional checks. Integrate into main, sign with the existing distribution key, publish GitHub/Obtainium artifacts and update Pages. Preserve existing releases and store reviews.

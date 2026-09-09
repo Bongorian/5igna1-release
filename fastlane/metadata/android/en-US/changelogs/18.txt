@@ -1,0 +1,1 @@
+View a saved photo’s signal-chain metadata and use its recorded chain, LEVEL, seeds and parameters as current settings. Improved viewer navigation and metadata typography. Long signal names scroll repeatedly inside the button. Original images, capture format and resolution remain unchanged. LIVE timing and device inputs cannot be restored.

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.6.2] - 2026-09-10
+
+- Show the displayed saved photo’s signal-chain metadata and reuse its recorded chain, LEVEL, seeds and parameters as current settings.
+- Separate signal controls from media navigation and style metadata details with clear type hierarchy.
+- Loop long signal-chain labels inside their button. Preserve original media and capture format/resolution.
+
 ## [1.6.1] - 2026-09-10
 
 - Recommend photo/video resolution and preview fps using GPU identity, a cached short rendering measurement, screen size and existing memory/camera limits.
