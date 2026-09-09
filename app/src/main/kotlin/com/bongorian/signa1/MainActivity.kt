@@ -105,7 +105,6 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     var resumed: Boolean = false
     var ready: Boolean = false
     var recording: Boolean = false
-    private var pendingRecordPermission = false
     var videoMode: Boolean = false
     var sound: Boolean = false
     var latestVideo: Boolean = false
@@ -773,14 +772,6 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                     .show()
             return
         }
-        if (videoMode && !recording && Build.VERSION.SDK_INT >= 33 &&
-            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED &&
-            !getSharedPreferences("signal", 0).getBoolean("recording.notificationsAsked", false)) {
-            getSharedPreferences("signal", 0).edit().putBoolean("recording.notificationsAsked", true).apply()
-            pendingRecordPermission = true
-            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 5)
-            return
-        }
         capture.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
         if (videoMode) {
             if (
@@ -951,13 +942,9 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             )
     }
 
-    override fun onUserLeaveHint() {
-        pendingRecordPermission = false
-        super.onUserLeaveHint()
-    }
-
     override fun onPause() {
         resumed = false
+        galleryButton.pause()
         if (mediaPreview != null) mediaPreview!!.dismiss()
         if (liveChainDialog != null) liveChainDialog!!.dismiss()
         if (liveEditor != null) liveEditor!!.dialog!!.dismiss()
@@ -1011,18 +998,6 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     override fun onRequestPermissionsResult(code: Int, p: Array<String>, results: IntArray) {
         super.onRequestPermissionsResult(code, p, results)
-        if (code == 5 && pendingRecordPermission) {
-            val deadline = SystemClock.elapsedRealtime() + 5000
-            handler.post(object : Runnable {
-                override fun run() {
-                    if (!pendingRecordPermission) return
-                    if (resumed && ready) { pendingRecordPermission = false; shoot() }
-                    else if (SystemClock.elapsedRealtime() < deadline) handler.postDelayed(this, 100)
-                    else pendingRecordPermission = false
-                }
-            })
-            return
-        }
         if (code == 4 && pendingFaultConfig != null) {
             val requested = pendingFaultConfig
             pendingFaultConfig = null

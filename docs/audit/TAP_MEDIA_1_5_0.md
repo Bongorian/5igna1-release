@@ -1,5 +1,7 @@
 # TAP, LIVE and media/display development check
 
+Historical evidence for 1.5.0. Its background-recording behavior was removed in 1.5.1; see the current [recording guide](../RECORDING.md).
+
 Development branch: `codex/raw-chain-time-echo`. This work does not change release identities or store submissions.
 
 - TIME ECHO exposes probability only; history retention, opportunities and burst lengths are bounded and randomized internally. Manual triggering remains available.

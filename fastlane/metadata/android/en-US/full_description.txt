@@ -13,7 +13,7 @@ CAPTURE THE SIGNAL
 JPEG saves a processed camera image and immutable fault state at a supported live resolution. ADVANCED OFF reduces memory use; ON pins the displayed frame. Preview and ordinary video use the same processed images. Select H.264/H.265 and device-supported video settings; sound is optional, with an optional resolution-linked audio quality mode. Original and processed DNG use separate RAW exposures and can differ from the RGB preview. Six base faults support RAW16. Optional experimental input sensitivity, motion blur, thermal noise and smear also support processed RAW. Browse photos and videos together inside the app, with photo zoom, video playback and seeking, sideways browsing and downward dismissal.
 
 EXPERIMENTAL INPUT AND ECHO
-TAP imports an image or video after READOUT. Source playback and output recording have separate controls. TIME ECHO introduces past frames through one probability control. Ordinary background work pauses; only user-started output recording continues through a foreground service.
+TAP imports an image or video after READOUT. Source playback and output recording have separate controls. TIME ECHO introduces past frames through one probability control. Leaving the capture screen or locking the device stops and saves recording. Preview and source playback stop, and recording never restarts automatically.
 
 EXPERIMENTAL RAW VIDEO
 Compatible cameras can save original, silent DNG sequences in ZIP with timestamps. Extract and develop them in RAW software. This is not a playable MP4; processing is bypassed and frames can be dropped under load.

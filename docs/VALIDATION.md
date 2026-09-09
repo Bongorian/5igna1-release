@@ -6,6 +6,7 @@ This page indexes evidence by source scope. Test results apply to the named buil
 
 | Scope | Evidence |
 |---|---|
+| 1.5.1: recording stops/saves on exit, removed service permissions | [Lifecycle verification](audit/FOREGROUND_1_5_1.md) |
 | 1.4.0: recommendations, normal capture and linked audio | [Capture policy verification](audit/ADAPTIVE_CAPTURE_AUDIO.md) |
 | 1.3.1 interactive guide and immediate Settings | [Guide and thermal investigation](audit/GUIDE_AND_THERMAL.md) |
 | 1.3.1 optional input sensitivity and image artifacts | [Experimental features](EXPERIMENTAL_SIGNALS.md), [recorded results](audit/experimental-signals-results.json) |

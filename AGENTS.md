@@ -83,3 +83,7 @@
 ## Owner direction — 1.5.0 release, 2026-09-09
 
 - The owner requested auditing/fixing SEED and RESEED, organizing documentation, and releasing the completed TAP/LIVE/MEDIA/DISPLAY work as 1.5.0. Integrate verified source into main and publish the signed GitHub/Obtainium APK as 1.5.0 / code 14 with the existing distribution key. Preserve earlier artifacts, signing identities and store submissions. The configured Play automation may upload an Alpha draft; never cancel review or delete another draft to force it through.
+
+## Owner direction — 1.5.1 release, 2026-09-09
+
+- The owner requested stopping and saving all recording on leaving the app, removing background recording services and unnecessary permissions, and releasing 1.5.1 / code 15. Publish the verified GitHub/Obtainium APK with the existing key; configured Play automation may upload an Alpha draft. Preserve earlier releases and reviews. Organize public documentation for first-time readers, separating current behavior from dated evidence.

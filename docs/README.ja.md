@@ -1,6 +1,8 @@
 # 5igna1 ガイド
 
-このガイドは **1.5.0 / code 14** に対応します。TAP入力・確率式TIME ECHO・MEDIA／DISPLAYモデル・SEED操作に対応します。過去の公開版については、そのタグ内の文書を参照してください。
+このガイドは **1.5.1 / code 15** に対応します。TAP入力・確率式TIME ECHO・MEDIA／DISPLAYモデル・SEED操作に対応します。過去の公開版については、そのタグ内の文書を参照してください。
+
+録画中は撮影画面を開いたままにしてください。画面を離れるか端末をロックすると録画を終了・保存します。[録画と権限](RECORDING.ja.md)。
 
 実験的な端末連動・ADVANCED・EXPERT・解像度連動音声・録音音声は初期OFFです。保存済みの選択は保持します。[撮影形式と音声](FORMATS.ja.md)・[負荷と動作モード](PERFORMANCE.ja.md)。
 
@@ -16,6 +18,8 @@
 | 操作をひととおり確認する | [操作リファレンス](USAGE.ja.md) |
 | JPEG・DNG・動画の違いを知る | [保存形式の選び方](FORMATS.ja.md) |
 | 写らない・保存できない・更新できない | [困ったとき](TROUBLESHOOTING.md) |
+
+[SEED / RESEED](SEEDS.ja.md) · [実験機能とTAP](EXPERIMENTAL_SIGNALS.ja.md)
 
 ## もう少し深く
 
@@ -34,5 +38,3 @@
 [公開・更新手順](RELEASING.md) · [配布タスクリスト](LAUNCH_TASKS.md) · [F-Droid readiness](FDROID_READINESS.md) · [素材監査](audit/ASSETS.md) · [依存監査](audit/dependencies.json)
 
 [文書の役割・整理方針](DOCUMENTATION.ja.md) · [Play自動アップロード](PLAY_AUTOMATION.ja.md)。過去の検証値は当時のソース・端末・条件に限定して参照してください。
-
-- [SEED / RESEED](SEEDS.md) · [日本語](SEEDS.ja.md)

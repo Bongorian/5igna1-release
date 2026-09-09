@@ -1,5 +1,7 @@
 # Experimental RAW video
 
+Recording stops and saves when you leave the capture screen or lock the device. [Recording and permissions](RECORDING.md).
+
 RAW video records **original, silent DNG frames in a ZIP**, rather than a playable MP4. Use it when you want to develop a sequence outside the app.
 
 [All guides](README.md) · [Choosing a format](FORMATS.md) · [日本語](RAW_VIDEO.ja.md)

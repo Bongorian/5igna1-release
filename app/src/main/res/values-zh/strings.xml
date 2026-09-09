@@ -453,8 +453,6 @@
     <string name="tap_loading">TAP · 正在读取素材…</string>
     <string name="tap_ready">TAP · READOUT → DATA</string>
     <string name="tap_failed">无法读取此素材</string>
-    <string name="recording_notification">5igna1 · 正在录制</string>
-    <string name="recording_background_hint">录制仍在继续。点击返回或在此停止。</string>
     <string name="recording_service_failed">无法启动持续录制</string>
     <string name="settings_experiments">实验功能</string>
     <string name="transport_model">模型</string>

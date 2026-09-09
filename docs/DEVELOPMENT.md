@@ -35,4 +35,4 @@ Video parameters include `videoKey` (an advertised `WIDTHxHEIGHT@FPS`), `seconds
 
 - `action seed`: SEED field refresh, exact integer input, Apply/Cancel, EVENT SEED and recording guard.
 - `action transport`: model UI, settings order, pixel identity, intermediate resolution, network hold/resume and LED gaps.
-- `action tap`: image/video fixtures, injection boundary, playback/recording and background lifecycle. Requires `files/tap-fixture.mp4` in DEV app storage.
+- `action tap`: image/video fixtures, injection boundary, playback/recording and stop/save on Home (add `-e leave lock` on an emulator without a secure lock to check screen locking). Requires `files/tap-fixture.mp4` in DEV app storage.

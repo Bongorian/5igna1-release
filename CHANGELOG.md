@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1] — 2026-09-09
+
+- Stop and save camera, TAP and RAW recording when the capture screen loses foreground activity, including Home, app switching and screen lock. Returning never restarts recording.
+- Remove the recording foreground service, its camera/microphone/data-sync/media-processing permissions, wake lock and notification permission request.
+- Preserve captures and settings; keep photo processing paused while hidden.
+- Organize recording, permissions, privacy and current user guides around user actions; retain dated validation evidence separately.
+
 ## [1.5.0] — 2026-09-09
 
 Version name: 1.5.0. Version code: 14.

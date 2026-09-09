@@ -6,6 +6,7 @@
 
 | 対象 | 記録 |
 |---|---|
+| 1.5.1：画面離脱時の録画終了・保存、サービス権限の削除 | [ライフサイクル検証](audit/FOREGROUND_1_5_1.md) |
 | 1.4.0の端末判定・通常撮影・解像度連動音声 | [今回の検証](audit/ADAPTIVE_CAPTURE_AUDIO.md) |
 | 1.3.1の操作ガイド・設定の即時保存 | [操作ガイドと負荷調査](audit/GUIDE_AND_THERMAL.ja.md) |
 | 1.3.1の端末入力感度・追加現象 | [実験機能](EXPERIMENTAL_SIGNALS.ja.md)・[実行結果](audit/experimental-signals-results.json) |

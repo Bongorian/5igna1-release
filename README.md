@@ -1,6 +1,6 @@
 # 5igna1
 
-Version 1.3.1 adds [experimental device response](docs/EXPERIMENTAL_SIGNALS.md), disabled by default: five input sensitivities per stage, plus motion blur, thermal noise and smear. Experimental features, ADVANCED MODE and audio default to OFF; existing saved choices are retained.
+Version 1.5.1 stops and saves recording when you leave the capture screen or lock the device. It includes camera faults, optional imported-media TAP, LIVE variation and MEDIA/DISPLAY models. Experimental features, ADVANCED MODE and audio start OFF; saved choices are retained.
 
 **Every glitch is an encounter.**
 
@@ -16,7 +16,7 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 
 ## One damaged system, fleeting moments
 
-This source is **1.5.0 (versionCode 14)**. It adds experimental TAP input, probability-based TIME ECHO, expanded MEDIA/DISPLAY models and corrected SEED controls. It includes the Kotlin/RAW optimizations and interactive offline guide. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
+This source is **1.5.1 (versionCode 15)**. It includes experimental TAP input, probability-based TIME ECHO, expanded MEDIA/DISPLAY models and corrected SEED controls. It includes the Kotlin/RAW optimizations and interactive offline guide. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 

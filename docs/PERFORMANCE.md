@@ -1,5 +1,7 @@
 # Heat and workload
 
+Recording stops and saves when you leave the capture screen or lock the device. [Recording and permissions](RECORDING.md).
+
 [Guides](README.md) · [日本語](PERFORMANCE.ja.md)
 
 Version 1.4.0 starts with **Recommended for this device**. Camera and encoder capabilities select an actual supported output within these initial pixel budgets, preferring video at up to 30 fps:

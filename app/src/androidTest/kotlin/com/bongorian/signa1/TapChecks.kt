@@ -90,26 +90,9 @@ internal object TapChecks {
         test.await("pause independent from recording", { !a.engine.tapSource!!.playing }, 3000)
         check(a.engine.recording)
         test.runOnMainSync { a.tapPlay.performClick() }
-        val source = a.engine.tapSource
-        test.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME)
-        test.await("recording hidden", { !a.resumed && a.engine.recording }, 5000)
-        val rendered = a.engine.renderedFrames
-        SystemClock.sleep(1600)
-        check(a.engine.renderedFrames > rendered && a.engine.tapSource === source) { "Background recorder stopped" }
-        test.uiAutomation.executeShellCommand("am start -f 0x20020000 -n ${a.packageName}/${MainActivity::class.java.name}").close()
-        test.await("recording return", { a.resumed && a.ready && a.engine.recording }, 10000)
-        check(a.engine.tapSource === source)
-        val beforeVideo = a.latest
-        test.runOnMainSync { a.shoot() }
-        test.await("TAP MP4", { !a.engine.recording && a.latest != beforeVideo }, 20000)
-        test.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME)
-        test.await("no background preview", { !a.resumed && !a.engine.attached && a.engine.tapSource == null }, 5000)
-        val stopped = a.engine.renderedFrames
-        SystemClock.sleep(600)
-        check(a.engine.renderedFrames == stopped && a.engine.faultInputs.microphone == null)
-        test.uiAutomation.executeShellCommand("am start -f 0x20020000 -n ${a.packageName}/${MainActivity::class.java.name}").close()
-        test.await("TAP resumes paused", { a.resumed && a.ready && a.engine.tapSource?.ready == true }, 15000)
-        check(!a.engine.tapSource!!.playing)
+        SystemClock.sleep(1800)
+        backgroundSave(test, "TAP")
+        check(a.engine.tapSource?.playing == false)
         test.runOnMainSync { a.applySettings(CaptureSettings(a.settings).apply { experimentalSignals = false }) }
         test.await("experimental OFF restores camera", { !a.tapMode && a.ready && a.engine.camera != null }, 15000)
         check(a.tapTab.visibility == View.GONE && a.engine.tapInput == null)
@@ -118,16 +101,48 @@ internal object TapChecks {
         test.await("camera video ready", { a.ready && a.videoMode && !a.tapMode }, 15000)
         test.runOnMainSync { a.shoot() }
         test.await("camera recording", { a.engine.recording }, 15000)
-        test.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME)
-        test.await("camera recording background", { !a.resumed && a.engine.recording }, 5000)
-        val cameraFrames = a.engine.renderedFrames
-        SystemClock.sleep(1500)
-        check(a.engine.renderedFrames > cameraFrames)
+        SystemClock.sleep(1800)
+        backgroundSave(test, "camera")
+        // Repeat with audio, and verify that returning never restarts the recording.
+        test.runOnMainSync { a.sound = true; a.shoot() }
+        test.await("audio recording", { a.engine.recording && a.engine.recorderAudio }, 15000)
+        SystemClock.sleep(1800)
+        backgroundSave(test, "camera/audio", audio = true)
+        val permissions = a.packageManager.getPackageInfo(a.packageName, android.content.pm.PackageManager.GET_PERMISSIONS)
+            .requestedPermissions.orEmpty()
+        check(permissions.none { it.contains("FOREGROUND_SERVICE") || it.endsWith("WAKE_LOCK") || it.endsWith("POST_NOTIFICATIONS") })
+        return "PASS TAP boundary/orientation, image/video import, independent play/record, JPEG and decodable MP4 output; Home/screen-exit stops and saves TAP/camera/audio recording; hidden camera/render/microphone released; return does not restart recording; no FGS/wake/notification permissions"
+    }
+
+    private fun backgroundSave(test: DeviceChecks, label: String, audio: Boolean = false) {
+        val a = test.activity!!
+        val before = a.latest
+        val lock = test.args?.getString("leave") == "lock"
+        test.sendKeyDownUpSync(if (lock) KeyEvent.KEYCODE_SLEEP else KeyEvent.KEYCODE_HOME)
+        test.await("$label stopped and saved", {
+            !a.resumed && !a.engine.attached && !a.engine.recording && a.latest != before &&
+                a.engine.camera == null && a.engine.tapSource == null && a.engine.faultInputs.microphone == null
+        }, 15000)
+        val saved = a.latest!!
+        check(a.engine.camera == null && a.engine.tapSource == null && a.engine.faultInputs.microphone == null)
+        val frames = a.engine.renderedFrames
+        SystemClock.sleep(1000)
+        check(a.engine.renderedFrames == frames) { "$label renders while hidden" }
+        android.media.MediaMetadataRetriever().use { media ->
+            media.setDataSource(a, saved)
+            check((media.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L) > 0)
+            val decoded = media.getFrameAtTime(0)
+            check(decoded != null) { "$label saved file cannot decode" }
+            decoded.recycle()
+            if (audio) check(media.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) == "yes")
+        }
+        if (lock) {
+            test.sendKeyDownUpSync(KeyEvent.KEYCODE_WAKEUP)
+            test.uiAutomation.executeShellCommand("wm dismiss-keyguard").close()
+        }
         test.uiAutomation.executeShellCommand("am start -f 0x20020000 -n ${a.packageName}/${MainActivity::class.java.name}").close()
-        test.await("camera recording foreground", { a.resumed && a.ready && a.engine.recording }, 10000)
-        val cameraVideo = a.latest
-        test.runOnMainSync { a.shoot() }
-        test.await("camera recording saved", { !a.engine.recording && a.latest != cameraVideo }, 20000)
-        return "PASS TAP readout/data boundary and orientation, image/video import, independent play/record, JPEG/MP4 output, foreground-only preview and ongoing background recording, probability-only LIVE page"
+        test.await("$label preview return", { a.resumed && a.ready }, 15000)
+        check(!a.engine.recording && !a.recording) { "$label restarted recording" }
+
     }
 }

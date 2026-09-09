@@ -110,30 +110,11 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     var previewChain: EffectChain? = null
     val foregroundWork = ForegroundWork()
     @Volatile var foreground = true
-    private var offscreen = false
-
+    /** Stop capture and finalize its file before releasing camera/GL resources. */
     fun background() {
         foreground = false
-        if (!recording) foregroundWork.pause()
-        gl.post {
-            if (!recording) { close(); return@post }
-            try {
-                val replacement = EGL14.eglCreatePbufferSurface(display, eglConfig,
-                    intArrayOf(EGL14.EGL_WIDTH, 1, EGL14.EGL_HEIGHT, 1, EGL14.EGL_NONE), 0)
-                check(replacement != EGL14.EGL_NO_SURFACE) { "Recording offscreen surface" }
-                val previous = window
-                window = replacement
-                current(window)
-                EGL14.eglDestroySurface(display, previous)
-                displaySurface?.release()
-                displaySurface = null
-                displayTarget = null
-                offscreen = true
-            } catch (error: Exception) {
-                stopVideo()
-                close()
-            }
-        }
+        foregroundWork.pause()
+        gl.post { close() }
     }
 
     var tapInput: TapInput? = null
@@ -569,21 +550,6 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         gl.post(
             Runnable@{
                 if (revision != configRevision.get()) return@Runnable
-                if (attached && offscreen && recording) {
-                    appliedRevision = revision
-                    val previous = window
-                    displaySurface = Surface(target)
-                    window = windowFor(displaySurface)
-                    current(window)
-                    EGL14.eglDestroySurface(display, previous)
-                    displayTarget = target
-                    width = w
-                    height = h
-                    offscreen = false
-                    foreground = true
-                    ready(frameSeen)
-                    return@Runnable
-                }
                 if (attached && displayTarget === target) {
                     appliedRevision = revision
                     width = w
@@ -1465,7 +1431,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     }
 
     fun frame() {
-        if (!attached || (!foreground && !recording) || cooling || (if (tapInput == null) cameraTexture == null || camera == null
+        if (!attached || !foreground || cooling || (if (tapInput == null) cameraTexture == null || camera == null
             else tapSource?.ready != true)) return
         try {
             current(window)
@@ -1509,7 +1475,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 timeEcho.disable()
                 null
             }
-            val show = !offscreen && (adaptiveLoad.due(lastFrameNs) || !frameSeen)
+            val show = adaptiveLoad.due(lastFrameNs) || !frameSeen
             if (show || recording && !rawVideoMode()) {
                 val renderStarted = System.nanoTime()
                 val currentState = faultFrame((if (previewEffects == null) effectState else previewEffects)!!)
@@ -1838,15 +1804,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
 
     fun toggleVideo(sound: Boolean) {
         if (recording) { gl.post { stopVideo() }; return }
-        ui.post {
-            if (!foreground || !attached || !videoMode || photoBusy) return@post
-            val microphone = sound || faultConfig.enabled && faultConfig.audio
-            RecordingService.begin(context, this, microphone) {
-                gl.post {
-                    if (foreground && attached) startVideo(sound)
-                    if (!recording) RecordingService.end(context, this)
-                }
-            }
+        gl.post {
+            if (foreground && attached && videoMode && !photoBusy) startVideo(sound)
         }
     }
 
@@ -1856,7 +1815,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             ready(true)
             return
         }
-        if (!frameSeen || !attached || recording || photoBusy || !videoMode || cooling) return
+        if (!foreground || !frameSeen || !attached || recording || photoBusy || !videoMode || cooling) return
         if (rawVideoMode()) {
             if (!rawFrameSeen || rawReader == null) {
                 status(context.getString(R.string.ui_checking_raw_output))
@@ -2019,8 +1978,6 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
 
     fun stopVideo() {
         if (!recording) return
-        ui.post { RecordingService.end(context, this) }
-        gl.post { if (!foreground && !recording) close() }
         if (rawRecorder != null) {
             recording = false
             photoBusy = true
@@ -2150,7 +2107,6 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     }
 
     fun close() {
-        offscreen = false
         gl.removeCallbacks(previewWatch)
         gl.removeCallbacks(reconnectCamera)
         reconnectPending = false

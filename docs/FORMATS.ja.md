@@ -1,5 +1,7 @@
 # 保存形式
 
+撮影画面を離れるか画面をロックすると録画を終了・保存します。[録画と権限](RECORDING.ja.md)。
+
 [English](FORMATS.md) · [ガイド](README.ja.md)
 
 | 形式 | 記録する信号 |

@@ -453,8 +453,6 @@
     <string name="tap_loading">TAP · loading media…</string>
     <string name="tap_ready">TAP · READOUT → DATA</string>
     <string name="tap_failed">Could not read this media file</string>
-    <string name="recording_notification">5igna1 · recording</string>
-    <string name="recording_background_hint">Recording continues. Tap to return or stop here.</string>
     <string name="recording_service_failed">Could not keep recording active</string>
     <string name="settings_experiments">Experimental features</string>
     <string name="transport_model">Model</string>

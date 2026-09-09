@@ -50,7 +50,7 @@ internal class MediaThumbnail(val activity: MainActivity) : FrameLayout(activity
     }
 
     fun load(uri: Uri?, video: Boolean) {
-        if (disposed) return
+        if (disposed || !activity.resumed) return
         if (uri != null && uri == requested && (loading || hasThumbnail)) return
         requested = uri
         loading = uri != null
@@ -101,6 +101,13 @@ internal class MediaThumbnail(val activity: MainActivity) : FrameLayout(activity
                 )
             }
         )
+    }
+
+    fun pause() {
+        revision++
+        cancellation?.cancel()
+        cancellation = null
+        loading = false
     }
 
     fun dispose() {

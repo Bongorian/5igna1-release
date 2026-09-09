@@ -2,7 +2,7 @@
 
 [Guide index](README.md) · [日本語](DOCUMENTATION.ja.md)
 
-Reviewed against this development checkout on 2026-09-09. User guides describe the checkout; the guide index identifies its published baseline and unreleased additions. For a released version, read the same files at its immutable tag.
+Start with the user guides to learn the app, the implementation references to change it, or the dated audit records to inspect evidence. Current guides describe 1.5.1; documents at earlier release tags describe those versions.
 
 ## Current references
 
@@ -12,6 +12,8 @@ Reviewed against this development checkout on 2026-09-09. User guides describe t
 | [ABOUT](ABOUT.md) / [日本語](ABOUT.ja.md) | Creative intent and limits of the image models |
 | [INSTALLATION](INSTALLATION.md) | APK/Obtainium installation, update identity and checksum procedure |
 | [GETTING_STARTED](GETTING_STARTED.md) / [日本語](GETTING_STARTED.ja.md) | First capture and the eight-step interactive guide |
+| [Recording and permissions](RECORDING.md) / [日本語](RECORDING.ja.md) | Recording lifecycle, saving on exit and permission purposes |
+| [SEED guide](SEEDS.md) / [日本語](SEEDS.ja.md) | Identity, event seeds, reseeding and reproducibility |
 | [USAGE](USAGE.md) / [日本語](USAGE.ja.md) | Controls, immediate Settings, effect/LIVE transactions and media viewer |
 | [RECIPES](RECIPES.md) / [日本語](RECIPES.ja.md) | Creative starting points; these are instructions, not built-in presets |
 | [EFFECTS](EFFECTS.md) / [日本語](EFFECTS.ja.md) | Thirteen base fault models and causal order; experimental additions link out |
@@ -41,6 +43,8 @@ Reviewed against this development checkout on 2026-09-09. User guides describe t
 |---|---|
 | [DISTRIBUTION_REPORT](DISTRIBUTION_REPORT.md) | Initial 1.0.0 launch preparation |
 | [PLAY_1_1_0](PLAY_1_1_0.md), [PLAY_1_3_0](PLAY_1_3_0.md) | Dated Play submissions and confirmed follow-up status |
+| [1.5.1 lifecycle validation](audit/FOREGROUND_1_5_1.md) | Stop/save, released resources and packaged permissions |
+| [1.5.0 validation](audit/TAP_MEDIA_1_5_0.md) | Dated TAP, media/display and seed checks; superseded background behavior |
 | [Original validation](audit/VALIDATION_1_0_0.md) | 1.0.0 test scope |
 | [Validation through 1.3.0](audit/VALIDATION_THROUGH_1_3_0.md) / [日本語](audit/VALIDATION_THROUGH_1_3_0.ja.md) | Original chronological redesign/tutorial/Kotlin logs, including status at each test date |
 | [RAW optimization](audit/RAW_OPTIMIZATION.md) / [日本語](audit/RAW_OPTIMIZATION.ja.md), [results](audit/raw-optimization-results.json) | First RAW differential/benchmark pass |
@@ -50,18 +54,10 @@ Reviewed against this development checkout on 2026-09-09. User guides describe t
 | [Experimental results](audit/experimental-signals-results.json) | 1.3.1 experimental GPU/RAW/video evidence |
 | [Injection assessment](audit/DATA_INJECTION_POINTS.md) / [日本語](audit/DATA_INJECTION_POINTS.ja.md) | Historical feasibility study; the current TAP feature is described in Experimental features |
 | [FAULT redesign](design/FAULT_SYSTEM.md) / [日本語](design/FAULT_SYSTEM.ja.md) | Original migration decisions from 1.0.0; superseded as a current architecture reference |
-| [Adaptive capture and audio](audit/ADAPTIVE_CAPTURE_AUDIO.md) | Current development verification and limits |
+| [Adaptive capture and audio](audit/ADAPTIVE_CAPTURE_AUDIO.md) | 1.4.0 verification and limits |
 
 ## Maintenance rules
 
 Update the relevant reference and its Japanese edition when behavior changes. Keep volatile counts in dated test records, versions in the guide scope/release records, and channel status in LAUNCH_TASKS. The application version is authoritative in `app/build.gradle`; a development tree sharing a release’s version string is still unreleased.
 
 Keep historical measurements, hashes and submitted metadata intact. Label the source/date instead of rewriting old results as current coverage. When moving a document, repair inbound and outbound links. Run the local documentation link/coverage check, locale checks and relevant application tests before committing. Policy-copy changes require a separate site update when the corresponding app version is published; editing this application checkout does not deploy the site.
-
-This review corrected stale tutorial/settings instructions, capture exactness claims, device budgets, RAW experimental coverage, build/test counts, channel status and misleading “unreleased” context. The long validation log was moved into audit; top-level VALIDATION now points to scoped evidence. Asset hashes were checked against all 26 entries without changing the assets.
-
-
-| Files | Purpose |
-|---|---|
-| [SEED guide](SEEDS.md) / [日本語](SEEDS.ja.md) | Structural and event seeds, reseeding, locks and reproducibility |
-| [1.5.0 validation](audit/TAP_MEDIA_1_5_0.md) | Dated TAP, media/display, background and seed checks |

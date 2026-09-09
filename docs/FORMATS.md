@@ -1,5 +1,7 @@
 # Capture formats
 
+Recording stops and saves when you leave the capture screen or lock the device. [Recording and permissions](RECORDING.md).
+
 [Guides](README.md) · [日本語](FORMATS.ja.md)
 
 | Format | What is recorded | Relation to the viewfinder |

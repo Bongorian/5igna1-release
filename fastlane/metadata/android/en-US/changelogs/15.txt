@@ -1,0 +1,1 @@
+Recording now stops and saves when you leave the capture screen or lock the device, including camera, TAP and RAW recording. Returning does not restart recording. Remove foreground-service, wake-lock and notification permissions. Captures and settings are retained. Clarify recording behavior, permissions and privacy in the guides.

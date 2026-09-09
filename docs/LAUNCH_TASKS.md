@@ -8,7 +8,7 @@ Last documented check: **2026-09-09 (Japan time)**. This is a dated maintainer s
 | Google Play Alpha | 1.3.0 / code 11 published to selected testers | [1.3.0 record](PLAY_1_3_0.md) |
 | Google Play Alpha draft | 1.5.0 / code 14 uploaded as an unpublished draft; review/publication require Console action | [Automatic upload records](PLAY_AUTOMATION.md) |
 | F-Droid | Owner-reported 1.0.0 / code 8 submission awaiting merge; later release work did not replace it | [Candidate audit](FDROID_READINESS.md) |
-| Current release source | 1.5.0 / code 14 source: TAP, MEDIA/DISPLAY, SEED and editor UI | [Guide scope](README.md) |
+| Current release source | 1.5.1 / code 15 source: foreground-only capture and permissions cleanup | [Guide scope](README.md) |
 
 ## Remaining owner work
 

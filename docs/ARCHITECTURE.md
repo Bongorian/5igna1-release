@@ -43,3 +43,5 @@ Settings persist immediately; capture-affecting changes reconfigure the camera. 
 The camera watches for unacknowledged preview delivery for six seconds and makes up to three reconnect attempts outside capture or cooling pauses. Error/disconnection callbacks use the same recovery path; leaving the foreground cancels it. Capture settings and effect selection are retained.
 
 With experimental device response enabled, processed RAW also supports MOTION BLUR, THERMAL NOISE and SMEAR. These additions and their approximation limits are described in [Experimental features](EXPERIMENTAL_SIGNALS.md).
+
+`MainActivity.onPause` marks the engine hidden, pauses photo work, and queues `close()` on the GL thread. Camera cleanup calls `stopVideo()` before releasing recorder/GL resources; MP4 is finalized and published, while RAW stops accepting frames and drains its bounded file queue before publishing the ZIP. No foreground service, wake lock or background render surface exists. Returning attaches a fresh preview without restarting recording.
