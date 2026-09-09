@@ -91,3 +91,7 @@
 ## Owner direction — 1.6.0 release, 2026-09-10
 
 - The owner requested releasing the verified adaptive window, display polish and compact capture/guide changes as 1.6.0 / code 16. Integrate the source into main and publish the signed GitHub/Obtainium APK with the existing distribution key. Configured Play automation may upload an Alpha draft; preserve existing reviews, releases and signing identities.
+
+## Owner direction — GitHub Pages with every release, 2026-09-10
+
+- Every app release must include updating the existing GitHub Pages site on `codex/privacy-pages` to current behavior. Review version labels, feature and operation descriptions, guide links, screenshot captions, and all privacy languages against the released source. Publish and verify the public site as part of release completion. Keep the recruitment purpose and distinguish GitHub availability from actual Play publication. This is standing authorization for routine Pages updates accompanying a requested release.

@@ -42,6 +42,12 @@ For each new version, attach these files after signing and verification (replace
 5igna1-vX.Y.Z.apk.sha256
 ```
 
+## GitHub Pages — required for every release
+
+Update the existing `codex/privacy-pages` branch alongside every application release. Compare the released source, changelog, user guide and bundled privacy policies with the landing page and all policy languages. Update version labels, feature/operation descriptions, versioned guide links and relevant disclosures; review screenshot captions and preserve historical version labels for unchanged images. Preserve the Google Play recruitment form and describe Play availability according to its actual review/publication state.
+
+Validate local links and assets, publish the Pages branch, wait for deployment, and verify the public landing and policy pages. A release is complete only after its GitHub artifacts and current Pages content are publicly verified. Keep this website publication separate from immutable app release tags.
+
 ## Initial or manual release
 
 Run the required checks and push the reviewed commit. Create a draft targeting its full commit SHA, attach the verified APK and checksum, and write user-facing release notes. Check the draft before publishing it. Publishing may create its missing tag; do not create a second conflicting tag or overwrite an existing public release.
