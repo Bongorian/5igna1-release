@@ -135,3 +135,7 @@
 - Add explicit selection of exposed wide/ultra-wide/telephoto/front/external cameras and physical sensors, beyond the existing zoom toggle. Work on `codex/multi-camera-selection`, preserve fault settings and capture lifecycle, and use matching physical characteristics/results for sensor-specific output. Verify with the connected DEV device and push completed work. No release requested.
 
 - The owner then prohibited digital zoom and requested optical-only adjustment where possible. Remove digital crop/zoom controls and their saved-state restoration; keep the native field of view. Prefer explicit physical sensors when exposed. Only use controllable advertised optical focal lengths, without digitally filling intermediate ratios; fixed-focal-length devices cannot provide continuous optical zoom.
+
+## Owner direction — 1.7.0 release, 2026-09-10
+
+- Release all completed TAP, video metadata and optical-only multi-camera changes as 1.7.0 / code 19. Integrate into main, publish the verified APK with the existing distribution key, and update the existing GitHub Pages site. Preserve prior releases and store reviews; the configured Play automation may upload an Alpha draft.

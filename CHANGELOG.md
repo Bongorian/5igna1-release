@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0] - 2026-09-10
+
+- Select exposed physical wide, ultra-wide, telephoto and front cameras; use sensor-specific resolution and RAW capabilities.
+- Remove digital zoom. Offer only advertised optical focal lengths on compatible lenses; fixed-focal-length cameras use lens switching.
+- Preserve TAP chain selections, support Google Photos-compatible media providers, and stop/save recording at source-video completion.
+- Retain imported video audio; resolution-linked audio converts to the output quality tier, while OFF preserves supported compressed source audio.
+- Store recording-start signal settings in MP4 and extend metadata inspection and Use these settings to videos. Later changes and LIVE timing are not replayed.
+
 ## [1.6.2] - 2026-09-10
 
 - Show the displayed saved photo’s signal-chain metadata and reuse its recorded chain, LEVEL, seeds and parameters as current settings.

@@ -83,7 +83,7 @@ internal object TapAudio {
                             if (count < 0) break
                             val time = span.outputStartUs+sourceUs-span.sourceStartUs
                             if (time > lastUs) {
-                                info.set(0,count,time,source.sampleFlags and MediaCodec.BUFFER_FLAG_KEY_FRAME)
+                                info.set(0,count,time,if (source.sampleFlags and MediaExtractor.SAMPLE_FLAG_SYNC != 0) MediaCodec.BUFFER_FLAG_KEY_FRAME else 0)
                                 writer.writeSampleData(audioTrack,buffer,info)
                                 lastUs = time
                             }
@@ -130,7 +130,7 @@ internal object TapAudio {
             buffer = capacity(buffer,source.sampleSize)
             val size = source.readSampleData(buffer,0)
             if (size < 0) break
-            info.set(0,size,(source.sampleTime-first).coerceAtLeast(0),source.sampleFlags and MediaCodec.BUFFER_FLAG_KEY_FRAME)
+            info.set(0,size,(source.sampleTime-first).coerceAtLeast(0),if (source.sampleFlags and MediaExtractor.SAMPLE_FLAG_SYNC != 0) MediaCodec.BUFFER_FLAG_KEY_FRAME else 0)
             mux.writeSampleData(target,buffer,info)
             source.advance()
         }

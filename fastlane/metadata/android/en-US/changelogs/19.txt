@@ -1,0 +1,1 @@
+Choose physical camera sensors with their own resolution and RAW support. Digital zoom removed; optical adjustment only where supported. TAP keeps chain settings, supports media providers, saves at video end and retains source audio. MP4 now stores recording-start signal settings for inspection and reuse.

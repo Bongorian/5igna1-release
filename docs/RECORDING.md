@@ -27,4 +27,4 @@ Version 1.5.0 allowed an active recording to continue after leaving the app. Ver
 TAP source-audio finalization can continue after capture stops; it combines already recorded video and selected source audio, without background capture.
 
 
-Development update: every MP4 stores its recording-start signal settings for inspection and reuse in the saved-media viewer. Automatic segments share the initial settings of the recording; later edits and LIVE timing are not recorded. This applies to camera and TAP recordings, with or without audio. Metadata is attached after source-audio processing without re-encoding the video.
+Since 1.7.0, every MP4 stores its recording-start signal settings for inspection and reuse in the saved-media viewer. Automatic segments share the initial settings of the recording; later edits and LIVE timing are not recorded. This applies to camera and TAP recordings, with or without audio. Metadata is attached after source-audio processing without re-encoding the video.

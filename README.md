@@ -1,8 +1,8 @@
 # 5igna1
 
-Development adds rotating/resizable camera layouts, exclusive photo/video/TAP icon controls and an optional email feedback draft. See [development verification](docs/audit/ADAPTIVE_WINDOW_FEEDBACK.md).
+The app supports rotating/resizable camera layouts, exclusive photo/video/TAP icon controls and an optional email feedback draft. See [development verification](docs/audit/ADAPTIVE_WINDOW_FEEDBACK.md).
 
-Version 1.6.2 adds saved-photo signal-chain inspection and reuse, clearer metadata typography and scrolling chain labels. Original media and capture format/resolution remain unchanged.
+Version 1.7.0 adds physical camera selection, optical-only focal controls, TAP source-audio preservation and recording-start signal settings in saved videos.
 
 **Every glitch is an encounter.**
 
@@ -18,7 +18,7 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 
 ## One damaged system, fleeting moments
 
-This source is **1.6.2 (versionCode 18)**. The offline quick start introduces capture and fault controls. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
+This source is **1.7.0 (versionCode 19)**. The offline quick start introduces capture and fault controls. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 
