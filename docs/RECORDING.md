@@ -23,3 +23,5 @@ TAP reads selected media through the Android picker without requesting access to
 ## Updating from 1.5.0
 
 Version 1.5.0 allowed an active recording to continue after leaving the app. Version 1.5.1 removes that behavior and its service permissions. Existing captures and saved settings are retained. No permission declaration needs to be completed by app users.
+
+TAP source-audio finalization can continue after capture stops; it combines already recorded video and selected source audio, without background capture.

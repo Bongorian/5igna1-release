@@ -66,7 +66,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     private var cameraVideoBeforeTap = false
     val capturePhotoFormat: Int get() = if (tapMode) 0 else settings.photoFormat
     val captureRawVideo: Boolean get() = !tapMode && settings.rawVideo
-    private val tapPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocument()) { uri ->
+    private val tapPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) { result ->
+        val uri = if (result.resultCode == RESULT_OK) result.data?.data else null
         if (uri != null && settings.experimentalSignals && !recording) {
             val type = contentResolver.getType(uri) ?: ""
             if (type.startsWith("image/") || type.startsWith("video/")) enterTap(TapInput(uri, type.startsWith("video/")))
@@ -76,8 +77,17 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     fun chooseTap() {
         if (!settings.experimentalSignals || recording || engine.photoBusy) return
-        tapPicker.launch(arrayOf("image/*", "video/*"))
+        tapPicker.launch(Intent.createChooser(tapPickerIntent(), getString(R.string.tap_choose)))
     }
+
+    internal fun tapPickerIntent(): Intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+        type = "*/*"
+        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
+        addCategory(Intent.CATEGORY_OPENABLE)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+
+    fun tapBypasses(id: Int) = tapMode && id != Effects.CLEAN && Effects.point(id).ordinal <= Effects.Point.READOUT.ordinal
 
     fun enterTap(input: TapInput) {
         if (!settings.experimentalSignals || recording || engine.photoBusy) return
@@ -478,12 +488,12 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         val active = uiEffects()
         renderFormat()
         selectedRoute.removeAllViews()
-        for (id in effectState.ids().filter { !tapMode || Effects.point(it).ordinal > Effects.Point.READOUT.ordinal }) {
+        for (id in effectState.ids()) {
             val enabled = effectAvailable(id)
             val chip =
                 button(
                     Effects.label(id) +
-                        (if (enabled) "" else " · " + (if (videoMode) "MP4" else "JPG"))
+                        (if (enabled) "" else " · " + (if (tapBypasses(id)) getString(R.string.tap_bypassed) else if (videoMode) "MP4" else "JPG"))
                 )
             chip.setTextSize(12f)
             chip.setTextColor(if (enabled) LIME else MUTED)
@@ -492,7 +502,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             selectedRoute.addView(chip, cp)
             chip.setOnClickListener(OnClickListener@{ v: View? -> showEffect(id) })
         }
-        if (effectState.mask == 0 || tapMode && active.isEmpty()) {
+        if (effectState.mask == 0) {
             val empty = button(getString(R.string.fault_chain_empty))
             empty.setTextColor(MUTED)
             selectedRoute.addView(empty, LinearLayout.LayoutParams(-2, dp(44f)))
@@ -579,7 +589,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun effectAvailable(id: Int): Boolean {
-        return !rawOriginal() && (settings.experimentalSignals || !Effects.physical(id)) &&
+        return !rawOriginal() && !tapBypasses(id) && (settings.experimentalSignals || !Effects.physical(id)) &&
             Effects.available(
                 id,
                 videoMode,
@@ -774,7 +784,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         if (videoMode) {
             if (
                 !recording &&
-                    sound &&
+                    sound && !(tapMode && engine.tapSource?.hasAudio == true) &&
                     !captureRawVideo &&
                     checkSelfPermission(Manifest.permission.RECORD_AUDIO) !=
                         PackageManager.PERMISSION_GRANTED
@@ -1094,13 +1104,15 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     fun renderAudio() {
         if (micButton != null) {
             val silent = videoMode && captureRawVideo
-            val enabled = sound && !silent
+            val sourceAudio = tapMode && engine.tapSource?.hasAudio == true
+            val enabled = sourceAudio || sound && !silent
             micButton.setImageResource(if (enabled) R.drawable.ic_mic else R.drawable.ic_mic_off)
             micButton.setColorFilter(if (enabled) LIME else MUTED)
             micButton.setSelected(enabled)
-            micButton.setEnabled(!recording && !silent)
+            micButton.setEnabled(!recording && !silent && !sourceAudio)
             val label =
-                if (silent) getString(R.string.ui_raw_silent)
+                if (sourceAudio) getString(R.string.tap_source_audio)
+                else if (silent) getString(R.string.ui_raw_silent)
                 else
                     getString(R.string.capture_record_audio) +
                         " · " +

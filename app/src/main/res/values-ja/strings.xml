@@ -513,4 +513,9 @@
     <string name="saved_signal_heading">SIGNAL CHAIN</string>
     <string name="saved_signal_metadata">METADATA</string>
     <string name="saved_signal_level">LEVEL  %1$d%%</string>
+    <string name="tap_bypassed">TAPでは無効</string>
+    <string name="tap_bypass_hint">選択中のチェーンに保持しています。TAPはREADOUTの後へ入力するため、この段はカメラへ戻るまで処理を通りません。</string>
+    <string name="tap_source_audio">素材音声 · 録画に保持</string>
+    <string name="tap_audio_saving">素材音声を保存中…</string>
+    <string name="tap_audio_failed">素材音声を追加できませんでした。音声を付けずに動画を保存しました。</string>
 </resources>

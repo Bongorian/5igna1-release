@@ -3,6 +3,7 @@ package com.bongorian.signa1
 import android.graphics.ImageDecoder
 import android.graphics.SurfaceTexture
 import android.media.MediaPlayer
+import android.os.SystemClock
 import android.net.Uri
 import android.opengl.GLES11Ext
 import android.opengl.GLES20
@@ -22,6 +23,13 @@ internal class TapSource(private val engine: GlitchEngine, val input: TapInput) 
     @Volatile var ready = false
         private set
     @Volatile var playing = false
+        private set
+    @Volatile var hasAudio = false
+        private set
+    @Volatile var ended = false
+        private set
+    private var audioTimeline: TapAudioTimeline? = null
+    var audioSession: TapAudio.Session? = null
         private set
     var width = 0
         private set
@@ -94,7 +102,16 @@ internal class TapSource(private val engine: GlitchEngine, val input: TapInput) 
             media.setSurface(surface)
             // TAP is an image signal at the readout/data boundary. It does not import sound.
             media.setVolume(0f, 0f)
-            media.isLooping = true
+            media.isLooping = false
+            media.setOnCompletionListener {
+                if (!closed && engine.tapSource === this) {
+                    audioTimeline?.playback(false,media.currentPosition.toLong()*1000,SystemClock.elapsedRealtimeNanos()/1000)
+                    playing = false
+                    ended = true
+                    // Flush the last available video frame before finalizing the recorder.
+                    if (engine.recording) { engine.frame(); engine.stopVideo() }
+                }
+            }
             media.setOnVideoSizeChangedListener { _, w, h ->
                 if (!closed && w > 0 && h > 0) { width = w; height = h }
             }
@@ -102,6 +119,7 @@ internal class TapSource(private val engine: GlitchEngine, val input: TapInput) 
                 if (!closed) {
                     width = media.videoWidth
                     height = media.videoHeight
+                    hasAudio = media.trackInfo.any { it.trackType == MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_AUDIO }
                     media.seekTo(0L, MediaPlayer.SEEK_CLOSEST_SYNC)
                 }
             }
@@ -135,8 +153,21 @@ internal class TapSource(private val engine: GlitchEngine, val input: TapInput) 
     }
 
     fun recordingStarted() {
-        if (ready && input.video && !closed) play(playback.recordingStarted())
+        if (!ready || !input.video || closed) return
+        if (hasAudio) {
+            audioTimeline = TapAudioTimeline()
+            audioSession = TapAudio.Session(input.uri,
+                if (engine.settings.resolutionAudio) RecordingAudio.supported(engine.outW,engine.outH,true) else null)
+            audioTimeline!!.playback(playing,positionUs(),SystemClock.elapsedRealtimeNanos()/1000)
+        }
+        play(playback.recordingStarted())
     }
+
+    fun recordingFrame(timestampNs: Long) { audioTimeline?.firstFrame(timestampNs/1000) }
+    fun recordedAudio(): TapAudio.Job? = audioSession?.let {
+        TapAudio.Job(it,audioTimeline!!.snapshot(SystemClock.elapsedRealtimeNanos()/1000))
+    }
+    private fun positionUs() = if (ended) 0L else (player?.currentPosition ?: 0).toLong()*1000
 
     fun recordingStopped() {
         playback.recordingStopped()
@@ -146,8 +177,13 @@ internal class TapSource(private val engine: GlitchEngine, val input: TapInput) 
     private fun play(value: Boolean) {
         if (playing == value) return
         try {
-            if (value) player!!.start() else player!!.pause()
+            val position = positionUs()
+            if (value) {
+                player!!.start() // PlaybackCompleted restarts at the beginning.
+                ended = false
+            } else player!!.pause()
             playing = value
+            audioTimeline?.playback(value,position,SystemClock.elapsedRealtimeNanos()/1000)
         } catch (error: Exception) { fail(error) }
     }
 

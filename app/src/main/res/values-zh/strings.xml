@@ -513,4 +513,9 @@
     <string name="saved_signal_heading">SIGNAL CHAIN</string>
     <string name="saved_signal_metadata">METADATA</string>
     <string name="saved_signal_level">LEVEL  %1$d%%</string>
+    <string name="tap_bypassed">TAP中跳过</string>
+    <string name="tap_bypass_hint">保留在所选信号链中。TAP在READOUT之后输入，因此返回相机前跳过此阶段。</string>
+    <string name="tap_source_audio">素材音频 · 保留在录像中</string>
+    <string name="tap_audio_saving">正在保存素材音频…</string>
+    <string name="tap_audio_failed">无法添加素材音频。已保存不含该音频的视频。</string>
 </resources>

@@ -309,12 +309,13 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             if (!a.effectAvailable(id)) {
                 val hint =
                     a.text(
-                        a.getString(R.string.fault_requires_rgb),
+                        a.getString(if (a.tapBypasses(id)) R.string.tap_bypass_hint else R.string.fault_requires_rgb),
                         13,
                         MainActivity.MUTED,
                     )
                 hint.setPadding(0, a.dp(12f), 0, a.dp(16f))
                 body!!.addView(hint)
+                if (!a.tapBypasses(id)) {
                 val convert =
                     action(
                         if (a.videoMode) R.string.fault_switch_mp4 else R.string.fault_switch_jpeg
@@ -322,6 +323,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 convert.setTag("switch-format")
                 body!!.addView(convert, LinearLayout.LayoutParams(-1, a.dp(48f)))
                 convert.setOnClickListener(OnClickListener@{ v: View? -> switchFormat(id) })
+                }
             } else {
                 transportControls(id)
                 seedControls(id)
@@ -455,7 +457,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 Effects.label(id) +
                 "\n" +
                 (if (Effects.physical(id)) a.getString(R.string.physical_artifact) else stage) +
-                (if (available) "" else " · " + (if (a.videoMode) "MP4" else "JPG"))
+                (if (available) "" else " · " + (if (a.tapBypasses(id)) a.getString(R.string.tap_bypassed) else if (a.videoMode) "MP4" else "JPG"))
         )
         view.setTextColor(
             if (selected) MainActivity.BG

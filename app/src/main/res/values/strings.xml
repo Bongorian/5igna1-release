@@ -513,4 +513,9 @@
     <string name="saved_signal_heading">SIGNAL CHAIN</string>
     <string name="saved_signal_metadata">METADATA</string>
     <string name="saved_signal_level">LEVEL  %1$d%%</string>
+    <string name="tap_bypassed">TAP bypass</string>
+    <string name="tap_bypass_hint">Kept in the selected chain. TAP enters after READOUT, so this stage is bypassed until you return to the camera.</string>
+    <string name="tap_source_audio">Source audio · preserved in recording</string>
+    <string name="tap_audio_saving">Saving source audio…</string>
+    <string name="tap_audio_failed">Source audio could not be added. The video was saved without it.</string>
 </resources>

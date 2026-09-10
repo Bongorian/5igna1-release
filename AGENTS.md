@@ -117,3 +117,7 @@
 ## Owner direction — 1.6.2 release, 2026-09-10
 
 - Publish saved-photo signal reuse and viewer styling as 1.6.2 / code 18 with minimal additional checks. Integrate into main, sign with the existing distribution key, publish GitHub/Obtainium artifacts and update Pages. Preserve existing releases and store reviews.
+
+## Owner direction — TAP provider, end and source audio fixes, 2026-09-10
+
+- On `codex/tap-media-audio-fixes`, preserve/show the selected chain across image/video TAP imports, allow Google Photos-compatible media providers, stop/save recording at source-video completion, and retain source audio. Resolution-linked audio ON converts source audio to the output-resolution quality tier; OFF preserves supported compressed source audio. Source audio takes precedence over microphone recording. Keep the READOUT boundary and preserve originals. DEV testing is authorized; no new release requested.

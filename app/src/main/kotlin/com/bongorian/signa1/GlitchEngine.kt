@@ -48,6 +48,7 @@ import android.util.Range
 import android.util.Size
 import android.view.Surface
 import com.bongorian.signa1.CameraOptions.RawVideo
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -1629,8 +1630,10 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 if (recording && !rawVideoMode()) {
                     current(encoder)
                     blit(rendered, outW, outH)
-                    if (encoderTimeOffset == Long.MIN_VALUE)
+                    if (encoderTimeOffset == Long.MIN_VALUE) {
                         encoderTimeOffset = System.nanoTime() - lastFrameNs
+                    }
+                    tapSource?.recordingFrame(lastFrameNs)
                     EGLExt.eglPresentationTimeANDROID(
                         display,
                         encoder,
@@ -1910,7 +1913,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         }
     }
 
-    fun startVideo(sound: Boolean) {
+    fun startVideo(requestedSound: Boolean) {
+        val sound = requestedSound && tapSource?.hasAudio != true
         if (previewEffects != null) {
             status(context.getString(R.string.fault_recording_draft))
             ready(true)
@@ -2072,7 +2076,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         nextUri = null
         nextFd = null
         try {
-            publish(completed!!, true, taken)
+            finishRecordedVideo(completed!!,taken,tapSource?.recordedAudio(),false)
             Log.i("Signal", "Recording continued in next segment")
         } catch (e: Exception) {
             error(context.getString(R.string.ui_could_not_publish_the_recording_segment), e)
@@ -2095,6 +2099,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         }
         recording = false
         tapSource?.recordingStopped()
+        val sourceAudio = tapSource?.recordedAudio()
+        if (sourceAudio != null) photoBusy = true
         gl.removeCallbacks(storageWatch)
         ready(false)
         val result = videoUri
@@ -2108,17 +2114,50 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         } finally {
             releaseRecorder()
             videoUri = null
-            ready(frameSeen && attached && tapSource?.ready != false)
+            ready(frameSeen && attached && tapSource?.ready != false && sourceAudio == null)
             ui.post(Runnable@{ listener.recording(false) })
         }
         if (ok)
             try {
-                publish(result!!, true, taken)
+                finishRecordedVideo(result!!,taken,sourceAudio,true)
             } catch (e: Exception) {
+                if (sourceAudio != null) photoBusy = false
                 discard(result)
                 error(context.getString(R.string.ui_could_not_save_the_video), e)
             }
-        else discard(result)
+        else {
+            if (sourceAudio != null) photoBusy = false
+            discard(result)
+        }
+    }
+
+    private fun finishRecordedVideo(uri: Uri, taken: Long, audio: TapAudio.Job?, final: Boolean) {
+        if (audio == null) { publish(uri,true,taken);return }
+        if (final) status(context.getString(R.string.tap_audio_saving))
+        files.execute {
+            var file: File? = null
+            var combined: Uri? = null
+            try {
+                file = TapAudio.remux(context,uri,audio)
+                combined = createMedia("mp4",taken)
+                context.contentResolver.openOutputStream(combined,"w")!!.use { output ->
+                    file.inputStream().use { input -> copy(input,output) }
+                }
+                publish(combined,true,taken)
+                discard(uri)
+            } catch (error: Exception) {
+                discard(combined)
+                // Keep the already finished video if its source audio cannot be read/converted.
+                try { publish(uri,true,taken) } catch (save: Exception) { discard(uri) }
+                error(context.getString(R.string.tap_audio_failed),error)
+            } finally {
+                file?.delete()
+                if (final) gl.post {
+                    photoBusy = false
+                    ready(frameSeen && attached && !cooling && tapSource?.ready != false)
+                }
+            }
+        }
     }
 
     fun releaseRecorder() {
@@ -2155,6 +2194,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
 
     fun closeCamera() {
         gl.removeCallbacks(tapTick)
+        if (recording && tapSource != null) stopVideo()
         tapSource?.close()
         tapSource = null
         timeEcho.reset()
