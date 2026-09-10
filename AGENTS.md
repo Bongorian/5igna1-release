@@ -125,3 +125,7 @@
 ## Owner direction — video signal metadata, 2026-09-10
 
 - Extend MP4 metadata inspection and Use these settings to the immutable recording-start signal state, like photos. Do not record timed changes. Include camera/TAP, audio finalization and automatic segments. Continue DEV verification on `codex/tap-media-audio-fixes`; no new release requested.
+
+## Owner direction — push completed work, 2026-09-10
+
+- After completing and checking each task, push its commits on the working branch to origin. This is standing authorization for routine branch pushes, including the completed TAP fixes and video metadata work. Main integration, release publication and store submissions still follow their separately authorized scope. Do not force-push or overwrite unrelated remote work.
