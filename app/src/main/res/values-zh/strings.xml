@@ -507,7 +507,7 @@
     <string name="saved_signal_missing">没有保存的信号链</string>
     <string name="saved_signal_title">已保存的信号链</string>
     <string name="saved_signal_use">使用这些设置</string>
-    <string name="saved_signal_scope">应用已保存的信号链、LEVEL、控制值、种子、详细参数以及已记录的实验功能开关。无法恢复LIVE时间进程、设备输入或素材。拍摄格式、分辨率和LIVE设置保持当前值。</string>
+    <string name="saved_signal_scope">应用已保存的信号链、LEVEL、控制值、种子、详细参数以及已记录的实验功能开关。无法恢复LIVE时间进程、设备输入或素材。拍摄格式、分辨率和LIVE设置保持当前值。 视频使用录制开始时的设置。</string>
     <string name="saved_signal_incomplete">当前版本无法完整恢复此元数据。可查看以下记录内容。</string>
     <string name="saved_signal_applied">已应用信号设置</string>
     <string name="saved_signal_heading">SIGNAL CHAIN</string>
@@ -518,4 +518,5 @@
     <string name="tap_source_audio">素材音频 · 保留在录像中</string>
     <string name="tap_audio_saving">正在保存素材音频…</string>
     <string name="tap_audio_failed">无法添加素材音频。已保存不含该音频的视频。</string>
+    <string name="video_metadata_failed">视频已保存，但无法附加信号设置。</string>
 </resources>

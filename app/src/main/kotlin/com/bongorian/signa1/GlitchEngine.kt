@@ -577,6 +577,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     var videoUri: Uri? = null
     var nextUri: Uri? = null
     var videoTaken: Long = 0
+    var videoDescription: String = ""
     var nextTaken: Long = 0
     var lastFrameNs: Long = 0
     var lastPreviewNs: Long = 0
@@ -1941,6 +1942,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 recorderAudio = true
                 faultInputs.configure(faultConfig, attached && !cooling, true)
             }
+            val initialFrame = faultFrame(requireNotNull(effectState))
+            videoDescription = BuildConfig.APP_NAME + " " + BuildConfig.VERSION_NAME + " | " +
+                Effects.chainName(initialFrame.ids()) + " | " + initialFrame.describe() + " | Recording-start RGB signal"
             videoTaken = System.currentTimeMillis()
             videoUri = createMedia("mp4", videoTaken)
             videoFd = context.contentResolver.openFileDescriptor(videoUri!!, "w")
@@ -2100,7 +2104,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         recording = false
         tapSource?.recordingStopped()
         val sourceAudio = tapSource?.recordedAudio()
-        if (sourceAudio != null) photoBusy = true
+        photoBusy = true
         gl.removeCallbacks(storageWatch)
         ready(false)
         val result = videoUri
@@ -2114,42 +2118,49 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         } finally {
             releaseRecorder()
             videoUri = null
-            ready(frameSeen && attached && tapSource?.ready != false && sourceAudio == null)
+            ready(frameSeen && attached && tapSource?.ready != false && !photoBusy)
             ui.post(Runnable@{ listener.recording(false) })
         }
         if (ok)
             try {
                 finishRecordedVideo(result!!,taken,sourceAudio,true)
             } catch (e: Exception) {
-                if (sourceAudio != null) photoBusy = false
+                photoBusy = false
                 discard(result)
                 error(context.getString(R.string.ui_could_not_save_the_video), e)
             }
         else {
-            if (sourceAudio != null) photoBusy = false
+            photoBusy = false
             discard(result)
         }
+        if (!photoBusy) ready(frameSeen && attached && !cooling && tapSource?.ready != false)
     }
 
     private fun finishRecordedVideo(uri: Uri, taken: Long, audio: TapAudio.Job?, final: Boolean) {
-        if (audio == null) { publish(uri,true,taken);return }
-        if (final) status(context.getString(R.string.tap_audio_saving))
+        val description = videoDescription
+        fun publishWithMetadata(target: Uri) {
+            try { VideoMetadata.write(context,target,description) }
+            catch (failure: Exception) { error(context.getString(R.string.video_metadata_failed),failure) }
+            publish(target,true,taken)
+        }
+        if (final && audio != null) status(context.getString(R.string.tap_audio_saving))
         files.execute {
             var file: File? = null
             var combined: Uri? = null
             try {
+                if (audio == null) { publishWithMetadata(uri);return@execute }
                 file = TapAudio.remux(context,uri,audio)
                 combined = createMedia("mp4",taken)
                 context.contentResolver.openOutputStream(combined,"w")!!.use { output ->
                     file.inputStream().use { input -> copy(input,output) }
                 }
-                publish(combined,true,taken)
+                publishWithMetadata(combined)
                 discard(uri)
             } catch (error: Exception) {
                 discard(combined)
                 // Keep the already finished video if its source audio cannot be read/converted.
-                try { publish(uri,true,taken) } catch (save: Exception) { discard(uri) }
-                error(context.getString(R.string.tap_audio_failed),error)
+                try { publishWithMetadata(uri) } catch (save: Exception) { discard(uri) }
+                error(context.getString(if (audio != null) R.string.tap_audio_failed else R.string.ui_could_not_save_the_video),error)
             } finally {
                 file?.delete()
                 if (final) gl.post {

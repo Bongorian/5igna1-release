@@ -228,7 +228,9 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "tap-audio") {
+            if (action == "video-signal") {
+                result.putString("result", VideoSignalChecks.run(this))
+            } else if (action == "tap-audio") {
                 result.putString("result", TapAudioChecks.run(this))
             } else if (action == "saved-signal") {
                 result.putString("result", SavedSignalChecks.run(this))

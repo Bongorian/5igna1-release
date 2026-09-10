@@ -62,6 +62,7 @@ internal object TapAudioChecks {
         test.await("recording starts playback",{a.engine.recording && a.engine.tapSource!!.playing},10000)
         test.await("source end saves recording",{!a.engine.recording && !a.engine.photoBusy && a.latest!=before},30000)
         check(a.engine.tapSource!!.ended && !a.engine.tapSource!!.playing)
+        check(VideoMetadata.read(a,a.latest!!)?.state != null) { "Missing signal after source audio passthrough" }
         val saved=a.latest!!
         val copy=audio(test,saved)
         val directory=File(a.filesDir,"verification").apply {mkdirs()}
@@ -87,6 +88,7 @@ internal object TapAudioChecks {
         SystemClock.sleep(600)
         test.runOnMainSync {a.tapPlay.performClick()}
         test.await("linked end saved",{!a.engine.recording && !a.engine.photoBusy && a.latest!=beforeLinked},30000)
+        check(VideoMetadata.read(a,a.latest!!)?.state != null) { "Missing signal after source audio conversion" }
         val converted=audio(test,a.latest!!)
         a.contentResolver.openInputStream(a.latest!!)!!.use { input -> File(directory,"tap-audio-linked.mp4").outputStream().use {input.copyTo(it)} }
         check(converted.first.getInteger(MediaFormat.KEY_CHANNEL_COUNT)==1)

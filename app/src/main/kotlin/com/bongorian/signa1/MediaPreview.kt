@@ -271,11 +271,10 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         time.setText(if (item.video) "0:00 / —" else a.getString(R.string.media_gestures))
         notice.setText(a.getString(R.string.media_loading))
         notice.setVisibility(View.VISIBLE)
-        if (item.video) {
-            signal.text = a.getString(R.string.saved_signal_missing)
-        } else worker.execute {
+        worker.execute {
             val metadata = runCatching {
-                a.contentResolver.openInputStream(item.uri)?.use { input ->
+                if (item.video) VideoMetadata.read(a,item.uri)
+                else a.contentResolver.openInputStream(item.uri)?.use { input ->
                     val exif = android.media.ExifInterface(input)
                     val candidates = listOf(android.media.ExifInterface.TAG_USER_COMMENT,
                         android.media.ExifInterface.TAG_IMAGE_DESCRIPTION).mapNotNull { SavedSignal.read(exif.getAttribute(it)) }

@@ -507,7 +507,7 @@
     <string name="saved_signal_missing">保存されたシグナルチェーンはありません</string>
     <string name="saved_signal_title">保存されたシグナルチェーン</string>
     <string name="saved_signal_use">この設定を使う</string>
-    <string name="saved_signal_scope">チェーン・LEVEL・操作値・SEED・詳細パラメータと、記録がある場合は実験機能のON/OFFを適用します。LIVEの時間進行・端末入力・入力素材は復元できません。撮影形式・解像度・LIVE設定は現在のままです。</string>
+    <string name="saved_signal_scope">チェーン・LEVEL・操作値・SEED・詳細パラメータと、記録がある場合は実験機能のON/OFFを適用します。LIVEの時間進行・端末入力・入力素材は復元できません。撮影形式・解像度・LIVE設定は現在のままです。 動画では録画開始時の設定を使用します。</string>
     <string name="saved_signal_incomplete">このメタデータは現在のバージョンでは完全に復元できません。下に記録内容を表示します。</string>
     <string name="saved_signal_applied">シグナル設定を適用しました</string>
     <string name="saved_signal_heading">SIGNAL CHAIN</string>
@@ -518,4 +518,5 @@
     <string name="tap_source_audio">素材音声 · 録画に保持</string>
     <string name="tap_audio_saving">素材音声を保存中…</string>
     <string name="tap_audio_failed">素材音声を追加できませんでした。音声を付けずに動画を保存しました。</string>
+    <string name="video_metadata_failed">動画は保存しましたが、設定情報を付与できませんでした。</string>
 </resources>

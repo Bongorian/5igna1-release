@@ -1,6 +1,6 @@
 package com.bongorian.signa1
 
-/** Reads the existing human-readable photo description; never guesses a partial preset. */
+/** Reads the human-readable photo or recording-start description; never guesses a partial preset. */
 internal data class SavedSignal(val description: String, val chain: String, val state: EffectState?,
                                 val experimental: Boolean?) {
     companion object {

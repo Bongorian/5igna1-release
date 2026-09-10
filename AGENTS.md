@@ -121,3 +121,7 @@
 ## Owner direction — TAP provider, end and source audio fixes, 2026-09-10
 
 - On `codex/tap-media-audio-fixes`, preserve/show the selected chain across image/video TAP imports, allow Google Photos-compatible media providers, stop/save recording at source-video completion, and retain source audio. Resolution-linked audio ON converts source audio to the output-resolution quality tier; OFF preserves supported compressed source audio. Source audio takes precedence over microphone recording. Keep the READOUT boundary and preserve originals. DEV testing is authorized; no new release requested.
+
+## Owner direction — video signal metadata, 2026-09-10
+
+- Extend MP4 metadata inspection and Use these settings to the immutable recording-start signal state, like photos. Do not record timed changes. Include camera/TAP, audio finalization and automatic segments. Continue DEV verification on `codex/tap-media-audio-fixes`; no new release requested.

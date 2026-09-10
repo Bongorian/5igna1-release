@@ -37,3 +37,5 @@ If you contact us by email, your message and email address are used to reply and
 GPU/driver identity and a short synthetic rendering measurement are stored locally to recommend resolution and preview frame rate. No camera image is used by this measurement and no results are transmitted.
 
 Imported TAP video audio is read only from the selected media and retained in processed recordings without microphone permission. With resolution-linked audio enabled it is converted locally. Temporary conversion files are removed after finalization; clearing app data removes interrupted cache files.
+
+MP4 videos also contain the signal chain and effect settings at recording start. These settings remain in the file when it is shared.
