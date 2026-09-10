@@ -2,3 +2,8 @@ pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal()
 dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }
 rootProject.name = 'SignalCamera'
 include ':app'
+// A separate UID is required to test real URI grants and Activity results.
+if (providers.gradleProperty('cameraClientChecks').orNull == 'true') {
+    include ':camera-client'
+    project(':camera-client').projectDir = file('test-clients/camera')
+}

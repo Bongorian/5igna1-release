@@ -532,4 +532,10 @@
     <string name="lens_equivalent">35mm等效约%1$.0f mm</string>
     <string name="lens_optical">光学焦距</string>
     <string name="lens_optical_focal">光学焦距 · %1$.2f mm</string>
+    <string name="external_capture_failed" formatted="false">无法返回拍摄结果。请检查保存位置后重试。</string>
+    <string name="external_capture_review" formatted="false">使用此次拍摄？</string>
+    <string name="external_capture_review_note" formatted="false">仅将此次拍摄结果返回给请求应用。</string>
+    <string name="external_capture_use" formatted="false">使用</string>
+    <string name="external_capture_retake" formatted="false">重拍</string>
+    <string name="external_capture_returning" formatted="false">正在返回拍摄结果…</string>
 </resources>

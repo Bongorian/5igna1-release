@@ -39,3 +39,5 @@ GPU/driver identity and a short synthetic rendering measurement are stored local
 Imported TAP video audio is read only from the selected media and retained in processed recordings without microphone permission. With resolution-linked audio enabled it is converted locally. Temporary conversion files are removed after finalization; clearing app data removes interrupted cache files.
 
 MP4 videos also contain the signal chain and effect settings at recording start. These settings remain in the file when it is shared.
+
+When another app explicitly requests a capture, you review and accept the JPEG or MP4 before it is returned. Only that new capture is handed to the requesting app, with no location tags. Private staging files are deleted after acceptance or cancellation. If a video request supplies no destination, the accepted video remains in shared DCIM/5igna1 storage. The receiving app and its storage provider apply their own policies.

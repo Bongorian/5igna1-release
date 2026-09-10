@@ -26,3 +26,5 @@
 - [GPU詳細調査とLIGHT MODE](audit/GPU_DETAIL_LIGHT.ja.md) / [English](audit/GPU_DETAIL_LIGHT.md)、[測定値](audit/gpu-detail-light-results.json)：未リリースの表示サイズ上限・LED単独の共通改善。
 
 [1.6.1 release follow-up: GPU defaults and TAP verification](audit/GPU_DETAIL_LIGHT.md).
+
+- [カメラ連携](CAMERA_INTEGRATION.ja.md) / [English](CAMERA_INTEGRATION.md)：未リリースの起動・結果返却仕様と別UIDでの検証。

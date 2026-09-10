@@ -139,3 +139,8 @@
 ## Owner direction — 1.7.0 release, 2026-09-10
 
 - Release all completed TAP, video metadata and optical-only multi-camera changes as 1.7.0 / code 19. Integrate into main, publish the verified APK with the existing distribution key, and update the existing GitHub Pages site. Preserve prior releases and store reviews; the configured Play automation may upload an Alpha draft.
+
+## Owner direction — camera intents, 2026-09-10
+
+- Implement ordinary camera launch and external photo/video result contracts on `codex/camera-intents`. External capture needs JPEG/MP4 only, not RAW. Preserve normal RAW settings, published releases and main; push completed checked work. No new release is requested.
+- The owner prohibits computer use for the rest of this session until explicitly changed. Use source inspection, CLI builds and automated tests; do not use native/browser UI control, screenshots or accessibility inspection.

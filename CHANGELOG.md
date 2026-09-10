@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Handle standard photo/video camera launches and explicitly targeted external JPEG/MP4 capture requests.
+- Review, retake or cancel before returning a capture; honor caller output URIs and video limits while preserving normal RAW settings.
+
 ## [1.7.0] - 2026-09-10
 
 - Select exposed physical wide, ultra-wide, telephoto and front cameras; use sensor-specific resolution and RAW capabilities.

@@ -38,3 +38,5 @@
 [公開・更新手順](RELEASING.md) · [配布タスクリスト](LAUNCH_TASKS.md) · [F-Droid readiness](FDROID_READINESS.md) · [素材監査](audit/ASSETS.md) · [依存監査](audit/dependencies.json)
 
 [文書の役割・整理方針](DOCUMENTATION.ja.md) · [Play自動アップロード](PLAY_AUTOMATION.ja.md)。過去の検証値は当時のソース・端末・条件に限定して参照してください。
+
+[未リリースのカメラ連携](CAMERA_INTEGRATION.ja.md)：通常のカメラ起動と、明示指定によるJPEG／MP4の撮影結果返却。

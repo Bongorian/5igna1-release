@@ -33,3 +33,5 @@ Experimental device response, ADVANCED, EXPERT, linked audio and recording audio
 Maintainer entry points: [Development checks](DEVELOPMENT.md), [release procedure](RELEASING.md), [distribution checklist](LAUNCH_TASKS.md), [Play upload automation](PLAY_AUTOMATION.md), and [F-Droid candidate](FDROID_READINESS.md).
 
 Historical measurements and submission reports retain their dated scope. Start from [Validation](VALIDATION.md) for evidence, or [Documentation map](DOCUMENTATION.md) for each file’s role, maintenance rules and archive links.
+
+[Unreleased camera app integration](CAMERA_INTEGRATION.md): ordinary camera launch and explicit external JPEG/MP4 capture results.

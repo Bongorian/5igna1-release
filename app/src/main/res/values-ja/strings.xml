@@ -532,4 +532,10 @@
     <string name="lens_equivalent">35mm換算 約%1$.0f mm</string>
     <string name="lens_optical">光学焦点距離</string>
     <string name="lens_optical_focal">光学焦点距離 · %1$.2f mm</string>
+    <string name="external_capture_failed" formatted="false">撮影結果を返せませんでした。保存先を確認して、もう一度お試しください。</string>
+    <string name="external_capture_review" formatted="false">この撮影結果を使いますか？</string>
+    <string name="external_capture_review_note" formatted="false">この撮影結果だけを呼び出し元のアプリへ渡します。</string>
+    <string name="external_capture_use" formatted="false">使用</string>
+    <string name="external_capture_retake" formatted="false">撮り直す</string>
+    <string name="external_capture_returning" formatted="false">撮影結果を返しています…</string>
 </resources>

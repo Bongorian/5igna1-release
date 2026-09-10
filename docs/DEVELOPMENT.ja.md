@@ -143,3 +143,7 @@ Android 12以降、Camera2プレビュー/JPEGとOpenGL ES 2.0が必要です。
 
 - `action light-mode`：モードの即時保存・排他、実表示サイズ、JPEG／RAW／動画の保存サイズ、実カメラの全バイト比較、表示サイズ変更、NETWORK保持、ADVANCED履歴を検証。自身が保存したテスト媒体は削除します。
 - `action gpu-detail`：CFA／DEMOSAIC試作、画素比較、表示転送、表示サイズ上限の測定。試作シェーダーはアプリに含めません。
+
+## カメラIntent検証 — 未リリース
+
+`action camera-intents`は別UIDの呼び出し元を使って結果返却を検証します。[カメラ連携](CAMERA_INTEGRATION.ja.md#検証)にビルド・実行手順があります。

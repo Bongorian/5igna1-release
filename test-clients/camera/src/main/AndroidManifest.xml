@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries><package android:name="com.bongorian.signa1.debug" /></queries>
+    <application android:label="5igna1 Camera Contract Test" android:theme="@android:style/Theme.Material.NoActionBar" android:allowBackup="false">
+        <activity android:name=".CameraClient" android:exported="true" />
+        <provider android:name=".OutputProvider" android:authorities="com.bongorian.signa1.cameraclient.output" android:exported="false" android:grantUriPermissions="true" />
+    </application>
+</manifest>

@@ -74,6 +74,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
 
         fun saved(uri: Uri, video: Boolean)
 
+        fun captureFailed() {}
+
         fun configured(
             options: CameraOptions,
             settings: CaptureSettings,
@@ -603,6 +605,12 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     var frameCount: Long = 0
     var fpsStart: Long = 0
     var encoderTimeOffset: Long = Long.MIN_VALUE
+    var externalSession: CaptureSession? = null
+    var externalRequest: CameraRequest? = null
+    private val externalDurationStop = Runnable { if (recording) stopVideo() }
+
+    fun captureFailed() { ui.post { listener.captureFailed() } }
+
     var segmentBytes: Long = 3500000000L // bounded files, no total recording time limit
     var pending: PendingPhoto? = null
     val catalogs: MutableMap<String?, CameraOptions?> = HashMap<String?, CameraOptions?>()
@@ -937,6 +945,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         false,
                     )
                 else options!!.video(settings)
+            if (externalRequest?.quality == 0 && videoMode)
+                videoChoice = options!!.videosFor(settings.codec).filter { !it.highSpeed && it.fps <= 30 }
+                    .minWithOrNull(compareBy<CameraOptions.Video> { CameraOptions.area(it.size) }.thenByDescending { it.fps }) ?: videoChoice
             check(!(if (videoMode) videoChoice == null else photoChoice == null)) {
                 "No supported output"
             }
@@ -975,7 +986,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 thermalMonitor.batteryC,
                 thermalMonitor.headroom,
             )
-            if (appliedRevision == configRevision.get())
+            if (externalSession == null && appliedRevision == configRevision.get())
                 settings.save(context.getSharedPreferences("signal", 0))
             val catalog = requireNotNull(options)
             val actual = CaptureSettings(settings)
@@ -1219,7 +1230,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     fun failRawSession(reason: String?) {
         if (options != null) options!!.rawVideoFailure = reason
         settings.rawVideo = false
-        settings.save(context.getSharedPreferences("signal", 0))
+        if (externalSession == null) settings.save(context.getSharedPreferences("signal", 0))
         status(reason + context.getString(R.string.ui_returning_to_standard_video))
         restart()
     }
@@ -1982,7 +1993,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             recorder!!.setVideoFrameRate(videoChoice!!.fps)
             val bitrate = options!!.bitrate(requireNotNull(videoChoice), settings)
             recorder!!.setVideoEncodingBitRate(bitrate)
-            recorder!!.setMaxFileSize(segmentBytes)
+            val requestedLimit = externalRequest?.sizeLimit ?: 0L
+            recorder!!.setMaxFileSize(if (requestedLimit > 0) min(segmentBytes, requestedLimit) else segmentBytes)
             if (sound) {
                 recorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
                 val audio = RecordingAudio.supported(outW, outH, settings.resolutionAudio)
@@ -2015,13 +2027,15 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             recorder!!.setOnInfoListener(
                 OnInfoListener@{ r: MediaRecorder?, what: Int, extra: Int ->
                     if (!recording) return@OnInfoListener
-                    if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_APPROACHING)
-                        prepareNextSegment()
+                    if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_APPROACHING) {
+                        if (externalSession == null) prepareNextSegment()
+                    }
                     else if (what == MediaRecorder.MEDIA_RECORDER_INFO_NEXT_OUTPUT_FILE_STARTED)
                         advanceSegment()
-                    else if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED) {
+                    else if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED ||
+                        what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED) {
                         stopVideo()
-                        status(
+                        if (externalSession == null) status(
                             context.getString(
                                 R.string.ui_could_not_start_the_next_file_recording_saved
                             )
@@ -2035,6 +2049,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             recorder!!.start()
             encoderTimeOffset = Long.MIN_VALUE
             recording = true
+            // Stop on the GL owner before releasing the encoder surface; MediaRecorder's native
+            // duration callback can arrive after a queued frame has hit the closed surface.
+            externalRequest?.durationMs?.takeIf { it > 0 }?.let { gl.postDelayed(externalDurationStop, it.toLong()) }
             tapSource?.recordingStarted()
             if (!recording) return
             ready(true)
@@ -2066,6 +2083,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             ready(frameSeen)
             ui.post(Runnable@{ listener.recording(false) })
             error(context.getString(R.string.ui_could_not_start_recording_try_lower_settings), e)
+            captureFailed()
         }
     }
 
@@ -2149,10 +2167,12 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 photoBusy = false
                 discard(result)
                 error(context.getString(R.string.ui_could_not_save_the_video), e)
+                captureFailed()
             }
         else {
             photoBusy = false
             discard(result)
+            captureFailed()
         }
         if (!photoBusy) ready(frameSeen && attached && !cooling && tapSource?.ready != false)
     }
@@ -2193,6 +2213,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     }
 
     fun releaseRecorder() {
+        gl.removeCallbacks(externalDurationStop)
         if (display !== EGL14.EGL_NO_DISPLAY && window !== EGL14.EGL_NO_SURFACE) current(window)
         if (encoder !== EGL14.EGL_NO_SURFACE) {
             EGL14.eglDestroySurface(display, encoder)

@@ -42,3 +42,7 @@ Video parameters include `videoKey` (an advertised `WIDTHxHEIGHT@FPS`), `seconds
 
 - `action light-mode`: immediate exclusive mode switches, view-sized preview, unchanged full-resolution JPEG/RAW/video output, live-camera byte comparison, resized view, NETWORK retention and ADVANCED history. Its own saved fixtures are removed.
 - `action gpu-detail`: bounded CFA/DEMOSAIC shader candidates, output comparisons, final-display transfer and view-cap timing. Test-only alternatives are not shipping shaders.
+
+## Camera intent checks — unreleased
+
+`action camera-intents` uses a separate-UID caller fixture to verify result delivery. See [camera integration](CAMERA_INTEGRATION.md#verification) for the opt-in build and test commands.

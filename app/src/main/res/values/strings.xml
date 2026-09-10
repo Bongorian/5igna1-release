@@ -532,4 +532,10 @@
     <string name="lens_equivalent">≈%1$.0f mm equivalent (35 mm)</string>
     <string name="lens_optical">Optical focal length</string>
     <string name="lens_optical_focal">Optical focal length · %1$.2f mm</string>
+    <string name="external_capture_failed" formatted="false">Could not return the capture. Check the destination and try again.</string>
+    <string name="external_capture_review" formatted="false">Use this capture?</string>
+    <string name="external_capture_review_note" formatted="false">Only this capture will be returned to the requesting app.</string>
+    <string name="external_capture_use" formatted="false">Use</string>
+    <string name="external_capture_retake" formatted="false">Retake</string>
+    <string name="external_capture_returning" formatted="false">Returning capture…</string>
 </resources>

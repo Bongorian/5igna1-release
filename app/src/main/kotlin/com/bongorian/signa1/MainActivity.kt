@@ -41,6 +41,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, SurfaceTextureListener {
+    var externalCapture: ExternalCapture? = null
     lateinit var engine: GlitchEngine
     lateinit var preview: TextureView
     lateinit var viewfinder: FrameLayout
@@ -76,7 +77,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun chooseTap() {
-        if (!settings.experimentalSignals || recording || engine.photoBusy) return
+        if (externalCapture != null || !settings.experimentalSignals || recording || engine.photoBusy) return
         tapPicker.launch(Intent.createChooser(tapPickerIntent(), getString(R.string.tap_choose)))
     }
 
@@ -90,7 +91,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     fun tapBypasses(id: Int) = tapMode && id != Effects.CLEAN && Effects.point(id).ordinal <= Effects.Point.READOUT.ordinal
 
     fun enterTap(input: TapInput) {
-        if (!settings.experimentalSignals || recording || engine.photoBusy) return
+        if (externalCapture != null || !settings.experimentalSignals || recording || engine.photoBusy) return
         if (!tapMode) cameraVideoBeforeTap = videoMode
         cancelEffectPreview()
         tapMode = true
@@ -152,7 +153,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     val previewAcknowledgement: Runnable =
         object : Runnable {
             override fun run() {
-                if (!resumed || mediaPreview != null || tutorial != null) return
+                if (!resumed || mediaPreview != null || tutorial != null || externalCapture?.blocked == true) return
                 if (preview.isAvailable())
                     engine.previewPresented(preview.surfaceTexture!!.timestamp)
                 handler.postDelayed(this, 100)
@@ -194,8 +195,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         getWindow().setDecorFitsSystemWindows(false)
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         getWindow().decorView.setSystemUiVisibility(0)
+        if (CameraIntents.returnsCapture(intent.action))
+            externalCapture = ExternalCapture(this, b?.getBundle("external.capture"))
         val prefs = getSharedPreferences("signal", 0)
-        sound = prefs.getBoolean("sound", false)
+        sound = externalCapture?.model?.sound ?: prefs.getBoolean("sound", false)
         advancedMode = prefs.getBoolean("advancedMode", false)
         val last = prefs.getString("last", null)
         if (last != null) latest = Uri.parse(last)
@@ -209,19 +212,29 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                 cameraVideoBeforeTap = b.getBoolean("session.cameraVideoBeforeTap", false)
             }
         }
-        settings = CaptureSettings.load(prefs, DeviceProfile(this).constrained)
-        settings.save(prefs)
+        settings = externalCapture?.model?.captureSettings ?: CaptureSettings.load(prefs, DeviceProfile(this).constrained)
+        if (externalCapture != null) {
+            settings = externalCapture!!.model.request.constrain(settings)
+            videoMode = externalCapture!!.model.request.video
+            tapMode = false
+            tapInput = null
+        } else {
+            settings.save(prefs)
+            if (b == null) CameraIntents.launchVideo(intent.action)?.let { videoMode = it }
+        }
         advancedMode = settings.advancedMode
         geo = GeoTags(this, Runnable { this.renderGeo() })
         geo.enabled = settings.location
-        effectState = EffectStateStore.load(prefs)
+        effectState = externalCapture?.model?.effects ?: EffectStateStore.load(prefs)
         engine = GlitchEngine(this, this)
+        engine.externalSession = externalCapture?.model?.session
+        engine.externalRequest = externalCapture?.model?.request
         engine.position = Supplier { geo.snapshot() }
         configureEngine()
         if (b != null) {
             engine.front = b.getBoolean("session.front", false)
         }
-        faultConfig = FaultPreferences.load(prefs)
+        faultConfig = externalCapture?.model?.faults ?: FaultPreferences.load(prefs)
         if (b != null) faultConfig = faultConfig.enabled(b.getBoolean("session.live", false))
         engine.applyFaultConfig(faultConfig)
         buildUi()
@@ -235,7 +248,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             })
         }
         tutorialPage =
-            if (b != null && b.containsKey("tutorial.page")) b.getInt("tutorial.page")
+            if (externalCapture != null) -1
+            else if (b != null && b.containsKey("tutorial.page")) b.getInt("tutorial.page")
             else
                 (if (
                     prefs.getBoolean(
@@ -247,8 +261,26 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                 else 0)
     }
 
+    override fun onNewIntent(next: Intent) {
+        super.onNewIntent(next)
+        // Shortcuts may reuse a foreground activity. Never interrupt an in-flight capture.
+        if (externalCapture != null || CameraIntents.returnsCapture(next.action)) return
+        val requestedVideo = CameraIntents.launchVideo(next.action) ?: return
+        setIntent(next)
+        if (recording || engine.photoBusy) return
+        cancelEffectPreview()
+        tapMode = false
+        tapInput = null
+        videoMode = requestedVideo
+        ready(false)
+        configureEngine()
+        renderEffects()
+        renderCaptureMode()
+    }
+
     override fun onSaveInstanceState(out: Bundle) {
         super.onSaveInstanceState(out)
+        externalCapture?.let { it.remember(); out.putBundle("external.capture", it.model.snapshot()) }
         out.putBundle("feedback.draft", FeedbackDialog.save(this))
         out.putInt("tutorial.page", if (tutorial == null) tutorialPage else tutorial!!.page)
         savePrefs()
@@ -462,7 +494,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun renderEffects() {
-        tapTab.visibility = if (settings.experimentalSignals) View.VISIBLE else View.GONE
+        tapTab.visibility = if (externalCapture == null && settings.experimentalSignals) View.VISIBLE else View.GONE
         echoButton.visibility = if (settings.experimentalSignals && faultConfig.enabled &&
             faultConfig.echo.enabled && !rawOriginal() && (videoMode && !captureRawVideo ||
             !videoMode && capturePhotoFormat == 0) && effectPreview == null && liveEditor == null)
@@ -605,7 +637,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         d.show()
     }
 
-    fun canCycleFormat(): Boolean = !tapMode && if (videoMode)
+    fun canCycleFormat(): Boolean = externalCapture == null && !tapMode && if (videoMode)
         settings.rawVideoEnabled && cameraOptions?.rawVideoAvailable() == true
         else cameraOptions?.raws?.isNotEmpty() == true
 
@@ -661,7 +693,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     fun renderCaptureMode() {
         renderAudio()
         val value = videoMode
-        tapTab.visibility = if (settings.experimentalSignals) View.VISIBLE else View.GONE
+        tapTab.visibility = if (externalCapture == null && settings.experimentalSignals) View.VISIBLE else View.GONE
         tapTab.setChecked(tapMode)
         tapPlay.visibility = if (tapMode && tapInput?.video == true) View.VISIBLE else View.GONE
         tapChoose.visibility = if (tapMode) View.VISIBLE else View.GONE
@@ -675,9 +707,17 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             else getString(R.string.ui_take_a_photo)
         )
         capture.invalidate()
+        if (externalCapture != null) {
+            photoTab.isEnabled = false
+            videoTab.isEnabled = false
+            geoButton.visibility = View.GONE
+            galleryButton.visibility = View.GONE
+            cameraRoot.findViewWithTag<View>("guide-settings")?.visibility = View.GONE
+        }
     }
 
     fun setVideo(value: Boolean) {
+        if (externalCapture != null) return
         if ((!ready && !tapMode) || recording || engine.photoBusy || !tapMode && videoMode == value) return
         if (
             value &&
@@ -724,18 +764,20 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         )
         renderEffects()
         engine.applyFaultConfig(value)
-        FaultPreferences.save(getSharedPreferences("signal", 0), value)
+        if (externalCapture == null) FaultPreferences.save(getSharedPreferences("signal", 0), value)
         faultSwitch.setChecked(value.enabled)
         faultSwitch.setTextColor(if (value.enabled) LIME else MUTED)
     }
 
     fun savePrefs() {
+        if (externalCapture != null) return
         val prefs = getSharedPreferences("signal", 0).edit().putBoolean("sound", sound)
         EffectStateStore.write(prefs, effectState)
         prefs.apply()
     }
 
     fun shoot() {
+        if (externalCapture?.blocked == true || isFinishing) return
         if (liveEditor != null) {
             if (recording) liveEditor!!.dialog!!.dismiss()
             else {
@@ -809,6 +851,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun openGallery() {
+        if (externalCapture != null) return
         if (recording || engine.photoBusy || mediaPreview != null) return
         cancelEffectPreview()
         if (liveEditor != null) liveEditor!!.dialog!!.dismiss()
@@ -853,7 +896,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun resumeCameraPreview() {
-        if (!resumed || mediaPreview != null || tutorial != null) return
+        if (!resumed || mediaPreview != null || tutorial != null || externalCapture?.blocked == true) return
         handler.removeCallbacks(previewAcknowledgement)
         handler.post(previewAcknowledgement)
         if (
@@ -878,7 +921,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun ready(value: Boolean) {
-        ready = value && resumed && mediaPreview == null && tutorial == null
+        ready = value && resumed && mediaPreview == null && tutorial == null && externalCapture?.blocked != true
         capture.setAlpha(if (ready) 1f else .4f)
     }
 
@@ -886,7 +929,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         recording = value
         renderFormat()
         for (mode in listOf(photoTab, videoTab, tapTab)) {
-            mode.isEnabled = !value
+            mode.isEnabled = !value && externalCapture == null
             mode.alpha = if (value) .5f else 1f
         }
         capture.invalidate()
@@ -913,7 +956,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         }
     }
 
+    override fun captureFailed() { externalCapture?.model?.fail() }
+
     override fun saved(uri: Uri, video: Boolean) {
+        externalCapture?.let { it.model.saved(uri, video); return }
         val rawSequence = "application/zip" == getContentResolver().getType(uri)
         latest = uri
         latestVideo = video
@@ -937,6 +983,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     override fun onResume() {
         super.onResume()
         resumed = true
+        externalCapture?.attach()
+        if (isFinishing) return
         engine.foreground = true
         engine.foregroundWork.resume()
         if (recording) handler.post(timer)
@@ -956,6 +1004,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     override fun onPause() {
         resumed = false
+        externalCapture?.let { it.remember(); it.pause() }
         galleryButton.pause()
         if (mediaPreview != null) mediaPreview!!.dismiss()
         if (liveChainDialog != null) liveChainDialog!!.dismiss()
@@ -1002,6 +1051,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun onDestroy() {
+        externalCapture?.destroy()
         lensDialog?.dismiss()
         lensDialog = null
         feedbackDialog?.dismiss()
@@ -1030,6 +1080,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             return
         }
         if (code == 1) {
+            if (externalCapture != null && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                externalCapture!!.cancel()
+                return
+            }
             if (tutorial != null) return
             if (
                 checkSelfPermission(Manifest.permission.CAMERA) ==
@@ -1080,6 +1134,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             resumed &&
                 mediaPreview == null &&
                 tutorial == null &&
+                externalCapture?.blocked != true &&
                 checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
         )
             engine.attach(
@@ -1144,6 +1199,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun setLocationEnabled(value: Boolean) {
+        if (externalCapture != null) return
         settings.location = value
         settings.save(getSharedPreferences("signal", 0))
         geo.updateEnabled(value)
@@ -1189,6 +1245,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun showLocation() {
+        if (externalCapture != null) return
         if (recording) {
             Toast.makeText(
                     this,
@@ -1269,6 +1326,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun showSettings() {
+        if (externalCapture != null) return
         if (recording || engine.photoBusy) {
             Toast.makeText(
                     this,
@@ -1292,14 +1350,14 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             return
         }
         cancelEffectPreview()
-        settings = CaptureSettings(value)
+        settings = externalCapture?.model?.request?.constrain(value) ?: CaptureSettings(value)
         if (tapMode && !settings.experimentalSignals) {
             tapMode = false
             videoMode = cameraVideoBeforeTap
         }
         advancedMode = settings.advancedMode
         if (settings.photoFormat == 1) settings.photoFormat = 2
-        settings.save(getSharedPreferences("signal", 0))
+        if (externalCapture == null) settings.save(getSharedPreferences("signal", 0))
         geo.updateEnabled(settings.location)
         if (settings.location && !geo.permitted()) requestLocationAccess()
         ready(false)
@@ -1367,6 +1425,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun onBackPressed() {
+        if (externalCapture != null && !recording) { externalCapture!!.cancel(); return }
         if (recording) engine.toggleVideo(sound && !captureRawVideo) else super.onBackPressed()
     }
 

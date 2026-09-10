@@ -122,12 +122,15 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
             status(context.getString(R.string.ui_no_location_fix_saved_without_gps))
     } catch (e: Exception) {
         discard(uri)
+        captureFailed()
         error(context.getString(R.string.ui_could_not_save_the_photo), e)
     } catch (e: AssertionError) {
         discard(uri)
+        captureFailed()
         error(context.getString(R.string.ui_could_not_save_the_photo), IllegalStateException("DNG writer rejected the capture", e))
     } catch (e: OutOfMemoryError) {
         discard(uri)
+        captureFailed()
         status(context.getString(R.string.ui_not_enough_memory_to_process_the_photo_lower))
     } finally {
         if (bitmap != null) bitmap.recycle()
@@ -142,6 +145,7 @@ internal fun GlitchEngine.savePhoto(shot: GlitchEngine.PendingPhoto) {
 }
 
 internal fun GlitchEngine.createMedia(extension: String, taken: Long): Uri {
+    externalSession?.let { return it.create(extension) }
     val video = extension == "mp4"
     val values = ContentValues()
     val stamp = SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(Date(taken))
@@ -167,6 +171,10 @@ internal fun GlitchEngine.createMedia(extension: String, taken: Long): Uri {
 }
 
 internal fun GlitchEngine.publish(uri: Uri, video: Boolean, taken: Long) {
+    if (externalSession != null) {
+        ui.post { listener.saved(uri, video) }
+        return
+    }
     val values = ContentValues()
     values.put(MediaStore.MediaColumns.IS_PENDING, 0)
     values.put(MediaStore.MediaColumns.DATE_TAKEN, taken)
@@ -176,6 +184,7 @@ internal fun GlitchEngine.publish(uri: Uri, video: Boolean, taken: Long) {
 }
 
 internal fun GlitchEngine.discard(uri: Uri?) {
+    externalSession?.let { it.discard(uri); return }
     if (uri != null)
         try {
             context.contentResolver.delete(uri, null, null)

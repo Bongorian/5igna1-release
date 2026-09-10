@@ -42,6 +42,16 @@ class DeviceChecks : Instrumentation() {
         var video = false
         var launchMonitor: ActivityMonitor? = null
         try {
+            if (args!!.getString("action", "") == "camera-intents") {
+                // This path uses instrumentation callbacks only: no screen capture, UI automation,
+                // coordinate input or accessibility-tree inspection.
+                activity = startActivitySync(Intent(targetContext, MainActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) as MainActivity
+                runOnMainSync { activity!!.tutorial?.dialog?.dismiss() }
+                await("camera ready", { activity!!.ready && activity!!.cameraOptions != null }, 25000)
+                result.putString("result", CameraIntentChecks.run(this))
+                return
+            }
             Thread(
                     {
                         SystemClock.sleep(12000)
