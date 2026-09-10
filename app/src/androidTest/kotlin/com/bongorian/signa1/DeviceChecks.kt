@@ -145,6 +145,7 @@ class DeviceChecks : Instrumentation() {
                 cover.setGravity(android.view.Gravity.TOP or android.view.Gravity.CENTER_HORIZONTAL)
                 cover.setPadding(0, activity!!.dp(35f), 0, 0)
                 cover.setClickable(true)
+                cover.keepScreenOn = true
                 cover.setTag("deviceCheckOverlay")
                 (activity!!.getWindow().getDecorView() as android.widget.FrameLayout).addView(
                     cover,
@@ -228,7 +229,9 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "video-signal") {
+            if (action == "camera-lenses") {
+                result.putString("result", CameraLensChecks.run(this))
+            } else if (action == "video-signal") {
                 result.putString("result", VideoSignalChecks.run(this))
             } else if (action == "tap-audio") {
                 result.putString("result", TapAudioChecks.run(this))

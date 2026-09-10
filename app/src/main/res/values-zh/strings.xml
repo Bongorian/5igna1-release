@@ -519,4 +519,17 @@
     <string name="tap_audio_saving">正在保存素材音频…</string>
     <string name="tap_audio_failed">无法添加素材音频。已保存不含该音频的视频。</string>
     <string name="video_metadata_failed">视频已保存，但无法附加信号设置。</string>
+    <string name="lens_select">选择相机</string>
+    <string name="lens_back">后置</string>
+    <string name="lens_front">前置</string>
+    <string name="lens_external">外接</string>
+    <string name="lens_auto">自动</string>
+    <string name="lens_camera">相机</string>
+    <string name="lens_ultrawide">超广角</string>
+    <string name="lens_wide">广角</string>
+    <string name="lens_telephoto">长焦</string>
+    <string name="lens_hint">选择设备公开的镜头或传感器。不使用数码变焦。仅当所选镜头支持光学焦距调整时显示控件。分辨率和RAW支持因相机而异。</string>
+    <string name="lens_equivalent">35mm等效约%1$.0f mm</string>
+    <string name="lens_optical">光学焦距</string>
+    <string name="lens_optical_focal">光学焦距 · %1$.2f mm</string>
 </resources>

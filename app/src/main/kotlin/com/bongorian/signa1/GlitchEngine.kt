@@ -22,7 +22,6 @@ import android.hardware.camera2.CaptureResult
 import android.hardware.camera2.TotalCaptureResult
 import android.hardware.camera2.params.OutputConfiguration
 import android.hardware.camera2.params.SessionConfiguration
-import android.hardware.camera2.params.StreamConfigurationMap
 import android.location.Location
 import android.media.ImageReader
 import android.media.ImageReader.OnImageAvailableListener
@@ -140,47 +139,23 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
 
     /** Metadata only: a restored TAP source has no preceding camera session. */
     private fun loadCameraCatalog(manager: CameraManager): String {
-        var id: String? = null
-        for (candidate in manager.cameraIdList) {
-            val cc = manager.getCameraCharacteristics(candidate)
-            val facing = cc.get<Int?>(CameraCharacteristics.LENS_FACING)
-            if (
-                cc.get<StreamConfigurationMap?>(
-                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-                ) != null &&
-                    facing != null &&
-                    facing ==
-                        (if (front) CameraCharacteristics.LENS_FACING_FRONT
-                        else CameraCharacteristics.LENS_FACING_BACK)
-            ) {
-                id = candidate
-                characteristics = cc
-                break
-            }
-        }
-        if (id == null)
-            for (candidate in manager.cameraIdList) {
-                val cc = manager.getCameraCharacteristics(candidate)
-                if (
-                    cc.get<StreamConfigurationMap?>(
-                        CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-                    ) != null
-                ) {
-                    id = candidate
-                    characteristics = cc
-                    break
-                }
-            }
-        checkNotNull(id) { "No camera" }
-        front =
-            CameraCharacteristics.LENS_FACING_FRONT ==
-                characteristics!!.get<Int?>(CameraCharacteristics.LENS_FACING)
+        lenses = CameraLenses.read(manager)
+        val selected = lenses.firstOrNull { it.key == cameraSelection }
+            ?: lenses.firstOrNull { it.front == front }
+            ?: lenses.firstOrNull() ?: error("No camera")
+        activeLens = selected
+        cameraSelection = selected.key
+        characteristics = selected.characteristics
+        opticalFocal = OpticalFocal.supported(selected.opticalFocals,
+            context.getSharedPreferences("signal",0).getFloat("opticalFocal:"+selected.key,selected.focalMm ?: 0f))
+        val id = selected.cameraId
+        front = selected.front
         val rotation = characteristics!!.get<Int?>(CameraCharacteristics.SENSOR_ORIENTATION)
         sensorRotation = if (rotation == null) 0 else rotation
-        options = catalogs.get(id)
+        options = catalogs.get(selected.key)
         if (options == null) {
             options = CameraOptions(id, requireNotNull(characteristics), maxTexture)
-            catalogs.put(id, options)
+            catalogs.put(selected.key, options)
         }
         options!!.recommendedPhotoPixels = deviceProfile.photoPixels()
         options!!.recommendedVideoPixels = deviceProfile.videoPixels()
@@ -331,16 +306,17 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 result: TotalCaptureResult,
             ) {
                 if (s === session) {
-                    faultInputs.capture(result)
-                    val ns = result.get<Long?>(CaptureResult.SENSOR_TIMESTAMP)
+                    val sensor = selectedResult(result) ?: return
+                    faultInputs.capture(sensor)
+                    val ns = sensor.get<Long?>(CaptureResult.SENSOR_TIMESTAMP)
                     if (ns != null) {
-                        signalMetadata.put(ns, result)
+                        signalMetadata.put(ns, sensor)
                         while (signalMetadata.size > 16) signalMetadata.remove(
                             signalMetadata.keys.iterator().next()
                         )
                     }
-                    if (rawRecorder != null) rawRecorder!!.result(result)
-                    if (rawProbe != null) rawProbe!!.result(result)
+                    if (rawRecorder != null) rawRecorder!!.result(sensor)
+                    if (rawProbe != null) rawProbe!!.result(sensor)
                 }
             }
         }
@@ -524,6 +500,51 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     @Volatile var outH: Int = 4096
 
     @Volatile var front: Boolean = false
+    @Volatile var lenses: List<CameraLens> = emptyList()
+    @Volatile var activeLens: CameraLens? = null
+        private set
+    @Volatile var cameraSelection: String = context.getSharedPreferences("signal",0).getString("cameraSelection","").orEmpty()
+        private set
+
+    private var persistedCamera = cameraSelection
+    @Volatile var opticalFocal: Float? = null
+        private set
+
+    fun setOpticalFocal(value: Float) {
+        gl.post {
+            val lens = activeLens ?: return@post
+            if (recording || photoBusy || tapInput != null || !attached) return@post
+            val selected = OpticalFocal.supported(lens.opticalFocals,value) ?: return@post
+            opticalFocal = selected
+            context.getSharedPreferences("signal",0).edit().putFloat("opticalFocal:"+lens.key,selected).apply()
+            updateRequest()
+        }
+    }
+
+    fun selectCamera(key: String) {
+        gl.post {
+            if (recording || photoBusy || !attached || tapInput != null || lenses.none { it.key == key }) return@post
+            cameraSelection = key
+            torch = false
+            restart()
+        }
+    }
+
+    private fun selectedResult(result: TotalCaptureResult): TotalCaptureResult? {
+        val physical = activeLens?.physicalId ?: return result
+        return result.physicalCameraTotalResults[physical]
+    }
+
+    private fun cameraRequest(device: CameraDevice, template: Int): CaptureRequest.Builder {
+        val physical = activeLens?.physicalId
+        return if (physical == null) device.createCaptureRequest(template)
+            else device.createCaptureRequest(template,setOf(physical))
+    }
+
+    private fun output(surface: Surface): OutputConfiguration = OutputConfiguration(surface).apply {
+        activeLens?.physicalId?.let { setPhysicalCameraId(it) }
+    }
+
 
     @Volatile var torch: Boolean = false
 
@@ -535,8 +556,6 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     var sessionFallback: Boolean = false
     var attached: Boolean = false
     var videoMode: Boolean = false
-    var zoom: Float = 1f
-    var maxZoom: Float = 4f
     val matrix: FloatArray = FloatArray(16)
     var vertices: FloatBuffer?
     var positionLoc: Int = 0
@@ -834,8 +853,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             Runnable@{
                 if (recording || photoBusy || !attached) return@Runnable
                 front = !front
+                cameraSelection = lenses.firstOrNull { it.front == front && it.physicalId == null }?.key.orEmpty()
                 torch = false
-                zoom = 1f
                 restart()
             }
         )
@@ -853,15 +872,6 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                     return@Runnable
                 }
                 torch = !torch
-                updateRequest()
-            }
-        )
-    }
-
-    fun zoom(value: Float) {
-        gl.post(
-            Runnable@{
-                zoom = max(1f, min(maxZoom, value))
                 updateRequest()
             }
         )
@@ -913,7 +923,6 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 settings.photoFormat = 0
                 status(context.getString(R.string.ui_raw_is_unavailable_on_this_camera_switched_to))
             }
-            if (rawVideoMode() || (!videoMode && settings.photoFormat != 0)) zoom = 1f
             if (settings.rawVideo && !options!!.rawVideoAvailable()) {
                 settings.rawVideo = false
                 status(context.getString(R.string.ui_raw_video_is_unavailable_on_this_camera))
@@ -966,11 +975,6 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 thermalMonitor.batteryC,
                 thermalMonitor.headroom,
             )
-            val mz =
-                characteristics!!.get<Float?>(
-                    CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM
-                )
-            maxZoom = if (mz == null) 1f else min(4f, mz)
             if (appliedRevision == configRevision.get())
                 settings.save(context.getSharedPreferences("signal", 0))
             val catalog = requireNotNull(options)
@@ -1115,7 +1119,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         session = s
                         try {
                             request =
-                                c.createCaptureRequest(
+                                cameraRequest(c,
                                     if (videoMode) CameraDevice.TEMPLATE_RECORD
                                     else CameraDevice.TEMPLATE_PREVIEW
                                 )
@@ -1163,7 +1167,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 }
             if (rawVideoMode()) {
                 val outputs: MutableList<OutputConfiguration?> = ArrayList<OutputConfiguration?>()
-                for (surface in surfaces) outputs.add(OutputConfiguration(surface))
+                for (surface in surfaces) outputs.add(output(surface))
                 val configuration =
                     SessionConfiguration(
                         SessionConfiguration.SESSION_REGULAR,
@@ -1190,8 +1194,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 )
             else if (!videoMode && photoChoice!!.maximumPixelMode) {
                 val outputs: MutableList<OutputConfiguration?> = ArrayList<OutputConfiguration?>()
-                outputs.add(OutputConfiguration(cameraSurface!!))
-                val still = OutputConfiguration(stillReader!!.surface)
+                outputs.add(output(cameraSurface!!))
+                val still = output(stillReader!!.surface)
                 still.addSensorPixelModeUsed(CameraMetadata.SENSOR_PIXEL_MODE_MAXIMUM_RESOLUTION)
                 outputs.add(still)
                 c.createCaptureSession(
@@ -1202,6 +1206,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         callback,
                     )
                 )
+            } else if (activeLens?.physicalId != null) {
+                c.createCaptureSession(SessionConfiguration(SessionConfiguration.SESSION_REGULAR,
+                    surfaces.map { output(it) },Executor { gl.post(it) },callback))
             } else c.createCaptureSession(surfaces, callback, gl)
         } catch (e: Exception) {
             Log.w("Signal", "Session configuration", e)
@@ -1269,20 +1276,23 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 CaptureRequest.FLASH_MODE,
                 if (torch) CaptureRequest.FLASH_MODE_TORCH else CaptureRequest.FLASH_MODE_OFF,
             )
-        val bounds =
-            characteristics!!.get<Rect?>(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)
-        if (bounds == null) return
-        val w = (bounds.width() / zoom).toInt()
-        val h = (bounds.height() / zoom).toInt()
-        builder.set<Rect?>(
-            CaptureRequest.SCALER_CROP_REGION,
-            Rect(
-                bounds.centerX() - w / 2,
-                bounds.centerY() - h / 2,
-                bounds.centerX() + w / 2,
-                bounds.centerY() + h / 2,
-            ),
-        )
+        val physical = activeLens?.physicalId
+        opticalFocal?.let { focal ->
+            if (physical == null) builder.set(CaptureRequest.LENS_FOCAL_LENGTH,focal)
+            else builder.setPhysicalCameraKey(CaptureRequest.LENS_FOCAL_LENGTH,focal,physical)
+        }
+        val physicalCrop = physical != null && activeLens!!.logical.availablePhysicalCameraRequestKeys
+            ?.contains(CaptureRequest.SCALER_CROP_REGION) == true
+        val cropCharacteristics = if (physical != null && !physicalCrop) activeLens!!.logical else characteristics!!
+        val bounds = (if (still && photoChoice?.maximumPixelMode == true)
+            cropCharacteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE_MAXIMUM_RESOLUTION)
+            else cropCharacteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)) ?: return
+        // Native field of view only. Never request digital zoom or a zoom crop.
+        val crop = Rect(bounds)
+        if (activeLens?.logical?.availableCaptureRequestKeys?.contains(CaptureRequest.CONTROL_ZOOM_RATIO) == true)
+            builder.set(CaptureRequest.CONTROL_ZOOM_RATIO,1f)
+        if (physicalCrop) builder.setPhysicalCameraKey(CaptureRequest.SCALER_CROP_REGION,crop,physical!!)
+        else builder.set(CaptureRequest.SCALER_CROP_REGION,crop)
     }
 
     fun updateRequest() {
@@ -1477,7 +1487,13 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                     lastPreviewAckMs = SystemClock.elapsedRealtime()
                     if (healthySinceMs == 0L) healthySinceMs = lastPreviewAckMs
                     if (lastPreviewAckMs - healthySinceMs > 2000) reconnectAttempts = 0
-                    if (frameSeen && !photoBusy) ready(!rawVideoMode() || rawFrameSeen)
+                    if (frameSeen && !photoBusy) {
+                        if (tapInput == null && persistedCamera != cameraSelection) {
+                            context.getSharedPreferences("signal",0).edit().putString("cameraSelection",cameraSelection).apply()
+                            persistedCamera = cameraSelection
+                        }
+                        ready(!rawVideoMode() || rawFrameSeen)
+                    }
                 }
             )
     }
@@ -1772,7 +1788,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         return@Runnable
                     }
                     status(context.getString(R.string.ui_capturing_at_full_resolution))
-                    val still = camera!!.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+                    val still = cameraRequest(camera!!,CameraDevice.TEMPLATE_STILL_CAPTURE)
                     still.addTarget(stillReader!!.surface)
                     applyControls(still, true)
                     if (photoChoice!!.maximumPixelMode)
@@ -1789,8 +1805,13 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                                 result: TotalCaptureResult,
                             ) {
                                 if (pending == shot) {
-                                    shot.result = result
-                                    dispatchPhoto(shot)
+                                    shot.result = selectedResult(result)
+                                    if (shot.result == null) {
+                                        pending = null
+                                        photoBusy = false
+                                        ready(frameSeen)
+                                        status(context.getString(R.string.ui_required_raw_metadata_for_dng_is_unavailable))
+                                    } else dispatchPhoto(shot)
                                 }
                             }
 

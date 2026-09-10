@@ -104,8 +104,9 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     fun configureEngine() = engine.configure(settings, videoMode, effectState, if (tapMode) tapInput else null)
 
-    lateinit var zoomButton: TextView
     lateinit var flipButton: ImageView
+    lateinit var lensButton: TextView
+    var lensDialog: android.app.Dialog? = null
     lateinit var galleryButton: MediaThumbnail
     lateinit var selectedRoute: LinearLayout
     lateinit var formatButton: TextView
@@ -141,7 +142,6 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     private var effectPreview: EffectPreview? = null
     var start: Long = 0
-    var zoom: Float = 1f
     var latest: Uri? = null
     var mediaPreview: MediaPreview? = null
     val handler: Handler = Handler(Looper.getMainLooper())
@@ -202,7 +202,6 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         latestVideo = prefs.getBoolean("lastVideo", false)
         if (b != null) {
             videoMode = b.getBoolean("session.video", false)
-            zoom = b.getFloat("session.zoom", 1f)
             captureCount = b.getInt("session.count", 0)
             b.getString("session.tap.uri")?.let { uri ->
                 tapInput = TapInput(Uri.parse(uri), b.getBoolean("session.tap.video"))
@@ -221,7 +220,6 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         configureEngine()
         if (b != null) {
             engine.front = b.getBoolean("session.front", false)
-            engine.zoom = zoom
         }
         faultConfig = FaultPreferences.load(prefs)
         if (b != null) faultConfig = faultConfig.enabled(b.getBoolean("session.live", false))
@@ -257,7 +255,6 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         out.putInt("session.count", captureCount)
         out.putBoolean("session.video", videoMode)
         out.putBoolean("session.front", engine.front)
-        out.putFloat("session.zoom", zoom)
         out.putBoolean("session.live", faultConfig.enabled)
         out.putBoolean("session.tap", tapMode)
         out.putBoolean("session.cameraVideoBeforeTap", cameraVideoBeforeTap)
@@ -669,8 +666,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         tapPlay.visibility = if (tapMode && tapInput?.video == true) View.VISIBLE else View.GONE
         tapChoose.visibility = if (tapMode) View.VISIBLE else View.GONE
         flipButton.visibility = if (tapMode) View.INVISIBLE else View.VISIBLE
+        lensButton.visibility = if (tapMode) View.GONE else View.VISIBLE
         torchButton.visibility = if (tapMode) View.GONE else View.VISIBLE
-        zoomButton.visibility = if (tapMode) View.GONE else View.VISIBLE
         photoTab.setChecked(!value && !tapMode)
         videoTab.setChecked(value && !tapMode)
         capture.setContentDescription(
@@ -898,6 +895,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             else if (videoMode) getString(R.string.ui_start_video_recording)
             else getString(R.string.ui_take_a_photo)
         )
+        lensButton.isEnabled = !value
+        lensButton.alpha = if (value) .3f else 1f
         flipButton.setEnabled(!value)
         flipButton.setAlpha(if (value) .3f else 1f)
         micButton.setAlpha(if (value) .3f else 1f)
@@ -1003,6 +1002,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun onDestroy() {
+        lensDialog?.dismiss()
+        lensDialog = null
         feedbackDialog?.dismiss()
         if (tutorial != null) tutorial!!.dispose()
         galleryButton.dispose()
@@ -1319,6 +1320,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         if (actualVideo != videoMode) return
         if (actual.photoFormat != capturePhotoFormat) cancelEffectPreview()
         cameraOptions = choices
+        renderCameraLens()
         if (!tapMode) settings = CaptureSettings(actual)
         settings.location = geo.enabled
         renderAudio()
@@ -1326,14 +1328,6 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         val aw = previewArea.width
         val ah = previewArea.height
         measuredFps = 0f
-        zoomButton.setEnabled(!rawOriginal() && (videoMode || capturePhotoFormat == 0))
-        zoomButton.setAlpha(
-            if (!rawOriginal() && (videoMode || capturePhotoFormat == 0)) 1f else .4f
-        )
-        if (rawOriginal() || (!videoMode && capturePhotoFormat != 0)) {
-            zoom = 1f
-            zoomButton.setText("1×")
-        }
         if (aw > 0 && ah > 0) {
             val vw = min(aw, (ah * displayAspect).toInt())
             val p = viewfinder.layoutParams as FrameLayout.LayoutParams

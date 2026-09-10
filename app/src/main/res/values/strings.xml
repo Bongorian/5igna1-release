@@ -519,4 +519,17 @@
     <string name="tap_audio_saving">Saving source audio…</string>
     <string name="tap_audio_failed">Source audio could not be added. The video was saved without it.</string>
     <string name="video_metadata_failed">Video saved, but its signal settings could not be attached.</string>
+    <string name="lens_select">Choose camera</string>
+    <string name="lens_back">Rear</string>
+    <string name="lens_front">Front</string>
+    <string name="lens_external">External</string>
+    <string name="lens_auto">Auto</string>
+    <string name="lens_camera">Camera</string>
+    <string name="lens_ultrawide">Ultra-wide</string>
+    <string name="lens_wide">Wide</string>
+    <string name="lens_telephoto">Telephoto</string>
+    <string name="lens_hint">Select a lens or sensor exposed by your device. Digital zoom is disabled. Optical focal adjustment appears only when the selected lens supports it. Resolutions and RAW support depend on the camera.</string>
+    <string name="lens_equivalent">≈%1$.0f mm equivalent (35 mm)</string>
+    <string name="lens_optical">Optical focal length</string>
+    <string name="lens_optical_focal">Optical focal length · %1$.2f mm</string>
 </resources>

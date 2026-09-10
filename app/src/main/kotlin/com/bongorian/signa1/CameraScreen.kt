@@ -212,21 +212,14 @@ internal fun MainActivity.buildUi() {
     tagP.setMargins(dp(12f), dp(12f), 0, 0)
     viewfinder.addView(liveTag, tagP)
     liveTag.setTag("fx")
-    val lens = row()
-    lens.setGravity(Gravity.CENTER)
-    val lensP = FrameLayout.LayoutParams(dp(56f), dp(48f), Gravity.TOP or Gravity.END)
-    lensP.topMargin = dp(12f)
-    viewfinder.addView(lens, lensP)
-    zoomButton = button(if (zoom == 1f) "1×" else "2×")
-    zoomButton.setBackground(bg(-0x33ede8ee, 0))
-    lens.addView(zoomButton, LinearLayout.LayoutParams(dp(50f), dp(44f)))
-    zoomButton.setOnClickListener(
-        OnClickListener@{ v: View? ->
-            zoom = (if (zoom == 1f) 2 else 1).toFloat()
-            engine.zoom(zoom)
-            zoomButton.setText(if (zoom == 1f) "1×" else "2×")
-        }
-    )
+    lensButton = button(getString(R.string.lens_select))
+    lensButton.setTextSize(11f)
+    lensButton.setPadding(dp(12f),0,dp(12f),0)
+    lensButton.setBackground(bg(-0x33ede8ee,0))
+    lensButton.setOnClickListener { showCameras() }
+    viewfinder.addView(lensButton,FrameLayout.LayoutParams(-2,dp(44f),Gravity.BOTTOM or Gravity.START).apply {
+        leftMargin=dp(12f);bottomMargin=dp(12f)
+    })
     val effects = LinearLayout(this)
     effects.setOrientation(LinearLayout.VERTICAL)
     effects.setPadding(dp(2f), dp(10f), dp(2f), dp(2f))
@@ -411,20 +404,11 @@ internal fun MainActivity.buildUi() {
     flipButton =
         iconButton(
             R.drawable.ic_camera_flip,
-            getString(R.string.ui_switch_front_and_rear_cameras),
+            getString(R.string.lens_select),
         )
     flipButton.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), dp(2f))
     controls.addView(flipButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
-    flipButton.setOnClickListener(
-        OnClickListener@{ v: View? ->
-            if (!recording) {
-                engine.switchCamera()
-                zoom = 1f
-                zoomButton.setText("1×")
-                handler.postDelayed(Runnable@{ this.renderTorch() }, 200)
-            }
-        }
-    )
+    flipButton.setOnClickListener { showCameras() }
     renderEffects()
     renderCaptureMode()
     savePrefs()

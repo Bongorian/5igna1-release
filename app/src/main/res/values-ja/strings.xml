@@ -519,4 +519,17 @@
     <string name="tap_audio_saving">素材音声を保存中…</string>
     <string name="tap_audio_failed">素材音声を追加できませんでした。音声を付けずに動画を保存しました。</string>
     <string name="video_metadata_failed">動画は保存しましたが、設定情報を付与できませんでした。</string>
+    <string name="lens_select">カメラを選ぶ</string>
+    <string name="lens_back">背面</string>
+    <string name="lens_front">前面</string>
+    <string name="lens_external">外部</string>
+    <string name="lens_auto">自動</string>
+    <string name="lens_camera">カメラ</string>
+    <string name="lens_ultrawide">超広角</string>
+    <string name="lens_wide">広角</string>
+    <string name="lens_telephoto">望遠</string>
+    <string name="lens_hint">端末が公開しているレンズ・センサーを選びます。デジタルズームは使用しません。光学焦点距離を変えられるレンズでのみ調整を表示します。対応解像度やRAWの可否はカメラごとに異なります。</string>
+    <string name="lens_equivalent">35mm換算 約%1$.0f mm</string>
+    <string name="lens_optical">光学焦点距離</string>
+    <string name="lens_optical_focal">光学焦点距離 · %1$.2f mm</string>
 </resources>

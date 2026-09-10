@@ -4,7 +4,7 @@
 
 ## Capture a photo or video
 
-Choose Photo or Video, then use the center button or a volume key to capture or start/stop recording. Tap the viewfinder to focus. Zoom offers 1×/2×; RAW uses 1×. The camera switch selects front/back where supported.
+Choose Photo or Video, then use the center button or a volume key to capture or start/stop recording. Tap the viewfinder to focus. Digital zoom is disabled in the development update. The camera button or the lens label in the viewfinder opens camera selection (development update). Choose the rear/front camera or an exposed physical lens such as ultra-wide, wide or telephoto. When individual sensors are available, selection pins a physical sensor instead of using the combined logical route. The last successfully used camera is remembered. A lens that exposes multiple controllable optical focal lengths gets an optical adjustment control; it selects only advertised focal lengths, with no digital interpolation. Fixed-focal-length lenses have no zoom control. Available sizes and RAW support follow the selected sensor. Selection is disabled during capture and in TAP. Some manufacturers do not expose every built-in camera to other apps.
 
 The top toolbar contains light, GPS, video audio and Settings; in landscape these sit above the right-hand controls. The viewfinder occupies the left side. Light and GPS turn lime when enabled; a long press reveals their status. Audio starts OFF. Turn it on for video sound; experimental RAW video is always silent. App information is in Settings.
 

@@ -129,3 +129,9 @@
 ## Owner direction — push completed work, 2026-09-10
 
 - After completing and checking each task, push its commits on the working branch to origin. This is standing authorization for routine branch pushes, including the completed TAP fixes and video metadata work. Main integration, release publication and store submissions still follow their separately authorized scope. Do not force-push or overwrite unrelated remote work.
+
+## Owner direction — multiple camera sensors, 2026-09-10
+
+- Add explicit selection of exposed wide/ultra-wide/telephoto/front/external cameras and physical sensors, beyond the existing zoom toggle. Work on `codex/multi-camera-selection`, preserve fault settings and capture lifecycle, and use matching physical characteristics/results for sensor-specific output. Verify with the connected DEV device and push completed work. No release requested.
+
+- The owner then prohibited digital zoom and requested optical-only adjustment where possible. Remove digital crop/zoom controls and their saved-state restoration; keep the native field of view. Prefer explicit physical sensors when exposed. Only use controllable advertised optical focal lengths, without digitally filling intermediate ratios; fixed-focal-length devices cannot provide continuous optical zoom.

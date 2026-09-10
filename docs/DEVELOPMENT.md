@@ -17,6 +17,7 @@ Replace DEVICE with the intended emulator or device. Camera tests save actual me
 
 | Action | Purpose |
 |---|---|
+| `camera-lenses` | Enumerated lens selection, physical result identity, JPEG/MP4 saves and recording switch guard |
 | `normal-capture` | Single-output capture, released history, immutable JPEG state and saved mode flags |
 | `capture-contract` | ADVANCED ON: pinned displayed JPEG pixels and timestamp/state metadata despite later camera frames |
 | `settings-auto` | Immediate settings, rapid changes, guide replay and recreation |
