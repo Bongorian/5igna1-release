@@ -184,3 +184,5 @@
 - The owner clarified that Open/Close words should not be visible. Convey disclosure through icon placement and typography while retaining accessibility labels and state.
 
 - Chain review follow-up: refine chain card radii and live-preview action spacing, replace Details/Adjust labels with icons, verify on the matched emulator, update review resources and install the checked USB DEV build.
+
+- Move the PRO shooting-mode switch into Settings → Modes and remove its top-toolbar button; preserve saved mode and camera control behavior.

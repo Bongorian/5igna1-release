@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Move the PRO shooting-mode switch from the top toolbar into Settings → Modes, preserving its saved state.
+
 - Give chain cards a consistent 4 dp radius, align compact chain actions, and replace cramped close/apply/detail text with clearly sized icons.
 
 - Move readiness/output status above the preview, use icon-only disclosure controls, fit all PRO entries and keep recording time visible when collapsed.

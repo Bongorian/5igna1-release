@@ -568,7 +568,8 @@
     <string name="chain_counts">Selected %1$d · Applied %2$d</string>
     <string name="chain_selected">Selected</string>
     <string name="chain_unselected">Not selected</string>
-    <string name="pro_mode">Camera control mode: Auto / Pro</string>
+    <string name="pro_mode">PRO shooting mode</string>
+    <string name="pro_mode_hint">Show supported camera controls for exposure, white balance, focus and lens settings. Turning this off restores automatic camera control.</string>
     <string name="pro_exposure">Exposure</string>
     <string name="pro_white_balance">White balance</string>
     <string name="pro_focus">Focus</string>

@@ -9,16 +9,16 @@ This is the development implementation on `codex/pro-camera-workspace`, after 1.
 | Choice | What it changes | Entry |
 |---|---|---|
 | Photo / Video / TAP | Capture type or imported source | Labeled rail above the shutter; TAP requires Experimental |
-| AUTO / PRO | Automatic camera defaults or capability-aware camera controls | Top bar; hidden for TAP and external capture requests |
+| PRO shooting mode | Automatic camera defaults or capability-aware camera controls | Settings → Modes; unavailable for TAP and external capture requests |
 | Normal / LIGHT / ADVANCED / EXPERT | Processing workload, fault editing and capture behavior | Settings → Processing modes; existing compatibility rules remain |
 
-PRO does not enable Experimental or change FAULT parameters. PRO itself can use automatic exposure, automatic white balance and autofocus; its controls allow each supported function to be adjusted. Returning to AUTO restores the camera request template and automatic focus. Each lens has its own stored settings. AE/WB locks are temporary and are released on camera reconfiguration, leaving PRO, or a new session.
+PRO does not enable Experimental or change FAULT parameters. PRO itself can use automatic exposure, automatic white balance and autofocus; its controls allow each supported function to be adjusted. Turning PRO shooting mode OFF restores the camera request template and automatic focus. Each lens has its own stored settings. AE/WB locks are temporary and are released on camera reconfiguration, leaving PRO, or a new session.
 
 ## Layout inventory
 
 | Area | Controls and behavior |
 |---|---|
-| Top toolbar | One row: light, location, microphone, save format, resolution/fps, AUTO/PRO and Settings |
+| Top toolbar | One row: light, location, microphone, save format, resolution/fps and Settings |
 | Top status | Readiness, output/quality overview, errors and recording time; never overlays the preview |
 | Preview | Native uncropped fit; portrait has a small FAULT badge and centered focal-length choices |
 | Landscape | FAULT badge hidden; focal choices centered in the controls area, outside the preview |
@@ -74,3 +74,5 @@ Camera2 semantics: [capture requests](https://developer.android.com/reference/an
 [Visual review and original screenshots](UI_REVIEW.md) covers Japanese and English on a dedicated 1280×2772, 480 dpi emulator, including portrait, landscape, PRO, FAULT, collapsed controls and recording stop. The automated review checks an unclipped 80 dp shutter, reuse of the same capture view across collapse, status outside the preview and fully visible PRO entries. UI captures were inspected after fixing clipped PRO cards and the wrapped MP4 label.
 
 Unit tests cover exposure/video ranges, AE/AWB dependencies, unsupported/high-speed behavior, serialization and shutter scaling. On the USB-connected 25060RK16C, offscreen Camera2 checks passed for physical:0:2 and physical:0:3: 8,000,000 ns exposure, ISO 200, daylight WB (5), then restored AUTO requests and results. The emulator matches display size/density, not that device’s camera hardware or system skin.
+
+Enable **PRO shooting mode** in **Settings → Modes**. The switch is saved immediately and retained between sessions; the top toolbar has no AUTO/PRO switch.

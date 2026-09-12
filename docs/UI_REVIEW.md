@@ -1,5 +1,8 @@
 # PRO workspace: visual review
 
+
+These images record the 2026-09-12 review. The current development build moves the top AUTO/PRO switch to Settings → Modes → PRO shooting mode.
+
 [日本語](UI_REVIEW.ja.md) · [PRO controls](PRO_CAMERA.md) · [Original image manifest](ui-review/manifest.json)
 
 This is an **unreleased development UI**, reviewed on 2026-09-12. The dedicated `Signal_Review_1280_480` emulator matches the connected 25060RK16C's **1280×2772 pixels and effective 480 dpi**. Three-button system navigation is enabled to include the bottom/right navigation inset. The emulator runs API 35; the physical device runs API 36 and a different system skin. Its camera pattern, sensor options and performance do not reproduce the physical camera.

@@ -568,7 +568,8 @@
     <string name="chain_counts">選択 %1$d · 適用 %2$d</string>
     <string name="chain_selected">選択中</string>
     <string name="chain_unselected">未選択</string>
-    <string name="pro_mode">カメラ制御：AUTO／PRO</string>
+    <string name="pro_mode">PRO撮影モード</string>
+    <string name="pro_mode_hint">対応する露出・ホワイトバランス・フォーカス・レンズの操作を表示します。OFFにするとカメラを自動制御に戻します。</string>
     <string name="pro_exposure">露出</string>
     <string name="pro_white_balance">ホワイトバランス</string>
     <string name="pro_focus">フォーカス</string>

@@ -85,17 +85,6 @@ internal fun MainActivity.buildUi() {
         setOnClickListener { ResolutionPicker.show(this@buildUi, videoMode) }
     }
     header.addView(count, LinearLayout.LayoutParams(0, dp(ControlSize.TOOLBAR), 1f))
-    proModeButton = button("AUTO").apply {
-        textSize = 12f
-        contentDescription = getString(R.string.pro_mode)
-        setOnClickListener {
-            if (!recording && !engine.photoBusy && !tapMode && externalCapture == null) {
-                engine.setProMode(!engine.proMode)
-                handler.postDelayed({ renderProCamera() }, 100)
-            }
-        }
-    }
-    header.addView(proModeButton, LinearLayout.LayoutParams(dp(48f), dp(ControlSize.TOOLBAR)))
     renderTorch()
     torchButton.setOnClickListener(
         OnClickListener@{ v: View? ->
@@ -125,7 +114,6 @@ internal fun MainActivity.buildUi() {
     header.addView(geoButton, 1, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
     header.addView(micButton, 2, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
     for (icon in listOf(torchButton, geoButton, micButton, settingsButton)) icon.setPadding(dp(6f), dp(6f), dp(6f), dp(6f))
-    proModeButton.setPadding(dp(4f), 0, dp(4f), 0)
     status = text(getString(R.string.ui_preparing_the_camera), 11, MUTED)
     status.setTypeface(Typeface.MONOSPACE)
     status.setSingleLine(true)

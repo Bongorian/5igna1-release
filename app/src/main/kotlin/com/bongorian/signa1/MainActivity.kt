@@ -59,7 +59,6 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     lateinit var strengthValue: TextView
     lateinit var photoTab: CaptureModeButton
     lateinit var videoTab: CaptureModeButton
-    lateinit var proModeButton: TextView
     lateinit var proReadingLabel: TextView
     lateinit var proStrip: LinearLayout
     var proCameraDialog: ProCameraDialog? = null

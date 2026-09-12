@@ -80,6 +80,14 @@ internal class QualityDialog(a: MainActivity) {
         scroll.addView(content)
         note(activity.getString(R.string.settings_saved_immediately))
         heading(activity.getString(R.string.settings_modes))
+        if (!activity.tapMode && activity.externalCapture == null) {
+            mode(R.string.pro_mode, R.string.pro_mode_hint, activity.engine.proMode, "pro-camera-mode") { checked ->
+                activity.engine.setProMode(checked)
+                activity.handler.postDelayed({ activity.renderProCamera() }, 100)
+            }
+            content!!.findViewWithTag<SignalToggle>("pro-camera-mode").isEnabled =
+                !activity.recording && !activity.engine.photoBusy
+        }
         mode(R.string.light_mode, R.string.light_hint, draft.lightMode, "light-mode") { checked ->
             if (!syncing) {
                 draft.lightMode = checked

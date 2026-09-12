@@ -33,11 +33,6 @@ internal fun MainActivity.buildProStrip(): LinearLayout {
 
 internal fun MainActivity.renderProCamera() {
     val allowed = !tapMode && externalCapture == null
-    proModeButton.visibility = if (allowed) View.VISIBLE else View.GONE
-    proModeButton.text = if (engine.proMode) "PRO" else "AUTO"
-    proModeButton.setTextColor(if (engine.proMode) MainActivity.LIME else MainActivity.WHITE)
-    proModeButton.contentDescription = getString(R.string.pro_mode) + " · " + proModeButton.text
-    proModeButton.isEnabled = allowed && !recording && !engine.photoBusy
     proStrip.visibility = if (allowed && engine.proMode) View.VISIBLE else View.GONE
     if (!allowed || !engine.proMode) return
     val context = engine.proContext
