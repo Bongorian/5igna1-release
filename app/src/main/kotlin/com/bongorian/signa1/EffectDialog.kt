@@ -228,7 +228,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 kotlin.math.round(draft.resolved(id, resolvedKey, draft.get(id, key) * (labels.size - 1))).toInt()
             val button = a.button(a.getString(title) + " · " + labels[selected])
             button.tag = "transport-$key"
-            body!!.addView(button, LinearLayout.LayoutParams(-1, a.dp(48f)))
+            body!!.addView(button, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
             button.setOnClickListener {
                 SignalSheet.pick(a, a.getString(title), labels, selected, { n ->
                     draft = draft.with(id, key, n.toFloat() / (labels.size - 1))
@@ -243,7 +243,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         val kind = draft.transportKind(id)
         if (id == Effects.VHS && kind <= 1) {
             val toggle = SignalToggle(a, a.getString(R.string.transport_reduce), draft.resolved(id, "mediaReduce", draft.get(id, "reduce")) >= .5f)
-            body!!.addView(toggle, LinearLayout.LayoutParams(-1, a.dp(48f)))
+            body!!.addView(toggle, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
             toggle.setOnCheckedChangeListener { _, checked -> draft = draft.with(id, "reduce", if (checked) 1f else 0f).automatic(id, "mediaReduce"); preview() }
         }
         if (id == Effects.VHS && kind == 3) choice("cable", R.string.transport_cable, arrayOf("Composite", "Component"))
@@ -369,7 +369,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                         if (a.videoMode) R.string.fault_switch_mp4 else R.string.fault_switch_jpeg
                     )
                 convert.setTag("switch-format")
-                body!!.addView(convert, LinearLayout.LayoutParams(-1, a.dp(48f)))
+                body!!.addView(convert, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
                 convert.setOnClickListener(OnClickListener@{ v: View? -> switchFormat(id) })
                 }
             } else {
@@ -456,7 +456,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 }
             }
             val clear = action(R.string.ui_clear_selection)
-            body!!.addView(clear, LinearLayout.LayoutParams(-1, a.dp(48f)))
+            body!!.addView(clear, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
             clear.setOnClickListener(
                 OnClickListener@{ v: View? ->
                     mask = 0

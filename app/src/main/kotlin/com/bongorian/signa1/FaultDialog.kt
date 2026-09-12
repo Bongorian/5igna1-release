@@ -170,7 +170,7 @@ internal object FaultDialog {
 
         fun toggle(label: Int, value: Boolean, changed: (Boolean) -> Unit) {
             val control = SignalToggle(a, a.getString(label), value)
-            val p = LinearLayout.LayoutParams(-1, a.dp(48f))
+            val p = LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD))
             p.bottomMargin = a.dp(8f)
             body!!.addView(control, p)
             control.setOnCheckedChangeListener(
@@ -313,7 +313,7 @@ internal object FaultDialog {
                     slider(R.string.live_chance, "chance", performance.chance, 0f, 1f, .01f, "")
                 }
                 val transport = a.row()
-                body!!.addView(transport, LinearLayout.LayoutParams(-1, a.dp(48f)))
+                body!!.addView(transport, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
                 val hold =
                     a.button(
                         a.getString(if (performance.hold) R.string.live_resume else R.string.live_pause)

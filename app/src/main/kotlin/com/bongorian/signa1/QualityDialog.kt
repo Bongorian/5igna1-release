@@ -51,7 +51,7 @@ internal class QualityDialog(a: MainActivity) {
         val t = activity!!.text("", MainActivity.TEXT_LABEL, MainActivity.WHITE)
         t.setPadding(activity.dp(12f), activity.dp(8f), activity.dp(12f), activity.dp(8f))
         t.setBackground(activity.bg(MainActivity.PANEL, 0))
-        t.setMinHeight(activity.dp(56f))
+        t.setMinHeight(activity.dp(ControlSize.STANDARD))
         val p = LinearLayout.LayoutParams(-1, -2)
         p.bottomMargin = activity.dp(7f)
         content!!.addView(t, p)
@@ -301,7 +301,7 @@ internal class QualityDialog(a: MainActivity) {
             )
         rawMode!!.tag = "raw-video-enable"
         rawMode!!.setEnabled(options.rawVideoAvailable())
-        content!!.addView(rawMode, LinearLayout.LayoutParams(-1, activity.dp(48f)))
+        content!!.addView(rawMode, LinearLayout.LayoutParams(-1, activity.dp(ControlSize.STANDARD)))
         rawMode!!.setOnCheckedChangeListener(
             OnCheckedChangeListener@{ button: CompoundButton?, checked: Boolean ->
                 draft.rawVideoEnabled = checked
@@ -362,7 +362,7 @@ internal class QualityDialog(a: MainActivity) {
                 persist()
             }
         )
-        content!!.addView(gps, LinearLayout.LayoutParams(-1, activity.dp(48f)))
+        content!!.addView(gps, LinearLayout.LayoutParams(-1, activity.dp(ControlSize.STANDARD)))
         note(activity.getString(R.string.settings_metadata_hint))
         experimentalSection()
         appSection()
@@ -385,7 +385,7 @@ internal class QualityDialog(a: MainActivity) {
     fun mode(label: Int, hint: Int, value: Boolean, tag: String?, changed: (Boolean) -> Unit) {
         val toggle = SignalToggle(activity, activity!!.getString(label), value)
         toggle.setTag(tag)
-        content!!.addView(toggle, LinearLayout.LayoutParams(-1, activity.dp(48f)))
+        content!!.addView(toggle, LinearLayout.LayoutParams(-1, activity.dp(ControlSize.STANDARD)))
         note(activity.getString(hint))
         toggle.setOnCheckedChangeListener(
             OnCheckedChangeListener@{ view: CompoundButton?, checked: Boolean ->

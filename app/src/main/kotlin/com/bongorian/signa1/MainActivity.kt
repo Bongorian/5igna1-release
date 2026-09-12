@@ -66,6 +66,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     lateinit var faultDeck: LinearLayout
     lateinit var faultDeckButton: TextView
     var faultDeckExpanded = false
+    var workspaceCollapsed = false
     lateinit var tapControls: LinearLayout
     lateinit var tapTab: CaptureModeButton
     lateinit var tapPlay: TextView
@@ -208,6 +209,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             externalCapture = ExternalCapture(this, b?.getBundle("external.capture"))
         val prefs = getSharedPreferences("signal", 0)
         faultDeckExpanded = b?.getBoolean("workspace.faultExpanded", false) ?: false
+        workspaceCollapsed = b?.getBoolean("workspace.collapsed", false) ?: false
         sound = externalCapture?.model?.sound ?: prefs.getBoolean("sound", false)
         advancedMode = prefs.getBoolean("advancedMode", false)
         val last = prefs.getString("last", null)
@@ -291,6 +293,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     override fun onSaveInstanceState(out: Bundle) {
         super.onSaveInstanceState(out)
         out.putBoolean("workspace.faultExpanded", faultDeckExpanded)
+        out.putBoolean("workspace.collapsed", workspaceCollapsed)
         externalCapture?.let { it.remember(); out.putBundle("external.capture", it.model.snapshot()) }
         out.putBundle("feedback.draft", FeedbackDialog.save(this))
         out.putInt("tutorial.page", if (tutorial == null) tutorialPage else tutorial!!.page)
@@ -451,8 +454,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         faultDeck.visibility = if (faultDeckExpanded) View.VISIBLE else View.GONE
         val selected = effectState.ids().size
         val applied = uiEffects().size
-        faultDeckButton.text = "FAULT  ·  " + selected + (if (applied != selected) "/" + applied else "") +
-            "   " + Math.round(effectState.amount * 100) + "%   " + (if (faultDeckExpanded) "⌃" else "⌄")
+        faultDeckButton.text = "FAULT  " + selected + (if (applied != selected) "/" + applied else "") +
+            "  ·  " + Math.round(effectState.amount * 100) + "%  " + (if (faultDeckExpanded) "⌃" else "⌄")
         faultDeckButton.contentDescription = getString(R.string.pro_fault_panel) + " · " + getString(R.string.chain_counts, selected, applied)
     }
 
@@ -959,6 +962,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     override fun recording(value: Boolean) {
         recording = value
+        cameraRoot.requestLayout()
         renderProCamera()
         renderFormat()
         for (mode in listOf(photoTab, videoTab, tapTab)) {

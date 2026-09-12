@@ -52,7 +52,7 @@ internal object SignalSheet {
         root.addView(scroll, LinearLayout.LayoutParams(-1, 0, 1f))
         val actions = a.row()
         actions.setPadding(0, a.dp(12f), 0, 0)
-        root.addView(actions, LinearLayout.LayoutParams(-1, a.dp(68f)))
+        root.addView(actions, LinearLayout.LayoutParams(-1, a.dp(ControlSize.PRIMARY + 12f)))
         val cancel = a.button(a.getString(R.string.ui_back))
         cancel.setTextColor(MainActivity.MUTED)
         cancel.setBackgroundColor(Color.TRANSPARENT)
@@ -100,7 +100,7 @@ internal object SignalSheet {
         root.setBackground(a.bg(MainActivity.BG, MainActivity.PANEL))
         val header = a.row()
         val heading = a.title(title)
-        header.addView(heading, LinearLayout.LayoutParams(0, a.dp(48f), 1f))
+        header.addView(heading, LinearLayout.LayoutParams(0, a.dp(ControlSize.STANDARD), 1f))
         val close = a.button("×")
         close.setTextSize(24f)
         close.setContentDescription(a.getString(R.string.ui_close))
@@ -173,7 +173,7 @@ internal object SignalSheet {
                 )
             row.setTag("choice-" + n)
             row.setPadding(a.dp(16f), a.dp(14f), a.dp(16f), a.dp(14f))
-            row.setMinHeight(a.dp(56f))
+            row.setMinHeight(a.dp(ControlSize.STANDARD))
             row.setBackground(
                 a.bg(
                     MainActivity.PANEL,
@@ -230,7 +230,7 @@ internal object SignalSheet {
         apply.setTag("number-apply")
         apply.setTextColor(MainActivity.BG)
         apply.setBackground(a.bg(MainActivity.LIME, 0))
-        val p = LinearLayout.LayoutParams(-1, a.dp(48f))
+        val p = LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD))
         p.topMargin = a.dp(12f)
         body.addView(apply, p)
         val dialog = content(a, title, body, 0, null, .4f)

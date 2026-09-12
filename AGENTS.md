@@ -172,3 +172,5 @@
 - USB review follow-up: fix empty PRO controls on the connected device, use PHOTO/VIDEO/TAP labels in all languages, move location outside the preview, restore audio toggles, show focal-length choices directly, and standardize control typography and spacing. Verify camera requests offscreen and install the corrected DEV build on the connected USB device; preserve release app and the computer-use ban.
 
 - The owner further requested a single horizontal top row and differentiated button heights throughout the app. Use shared primary/standard/toolbar/compact sizes, retaining the larger shutter; apply to capture, editors, viewer and help actions, then install the checked DEV update over USB.
+
+- Screenshot review: reduce all action-height tiers to 48/40/32/28 dp, make capture modes text tabs and collapsed FAULT visually compact. In landscape move preview overlays out to the controls, hide the preview badge, and provide a collapsible controls column with capture/stop still available. The supplied screenshot may be inspected; no new computer-use or screenshot capture is authorized. Install the checked DEV update over USB.

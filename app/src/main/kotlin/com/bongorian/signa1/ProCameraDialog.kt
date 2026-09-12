@@ -107,7 +107,7 @@ internal class ProCameraDialog(private val a: MainActivity, private val group: S
             override fun onStartTrackingTouch(view: SeekBar?) {}
             override fun onStopTrackingTouch(view: SeekBar?) {}
         })
-        body.addView(bar, LinearLayout.LayoutParams(-1, a.dp(48f)))
+        body.addView(bar, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
     }
     private fun render() {
         body.removeAllViews()

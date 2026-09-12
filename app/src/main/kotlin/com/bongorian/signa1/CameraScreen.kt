@@ -122,7 +122,7 @@ internal fun MainActivity.buildUi() {
     settingsButton.setOnClickListener(OnClickListener@{ v: View? -> showSettings() })
     header.addView(geoButton, 1, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
     header.addView(micButton, 2, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
-    for (icon in listOf(torchButton, geoButton, micButton, settingsButton)) icon.setPadding(dp(10f), dp(10f), dp(10f), dp(10f))
+    for (icon in listOf(torchButton, geoButton, micButton, settingsButton)) icon.setPadding(dp(6f), dp(6f), dp(6f), dp(6f))
     proModeButton.setPadding(dp(4f), 0, dp(4f), 0)
     status = text(getString(R.string.ui_preparing_the_camera), 12, MUTED)
     status.setTypeface(Typeface.MONOSPACE)
@@ -242,7 +242,9 @@ internal fun MainActivity.buildUi() {
     controlBody.addView(faultBar, LinearLayout.LayoutParams(-1, dp(ControlSize.TOOLBAR)).apply { topMargin = dp(8f) })
     faultDeckButton = button("").apply {
         gravity = Gravity.CENTER_VERTICAL or Gravity.START
-        textSize = 12f
+        textSize = 11f
+        setPadding(dp(4f), 0, dp(4f), 0)
+        setBackgroundColor(Color.TRANSPARENT)
         setOnClickListener { faultDeckExpanded = !faultDeckExpanded; renderFaultDeck() }
     }
     faultBar.addView(faultDeckButton, LinearLayout.LayoutParams(0, -1, 1f))
@@ -255,7 +257,7 @@ internal fun MainActivity.buildUi() {
     }
     faultDeck.addView(effects, LinearLayout.LayoutParams(-1, -2))
     val chainRow = row()
-    effects.addView(chainRow, LinearLayout.LayoutParams(-1, dp(48f)))
+    effects.addView(chainRow, LinearLayout.LayoutParams(-1, dp(ControlSize.STANDARD)))
     val scroll = HorizontalScrollView(this)
     scroll.setHorizontalScrollBarEnabled(false)
     chainRow.addView(scroll, LinearLayout.LayoutParams(0, -1, 1f))
@@ -324,12 +326,12 @@ internal fun MainActivity.buildUi() {
         }
     )
     val modes = CaptureToolbar(this)
-    controlsColumn.addView(modes, LinearLayout.LayoutParams(-1, dp(48f)))
+    controlsColumn.addView(modes, LinearLayout.LayoutParams(-1, dp(ControlSize.TOOLBAR)))
     photoTab = CaptureModeButton(this, R.drawable.ic_mode_photo, getString(R.string.capture_label_photo))
     videoTab = CaptureModeButton(this, R.drawable.ic_mode_video, getString(R.string.capture_label_video))
     tapTab = CaptureModeButton(this, R.drawable.ic_mode_tap, getString(R.string.capture_label_tap))
     tapTab.visibility = if (externalCapture == null && settings.experimentalSignals) View.VISIBLE else View.GONE
-    for (mode in listOf(photoTab, videoTab, tapTab)) modes.addView(mode, LinearLayout.LayoutParams(dp(96f), dp(48f)))
+    for (mode in listOf(photoTab, videoTab, tapTab)) modes.addView(mode, LinearLayout.LayoutParams(dp(96f), dp(ControlSize.TOOLBAR)))
     tapTab.setOnClickListener { if (!tapMode) { if (tapInput != null) enterTap(tapInput!!) else chooseTap() } }
     photoTab.setOnClickListener { setVideo(false) }
     videoTab.setOnClickListener { setVideo(true) }
@@ -338,7 +340,7 @@ internal fun MainActivity.buildUi() {
     photoTab.tooltipText = getString(R.string.ui_photo) + " · " + getString(R.string.resolution_hold)
     videoTab.tooltipText = getString(R.string.ui_video) + " · " + getString(R.string.resolution_hold)
     val live = row()
-    live.background = bg(PANEL, 0)
+    live.setBackgroundColor(Color.TRANSPARENT)
     faultBar.addView(live, LinearLayout.LayoutParams(-2, -1).apply { leftMargin = dp(8f) })
     faultSwitch = ToggleButton(this)
     faultSwitch.setTextOn("LIVE ON")
@@ -350,10 +352,10 @@ internal fun MainActivity.buildUi() {
     faultSwitch.setChecked(faultConfig.enabled)
     faultSwitch.setTextColor(if (faultConfig.enabled) LIME else MUTED)
     faultSwitch.setContentDescription(getString(R.string.ui_toggle_live_fault))
-    live.addView(faultSwitch, LinearLayout.LayoutParams(dp(84f), -1))
+    live.addView(faultSwitch, LinearLayout.LayoutParams(dp(68f), -1))
     val reactions = iconButton(R.drawable.ic_tune, getString(R.string.ui_live_fault_settings))
-    reactions.setPadding(dp(14f), dp(14f), dp(14f), dp(14f))
-    live.addView(reactions, LinearLayout.LayoutParams(dp(48f), -1))
+    reactions.setPadding(dp(6f), dp(6f), dp(6f), dp(6f))
+    live.addView(reactions, LinearLayout.LayoutParams(dp(32f), -1))
     reactions.setOnClickListener(OnClickListener@{ v: View? -> FaultDialog.show(this) })
     faultSwitch.setOnCheckedChangeListener(
         OnCheckedChangeListener@{ view: CompoundButton?, checked: Boolean ->
@@ -392,17 +394,17 @@ internal fun MainActivity.buildUi() {
     faultDeck.addView(echoButton, LinearLayout.LayoutParams(-1, dp(ControlSize.COMPACT)))
     val controls = row()
     controls.setGravity(Gravity.CENTER)
-    controlsColumn.addView(controls, LinearLayout.LayoutParams(-1, dp(88f)))
+    controlsColumn.addView(controls, LinearLayout.LayoutParams(-1, dp(72f)))
     galleryButton = MediaThumbnail(this)
     val gallerySlot = FrameLayout(this)
-    gallerySlot.addView(galleryButton, FrameLayout.LayoutParams(dp(48f), dp(48f), Gravity.CENTER))
-    controls.addView(gallerySlot, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    gallerySlot.addView(galleryButton, FrameLayout.LayoutParams(dp(ControlSize.STANDARD), dp(ControlSize.STANDARD), Gravity.CENTER))
+    controls.addView(gallerySlot, LinearLayout.LayoutParams(dp(ControlSize.STANDARD), dp(ControlSize.STANDARD)))
     galleryButton.setOnClickListener(OnClickListener@{ v: View? -> openGallery() })
     galleryButton.load(latest, latestVideo)
     val spacer = Space(this)
     controls.addView(spacer, LinearLayout.LayoutParams(0, 1, 1f))
     capture = CaptureButton()
-    controls.addView(capture, LinearLayout.LayoutParams(dp(80f), dp(80f)))
+    controls.addView(capture, LinearLayout.LayoutParams(dp(64f), dp(64f)))
     capture.setContentDescription(getString(R.string.ui_take_a_photo))
     capture.setOnClickListener(OnClickListener@{ v: View? -> shoot() })
     controls.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
@@ -412,13 +414,14 @@ internal fun MainActivity.buildUi() {
             getString(R.string.camera_flip_facing),
         )
     flipButton.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), dp(2f))
-    controls.addView(flipButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    controls.addView(flipButton, LinearLayout.LayoutParams(dp(ControlSize.STANDARD), dp(ControlSize.STANDARD)))
     flipButton.setOnClickListener {
         if (!recording && !engine.photoBusy && !tapMode) {
             cancelEffectPreview()
             engine.switchCamera()
         }
     }
+    root.buildFoldRail()
     renderEffects()
     renderCaptureMode()
     renderFaultDeck()

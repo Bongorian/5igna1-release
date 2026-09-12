@@ -619,4 +619,6 @@
     <string name="capture_label_photo">PHOTO</string>
     <string name="capture_label_video">VIDEO</string>
     <string name="capture_label_tap">TAP</string>
+    <string name="workspace_expand">显示拍摄控制</string>
+    <string name="workspace_collapse">收起拍摄控制</string>
 </resources>

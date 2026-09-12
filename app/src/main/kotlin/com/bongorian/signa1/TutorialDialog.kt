@@ -96,10 +96,10 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
                 override fun onStopTrackingTouch(s: SeekBar?) {}
             })
         }
-        content.addView(slider, LinearLayout.LayoutParams(-1, a.dp(48f)))
+        content.addView(slider, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
         practice = a.button("").apply {
             tag = "tutorial-practice"
-            minHeight = a.dp(48f)
+            minHeight = a.dp(ControlSize.STANDARD)
             setTextColor(MainActivity.LIME)
             setOnClickListener { practice() }
         }

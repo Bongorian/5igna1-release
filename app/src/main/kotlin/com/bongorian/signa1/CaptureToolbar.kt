@@ -11,8 +11,8 @@ internal class CaptureToolbar(private val a: MainActivity) : LinearLayout(a) {
         val width = (MeasureSpec.getSize(widthMeasureSpec) / buttons.size.coerceAtLeast(1)).coerceAtMost(a.dp(104f))
         buttons.forEach { button ->
             val old = button.layoutParams as LayoutParams
-            if (old.width != width || old.height != a.dp(48f)) button.layoutParams = LayoutParams(width, a.dp(48f))
+            if (old.width != width || old.height != a.dp(ControlSize.TOOLBAR)) button.layoutParams = LayoutParams(width, a.dp(ControlSize.TOOLBAR))
         }
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(a.dp(48f), MeasureSpec.EXACTLY))
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(a.dp(ControlSize.TOOLBAR), MeasureSpec.EXACTLY))
     }
 }

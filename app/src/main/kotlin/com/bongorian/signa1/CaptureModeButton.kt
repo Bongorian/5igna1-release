@@ -25,7 +25,7 @@ internal class CaptureModeButton(a: MainActivity, @Suppress("UNUSED_PARAMETER") 
     override fun setChecked(checked: Boolean) {
         isSelected = checked
         val a = context as MainActivity
-        background = a.bg(if (checked) MainActivity.PANEL else MainActivity.BG, 0)
+        setBackgroundColor(android.graphics.Color.TRANSPARENT)
         setTextColor(if (checked) MainActivity.LIME else MainActivity.MUTED)
     }
     override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {

@@ -619,4 +619,6 @@
     <string name="capture_label_photo">PHOTO</string>
     <string name="capture_label_video">VIDEO</string>
     <string name="capture_label_tap">TAP</string>
+    <string name="workspace_expand">撮影操作を表示</string>
+    <string name="workspace_collapse">撮影操作を折りたたむ</string>
 </resources>
