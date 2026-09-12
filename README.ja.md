@@ -1,5 +1,7 @@
 # 5igna1
 
+[未リリースのPRO画面・スクリーンショットレビュー](docs/UI_REVIEW.ja.md)。
+
 画面回転・サイズ変更に応じたカメラ配置、写真・動画・TAPの排他選択アイコン、任意のメール下書きによる不具合報告に対応しています。[検証記録](docs/audit/ADAPTIVE_WINDOW_FEEDBACK.md)。
 
 1.7.1では外部アプリへのJPEG／MP4撮影返却、元フレームを使うNetwork表示の劣化、時間モデルと有効な詳細パラメータの整合に対応しました。[カメラ連携](docs/CAMERA_INTEGRATION.ja.md)・[時間モデル](docs/TIME_MODEL.ja.md)。

@@ -16,19 +16,22 @@ PRO does not enable Experimental or change FAULT parameters. PRO itself can use 
 
 ## Layout inventory
 
-| Area | Controls and behavior | Reason for the placement |
-|---|---|---|
-| Top bar | Torch, save format, output resolution/fps, AUTO/PRO, Settings | Capture setup stays above the image, without mixing it with FAULT |
-| Status line | Readiness, errors and recording time | Short user-facing status; the processing engine still retains diagnostics |
-| Preview | Uncropped fit, compact FAULT indicator, centered focal-length buttons at the bottom | Preserve framing; lens selection remains close to the image |
-| Top row | Location and microphone controls in the single top row, including OFF state | Show relevant capture state without permanent inactive icons |
-| PRO strip | Actual shutter/ISO and shortcuts to supported Exposure, WB, Focus and Lens controls | Adjust real camera behavior while retaining a visible preview |
-| FAULT bar | Selected/applied count, LEVEL, expand/collapse; LIVE toggle and settings | Keep creative effects available without always occupying the capture area |
-| Expanded FAULT panel | Chain, add/remove, random/reseed, LEVEL, live state and transport, optional ECHO | Existing behavior grouped into one place |
-| Mode rail | PHOTO, VIDEO, optional TAP in every app language | Stable position directly above capture |
-| Shutter row | Saved media on the left, capture in the center, front/rear on the right | Capture remains centered regardless of source, PRO or expanded panels |
+| Area | Controls and behavior |
+|---|---|
+| Top toolbar | One row: light, location, microphone, save format, resolution/fps, AUTO/PRO and Settings |
+| Top status | Readiness, output/quality overview, errors and recording time; never overlays the preview |
+| Preview | Native uncropped fit; portrait has a small FAULT badge and centered focal-length choices |
+| Landscape | FAULT badge hidden; focal choices centered in the controls area, outside the preview |
+| PRO strip | Measured shutter/ISO and equally sized Exposure, WB, Focus and Lens entries; unsupported entries omitted |
+| FAULT summary | Leading chevron, selected/applied counts, LEVEL, LIVE and its settings; transparent compact row |
+| Expanded FAULT | Chain, add/remove, random/reseed, LEVEL, live state/transport and optional ECHO |
+| Mode rail | PHOTO / VIDEO / optional TAP as text tabs in every language |
+| Capture row | Saved media, centered 80 dp shutter, front/rear switch |
+| Landscape disclosure | Panel icon at the upper outer edge; an 88 dp rail retains the same shutter when collapsed, plus recording time above it |
 
-Portrait uses the order above. Wide windows put capture tools in the right column and reserve the remaining area for preview. The controls area scrolls if needed, while the mode rail and shutter stay outside that scroll. The PRO and FAULT editors use a bottom/side sheet with preview space reserved. Closing PRO retains adjustments; FAULT still uses Apply/Cancel. The quick-start guide temporarily expands FAULT to reveal the controls it explains, then restores the previous expansion state.
+Primary, standard, toolbar and compact controls use 48/40/32/28 dp heights. The 80 dp shutter is deliberately larger. Compact labels use 12 sp, with PRO labels fitting from 10–12 sp; editor choices and adjustment values use 14 and 18 sp. Spacing uses 4/8/12 dp steps. Disclosure icons change direction with their state; Open/Close remains in accessibility labels and tooltips, without visible action words.
+
+The controls scroll when needed; capture tabs and shutter stay outside that scroll. Landscape collapse retains camera, FAULT and recording state. PRO/FAULT sheets reserve preview space; PRO adjustments save immediately, while FAULT keeps Apply/Cancel. The guide temporarily expands FAULT and restores its previous state afterward.
 
 Horizontal swipes over the preview switch Photo/Video and retain the chain. Tapping requests autofocus when AF is active; this implementation does not set a touch-coordinate metering region. The focus indicator is centered, and manual focus is not overridden. Photo preview now requests continuous-picture AF; video requests continuous-video AF where supported.
 
@@ -68,16 +71,6 @@ Camera2 semantics: [capture requests](https://developer.android.com/reference/an
 
 ## Review and verification
 
-Review AUTO/PRO, collapsed/expanded FAULT, Photo/Video, TAP opt-in, portrait and landscape, and changing between lenses with different capabilities. Confirm that the capture controls remain easy to find and that measured values are distinct from settings. Physical-device visual review is pending under the current no-computer-use instruction.
+[Visual review and original screenshots](UI_REVIEW.md) covers Japanese and English on a dedicated 1280×2772, 480 dpi emulator, including portrait, landscape, PRO, FAULT, collapsed controls and recording stop. The automated review checks an unclipped 80 dp shutter, reuse of the same capture view across collapse, status outside the preview and fully visible PRO entries. UI captures were inspected after fixing clipped PRO cards and the wrapped MP4 label.
 
-Automated coverage includes sensor/video range constraints, AE/AWB dependencies, unsupported/high-speed behavior, per-lens serialization, and logarithmic shutter controls. A separate no-Activity Camera2 check uses an offscreen YUV sink: it verifies manual shutter/ISO, WB and restoration of AUTO requests and results. It does not create capture files or inspect the screen. Hardware behavior beyond the tested emulator remains device-dependent.
-
-Verification on 2026-09-12: 75 unit tests passed; F-Droid debug lint, both debug variants and the instrumentation APK built successfully; 616 localized strings passed the locale check. Android 35 emulator Camera2 returned exposure 8,000,000 ns, ISO 200 and daylight WB (5), then restored AUTO request and result values. UI instrumentation was compiled but not run; no screenshots or visual inspection were performed.
-
-USB review follow-up: shared control heights distinguish primary actions (48 dp), ordinary actions (40 dp), toolbars (32 dp) and compact choices (28 dp). The shutter remains larger. Compact labels use 12 sp, editor choices 14 sp and adjustment values 18 sp, with 4/8/12 dp spacing. Focal buttons use approximate 35 mm equivalents when sensor dimensions are available; tooltip details retain the actual focal length. Light, location, audio, format, resolution, AUTO/PRO and Settings share one top row. Status/recording text sits above the focal buttons inside the preview. Audio is available before switching to VIDEO.
-
-USB verification on 2026-09-12 (25060RK16C): pinned physical:0:2 and physical:0:3 both returned manual exposure 8,000,000 ns, ISO 200 and daylight WB (5), and restored AUTO request/result values. These checks use offscreen YUV and never open an Activity or save images. This fixes the earlier mistaken interpretation of physical override keys as the complete set of supported controls.
-
-Landscape review update: PHOTO/VIDEO/TAP are text tabs without button backgrounds. The collapsed FAULT row is a compact transparent summary. In wide windows, status and focal choices move below the right-hand controls, and the preview badge is hidden. The edge chevron collapses that column to a slim rail with capture/stop and an expand action; selected camera and fault values are retained. Portrait keeps its preview controls.
-
-Disclosure review: the original 80 dp CaptureButton is reused in both layouts, including its recording-stop rendering and existing click behavior. The collapsed rail reserves 88 dp for it. Workspace and FAULT disclosure controls share drawn chevrons, Open/Close labels, keyboard focus and expanded/collapsed accessibility state. Connected-device size 1280×2772 at effective density 480 was used to size the layout; no new screenshot or UI automation was used.
+Unit tests cover exposure/video ranges, AE/AWB dependencies, unsupported/high-speed behavior, serialization and shutter scaling. On the USB-connected 25060RK16C, offscreen Camera2 checks passed for physical:0:2 and physical:0:3: 8,000,000 ns exposure, ISO 200, daylight WB (5), then restored AUTO requests and results. The emulator matches display size/density, not that device’s camera hardware or system skin.

@@ -37,3 +37,5 @@ Historical measurements and submission reports retain their dated scope. Start f
 [Unreleased camera app integration](CAMERA_INTEGRATION.md): ordinary camera launch and explicit external JPEG/MP4 capture results.
 
 [Unreleased PRO camera and workspace](PRO_CAMERA.md): supported camera adjustments, control placement and review scope.
+
+[PRO workspace visual review](UI_REVIEW.md)

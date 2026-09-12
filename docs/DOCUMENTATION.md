@@ -14,6 +14,7 @@ Start with the user guides to learn the app, the implementation references to ch
 | [GETTING_STARTED](GETTING_STARTED.md) / [日本語](GETTING_STARTED.ja.md) | First capture and the eight-step interactive guide |
 | [Recording and permissions](RECORDING.md) / [日本語](RECORDING.ja.md) | Recording lifecycle, saving on exit and permission purposes |
 | [SEED guide](SEEDS.md) / [日本語](SEEDS.ja.md) | Identity, event seeds, reseeding and reproducibility |
+| [UI review](UI_REVIEW.md) / [日本語](UI_REVIEW.ja.md) | Matched-density emulator, screenshot evidence, source hashes and reproduction |
 | [PRO camera workspace](PRO_CAMERA.md) / [日本語](PRO_CAMERA.ja.md) | Unreleased real camera controls, capability rules and layout inventory |
 | [USAGE](USAGE.md) / [日本語](USAGE.ja.md) | Controls, immediate Settings, effect/LIVE transactions and media viewer |
 | [RECIPES](RECIPES.md) / [日本語](RECIPES.ja.md) | Creative starting points; these are instructions, not built-in presets |

@@ -2,7 +2,6 @@ package com.bongorian.signa1
 
 import android.view.Gravity
 import android.view.View
-import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
 
@@ -14,20 +13,20 @@ internal fun MainActivity.buildProStrip(): LinearLayout {
         ellipsize = android.text.TextUtils.TruncateAt.END
     }
     root.addView(proReadingLabel, LinearLayout.LayoutParams(-1, -2))
-    val scroll = HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false }
     val fields = row()
-    scroll.addView(fields)
-    root.addView(scroll, LinearLayout.LayoutParams(-1, dp(ControlSize.PRIMARY)))
+    root.addView(fields, LinearLayout.LayoutParams(-1, dp(ControlSize.PRIMARY)))
     listOf("exposure" to R.string.pro_exposure, "wb" to R.string.pro_white_balance,
         "focus" to R.string.pro_focus, "lens" to R.string.pro_lens).forEach { (key, title) ->
         val field = button(getString(title)).apply {
             tag = "pro-field:" + key
             textSize = 12f
             gravity = Gravity.CENTER
-            setPadding(dp(12f), dp(6f), dp(12f), dp(6f))
+            setPadding(dp(4f), dp(4f), dp(4f), dp(4f))
+            maxLines = 2
+            setAutoSizeTextTypeUniformWithConfiguration(10, 12, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
             setOnClickListener { showProCamera(key) }
         }
-        fields.addView(field, LinearLayout.LayoutParams(dp(98f), -1).apply { rightMargin = dp(8f) })
+        fields.addView(field, LinearLayout.LayoutParams(0, -1, 1f).apply { leftMargin = dp(4f); rightMargin = dp(4f) })
     }
     return root
 }
@@ -51,13 +50,13 @@ internal fun MainActivity.renderProCamera() {
     if (proReadingLabel.text.toString() != actual) proReadingLabel.text = actual
     fun field(key: String, text: String, supported: Boolean) {
         val view = proStrip.findViewWithTag<TextView>("pro-field:" + key)
-        if (view.text.toString() != text) view.text = text
+        if (view.text.toString() != text) { view.text = text; view.contentDescription = text.replace("\n", ": ") }
         view.visibility = if (supported) View.VISIBLE else View.GONE
         view.isEnabled = !recording && !engine.photoBusy && !context.highSpeed
         view.alpha = if (view.isEnabled) 1f else .45f
     }
     field("exposure", getString(R.string.pro_exposure) + "\n" +
-        if (value.manualExposure) ProCameraScale.shutter(value.exposureNs) + " · " + value.iso
+        if (value.manualExposure) ProCameraScale.shutter(value.exposureNs)
         else "AUTO" + if (value.aeLock) " · L" else "",
         caps?.let { it.exposureRange(context) != null || it.ev != null || it.aeLock } == true)
     field("wb", "WB\n" + proWhiteBalanceLabel(value.whiteBalance), caps?.whiteBalance?.isNotEmpty() == true || caps?.awbLock == true)

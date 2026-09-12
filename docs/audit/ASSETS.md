@@ -49,3 +49,9 @@ All 26 recorded file hashes match this checkout. Store screenshots remain the su
 ### 棚卸し — 2026-09-10
 
 `assets.json` の29件について、対象ファイルの存在とSHA-256の一致を確認しました。上記26件の確認は2026-09-09時点の記録です。その後追加した撮影モードアイコン3件を含む現況が29件です。ストア画像の撮影版とサイト側の素材台帳の区別は維持します。
+
+## PRO UI review — 2026-09-12
+
+`docs/ui-review/{ja,en}/*.png`: 18 original emulator screenshots of the unreleased PRO workspace, 1280×2772/2772×1280 at 480 dpi, API 35 and three-button navigation. Project UI and the same AOSP-generated house scene described above; no compositing or retouching. Screenshot dimensions, SHA-256 values and source digest are in [the review manifest](../ui-review/manifest.json). See [visual review](../UI_REVIEW.md) for reproduction and limitations.
+
+`DisclosureUi.kt` draws the panel/chevron symbols directly using simple paths written for this project (Apache-2.0); no external icon asset or image generator is used.

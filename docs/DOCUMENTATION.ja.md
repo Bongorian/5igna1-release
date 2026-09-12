@@ -9,6 +9,7 @@
 | 利用ガイド | [README](README.ja.md)から、初回撮影・操作・FAULT・時間・形式・負荷へ移動 |
 | 録画と権限 | [RECORDING](RECORDING.ja.md)が画面を離れた際の終了・保存と権限の用途 |
 | SEED | [SEEDS](SEEDS.ja.md)が構造・イベントの再現性と再生成 |
+| 画面レビュー | [UI_REVIEW](UI_REVIEW.ja.md)が同密度エミュレーターの画像・検証・再現手順 |
 | PRO撮影・画面配置 | [PRO_CAMERA](PRO_CAMERA.ja.md)が未リリースのカメラ調整、対応条件と配置の棚卸し |
 | 撮影仕様 | [FORMATS](FORMATS.ja.md)が通常／ADVANCED撮影・RAW・音声の基準 |
 | 実装資料 | [ARCHITECTURE](ARCHITECTURE.ja.md)が所有権・状態・ライフサイクル、[RAW](raw-pipeline.ja.md)が表現変換 |

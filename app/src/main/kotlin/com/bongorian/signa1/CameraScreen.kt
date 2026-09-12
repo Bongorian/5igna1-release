@@ -70,11 +70,13 @@ internal fun MainActivity.buildUi() {
     formatButton = button("")
     formatButton.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
     formatButton.setTextSize(12f)
+    formatButton.setSingleLine(true)
+    formatButton.setAutoSizeTextTypeUniformWithConfiguration(10, 12, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
     formatButton.setPadding(dp(4f), 0, dp(4f), 0)
     formatButton.setOnClickListener(OnClickListener@{ v: View? -> cycleFormat() })
     torchButton = iconButton(R.drawable.ic_flash, getString(R.string.ui_light_off))
     header.addView(torchButton, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
-    header.addView(formatButton, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
+    header.addView(formatButton, LinearLayout.LayoutParams(dp(44f), dp(ControlSize.TOOLBAR)))
     count = text("—", 12, MainActivity.WHITE).apply {
         gravity = Gravity.CENTER
         setSingleLine(true)
@@ -124,12 +126,15 @@ internal fun MainActivity.buildUi() {
     header.addView(micButton, 2, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
     for (icon in listOf(torchButton, geoButton, micButton, settingsButton)) icon.setPadding(dp(6f), dp(6f), dp(6f), dp(6f))
     proModeButton.setPadding(dp(4f), 0, dp(4f), 0)
-    status = text(getString(R.string.ui_preparing_the_camera), 12, MUTED)
+    status = text(getString(R.string.ui_preparing_the_camera), 11, MUTED)
     status.setTypeface(Typeface.MONOSPACE)
     status.setSingleLine(true)
     status.setEllipsize(TextUtils.TruncateAt.END)
     status.gravity = Gravity.CENTER_VERTICAL or Gravity.END
     status.setPadding(dp(8f), 0, dp(8f), 0)
+    status.setBackgroundColor(Color.TRANSPARENT)
+    status.gravity = Gravity.CENTER_VERTICAL or Gravity.START
+    utility.addView(status, LinearLayout.LayoutParams(-1, dp(24f)))
     // Fit the actual signal aspect without cropping or stretching.
     previewArea = FrameLayout(this)
     previewColumn.addView(previewArea, LinearLayout.LayoutParams(-1, 0, 1f))
@@ -171,11 +176,6 @@ internal fun MainActivity.buildUi() {
     viewfinder.addView(preview, FrameLayout.LayoutParams(-1, -1))
     overlay = Overlay()
     viewfinder.addView(overlay, FrameLayout.LayoutParams(-1, -1))
-    status.background = bg(0x99101410.toInt(), 0)
-    status.gravity = Gravity.CENTER
-    viewfinder.addView(status, FrameLayout.LayoutParams(-1, dp(24f), Gravity.BOTTOM).apply {
-        bottomMargin = dp(60f); leftMargin = dp(12f); rightMargin = dp(12f)
-    })
     tapControls = row()
     tapControls.visibility = View.GONE
     tapControls.setPadding(dp(8f), dp(4f), dp(8f), dp(8f))
@@ -231,6 +231,7 @@ internal fun MainActivity.buildUi() {
     lensRail = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER }
     lensScroll = HorizontalScrollView(this).apply {
         isHorizontalScrollBarEnabled = false
+        isFillViewport = true
         addView(lensRail)
     }
     viewfinder.addView(lensScroll, FrameLayout.LayoutParams(-2, dp(ControlSize.COMPACT), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {

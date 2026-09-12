@@ -1,6 +1,8 @@
 # 5igna1
 
-The app supports rotating/resizable camera layouts, exclusive photo/video/TAP icon controls and an optional email feedback draft. See [development verification](docs/audit/ADAPTIVE_WINDOW_FEEDBACK.md).
+[Unreleased PRO workspace and screenshot review](docs/UI_REVIEW.md).
+
+The app supports rotating/resizable camera layouts, exclusive PHOTO/VIDEO/TAP text tabs and an optional email feedback draft. See [development verification](docs/audit/ADAPTIVE_WINDOW_FEEDBACK.md).
 
 Version 1.7.1 adds external JPEG/MP4 capture, source-frame Network display degradation and consistent fault timing with active model controls. See [camera integration](docs/CAMERA_INTEGRATION.md) and [time model](docs/TIME_MODEL.md).
 
@@ -55,7 +57,7 @@ All processing runs on your device. No ads, accounts, analytics or Internet perm
 
 ## Explore time, sources and workload
 
-Hold the photo/video mode icon to select resolution. Settings recommends a conservative starting size and adjusts preview workload under load. ADVANCED exposes internal controls and retains displayed frames; EXPERT removes app-level preview and cooling limits. [Performance modes](docs/PERFORMANCE.md).
+Hold the photo/video mode tab to select resolution. Settings recommends a conservative starting size and adjusts preview workload under load. ADVANCED exposes internal controls and retains displayed frames; EXPERT removes app-level preview and cooling limits. [Performance modes](docs/PERFORMANCE.md).
 
 Experimental **TIME ECHO** inserts past frames using the current fault state. **TAP** accepts a selected image or video after READOUT and before DATA. Source playback and processed-output recording have separate controls. [Experimental features](docs/EXPERIMENTAL_SIGNALS.md).
 

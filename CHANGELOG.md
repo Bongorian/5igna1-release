@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Move readiness/output status above the preview, use icon-only disclosure controls, fit all PRO entries and keep recording time visible when collapsed.
+- Add a matched-density emulator review, original screenshots and repeatable workspace checks.
+
 - Restore the 80 dp shutter in both expanded and collapsed layouts, and label workspace/FAULT disclosure actions with shared icons.
 
 - Reduce control heights, simplify collapsed FAULT and capture tabs, and let landscape controls collapse while moving overlays out of the preview.

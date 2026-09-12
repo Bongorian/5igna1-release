@@ -248,7 +248,9 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "camera-lenses") {
+            if (action == "workspace-review") {
+                result.putString("result", WorkspaceReviewChecks.run(this))
+            } else if (action == "camera-lenses") {
                 result.putString("result", CameraLensChecks.run(this))
             } else if (action == "video-signal") {
                 result.putString("result", VideoSignalChecks.run(this))

@@ -174,6 +174,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             override fun run() {
                 if (recording) {
                     val sec = (SystemClock.elapsedRealtime() - start) / 1000
+                    cameraRoot.recordingClock(sec)
                     status.setText(
                         if (captureRawVideo)
                             String.format(
@@ -455,7 +456,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         val selected = effectState.ids().size
         val applied = uiEffects().size
         val summary = "FAULT " + selected + (if (applied != selected) "/" + applied else "") + " · " +
-            getString(if (faultDeckExpanded) R.string.disclosure_close else R.string.disclosure_open)
+            Math.round(effectState.amount * 100).toString() + "%"
         DisclosureUi.bind(this, faultDeckButton, faultDeckExpanded, false, summary)
         faultDeckButton.contentDescription = getString(R.string.pro_fault_panel) + " · " + getString(R.string.chain_counts, selected, applied)
     }
@@ -676,7 +677,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         else cameraOptions?.raws?.isNotEmpty() == true
 
     fun renderFormat() {
-        val label = if (videoMode) (if (captureRawVideo) "RAW\nZIP" else "MP4")
+        val label = if (videoMode) (if (captureRawVideo) "RAW ZIP" else "MP4")
             else if (capturePhotoFormat == 0) "JPG" else "RAW"
         formatButton.text = label
         formatButton.isEnabled = canCycleFormat() && !recording && !engine.photoBusy
@@ -947,7 +948,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun status(s: String) {
-        if (!recording) status.setText(if (s.startsWith("LIVE ·")) getString(R.string.pro_ready) else s)
+        if (!recording) status.setText(if (s.startsWith("LIVE ·")) cameraReadySummary() else s)
         if (
             s.contains(getString(R.string.ui_failed)) ||
                 s.contains(getString(R.string.ui_could_not)) ||
@@ -990,7 +991,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         } else {
             handler.removeCallbacks(timer)
             status.setTextColor(LIME)
-            status.setText(getString(R.string.pro_ready))
+            status.setText(cameraReadySummary())
         }
     }
 
@@ -1451,10 +1452,12 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         renderCaptureMode()
     }
 
+    private fun cameraReadySummary(): String = getString(R.string.pro_ready) + " · " + engine.description()
+
     override fun fps(value: Float) {
         measuredFps = value
         if (ready && !recording && !engine.cooling)
-            status.setText(if (engine.proError) getString(R.string.pro_rejected) else getString(R.string.pro_ready))
+            status.setText(if (engine.proError) getString(R.string.pro_rejected) else cameraReadySummary())
     }
 
     override fun onKeyDown(key: Int, event: KeyEvent): Boolean {

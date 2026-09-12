@@ -1,0 +1,121 @@
+{
+  "capturedAtUtc": "2026-09-12T14:34:50.850796+00:00",
+  "avd": "Signal_Review_1280_480",
+  "api": 35,
+  "width": 1280,
+  "height": 2772,
+  "densityDpi": 480,
+  "navigation": "three-button",
+  "source": "Android emulator emulated camera with app ROW ERROR; unedited screenshots",
+  "files": [
+    {
+      "path": "ja/01-portrait-auto.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "f543424d1d6d76d55fd57f34cc015762f44c502dad6108b7671a0487a29d59e7"
+    },
+    {
+      "path": "ja/02-portrait-fault.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "a1fcd95457026cd753042b88e80c15003219e4d50c075baff0f3794b75a3e8bf"
+    },
+    {
+      "path": "ja/03-portrait-pro.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "2256a426ea704564b8706ef0a29302b2397faddc5e78e2f91efb1d69c4a2f1ac"
+    },
+    {
+      "path": "ja/04-pro-exposure.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "974f8a720556056bc37b5ee89a0e4fdd35d39b02f3ed518919ee2bc47272a109"
+    },
+    {
+      "path": "ja/05-landscape.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "9ee9963e0dcaf13f06e8549c83f613a973c9ed9f8088c3a67e133f0f5e4118d9"
+    },
+    {
+      "path": "ja/06-landscape-collapsed.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "1285d58aef519cc748bac95b7cc5836db57e296226de7873db8301198355fa0e"
+    },
+    {
+      "path": "ja/07-landscape-video.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "3aefcf6a76d6c0c249002e09226736cff53dd85975c375ff9dd8dc8bf78f8ef3"
+    },
+    {
+      "path": "ja/08-landscape-recording-collapsed.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "4ef4344eaa3ea922cae6789dd5288bf479abf60e0858b3ed0c6635450828618b"
+    },
+    {
+      "path": "ja/09-settings.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "0ad3cd664d2d3175eb07d412d62f80debd4ff33a5ad89e01ae7accf3eff12650"
+    },
+    {
+      "path": "en/01-portrait-auto.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "edee9b324e755c6c824308c2df822638ce19a26727b7f089ccd21e79f8c27fcd"
+    },
+    {
+      "path": "en/02-portrait-fault.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "393e48dd3e84fdc138b97e4e5524d6cbc2c3bdb220668d1839781fd1c6d43482"
+    },
+    {
+      "path": "en/03-portrait-pro.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "bfea8e452755f3fc391a294fcea3ffb392241e96f4a1f77092531e23d64f389e"
+    },
+    {
+      "path": "en/04-pro-exposure.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "63ed755e5b0b68ba4e270cb7f8d05919226a575a189130b173b78dbe5abc9735"
+    },
+    {
+      "path": "en/05-landscape.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "86265f1d4fc56ce91ee1d2f46e1df51b41b33fdc052343ff4fe321160de8b2de"
+    },
+    {
+      "path": "en/06-landscape-collapsed.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "f220c3e7cfd3027f848ad27a89a7c54471fe6d688b5a6c767f1c01a6c8f1d831"
+    },
+    {
+      "path": "en/07-landscape-video.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "7f7068056d0372d8388b9710e2d67758c3c93dd7471e00f1f4a312ac097e02e2"
+    },
+    {
+      "path": "en/08-landscape-recording-collapsed.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "ab6df4e95971fc06a4507d718def5459dab024e23e3e1ff2caba5efd1f5d314b"
+    },
+    {
+      "path": "en/09-settings.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "2a1cebd8323f241bae076a7e4a95b47417b7df9a801e1f66c1e12ad229392d68"
+    }
+  ],
+  "appSourceSha256": "51827f701140e562ea0be26f772ec7e602b6bf0b24976b6803e6f78b1c53315f"
+}

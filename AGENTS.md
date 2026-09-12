@@ -176,3 +176,9 @@
 - Screenshot review: reduce all action-height tiers to 48/40/32/28 dp, make capture modes text tabs and collapsed FAULT visually compact. In landscape move preview overlays out to the controls, hide the preview badge, and provide a collapsible controls column with capture/stop still available. The supplied screenshot may be inspected; no new computer-use or screenshot capture is authorized. Install the checked DEV update over USB.
 
 - Restore the original 80 dp shutter. Landscape collapse must retain the same CaptureButton instance, size, colors and photo/video/stop behavior. Replace ambiguous glyph-only disclosures with consistent drawn chevrons, explicit open/close labels and accessible state for both the workspace and FAULT. Account for connected-device dimensions; install the checked DEV build.
+
+## Owner direction — emulator visual review, 2026-09-12
+
+- The owner explicitly permits computer use again. Create an emulator matching the connected device’s 1280×2772 resolution and effective 480 dpi, capture and inspect screenshots, improve UI with that evidence, and update Git resources. Move readiness/status text out of the preview to a compact top overview. Emulator screenshots and UI instrumentation are authorized; this supersedes the earlier computer-use ban. Keep release/store publication scope unchanged.
+
+- The owner clarified that Open/Close words should not be visible. Convey disclosure through icon placement and typography while retaining accessibility labels and state.

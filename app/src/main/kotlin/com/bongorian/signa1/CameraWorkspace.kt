@@ -18,9 +18,15 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
     private lateinit var foldButton: TextView
     lateinit var captureHome: FrameLayout
     private val foldedCaptureHost = FrameLayout(a)
+    private val foldedClock = a.text("", 11, MainActivity.RED).apply { gravity = Gravity.CENTER; isSingleLine = true; tag = "workspace-recording-clock" }
+
+    fun recordingClock(seconds: Long) {
+        foldedClock.text = String.format(java.util.Locale.US, "● %02d:%02d", seconds / 60, seconds % 60)
+    }
 
     fun buildFoldRail() {
-        foldButton = a.button("›").apply {
+        foldButton = a.button("").apply {
+            tag = "workspace-toggle"
             textSize = 11f
             setPadding(a.dp(4f), 0, a.dp(4f), 0)
             setBackgroundColor(android.graphics.Color.TRANSPARENT)
@@ -30,6 +36,7 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
             }
         }
         foldRail.addView(foldButton, LayoutParams(-1, a.dp(48f)))
+        foldRail.addView(foldedClock, LayoutParams(-1, a.dp(24f)))
         foldRail.addView(android.widget.Space(a), LayoutParams(1, 0, 1f))
         foldRail.addView(foldedCaptureHost, LayoutParams(-1, a.dp(88f)))
         foldRail.addView(android.widget.Space(a), LayoutParams(1, 0, 1f))
@@ -38,13 +45,13 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
 
     private fun arrangePreviewTools() {
         val target = if (wide) previewTools else a.viewfinder
-        for (view in listOf(a.status, a.lensScroll)) {
+        for (view in listOf(a.lensScroll)) {
             if (view.parent === target) continue
             (view.parent as? android.view.ViewGroup)?.removeView(view)
-            if (wide) previewTools.addView(view, LayoutParams(-1, a.dp(if (view === a.status) 24f else ControlSize.COMPACT)))
-            else a.viewfinder.addView(view, FrameLayout.LayoutParams(if (view === a.status) -1 else -2,
-                a.dp(if (view === a.status) 24f else ControlSize.COMPACT), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {
-                bottomMargin = a.dp(if (view === a.status) 48f else 12f)
+            if (wide) previewTools.addView(view, LayoutParams(-1, a.dp(ControlSize.COMPACT)))
+            else a.viewfinder.addView(view, FrameLayout.LayoutParams(-2,
+                a.dp(ControlSize.COMPACT), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {
+                bottomMargin = a.dp(12f)
                 leftMargin = a.dp(12f); rightMargin = a.dp(12f)
             })
         }
@@ -87,17 +94,18 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
             else -> VISIBLE
         }
         foldRail.visibility = if (wide && a.effectEditorSpace == null) VISIBLE else GONE
-        val foldLabel = a.getString(R.string.workspace_controls) + "\n" + a.getString(if (collapsed) R.string.disclosure_open else R.string.disclosure_close)
+        val foldLabel = ""
         DisclosureUi.bind(a, foldButton, !collapsed, true, foldLabel)
         foldButton.contentDescription = a.getString(if (collapsed) R.string.workspace_expand else R.string.workspace_collapse)
         foldButton.tooltipText = foldButton.contentDescription
         foldedCaptureHost.visibility = if (collapsed) VISIBLE else GONE
+        foldedClock.visibility = if (collapsed && a.recording) VISIBLE else GONE
         val captureParent = if (collapsed) foldedCaptureHost else captureHome
         if (a.capture.parent !== captureParent) {
             (a.capture.parent as? android.view.ViewGroup)?.removeView(a.capture)
             captureParent.addView(a.capture, FrameLayout.LayoutParams(a.dp(80f), a.dp(80f), Gravity.CENTER))
         }
-        size(foldRail, LayoutParams(a.dp(if (collapsed) 88f else 64f), -1))
+        size(foldRail, LayoutParams(a.dp(if (collapsed) 88f else 36f), -1))
         val utilityParent = if (wide) controlsColumn else previewColumn
         if (utilityBlock.parent !== utilityParent) {
             (utilityBlock.parent as? LinearLayout)?.removeView(utilityBlock)
