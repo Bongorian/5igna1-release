@@ -31,13 +31,13 @@ internal object ResponsiveUiChecks {
                 val root = a.cameraRoot
                 for (mode in listOf(a.photoTab,a.videoTab,a.tapTab)) check(mode.width>=a.dp(48f))
                 check(a.formatButton.height == a.photoTab.height)
-                check(kotlin.math.abs(a.photoTab.height-a.photoTab.paddingTop-a.photoTab.paddingBottom - a.dp(20f)) <= 1)
+                check(a.photoTab.text.toString() == a.getString(R.string.ui_photo))
                 val label = a.faultSwitch
                 if (!root.wide) {
-                    check(label.maxLines==1 && !label.text.contains('\n'))
+                    check(!label.text.contains('\n'))
                     check(label.paint.measureText("LIVE OFF") <= label.width+1) { "LIVE label clipped: ${label.width}" }
                 }
-                val parent = a.formatButton.parent as View
+                val parent = a.faultDeckButton.parent as View
                 val live = label.parent as View
                 check(live.right <= parent.width) { "Capture controls overflow" }
             }

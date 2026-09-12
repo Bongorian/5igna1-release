@@ -35,3 +35,5 @@ Maintainer entry points: [Development checks](DEVELOPMENT.md), [release procedur
 Historical measurements and submission reports retain their dated scope. Start from [Validation](VALIDATION.md) for evidence, or [Documentation map](DOCUMENTATION.md) for each file’s role, maintenance rules and archive links.
 
 [Unreleased camera app integration](CAMERA_INTEGRATION.md): ordinary camera launch and explicit external JPEG/MP4 capture results.
+
+[Unreleased PRO camera and workspace](PRO_CAMERA.md): supported camera adjustments, control placement and review scope.

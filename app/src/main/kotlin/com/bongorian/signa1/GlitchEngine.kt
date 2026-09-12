@@ -148,6 +148,10 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         activeLens = selected
         cameraSelection = selected.key
         characteristics = selected.characteristics
+        proControls = ProCameraControls(selected)
+        proDesired = ProCameraState.decode(context.getSharedPreferences("signal", 0).getString("proCamera:" + selected.key, null)).copy(aeLock = false, awbLock = false)
+        proReading = ProCameraReading()
+        proError = false
         opticalFocal = OpticalFocal.supported(selected.opticalFocals,
             context.getSharedPreferences("signal",0).getFloat("opticalFocal:"+selected.key,selected.focalMm ?: 0f))
         val id = selected.cameraId
@@ -310,6 +314,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             ) {
                 if (s === session) {
                     val sensor = selectedResult(result) ?: return
+                    proReading = ProCameraControls.reading(sensor)
                     faultInputs.capture(sensor)
                     val ns = sensor.get<Long?>(CaptureResult.SENSOR_TIMESTAMP)
                     if (ns != null) {
@@ -513,6 +518,50 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     @Volatile var opticalFocal: Float? = null
         private set
 
+    @Volatile var proMode: Boolean = context.getSharedPreferences("signal", 0).getBoolean("proCameraMode", false)
+        private set
+    @Volatile var proDesired = ProCameraState()
+        private set
+    @Volatile var proReading = ProCameraReading()
+        private set
+    @Volatile var proControls: ProCameraControls? = null
+        private set
+    @Volatile var proError = false
+        private set
+    val proContext: ProCameraContext get() = ProCameraContext(videoMode,
+        if (videoMode) (if (rawVideoMode()) settings.rawVideoFps else videoChoice?.fps ?: 30) else requestedPreviewCameraFps,
+        runCatching { cameraStreamSize?.let { options?.map?.getOutputMinFrameDuration(SurfaceTexture::class.java, it) } ?: 0L }.getOrDefault(0L),
+        videoMode && videoChoice?.highSpeed == true)
+    val proActive: Boolean get() = proMode && tapInput == null && externalRequest == null && !proContext.highSpeed
+    val proEffective: ProCameraState get() = if (proActive)
+        proDesired.resolve(proControls?.capabilities ?: ProCameraCapabilities(), proContext) else ProCameraState()
+
+    fun setProMode(enabled: Boolean) {
+        gl.post {
+            if (recording || photoBusy || externalRequest != null || tapInput != null) return@post
+            proMode = enabled
+            if (!enabled) proDesired = proDesired.copy(aeLock = false, awbLock = false)
+            proError = false
+            context.getSharedPreferences("signal", 0).edit().putBoolean("proCameraMode", enabled).apply()
+            updateRequest()
+        }
+    }
+
+    fun setProState(cameraKey: String, value: ProCameraState) {
+        gl.post {
+            if (recording || photoBusy || externalRequest != null || tapInput != null || cameraKey != cameraSelection) return@post
+            proDesired = value
+            proError = false
+            context.getSharedPreferences("signal", 0).edit().putString("proCamera:" + cameraKey, value.copy(aeLock = false, awbLock = false).encode()).apply()
+            updateRequest()
+        }
+    }
+
+    private fun proWaitMs(base: Long): Long {
+        val extra = if (proActive && proEffective.manualExposure) proEffective.exposureNs / 1_000_000 else 0L
+        return maxOf(base, extra * 3 + 3000)
+    }
+
     fun setOpticalFocal(value: Float) {
         gl.post {
             val lens = activeLens ?: return@post
@@ -540,8 +589,10 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
 
     private fun cameraRequest(device: CameraDevice, template: Int): CaptureRequest.Builder {
         val physical = activeLens?.physicalId
-        return if (physical == null) device.createCaptureRequest(template)
+        val builder = if (physical == null) device.createCaptureRequest(template)
             else device.createCaptureRequest(template,setOf(physical))
+        proControls?.remember(template, builder)
+        return builder
     }
 
     private fun output(surface: Surface): OutputConfiguration = OutputConfiguration(surface).apply {
@@ -725,7 +776,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                             max(
                                 previewStartedMs,
                                 lastPreviewAckMs,
-                            ) > 6000
+                            ) > proWaitMs(6000)
                 ) {
                     scheduleReconnect()
                     if (reconnectAttempts >= 3 && !reconnectPending) return
@@ -894,7 +945,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                     cooling ||
                         request == null ||
                         session == null ||
-                        session is CameraConstrainedHighSpeedCaptureSession
+                        session is CameraConstrainedHighSpeedCaptureSession || proActive && proEffective.manualFocus
                 )
                     return@Runnable
                 try {
@@ -1273,17 +1324,17 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
     }
 
     fun applyControls(builder: CaptureRequest.Builder, still: Boolean) {
+        proControls?.reset(builder, if (still) CameraDevice.TEMPLATE_STILL_CAPTURE
+            else if (videoMode) CameraDevice.TEMPLATE_RECORD else CameraDevice.TEMPLATE_PREVIEW)
         builder.set<Int?>(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO)
         val af = characteristics!!.get<IntArray?>(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES)
         val desired =
-            if (still) CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
+            if (still || !videoMode) CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
             else CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO
-        if (af != null)
-            for (value in af) if (value == desired)
-                builder.set<Int?>(
-                    CaptureRequest.CONTROL_AF_MODE,
-                    desired,
-                )
+        if (af != null && desired in af) {
+            builder.set(CaptureRequest.CONTROL_AF_MODE, desired)
+            proControls?.autofocus(builder, desired)
+        }
         if (true == characteristics!!.get<Boolean?>(CameraCharacteristics.FLASH_INFO_AVAILABLE))
             builder.set<Int?>(
                 CaptureRequest.FLASH_MODE,
@@ -1306,6 +1357,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             builder.set(CaptureRequest.CONTROL_ZOOM_RATIO,1f)
         if (physicalCrop) builder.setPhysicalCameraKey(CaptureRequest.SCALER_CROP_REGION,crop,physical!!)
         else builder.set(CaptureRequest.SCALER_CROP_REGION,crop)
+        if (proActive) proControls?.apply(builder, proDesired, proContext)
     }
 
     fun updateRequest() {
@@ -1362,7 +1414,13 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                 session!!.setRepeatingRequest(request!!.build(), timingCallback, gl)
             }
         } catch (e: Exception) {
-            error(context.getString(R.string.ui_could_not_apply_camera_settings), e)
+            if (proActive) {
+                proMode = false
+                proError = true
+                context.getSharedPreferences("signal", 0).edit().putBoolean("proCameraMode", false).apply()
+                status(context.getString(R.string.pro_rejected))
+                updateRequest()
+            } else error(context.getString(R.string.ui_could_not_apply_camera_settings), e)
         }
     }
 
@@ -1854,7 +1912,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                                 status(context.getString(R.string.ui_photo_capture_timed_out))
                             }
                         },
-                        20000,
+                        proWaitMs(20000),
                     )
                 } catch (e: Exception) {
                     readback?.recycle()

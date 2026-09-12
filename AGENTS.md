@@ -164,3 +164,7 @@
 ## Owner direction — camera and chain controls, 2026-09-12
 
 - On `codex/camera-chain-controls`, make the lower-right icon switch front/rear and the viewfinder button choose lenses on that side or advertised optical focal lengths. Keep digital zoom prohibited. Show TAP controls only with Experimental enabled; suppress confirmation vibration during audio-enabled recording. Refresh chain selection, adjustment and inspection for readability, with separate selected/applied counts. Keep the computer-use ban; use CLI checks, preserve published artifacts and push checked work. No new release or device installation requested.
+
+## Owner direction — PRO camera workspace, 2026-09-12
+
+- Implement capability-aware real camera adjustments in a PRO shooting mode and reorganize the capture UI for later owner review on `codex/pro-camera-workspace`. Keep camera controls separate from FAULT and processing modes, preserve native optical framing and unsupported-device fallbacks. Stop the wireless-device investigation. Continue CLI and offscreen verification under the computer-use prohibition, provide a DEV review build, and push checked work. No new release is requested.

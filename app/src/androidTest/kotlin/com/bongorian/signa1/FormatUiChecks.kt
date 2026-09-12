@@ -12,8 +12,11 @@ internal object FormatUiChecks {
         android.os.SystemClock.sleep(500)
         test.runOnMainSync {
             val modes = a.photoTab.parent as android.view.View
-            val toolbar = a.formatButton.parent as CaptureToolbar
-            check(a.formatButton.right <= modes.left && modes.right <= toolbar.live.left)
+            check(modes is CaptureToolbar)
+            check(a.formatButton.parent !== modes)
+            check(a.formatButton.width >= a.dp(44f) && a.proModeButton.width >= a.dp(44f))
+            check(a.photoTab.right <= a.videoTab.left)
+            check(kotlin.math.abs((a.photoTab.left + a.videoTab.right) / 2 - modes.width / 2) <= 1)
             val footer = a.capture.parent as android.view.View
             check(kotlin.math.abs(a.capture.left+a.capture.width/2-footer.width/2)<=1)
         }

@@ -40,3 +40,5 @@
 [文書の役割・整理方針](DOCUMENTATION.ja.md) · [Play自動アップロード](PLAY_AUTOMATION.ja.md)。過去の検証値は当時のソース・端末・条件に限定して参照してください。
 
 [未リリースのカメラ連携](CAMERA_INTEGRATION.ja.md)：通常のカメラ起動と、明示指定によるJPEG／MP4の撮影結果返却。
+
+[未リリースのPRO撮影・画面再配置](PRO_CAMERA.ja.md)：対応するカメラ調整、操作配置とレビュー範囲。

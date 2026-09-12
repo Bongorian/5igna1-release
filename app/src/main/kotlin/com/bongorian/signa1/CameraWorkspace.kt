@@ -45,7 +45,7 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
         val content = controlsScroll.getChildAt(0)
         content.measure(MeasureSpec.makeMeasureSpec(controlW, MeasureSpec.EXACTLY),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
-        val controlH = (content.measuredHeight + a.dp(88f)).coerceAtMost((h * .55f).toInt())
+        val controlH = (content.measuredHeight + a.dp(136f)).coerceAtMost((h * .55f).toInt())
         size(previewColumn, if (wide) LayoutParams(0, -1, 1f) else LayoutParams(-1, 0, 1f))
         size(controlsColumn, if (wide) LayoutParams(controlW, -1).apply { leftMargin = a.dp(12f) }
             else LayoutParams(-1, controlH))

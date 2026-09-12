@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add capability-aware PRO camera controls: shutter/ISO, EV/AE lock, WB, manual focus and supported lens adjustments, with per-lens preferences and AUTO restoration.
+- Reorganize capture setup, measured camera values, collapsible FAULT controls and labeled capture modes around a centered shutter; preview swipes now preserve the chain.
+
 - Separate front/rear switching from lens selection; keep optical adjustments limited to advertised focal lengths.
 - Hide TAP controls until enabled and suppress confirmation vibration during audio-enabled recording.
 - Refresh chain selection and inspection with descriptions, separate detail actions and selected/applied counts.

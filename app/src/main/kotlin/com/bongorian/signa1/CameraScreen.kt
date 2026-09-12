@@ -73,7 +73,27 @@ internal fun MainActivity.buildUi() {
     formatButton.setPadding(dp(2f), 0, dp(2f), 0)
     formatButton.setOnClickListener(OnClickListener@{ v: View? -> cycleFormat() })
     torchButton = iconButton(R.drawable.ic_flash, getString(R.string.ui_light_off))
-    header.addView(torchButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    header.addView(torchButton, LinearLayout.LayoutParams(dp(44f), dp(48f)))
+    header.addView(formatButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    count = text("—", 12, MainActivity.WHITE).apply {
+        gravity = Gravity.CENTER
+        setSingleLine(true)
+        ellipsize = TextUtils.TruncateAt.END
+        contentDescription = getString(R.string.pro_output_size)
+        setOnClickListener { ResolutionPicker.show(this@buildUi, videoMode) }
+    }
+    header.addView(count, LinearLayout.LayoutParams(0, dp(48f), 1f))
+    proModeButton = button("AUTO").apply {
+        textSize = 11f
+        contentDescription = getString(R.string.pro_mode)
+        setOnClickListener {
+            if (!recording && !engine.photoBusy && !tapMode && externalCapture == null) {
+                engine.setProMode(!engine.proMode)
+                handler.postDelayed({ renderProCamera() }, 100)
+            }
+        }
+    }
+    header.addView(proModeButton, LinearLayout.LayoutParams(dp(64f), dp(48f)))
     renderTorch()
     torchButton.setOnClickListener(
         OnClickListener@{ v: View? ->
@@ -82,11 +102,9 @@ internal fun MainActivity.buildUi() {
         }
     )
     geoButton = iconButton(R.drawable.ic_location, getString(R.string.ui_capture_location_settings))
-    header.addView(geoButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     geoButton.setOnClickListener(OnClickListener@{ v: View? -> showLocation() })
     renderGeo()
     micButton = iconButton(R.drawable.ic_mic, getString(R.string.ui_audio_on))
-    header.addView(micButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     renderAudio()
     micButton.setOnClickListener(
         OnClickListener@{ v: View? ->
@@ -100,26 +118,15 @@ internal fun MainActivity.buildUi() {
     val settingsButton =
         iconButton(R.drawable.ic_settings, getString(R.string.ui_capture_and_language_settings))
     settingsButton.tag = "guide-settings"
-    header.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
     header.addView(settingsButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     settingsButton.setOnClickListener(OnClickListener@{ v: View? -> showSettings() })
     val info = row()
     utility.addView(info, LinearLayout.LayoutParams(-1, dp(27f)))
-    status = text("CONNECTING…", 11, LIME)
+    status = text(getString(R.string.ui_preparing_the_camera), 11, MUTED)
     status.setTypeface(Typeface.MONOSPACE)
     status.setSingleLine(true)
     status.setEllipsize(TextUtils.TruncateAt.END)
     info.addView(status, LinearLayout.LayoutParams(0, -1, 1f))
-    count = text("FULL RES", 10, MUTED)
-    count.setOnClickListener(OnClickListener@{ v: View? -> showSettings() })
-    count.setTypeface(Typeface.MONOSPACE)
-    count.setSingleLine(true)
-    count.setEllipsize(TextUtils.TruncateAt.END)
-    count.setGravity(Gravity.END or Gravity.CENTER_VERTICAL)
-    val countParams = LinearLayout.LayoutParams(dp(100f), -1)
-    countParams.leftMargin = dp(10f)
-    count.setVisibility(View.GONE)
-    info.addView(count, countParams)
     // Fit the actual signal aspect without cropping or stretching.
     previewArea = FrameLayout(this)
     previewColumn.addView(previewArea, LinearLayout.LayoutParams(-1, 0, 1f))
@@ -161,6 +168,14 @@ internal fun MainActivity.buildUi() {
     viewfinder.addView(preview, FrameLayout.LayoutParams(-1, -1))
     overlay = Overlay()
     viewfinder.addView(overlay, FrameLayout.LayoutParams(-1, -1))
+    micButton.background = bg(0xAA101410.toInt(), 0)
+    geoButton.background = bg(0xAA101410.toInt(), 0)
+    viewfinder.addView(micButton, FrameLayout.LayoutParams(dp(44f), dp(44f), Gravity.TOP or Gravity.END).apply {
+        topMargin = dp(8f); rightMargin = dp(8f)
+    })
+    viewfinder.addView(geoButton, FrameLayout.LayoutParams(dp(44f), dp(44f), Gravity.TOP or Gravity.END).apply {
+        topMargin = dp(8f); rightMargin = dp(58f)
+    })
     tapControls = row()
     tapControls.visibility = View.GONE
     tapControls.setPadding(dp(8f), dp(4f), dp(8f), dp(8f))
@@ -186,11 +201,11 @@ internal fun MainActivity.buildUi() {
                 if (e.action == MotionEvent.ACTION_UP) {
                     val diff = e.getX() - downX
                     if (abs(diff) > dp(60f)) {
-                        chooseEffect(nextAvailable(if (diff < 0) 1 else -1))
+                        setVideo(diff < 0)
                     } else {
                         v.performClick()
-                        overlay.focusX = e.getX()
-                        overlay.focusY = e.getY()
+                        overlay.focusX = if (tapMode || engine.proEffective.manualFocus) -1f else preview.width / 2f
+                        overlay.focusY = preview.height / 2f
                         overlay.invalidate()
                         handler.postDelayed(
                             Runnable@{
@@ -218,20 +233,27 @@ internal fun MainActivity.buildUi() {
     lensButton.setPadding(dp(12f),0,dp(12f),0)
     lensButton.setBackground(bg(-0x33ede8ee,0))
     lensButton.setOnClickListener { showCameras() }
-    viewfinder.addView(lensButton,FrameLayout.LayoutParams(-2,dp(44f),Gravity.BOTTOM or Gravity.START).apply {
-        leftMargin=dp(12f);bottomMargin=dp(12f)
+    viewfinder.addView(lensButton,FrameLayout.LayoutParams(-2,dp(44f),Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {
+        bottomMargin=dp(12f)
     })
-    val effects = LinearLayout(this)
-    effects.setOrientation(LinearLayout.VERTICAL)
-    effects.setPadding(dp(2f), dp(10f), dp(2f), dp(2f))
-    val shade =
-        GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(0x00101410, -0x11f5f3f5, -0x5f5f3f5),
-        )
-    effects.setBackgroundColor(BG)
-    val ep = FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM)
-    controlBody.addView(effects, LinearLayout.LayoutParams(-1, -2))
+    proStrip = buildProStrip()
+    controlBody.addView(proStrip, LinearLayout.LayoutParams(-1, -2))
+    val faultBar = row()
+    controlBody.addView(faultBar, LinearLayout.LayoutParams(-1, dp(48f)).apply { topMargin = dp(6f) })
+    faultDeckButton = button("").apply {
+        gravity = Gravity.CENTER_VERTICAL or Gravity.START
+        textSize = 12f
+        setOnClickListener { faultDeckExpanded = !faultDeckExpanded; renderFaultDeck() }
+    }
+    faultBar.addView(faultDeckButton, LinearLayout.LayoutParams(0, -1, 1f))
+    faultDeck = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; visibility = View.GONE }
+    controlBody.addView(faultDeck, LinearLayout.LayoutParams(-1, -2))
+    val effects = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        setPadding(dp(2f), dp(10f), dp(2f), dp(2f))
+        setBackgroundColor(BG)
+    }
+    faultDeck.addView(effects, LinearLayout.LayoutParams(-1, -2))
     val chainRow = row()
     effects.addView(chainRow, LinearLayout.LayoutParams(-1, dp(48f)))
     val scroll = HorizontalScrollView(this)
@@ -301,27 +323,13 @@ internal fun MainActivity.buildUi() {
             }
         }
     )
-    val tools = CaptureToolbar(this)
-    controlBody.addView(tools, LinearLayout.LayoutParams(-1, -2))
-    val modeGroup = row().apply {
-        background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
-        setPadding(dp(2f), 0, dp(2f), 0)
-        accessibilityDelegate = object : View.AccessibilityDelegate() {
-            override fun onInitializeAccessibilityNodeInfo(host: View, info: android.view.accessibility.AccessibilityNodeInfo) {
-                super.onInitializeAccessibilityNodeInfo(host, info)
-                info.collectionInfo = android.view.accessibility.AccessibilityNodeInfo.CollectionInfo.obtain(
-                    1, if (settings.experimentalSignals) 3 else 2, false,
-                    android.view.accessibility.AccessibilityNodeInfo.CollectionInfo.SELECTION_MODE_SINGLE)
-            }
-        }
-    }
+    val modes = CaptureToolbar(this)
+    controlsColumn.addView(modes, LinearLayout.LayoutParams(-1, dp(48f)))
     photoTab = CaptureModeButton(this, R.drawable.ic_mode_photo, getString(R.string.ui_photo))
     videoTab = CaptureModeButton(this, R.drawable.ic_mode_video, getString(R.string.ui_video))
     tapTab = CaptureModeButton(this, R.drawable.ic_mode_tap, getString(R.string.tap_mode))
     tapTab.visibility = if (externalCapture == null && settings.experimentalSignals) View.VISIBLE else View.GONE
-    for (mode in listOf(photoTab, videoTab, tapTab)) modeGroup.addView(mode, LinearLayout.LayoutParams(dp(48f), dp(48f)))
-    tools.modes = modeGroup
-    tools.addView(formatButton, LinearLayout.LayoutParams(dp(52f), -1))
+    for (mode in listOf(photoTab, videoTab, tapTab)) modes.addView(mode, LinearLayout.LayoutParams(dp(96f), dp(48f)))
     tapTab.setOnClickListener { if (!tapMode) { if (tapInput != null) enterTap(tapInput!!) else chooseTap() } }
     photoTab.setOnClickListener { setVideo(false) }
     videoTab.setOnClickListener { setVideo(true) }
@@ -329,26 +337,21 @@ internal fun MainActivity.buildUi() {
     videoTab.setOnLongClickListener { ResolutionPicker.show(this, true); true }
     photoTab.tooltipText = getString(R.string.ui_photo) + " · " + getString(R.string.resolution_hold)
     videoTab.tooltipText = getString(R.string.ui_video) + " · " + getString(R.string.resolution_hold)
-    tools.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
-    tools.addView(modeGroup, LinearLayout.LayoutParams(-2, dp(56f)))
-    tools.addView(Space(this), LinearLayout.LayoutParams(0, 1, 1f))
     val live = row()
-    tools.live = live
-    live.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
-    tools.addView(live, LinearLayout.LayoutParams(-2, -1))
+    live.background = bg(PANEL, 0)
+    faultBar.addView(live, LinearLayout.LayoutParams(-2, -1).apply { leftMargin = dp(8f) })
     faultSwitch = ToggleButton(this)
-    faultSwitch.setTextOn("LIVE\nON")
-    faultSwitch.setTextOff("LIVE\nOFF")
-    typography(faultSwitch, 9, true)
+    faultSwitch.setTextOn("LIVE ON")
+    faultSwitch.setTextOff("LIVE OFF")
+    typography(faultSwitch, 11, true)
     faultSwitch.setAllCaps(false)
     faultSwitch.setBackgroundColor(Color.TRANSPARENT)
     faultSwitch.setPadding(0, 0, 0, 0)
     faultSwitch.setChecked(faultConfig.enabled)
     faultSwitch.setTextColor(if (faultConfig.enabled) LIME else MUTED)
     faultSwitch.setContentDescription(getString(R.string.ui_toggle_live_fault))
-    live.addView(faultSwitch, LinearLayout.LayoutParams(dp(64f), -1))
+    live.addView(faultSwitch, LinearLayout.LayoutParams(dp(84f), -1))
     val reactions = iconButton(R.drawable.ic_tune, getString(R.string.ui_live_fault_settings))
-    tools.tune = reactions
     reactions.setPadding(dp(11f), dp(11f), dp(11f), dp(11f))
     live.addView(reactions, LinearLayout.LayoutParams(dp(42f), -1))
     reactions.setOnClickListener(OnClickListener@{ v: View? -> FaultDialog.show(this) })
@@ -361,7 +364,7 @@ internal fun MainActivity.buildUi() {
     val timeRow = LinearLayout.LayoutParams(-1, dp(44f))
     timeRow.topMargin = dp(8f)
     timeRow.bottomMargin = dp(4f)
-    controlBody.addView(liveTransport, timeRow)
+    faultDeck.addView(liveTransport, timeRow)
     liveHold = button(getString(R.string.live_pause))
     val hit = button(getString(R.string.live_trigger))
     val rewind = button(getString(R.string.live_reset))
@@ -386,7 +389,7 @@ internal fun MainActivity.buildUi() {
     echoButton = button(getString(R.string.echo_trigger))
     echoButton.contentDescription = getString(R.string.echo_hint)
     echoButton.setOnClickListener { engine.triggerEcho() }
-    controlBody.addView(echoButton, LinearLayout.LayoutParams(-1, dp(44f)))
+    faultDeck.addView(echoButton, LinearLayout.LayoutParams(-1, dp(44f)))
     val controls = row()
     controls.setGravity(Gravity.CENTER)
     controlsColumn.addView(controls, LinearLayout.LayoutParams(-1, dp(88f)))
@@ -406,7 +409,7 @@ internal fun MainActivity.buildUi() {
     flipButton =
         iconButton(
             R.drawable.ic_camera_flip,
-            getString(R.string.lens_select),
+            getString(R.string.camera_flip_facing),
         )
     flipButton.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), dp(2f))
     controls.addView(flipButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
@@ -418,5 +421,6 @@ internal fun MainActivity.buildUi() {
     }
     renderEffects()
     renderCaptureMode()
+    renderFaultDeck()
     savePrefs()
 }

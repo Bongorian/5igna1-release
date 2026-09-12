@@ -42,6 +42,10 @@ class DeviceChecks : Instrumentation() {
         var video = false
         var launchMonitor: ActivityMonitor? = null
         try {
+            if (args!!.getString("action", "") == "pro-camera") {
+                result.putString("result", ProCameraDeviceChecks.run(targetContext))
+                return
+            }
             if (args!!.getString("action", "") == "network-render") {
                 // Offscreen synthetic GL fixtures only: no activity, screen or accessibility APIs.
                 result.putString("result", FaultRenderChecks.run(targetContext, false, true))

@@ -38,10 +38,13 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
     private var changed = false
     private var level = 55
     private var restoreHost = true
+    private val previousFaultDeck = activity.faultDeckExpanded
     val targetBounds = RectF()
 
     fun show() {
         val a = activity
+        a.faultDeckExpanded = true
+        a.renderFaultDeck()
         host?.hide()
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         root = FrameLayout(a).apply { tag = "tutorial" }
@@ -137,6 +140,8 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
         dialog.setContentView(root)
         dialog.setCanceledOnTouchOutside(false)
         dialog.setOnDismissListener {
+            a.faultDeckExpanded = previousFaultDeck
+            a.renderFaultDeck()
             if (restoreHost && !a.isFinishing && !a.isDestroyed) host?.show()
             a.tutorialClosed()
         }

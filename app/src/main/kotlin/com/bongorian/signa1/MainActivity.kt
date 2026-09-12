@@ -59,6 +59,13 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     lateinit var strengthValue: TextView
     lateinit var photoTab: CaptureModeButton
     lateinit var videoTab: CaptureModeButton
+    lateinit var proModeButton: TextView
+    lateinit var proReadingLabel: TextView
+    lateinit var proStrip: LinearLayout
+    var proCameraDialog: ProCameraDialog? = null
+    lateinit var faultDeck: LinearLayout
+    lateinit var faultDeckButton: TextView
+    var faultDeckExpanded = false
     lateinit var tapControls: LinearLayout
     lateinit var tapTab: CaptureModeButton
     lateinit var tapPlay: TextView
@@ -199,6 +206,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         if (CameraIntents.returnsCapture(intent.action))
             externalCapture = ExternalCapture(this, b?.getBundle("external.capture"))
         val prefs = getSharedPreferences("signal", 0)
+        faultDeckExpanded = b?.getBoolean("workspace.faultExpanded", false) ?: false
         sound = externalCapture?.model?.sound ?: prefs.getBoolean("sound", false)
         advancedMode = prefs.getBoolean("advancedMode", false)
         val last = prefs.getString("last", null)
@@ -281,6 +289,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     override fun onSaveInstanceState(out: Bundle) {
         super.onSaveInstanceState(out)
+        out.putBoolean("workspace.faultExpanded", faultDeckExpanded)
         externalCapture?.let { it.remember(); out.putBundle("external.capture", it.model.snapshot()) }
         out.putBundle("feedback.draft", FeedbackDialog.save(this))
         out.putInt("tutorial.page", if (tutorial == null) tutorialPage else tutorial!!.page)
@@ -437,6 +446,15 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         commitEffects(effectState.single(id))
     }
 
+    fun renderFaultDeck() {
+        faultDeck.visibility = if (faultDeckExpanded) View.VISIBLE else View.GONE
+        val selected = effectState.ids().size
+        val applied = uiEffects().size
+        faultDeckButton.text = "FAULT  ·  " + selected + (if (applied != selected) "/" + applied else "") +
+            "   " + Math.round(effectState.amount * 100) + "%   " + (if (faultDeckExpanded) "⌃" else "⌄")
+        faultDeckButton.contentDescription = getString(R.string.pro_fault_panel) + " · " + getString(R.string.chain_counts, selected, applied)
+    }
+
     fun confirmHaptic(view: View, kind: Int) {
         if (!((recording || engine.recording) && !captureRawVideo &&
                 (sound || tapMode && engine.tapSource?.hasAudio == true)))
@@ -544,6 +562,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             selectedRoute.addView(empty, LinearLayout.LayoutParams(-2, dp(44f)))
             empty.setOnClickListener(OnClickListener@{ v: View? -> showChain() })
         }
+        renderFaultDeck()
         val tag = viewfinder.findViewWithTag<TextView>("fx")
         tag.setText(if (original) "  RAW / ORIGINAL  " else "  FX / " + active.size + "  ")
         strength.setProgress(Math.round(effectState.amount * 100))
@@ -568,6 +587,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun liveFrame(frame: EffectState.Frame) {
+        renderProCamera()
+        proCameraDialog?.update()
         if (tapMode) {
             tapPlay.setText(if (engine.tapSource?.playing == true) R.string.tap_pause else R.string.tap_play)
             tapPlay.isEnabled = engine.tapSource?.ready == true
@@ -699,6 +720,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun renderCaptureMode() {
+        renderProCamera()
         renderAudio()
         val value = videoMode
         tapTab.visibility = if (externalCapture == null && settings.experimentalSignals) View.VISIBLE else View.GONE
@@ -920,7 +942,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     override fun status(s: String) {
-        if (!recording) status.setText(s)
+        if (!recording) status.setText(if (s.startsWith("LIVE ·")) getString(R.string.pro_ready) else s)
         if (
             s.contains(getString(R.string.ui_failed)) ||
                 s.contains(getString(R.string.ui_could_not)) ||
@@ -936,6 +958,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     override fun recording(value: Boolean) {
         recording = value
+        renderProCamera()
         renderFormat()
         for (mode in listOf(photoTab, videoTab, tapTab)) {
             mode.isEnabled = !value && externalCapture == null
@@ -961,7 +984,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         } else {
             handler.removeCallbacks(timer)
             status.setTextColor(LIME)
-            status.setText("LIVE · " + engine.description())
+            status.setText(getString(R.string.pro_ready))
         }
     }
 
@@ -1017,6 +1040,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         galleryButton.pause()
         if (mediaPreview != null) mediaPreview!!.dismiss()
         if (liveChainDialog != null) liveChainDialog!!.dismiss()
+        proCameraDialog?.dialog?.dismiss()
         if (liveEditor != null) liveEditor!!.dialog!!.dismiss()
         cancelEffectPreview()
         savePrefs()
@@ -1168,6 +1192,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     fun renderAudio() {
         if (micButton != null) {
+            micButton.visibility = if (videoMode) View.VISIBLE else View.GONE
             val silent = videoMode && captureRawVideo
             val sourceAudio = tapMode && engine.tapSource?.hasAudio == true
             val enabled = sourceAudio || sound && !silent
@@ -1199,6 +1224,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     fun renderGeo() {
         if (geoButton != null) {
+            geoButton.visibility = if (geo.enabled && externalCapture == null) View.VISIBLE else View.GONE
             geoButton.setColorFilter(if (geo.enabled) LIME else MUTED)
             geoButton.setSelected(geo.enabled)
             val label = getString(R.string.ui_capture_location_settings) + " · " + geo.label()
@@ -1406,12 +1432,12 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         count.setText(
             if (videoMode)
                 (if (captureRawVideo) "RAW · " else "") +
-                    requireNotNull(engine.videoChoice).fps +
-                    " fps / ⚙"
+                    (if (captureRawVideo) settings.rawVideoFps else requireNotNull(engine.videoChoice).fps) +
+                    " fps"
             else
                 String.format(
                     Locale.US,
-                    "%.1f MP / ⚙",
+                    "%.1f MP",
                     w * h.toDouble() / 1e6,
                 )
         )
@@ -1422,7 +1448,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     override fun fps(value: Float) {
         measuredFps = value
         if (ready && !recording && !engine.cooling)
-            status.setText("LIVE · " + engine.description() + " · " + engine.loadSummary())
+            status.setText(if (engine.proError) getString(R.string.pro_rejected) else getString(R.string.pro_ready))
     }
 
     override fun onKeyDown(key: Int, event: KeyEvent): Boolean {
