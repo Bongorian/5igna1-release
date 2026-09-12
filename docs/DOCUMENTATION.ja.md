@@ -28,3 +28,5 @@
 [1.6.1 release follow-up: GPU defaults and TAP verification](audit/GPU_DETAIL_LIGHT.md).
 
 - [カメラ連携](CAMERA_INTEGRATION.ja.md) / [English](CAMERA_INTEGRATION.md)：未リリースの起動・結果返却仕様と別UIDでの検証。
+
+- [内部パラメータと時間モデルの棚卸し](design/TIME_MODEL_REVIEW.ja.md) / [English](design/TIME_MODEL_REVIEW.md)、[全項目と検証結果](audit/TIME_MODEL_EVIDENCE.md)：2026-09-12、dd7f027の調査と改善案。アプリ本体の挙動変更は含みません。

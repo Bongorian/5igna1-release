@@ -72,3 +72,5 @@ Keep historical measurements, hashes and submitted metadata intact. Label the so
 [1.6.1 release follow-up: GPU defaults and TAP verification](audit/GPU_DETAIL_LIGHT.md).
 
 - [Camera integration](CAMERA_INTEGRATION.md) / [日本語](CAMERA_INTEGRATION.ja.md): unreleased camera intents, caller contracts and separate-UID verification.
+
+- [Internal parameters and time-model review](design/TIME_MODEL_REVIEW.md) / [日本語](design/TIME_MODEL_REVIEW.ja.md), [generated catalog and evidence](audit/TIME_MODEL_EVIDENCE.md): 2026-09-12 audit of dd7f027; proposed clock/parameter contract, with no production behavior change.

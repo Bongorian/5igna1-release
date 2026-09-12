@@ -148,3 +148,7 @@
 ## Owner direction — Network display clarity, 2026-09-12
 
 - Improve Network display with separate freeze interval/duration controls and source-frame cadence/resolution degradation, replacing its synthetic noise overlay. Work on `codex/network-display-clarity`, preserve CRT/LED settings, and push verified work. No new release requested. The computer-use prohibition remains in force; CLI builds and offscreen synthetic rendering tests are permitted.
+
+## Owner direction — time-model audit, 2026-09-12
+
+- Inventory each model’s internal parameters and assess consistency with the time model on `codex/time-model-audit`. Deliver source-based findings, reproducible characterization and a proposed implementation order. This request is assessment, not authorization to redesign production timing or release another build. Keep the installed Pixel build and the computer-use prohibition in place; push completed checked audit work.
