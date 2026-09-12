@@ -861,8 +861,9 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         gl.post(
             Runnable@{
                 if (recording || photoBusy || !attached) return@Runnable
-                front = !front
-                cameraSelection = lenses.firstOrNull { it.front == front && it.physicalId == null }?.key.orEmpty()
+                val target = lenses.firstOrNull { it.front != (activeLens?.front ?: front) } ?: return@Runnable
+                front = target.front
+                cameraSelection = target.key
                 torch = false
                 restart()
             }

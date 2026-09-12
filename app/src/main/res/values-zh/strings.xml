@@ -287,8 +287,8 @@
     <string name="fault_description_9" formatted="false">"将相机亮度映射为伪彩色。"</string>
     <string name="fault_description_10" formatted="false">"解码图像的块量化与地址错误模型。"</string>
     <string name="fault_description_11" formatted="false">"解码区域丢失与复用模型，不修改实际数据包。"</string>
-    <string name="fault_description_12" formatted="false">"磁带响应特性，以及循迹、滑移和信号丢失。"</string>
-    <string name="fault_description_13" formatted="false">"扫描、荧光显示特性，以及会聚和同步故障。"</string>
+    <string name="fault_description_12">磁带、DVD、模拟或数字媒体的响应与故障。</string>
+    <string name="fault_description_13">CRT、LCD、Network或LED显示的响应与故障。</string>
     <string name="ui_random_chain" formatted="false">"随机效果链"</string>
     <string name="fault_chain_editor" formatted="false">"效果链 · 实时预览"</string>
     <string name="fault_add_remove" formatted="false">"添加 / 移除"</string>
@@ -300,7 +300,7 @@
     <string name="fault_requires_rgb">此效果需要处理后的图像。切换拍摄格式即可使用，RAW 效果链设置会保留。</string>
     <string name="fault_switch_mp4">切换至 MP4 并使用</string>
     <string name="fault_switch_jpeg">切换至 JPG 并使用</string>
-    <string name="fault_catalog_hint">点按添加或移除 · 点按效果链中的效果进行调整</string>
+    <string name="fault_catalog_hint">点击条目选择或移除。打开详情查看说明并调整。处理顺序固定。</string>
     <string name="ui_invalid_number">请输入显示范围内的有限数值。</string>
     <string name="ui_advanced_mode">ADVANCED MODE</string>
     <string name="ui_advanced_hint">AUTO随模型更新，FIX固定数值。点击数字可直接输入。</string>
@@ -528,7 +528,7 @@
     <string name="lens_ultrawide">超广角</string>
     <string name="lens_wide">广角</string>
     <string name="lens_telephoto">长焦</string>
-    <string name="lens_hint">选择设备公开的镜头或传感器。不使用数码变焦。仅当所选镜头支持光学焦距调整时显示控件。分辨率和RAW支持因相机而异。</string>
+    <string name="lens_hint">选择当前朝向的镜头。右下角图标切换前置／后置。光学调节仅使用镜头公开的焦距，不使用数码变焦。</string>
     <string name="lens_equivalent">35mm等效约%1$.0f mm</string>
     <string name="lens_optical">光学焦距</string>
     <string name="lens_optical_focal">光学焦距 · %1$.2f mm</string>
@@ -561,4 +561,11 @@
     <string name="exposure_clock_label">曝光时钟</string>
     <string name="exposure_clock_fault">0 · 仅FAULT时间</string>
     <string name="exposure_clock_measured">1 · 实测曝光时间＋FAULT振荡</string>
+    <string name="camera_flip_facing">切换前置／后置相机</string>
+    <string name="chain_choose">选择</string>
+    <string name="chain_details">详情调整</string>
+    <string name="chain_add">添加</string>
+    <string name="chain_counts">已选 %1$d · 应用 %2$d</string>
+    <string name="chain_selected">已选择</string>
+    <string name="chain_unselected">未选择</string>
 </resources>

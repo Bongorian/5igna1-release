@@ -38,6 +38,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     var advancedGroup: FaultParameters.Group = FaultParameters.Group.SIGNAL
     var sheet: Dialog? = null
     var auxiliary: Dialog? = null
+    private var selectionSummary: TextView? = null
     var route: LinearLayout? = null
     var body: LinearLayout? = null
     var scroll: ScrollView? = null
@@ -119,6 +120,8 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 sheet!!.dismiss()
             }
         )
+        selectionSummary = a.text("", 12, MainActivity.LIME)
+        root.addView(selectionSummary, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = a.dp(6f) })
         val routeRow = a.row()
         root.addView(routeRow, LinearLayout.LayoutParams(-1, a.dp(50f)))
         val path = HorizontalScrollView(a)
@@ -126,10 +129,10 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         route = a.row()
         path.addView(route)
         routeRow.addView(path, LinearLayout.LayoutParams(0, -1, 1f))
-        val add = a.button("＋")
-        add.setTextSize(22f)
+        val add = a.button(a.getString(R.string.chain_choose))
+        add.setTextSize(12f)
         add.setContentDescription(a.getString(R.string.fault_add_remove))
-        routeRow.addView(add, LinearLayout.LayoutParams(a.dp(44f), a.dp(44f)))
+        routeRow.addView(add, LinearLayout.LayoutParams(a.dp(76f), a.dp(44f)))
         add.setOnClickListener(
             OnClickListener@{ v: View? ->
                 tuning = false
@@ -277,6 +280,8 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     }
 
     fun renderRoute() {
+        val selectedIds = Effects.ordered(mask, false)
+        selectionSummary?.text = a.getString(R.string.chain_counts, selectedIds.size, selectedIds.count { a.effectAvailable(it) })
         route!!.removeAllViews()
         for (id in Effects.ordered(mask, false).filter { a.settings.experimentalSignals || !Effects.physical(it) }) {
             val chip = a.button(Effects.label(id))
@@ -321,6 +326,16 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                     MainActivity.MUTED,
                 )
             title.addView(name, LinearLayout.LayoutParams(0, a.dp(40f), 1f))
+            if ((mask and (1 shl id)) == 0 && a.effectAvailable(id)) {
+                val add = action(R.string.chain_add)
+                title.addView(add, LinearLayout.LayoutParams(-2, a.dp(44f)))
+                add.setOnClickListener {
+                    mask = mask or (1 shl id)
+                    renderRoute()
+                    renderBody()
+                    preview()
+                }
+            }
             if ((mask and (1 shl id)) != 0) {
                 val remove = action(R.string.fault_remove)
                 title.addView(remove, LinearLayout.LayoutParams(-2, a.dp(40f)))
@@ -336,6 +351,9 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 )
             }
             body!!.addView(title)
+            body!!.addView(a.text(FaultPresentation.description(a, id), 13, MainActivity.MUTED).apply {
+                setPadding(0, a.dp(4f), 0, a.dp(16f))
+            })
             if (!a.effectAvailable(id)) {
                 val hint =
                     a.text(
@@ -392,52 +410,53 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 )
             hint.setPadding(0, a.dp(4f), 0, a.dp(8f))
             body!!.addView(hint)
-            var row: LinearLayout? = null
-            for (i in ids.indices) {
-                if (i % 2 == 0) {
-                    row = a.row()
-                    body!!.addView(row, LinearLayout.LayoutParams(-1, -2))
-                    row.minimumHeight = a.dp(65f)
+            var previous: Effects.Point? = null
+            for (id in ids) {
+                val point = Effects.point(id)
+                if (point != previous) {
+                    body!!.addView(a.text(Effects.stage(id), 11, MainActivity.MUTED).apply {
+                        setPadding(a.dp(4f), a.dp(14f), 0, a.dp(6f))
+                    })
+                    previous = point
                 }
-                val id = ids[i]
+                val row = a.row()
                 val choice = a.button("")
-                choice.setTextSize(12f)
-                choice.minHeight = a.dp(60f)
-                choice.setPadding(a.dp(6f), a.dp(4f), a.dp(6f), a.dp(4f))
-                choices.put(id, choice)
-                val p = LinearLayout.LayoutParams(0, -2, 1f)
-                p.setMargins(a.dp(2f), 0, a.dp(2f), 0)
-                row!!.addView(choice, p)
+                choice.textSize = 14f
+                choice.gravity = Gravity.CENTER_VERTICAL or Gravity.START
+                choice.setPadding(a.dp(12f), a.dp(12f), a.dp(12f), a.dp(12f))
+                choice.minHeight = a.dp(80f)
+                choices[id] = choice
+                row.addView(choice, LinearLayout.LayoutParams(0, -2, 1f))
+                val detail = a.button(a.getString(R.string.chain_details))
+                detail.textSize = 12f
+                detail.contentDescription = Effects.label(id) + " · " + a.getString(R.string.chain_details)
+                row.addView(detail, LinearLayout.LayoutParams(a.dp(72f), -1).apply { leftMargin = a.dp(6f) })
+                detail.setOnClickListener {
+                    focused = id
+                    tuning = true
+                    renderRoute()
+                    renderBody()
+                }
+                body!!.addView(row, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = a.dp(8f) })
                 paintChoice(id)
-                choice.setOnClickListener(
-                    OnClickListener@{ v: View? ->
-                        if (!a.effectAvailable(id)) {
-                            focused = id
-                            tuning = true
-                            renderRoute()
-                            renderBody()
-                            return@OnClickListener
-                        }
+                choice.setOnClickListener {
+                    // An unavailable selected stage may be removed, but importing never removes it.
+                    if (!a.effectAvailable(id) && mask and (1 shl id) == 0) {
+                        focused = id
+                        tuning = true
+                        renderRoute()
+                        renderBody()
+                    } else {
                         mask = mask xor (1 shl id)
-                        if ((mask and (1 shl id)) != 0) focused = id
-                        else if (focused == id)
-                            focused = if (mask == 0) 0 else Effects.ordered(mask, false)[0]
                         paintChoice(id)
                         renderRoute()
                         preview()
-                        v!!.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+                        a.confirmHaptic(choice, HapticFeedbackConstants.CLOCK_TICK)
                     }
-                )
-            }
-            if (ids.size % 2 == 0) {
-                row = a.row()
-                body!!.addView(row, LinearLayout.LayoutParams(-1, a.dp(65f)))
+                }
             }
             val clear = action(R.string.ui_clear_selection)
-            clear.setTextSize(10f)
-            val clearP = LinearLayout.LayoutParams(0, a.dp(60f), 1f)
-            clearP.setMargins(a.dp(2f), 0, a.dp(2f), 0)
-            row!!.addView(clear, clearP)
+            body!!.addView(clear, LinearLayout.LayoutParams(-1, a.dp(48f)))
             clear.setOnClickListener(
                 OnClickListener@{ v: View? ->
                     mask = 0
@@ -486,13 +505,13 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         val available = a.effectAvailable(id)
         var stage = Effects.stage(id)
         stage = stage.substring(stage.indexOf(" / ") + 3)
-        view!!.setText(
-            (if (selected) "✓ " else "") +
-                Effects.label(id) +
-                "\n" +
-                (if (Effects.physical(id)) a.getString(R.string.physical_artifact) else stage) +
-                (if (available) "" else " · " + (if (a.tapBypasses(id)) a.getString(R.string.tap_bypassed) else if (a.videoMode) "MP4" else "JPG"))
-        )
+        val label = (if (selected) "✓  " else "＋  ") + Effects.label(id)
+        val copy = label + "\n" + FaultPresentation.description(a, id) +
+            (if (available) "" else "\n" + a.getString(if (a.tapBypasses(id)) R.string.tap_bypassed else R.string.fault_requires_rgb))
+        view!!.text = android.text.SpannableString(copy).apply {
+            setSpan(android.text.style.RelativeSizeSpan(.86f), label.length + 1, length, 0)
+            setSpan(android.text.style.StyleSpan(android.graphics.Typeface.NORMAL), label.length + 1, length, 0)
+        }
         view.setTextColor(
             if (selected) MainActivity.BG
             else if (available) MainActivity.WHITE else MainActivity.MUTED
@@ -508,7 +527,8 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             Effects.label(id) +
                 " · " +
                 stage +
-                (if (available) "" else " · " + a.getString(R.string.fault_requires_rgb))
+                " · " + a.getString(if (selected) R.string.chain_selected else R.string.chain_unselected) +
+                (if (available) "" else " · " + a.getString(if (a.tapBypasses(id)) R.string.tap_bypassed else R.string.fault_requires_rgb))
         )
     }
 

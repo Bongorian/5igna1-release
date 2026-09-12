@@ -160,3 +160,7 @@
 ## Owner direction — 1.7.1 release, 2026-09-12
 
 - The owner requests integrating all completed changes into main, installing on the connected device, and releasing 1.7.1 / code 20. Update the installed DEV app without replacing the release app, publish the verified APK with the existing distribution key, and update GitHub Pages. Preserve older releases and store reviews; configured Play automation may upload an Alpha draft. The computer-use ban remains in effect.
+
+## Owner direction — camera and chain controls, 2026-09-12
+
+- On `codex/camera-chain-controls`, make the lower-right icon switch front/rear and the viewfinder button choose lenses on that side or advertised optical focal lengths. Keep digital zoom prohibited. Show TAP controls only with Experimental enabled; suppress confirmation vibration during audio-enabled recording. Refresh chain selection, adjustment and inspection for readability, with separate selected/applied counts. Keep the computer-use ban; use CLI checks, preserve published artifacts and push checked work. No new release or device installation requested.

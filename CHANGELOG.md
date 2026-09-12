@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Separate front/rear switching from lens selection; keep optical adjustments limited to advertised focal lengths.
+- Hide TAP controls until enabled and suppress confirmation vibration during audio-enabled recording.
+- Refresh chain selection and inspection with descriptions, separate detail actions and selected/applied counts.
+
 ## [1.7.1] - 2026-09-12
 
 - Handle standard photo/video camera launches and explicitly targeted external JPEG/MP4 capture requests.

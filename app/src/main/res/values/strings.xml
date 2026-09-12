@@ -287,8 +287,8 @@
     <string name="fault_description_9" formatted="false">"False-color transfer of camera luminance."</string>
     <string name="fault_description_10" formatted="false">"Decoded-block quantization and address-error model."</string>
     <string name="fault_description_11" formatted="false">"Decoded-region loss/reuse model; no actual packets are edited."</string>
-    <string name="fault_description_12" formatted="false">"Tape response profile plus tracking, slips and dropout."</string>
-    <string name="fault_description_13" formatted="false">"Scan/phosphor profile plus convergence and sync faults."</string>
+    <string name="fault_description_12">Tape, DVD, analog or digital media response and faults.</string>
+    <string name="fault_description_13">CRT, LCD, Network or LED display response and faults.</string>
     <string name="ui_random_chain" formatted="false">"RANDOM CHAIN"</string>
     <string name="fault_chain_editor" formatted="false">"Chain · live preview"</string>
     <string name="fault_add_remove" formatted="false">"Add / remove"</string>
@@ -300,7 +300,7 @@
     <string name="fault_requires_rgb">This effect needs a processed image. Switch the capture format to use it. Your RAW chain is kept.</string>
     <string name="fault_switch_mp4">Switch to MP4 and use</string>
     <string name="fault_switch_jpeg">Switch to JPG and use</string>
-    <string name="fault_catalog_hint">Tap to add / remove · Tap a chain chip to adjust</string>
+    <string name="fault_catalog_hint">Tap a row to select or remove. Open Details to read and adjust. Processing order is fixed.</string>
     <string name="ui_invalid_number">Enter a finite number within the shown range.</string>
     <string name="ui_advanced_mode">ADVANCED MODE</string>
     <string name="ui_advanced_hint">AUTO follows the model; FIX holds a value. Tap a number for exact entry.</string>
@@ -528,7 +528,7 @@
     <string name="lens_ultrawide">Ultra-wide</string>
     <string name="lens_wide">Wide</string>
     <string name="lens_telephoto">Telephoto</string>
-    <string name="lens_hint">Select a lens or sensor exposed by your device. Digital zoom is disabled. Optical focal adjustment appears only when the selected lens supports it. Resolutions and RAW support depend on the camera.</string>
+    <string name="lens_hint">Choose a lens on this side. Use the lower-right icon to switch front / rear. Optical control uses only focal lengths exposed by the lens; no digital zoom.</string>
     <string name="lens_equivalent">≈%1$.0f mm equivalent (35 mm)</string>
     <string name="lens_optical">Optical focal length</string>
     <string name="lens_optical_focal">Optical focal length · %1$.2f mm</string>
@@ -561,4 +561,11 @@
     <string name="exposure_clock_label">Exposure clock</string>
     <string name="exposure_clock_fault">0 · FAULT time only</string>
     <string name="exposure_clock_measured">1 · Measured exposure timing + FAULT oscillator</string>
+    <string name="camera_flip_facing">Switch front / rear camera</string>
+    <string name="chain_choose">Choose</string>
+    <string name="chain_details">Details</string>
+    <string name="chain_add">Add</string>
+    <string name="chain_counts">Selected %1$d · Applied %2$d</string>
+    <string name="chain_selected">Selected</string>
+    <string name="chain_unselected">Not selected</string>
 </resources>

@@ -30,6 +30,10 @@ internal object CameraLensChecks {
             test.languageScreenshot("camera-lenses")
             test.runOnMainSync {a.lensDialog!!.dismiss()}
             for (lens in lenses) {
+                if (e.activeLens?.front != lens.front) {
+                    test.runOnMainSync { a.flipButton.performClick() }
+                    test.await("facing ${lens.front}", { a.ready && e.activeLens?.front == lens.front }, 20000)
+                }
                 test.runOnMainSync {
                     a.showCameras()
                     a.lensDialog!!.window!!.decorView.findViewWithTag<View>("camera-lens:"+lens.key)!!.performClick()

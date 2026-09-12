@@ -5,7 +5,7 @@ import android.widget.LinearLayout
 internal fun MainActivity.renderCameraLens() {
     val selected = engine.activeLens
     lensButton.text = selected?.label(this) ?: getString(R.string.lens_select)
-    flipButton.contentDescription = getString(R.string.lens_select)+" · "+lensButton.text
+    flipButton.contentDescription = getString(R.string.camera_flip_facing)
     renderTorch()
 }
 
@@ -32,7 +32,7 @@ internal fun MainActivity.showCameras() {
         })
         body.addView(slider,LinearLayout.LayoutParams(-1,dp(48f)))
     }
-    for (lens in engine.lenses) {
+    for (lens in engine.lenses.filter { it.front == (engine.activeLens?.front ?: engine.front) }) {
         val choice=button(lens.label(this)+"\n"+lens.detail(this))
         choice.tag="camera-lens:"+lens.key
         choice.isSingleLine=false

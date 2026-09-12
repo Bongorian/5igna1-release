@@ -161,7 +161,8 @@ internal fun MainActivity.buildUi() {
     viewfinder.addView(preview, FrameLayout.LayoutParams(-1, -1))
     overlay = Overlay()
     viewfinder.addView(overlay, FrameLayout.LayoutParams(-1, -1))
-    val tapControls = row()
+    tapControls = row()
+    tapControls.visibility = View.GONE
     tapControls.setPadding(dp(8f), dp(4f), dp(8f), dp(8f))
     tapPlay = button(getString(R.string.tap_play))
     tapPlay.tag = "tap-play"
@@ -317,6 +318,7 @@ internal fun MainActivity.buildUi() {
     photoTab = CaptureModeButton(this, R.drawable.ic_mode_photo, getString(R.string.ui_photo))
     videoTab = CaptureModeButton(this, R.drawable.ic_mode_video, getString(R.string.ui_video))
     tapTab = CaptureModeButton(this, R.drawable.ic_mode_tap, getString(R.string.tap_mode))
+    tapTab.visibility = if (externalCapture == null && settings.experimentalSignals) View.VISIBLE else View.GONE
     for (mode in listOf(photoTab, videoTab, tapTab)) modeGroup.addView(mode, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     tools.modes = modeGroup
     tools.addView(formatButton, LinearLayout.LayoutParams(dp(52f), -1))
@@ -377,7 +379,7 @@ internal fun MainActivity.buildUi() {
     hit.setOnClickListener(
         OnClickListener@{ v: View? ->
             engine.hitFaults()
-            v!!.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+            confirmHaptic(v!!, HapticFeedbackConstants.CONFIRM)
         }
     )
     rewind.setOnClickListener(OnClickListener@{ v: View? -> engine.rewindFaults() })
@@ -408,7 +410,12 @@ internal fun MainActivity.buildUi() {
         )
     flipButton.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), dp(2f))
     controls.addView(flipButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
-    flipButton.setOnClickListener { showCameras() }
+    flipButton.setOnClickListener {
+        if (!recording && !engine.photoBusy && !tapMode) {
+            cancelEffectPreview()
+            engine.switchCamera()
+        }
+    }
     renderEffects()
     renderCaptureMode()
     savePrefs()

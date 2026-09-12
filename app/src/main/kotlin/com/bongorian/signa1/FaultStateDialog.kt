@@ -64,15 +64,16 @@ internal class FaultStateDialog(val a: MainActivity) {
 
     fun update(frame: EffectState.Frame) {
         clock.setText(String.format(Locale.US, "%.1f s", frame.time))
-        summary.setText(a.getString(R.string.fault_state_count, frame.nodes.size))
-        val next = frame.ids().contentToString()
+        summary.setText(a.getString(R.string.chain_counts, a.effectState.ids().size, frame.ids().size))
+        val selected = a.effectState.ids()
+        val next = selected.contentToString() + frame.ids().contentToString()
         if (next != order) {
             order = next
             rows.removeAllViews()
             items.clear()
             var index = 1
-            for (id in frame.ids()) {
-                val row: Row = Row(id, index++)
+            for (id in selected) {
+                val row: Row = Row(id, index++, id in frame.ids())
                 items.put(id, row)
                 val p = LinearLayout.LayoutParams(-1, -2)
                 p.bottomMargin = a.dp(10f)
@@ -95,7 +96,7 @@ internal class FaultStateDialog(val a: MainActivity) {
         }
     }
 
-    internal inner class Row(id: Int, index: Int) {
+    internal inner class Row(id: Int, index: Int, val applied: Boolean) {
         val root: LinearLayout
         val value: TextView
         val meter: Meter
@@ -117,6 +118,10 @@ internal class FaultStateDialog(val a: MainActivity) {
             value.setGravity(Gravity.END or Gravity.CENTER_VERTICAL)
             line.addView(value, LinearLayout.LayoutParams(a.dp(48f), a.dp(24f)))
             root.addView(line)
+            root.addView(a.text(FaultPresentation.description(a, id), 12, MainActivity.MUTED).apply {
+                setPadding(0, a.dp(8f), 0, 0)
+            })
+            if (!applied) root.addView(a.text(a.getString(if (a.tapBypasses(id)) R.string.tap_bypassed else R.string.fault_requires_rgb), 12, MainActivity.MUTED))
             meter = Meter()
             val p = LinearLayout.LayoutParams(-1, a.dp(4f))
             p.topMargin = a.dp(10f)
@@ -126,7 +131,7 @@ internal class FaultStateDialog(val a: MainActivity) {
         fun update(amount: Float) {
             var amount = amount
             amount = max(0f, min(1f, amount))
-            value.setText(Math.round(amount * 100).toString() + "%")
+            value.setText(if (applied) Math.round(amount * 100).toString() + "%" else "—")
             meter.amount = amount
             meter.invalidate()
         }

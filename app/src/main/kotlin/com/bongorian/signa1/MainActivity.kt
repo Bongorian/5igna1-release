@@ -59,6 +59,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     lateinit var strengthValue: TextView
     lateinit var photoTab: CaptureModeButton
     lateinit var videoTab: CaptureModeButton
+    lateinit var tapControls: LinearLayout
     lateinit var tapTab: CaptureModeButton
     lateinit var tapPlay: TextView
     lateinit var tapChoose: TextView
@@ -436,6 +437,12 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         commitEffects(effectState.single(id))
     }
 
+    fun confirmHaptic(view: View, kind: Int) {
+        if (!((recording || engine.recording) && !captureRawVideo &&
+                (sound || tapMode && engine.tapSource?.hasAudio == true)))
+            view.performHapticFeedback(kind)
+    }
+
     fun commitEffects(next: EffectState) {
         check(Looper.myLooper() == Looper.getMainLooper()) { "Effect edits require UI thread" }
         cancelEffectPreview()
@@ -662,7 +669,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             next.photoSize = "recommended"
         }
         applySettings(next)
-        formatButton.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+        confirmHaptic(formatButton, HapticFeedbackConstants.CONFIRM)
     }
 
     fun randomChain() {
@@ -672,7 +679,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             return
         }
         commitEffects(EffectRandomizer.chain(effectState, availableEffects(), SecureRandom()))
-        selectedRoute.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+        confirmHaptic(selectedRoute, HapticFeedbackConstants.CONFIRM)
     }
 
     fun reseed() {
@@ -688,7 +695,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         }
         commitEffects(next)
         Toast.makeText(this, R.string.seed_chain_done, Toast.LENGTH_SHORT).show()
-        selectedRoute.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+        confirmHaptic(selectedRoute, HapticFeedbackConstants.CONFIRM)
     }
 
     fun renderCaptureMode() {
@@ -696,8 +703,9 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         val value = videoMode
         tapTab.visibility = if (externalCapture == null && settings.experimentalSignals) View.VISIBLE else View.GONE
         tapTab.setChecked(tapMode)
-        tapPlay.visibility = if (tapMode && tapInput?.video == true) View.VISIBLE else View.GONE
-        tapChoose.visibility = if (tapMode) View.VISIBLE else View.GONE
+        tapPlay.visibility = if (settings.experimentalSignals && tapMode && tapInput?.video == true) View.VISIBLE else View.GONE
+        tapControls.visibility = if (settings.experimentalSignals && tapMode) View.VISIBLE else View.GONE
+        tapChoose.visibility = if (settings.experimentalSignals && tapMode) View.VISIBLE else View.GONE
         flipButton.visibility = if (tapMode) View.INVISIBLE else View.VISIBLE
         lensButton.visibility = if (tapMode) View.GONE else View.VISIBLE
         torchButton.visibility = if (tapMode) View.GONE else View.VISIBLE
@@ -820,7 +828,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                     .show()
             return
         }
-        capture.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+        confirmHaptic(capture, HapticFeedbackConstants.CONFIRM)
         if (videoMode) {
             if (
                 !recording &&
