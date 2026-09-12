@@ -1,0 +1,1 @@
+External JPEG/MP4 capture with review and retake. Network display now holds source frames with separate freeze timing, delivery fps and resolution loss. Model controls show active parameters and effective values. Fault timing and seeds are consistent across sessions, with explicit Exposure/LED controls. Existing settings remain readable; older noise/event sequences can change.

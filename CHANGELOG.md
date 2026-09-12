@@ -1,9 +1,12 @@
 # Changelog
 
-## Unreleased
+## [1.7.1] - 2026-09-12
 
 - Handle standard photo/video camera launches and explicitly targeted external JPEG/MP4 capture requests.
 - Review, retake or cancel before returning a capture; honor caller output URIs and video limits while preserving normal RAW settings.
+- Replace Network display noise with source-frame delivery and resolution loss; separate freeze interval, duration and chance, with effective values shown in the editor.
+- Align active model selection and advanced parameters; separate delivery, content and fault clocks, and make incident/noise seeds stable across sessions.
+- Give Exposure and LED explicit time controls and retain held-frame provenance in captures. Saved settings remain readable, but older noise and incident sequences are not reproduced exactly.
 
 ## [1.7.0] - 2026-09-10
 

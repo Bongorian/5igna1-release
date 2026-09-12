@@ -1,5 +1,5 @@
 # 5igna1 Privacy Policy
-Last updated: September 9, 2026
+Last updated: September 12, 2026
 
 Provider: Bongorian
 Contact: dennosamurai@gmail.com

@@ -156,3 +156,7 @@
 ## Owner direction — time-model consistency, 2026-09-12
 
 - The owner approved proceeding with the audit’s implementation. Work on `codex/time-model-consistency`: resolve active models before compilation, separate delivery/content clocks, expose effective values and active parameters, unify incident/noise timing and seed rules, and clarify Exposure/LED generators. This supersedes the assessment-only restriction above. Keep richer temporal afterglow/multi-frame blur as separate future work. Preserve old golden evidence, saved-key readability and release artifacts; no new release is requested. Continue CLI/offscreen verification under the computer-use ban and push checked work.
+
+## Owner direction — 1.7.1 release, 2026-09-12
+
+- The owner requests integrating all completed changes into main, installing on the connected device, and releasing 1.7.1 / code 20. Update the installed DEV app without replacing the release app, publish the verified APK with the existing distribution key, and update GitHub Pages. Preserve older releases and store reviews; configured Play automation may upload an Alpha draft. The computer-use ban remains in effect.

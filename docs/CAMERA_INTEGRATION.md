@@ -2,7 +2,7 @@
 
 [Guides](README.md) · [日本語](CAMERA_INTEGRATION.ja.md)
 
-This describes the development branch after 1.7.0. The published 1.7.0 APK does not implement these contracts.
+These contracts are included in 1.7.1. Earlier releases do not implement them.
 
 ## Opening the camera
 

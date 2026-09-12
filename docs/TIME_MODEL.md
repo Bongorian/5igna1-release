@@ -2,7 +2,7 @@
 
 [日本語](TIME_MODEL.ja.md) · [LIVE](LIVE_FAULT.md) · [Internal controls](ADVANCED_MODE.md) · [SEED](SEEDS.md)
 
-This development implementation uses **clock model 2**. Existing released builds and saved descriptions without `clockModel=2` retain their historical meaning. Old controls and FIX keys remain readable, but replaying those settings uses the new generators; it does not reproduce an earlier release's exact noise or incident sequence.
+Version 1.7.1 uses **clock model 2**. Existing released builds and saved descriptions without `clockModel=2` retain their historical meaning. Old controls and FIX keys remain readable, but replaying those settings uses the new generators; it does not reproduce an earlier release's exact noise or incident sequence.
 
 ## Clocks and controls
 

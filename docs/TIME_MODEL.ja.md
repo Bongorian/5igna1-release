@@ -1,4 +1,4 @@
-# 時間と内部パラメータの共通ルール（開発版）
+# 時間と内部パラメータの共通ルール（1.7.1）
 
 [English](TIME_MODEL.md) · [LIVE](LIVE_FAULT.ja.md) · [内部調整](ADVANCED_MODE.ja.md) · [SEED](SEEDS.ja.md)
 
