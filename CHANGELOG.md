@@ -1,29 +1,13 @@
 # Changelog
 
-## Unreleased
+## [1.7.2] - 2026-09-13
 
-- Move the PRO shooting-mode switch from the top toolbar into Settings → Modes, preserving its saved state.
-
-- Give chain cards a consistent 4 dp radius, align compact chain actions, and replace cramped close/apply/detail text with clearly sized icons.
-
-- Move readiness/output status above the preview, use icon-only disclosure controls, fit all PRO entries and keep recording time visible when collapsed.
-- Add a matched-density emulator review, original screenshots and repeatable workspace checks.
-
-- Restore the 80 dp shutter in both expanded and collapsed layouts, and label workspace/FAULT disclosure actions with shared icons.
-
-- Reduce control heights, simplify collapsed FAULT and capture tabs, and let landscape controls collapse while moving overlays out of the preview.
-
-- Consolidate capture tools into one top row and distinguish primary, standard and compact button heights across app panels.
-
-- Fix empty PRO controls on pinned physical lenses by distinguishing shared camera settings from per-sensor overrides.
-- Use PHOTO/VIDEO/TAP labels, direct focal-length buttons, upper location/audio controls and consistent capture-control spacing.
-
-- Add capability-aware PRO camera controls: shutter/ISO, EV/AE lock, WB, manual focus and supported lens adjustments, with per-lens preferences and AUTO restoration.
-- Reorganize capture setup, measured camera values, collapsible FAULT controls and labeled capture modes around a centered shutter; preview swipes now preserve the chain.
-
-- Separate front/rear switching from lens selection; keep optical adjustments limited to advertised focal lengths.
-- Hide TAP controls until enabled and suppress confirmation vibration during audio-enabled recording.
-- Refresh chain selection and inspection with descriptions, separate detail actions and selected/applied counts.
+- Add capability-aware PRO shooting mode in Settings: shutter/ISO, EV/AE lock, white balance, manual focus and supported lens controls, with saved per-lens choices and automatic restoration when disabled.
+- Separate front/rear switching from direct lens/focal-length selection while preserving optical-only framing.
+- Reorganize the compact camera workspace with a single top toolbar, readiness outside the preview, text capture tabs and collapsible landscape controls retaining the same 80 dp shutter and recording timer.
+- Refine chain selection, descriptions and selected/applied counts; unify card radii and replace cramped editor actions with icons.
+- Show TAP only when experimental features are enabled and suppress confirmation vibration during audio-enabled recording.
+- Add repeatable matched-density emulator reviews and original Japanese/English screenshots.
 
 ## [1.7.1] - 2026-09-12
 

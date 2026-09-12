@@ -1,6 +1,6 @@
 # 5igna1 field guide
 
-These guides cover **1.6.0 / code 16**. Sections explicitly marked unreleased describe development additions, including LIGHT MODE. For earlier versions, read the documentation at that release tag.
+These guides cover **1.7.2 / code 21**. Historical measurements and submission reports retain their dated scope.
 
 Keep the capture screen active while recording. Leaving it or locking the device stops and saves the recording. [Recording and permissions](RECORDING.md).
 
@@ -34,8 +34,8 @@ Maintainer entry points: [Development checks](DEVELOPMENT.md), [release procedur
 
 Historical measurements and submission reports retain their dated scope. Start from [Validation](VALIDATION.md) for evidence, or [Documentation map](DOCUMENTATION.md) for each file’s role, maintenance rules and archive links.
 
-[Unreleased camera app integration](CAMERA_INTEGRATION.md): ordinary camera launch and explicit external JPEG/MP4 capture results.
+[Camera app integration](CAMERA_INTEGRATION.md): ordinary camera launch and explicit external JPEG/MP4 capture results.
 
-[Unreleased PRO camera and workspace](PRO_CAMERA.md): supported camera adjustments, control placement and review scope.
+[PRO camera and workspace](PRO_CAMERA.md): supported camera adjustments, control placement and review scope.
 
 [PRO workspace visual review](UI_REVIEW.md)

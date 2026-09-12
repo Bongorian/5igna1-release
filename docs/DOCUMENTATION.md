@@ -78,3 +78,38 @@ Keep historical measurements, hashes and submitted metadata intact. Label the so
 - [Internal parameters and time-model review](design/TIME_MODEL_REVIEW.md) / [日本語](design/TIME_MODEL_REVIEW.ja.md), [generated catalog and evidence](audit/TIME_MODEL_EVIDENCE.md): 2026-09-12 audit of dd7f027; proposed clock/parameter contract, with no production behavior change.
 
 - [Clock model 2](TIME_MODEL.md) / [日本語](TIME_MODEL.ja.md): unreleased clock ownership, shared incidents, stable seeds, active model parameters and verification scope.
+
+## Camera workspace review artifacts
+
+- [ui-review/en/01-portrait-auto.png ](ui-review/en/01-portrait-auto.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/en/02-portrait-fault.png ](ui-review/en/02-portrait-fault.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/en/03-portrait-pro.png ](ui-review/en/03-portrait-pro.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/en/04-pro-exposure.png ](ui-review/en/04-pro-exposure.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/en/05-landscape.png ](ui-review/en/05-landscape.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/en/06-landscape-collapsed.png ](ui-review/en/06-landscape-collapsed.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/en/07-landscape-video.png ](ui-review/en/07-landscape-video.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/en/08-landscape-recording-collapsed.png ](ui-review/en/08-landscape-recording-collapsed.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/en/09-settings.png ](ui-review/en/09-settings.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/ja/01-portrait-auto.png ](ui-review/ja/01-portrait-auto.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/ja/02-portrait-fault.png ](ui-review/ja/02-portrait-fault.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/ja/03-portrait-pro.png ](ui-review/ja/03-portrait-pro.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/ja/04-pro-exposure.png ](ui-review/ja/04-pro-exposure.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/ja/05-landscape.png ](ui-review/ja/05-landscape.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/ja/06-landscape-collapsed.png ](ui-review/ja/06-landscape-collapsed.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/ja/07-landscape-video.png ](ui-review/ja/07-landscape-video.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/ja/08-landscape-recording-collapsed.png ](ui-review/ja/08-landscape-recording-collapsed.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/ja/09-settings.png ](ui-review/ja/09-settings.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [ui-review/manifest.json ](ui-review/manifest.json): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/en/landscape-adjust.png ](chain-review/en/landscape-adjust.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/en/landscape-catalog.png ](chain-review/en/landscape-catalog.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/en/landscape-deck.png ](chain-review/en/landscape-deck.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/en/portrait-adjust.png ](chain-review/en/portrait-adjust.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/en/portrait-catalog.png ](chain-review/en/portrait-catalog.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/en/portrait-deck.png ](chain-review/en/portrait-deck.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/ja/landscape-adjust.png ](chain-review/ja/landscape-adjust.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/ja/landscape-catalog.png ](chain-review/ja/landscape-catalog.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/ja/landscape-deck.png ](chain-review/ja/landscape-deck.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/ja/portrait-adjust.png ](chain-review/ja/portrait-adjust.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/ja/portrait-catalog.png ](chain-review/ja/portrait-catalog.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/ja/portrait-deck.png ](chain-review/ja/portrait-deck.png): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.
+- [chain-review/manifest.json ](chain-review/manifest.json): original emulator review capture or source/dimension/hash manifest; dated evidence, linked from UI_REVIEW.

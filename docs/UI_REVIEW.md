@@ -1,7 +1,7 @@
 # PRO workspace: visual review
 
 
-These images record the 2026-09-12 review. The current development build moves the top AUTO/PRO switch to Settings → Modes → PRO shooting mode.
+These images record the 2026-09-12 review. The 1.7.2 release moves the top AUTO/PRO switch to Settings → Modes → PRO shooting mode.
 
 [日本語](UI_REVIEW.ja.md) · [PRO controls](PRO_CAMERA.md) · [Original image manifest](ui-review/manifest.json)
 

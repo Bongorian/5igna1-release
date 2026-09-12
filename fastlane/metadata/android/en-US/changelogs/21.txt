@@ -1,0 +1,1 @@
+PRO shooting mode is now in Settings, with supported exposure, white balance, focus and lens controls. Improved front/rear and optical lens selection. Compact portrait/landscape controls retain the full-size shutter and recording timer. Clearer chain cards and editor icons. TAP appears when experimental features are enabled.

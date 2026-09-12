@@ -186,3 +186,7 @@
 - Chain review follow-up: refine chain card radii and live-preview action spacing, replace Details/Adjust labels with icons, verify on the matched emulator, update review resources and install the checked USB DEV build.
 
 - Move the PRO shooting-mode switch into Settings → Modes and remove its top-toolbar button; preserve saved mode and camera control behavior.
+
+## Owner direction — 1.7.2 release, 2026-09-13
+
+- Release the completed PRO workspace and chain/camera controls as 1.7.2 / code 21. Integrate verified source into main, publish the signed GitHub/Obtainium APK with the existing distribution key, update GitHub Pages and install DEV. Preserve prior artifacts and store reviews; configured Play draft automation may run.

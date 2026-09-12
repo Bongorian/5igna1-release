@@ -1,10 +1,10 @@
 # 5igna1
 
-[Unreleased PRO workspace and screenshot review](docs/UI_REVIEW.md).
+[PRO workspace and screenshot review](docs/UI_REVIEW.md).
 
 The app supports rotating/resizable camera layouts, exclusive PHOTO/VIDEO/TAP text tabs and an optional email feedback draft. See [development verification](docs/audit/ADAPTIVE_WINDOW_FEEDBACK.md).
 
-Version 1.7.1 adds external JPEG/MP4 capture, source-frame Network display degradation and consistent fault timing with active model controls. See [camera integration](docs/CAMERA_INTEGRATION.md) and [time model](docs/TIME_MODEL.md).
+Version 1.7.2 adds PRO shooting mode in Settings, direct optical lens selection and a compact camera workspace with clearer chain controls. See [PRO controls](docs/PRO_CAMERA.md).
 
 **Every glitch is an encounter.**
 
@@ -20,7 +20,7 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 
 ## One damaged system, fleeting moments
 
-This source is **1.7.1 (versionCode 20)**. The offline quick start introduces capture and fault controls. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
+This source is **1.7.2 (versionCode 21)**. The offline quick start introduces capture and fault controls. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 

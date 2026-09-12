@@ -27,3 +27,5 @@ Open source under Apache-2.0.
 Support: dennosamurai@gmail.com
 
 Select exposed cameras and physical lenses at their native field of view, without digital zoom. TAP supports system media providers, saves at source-video end and retains source audio; resolution-linked audio ON converts quality, while OFF copies supported compressed audio. Saved photos and new MP4 videos let you inspect and reuse recorded signal settings; video stores the recording-start state only.
+
+PRO shooting mode in Settings exposes supported exposure, white balance, focus and lens controls. Switch front/rear cameras and choose exposed optical lenses directly. Landscape controls can collapse while keeping the full-size shutter and recording timer.

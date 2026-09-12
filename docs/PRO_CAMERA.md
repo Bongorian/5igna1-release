@@ -2,7 +2,7 @@
 
 [日本語](PRO_CAMERA.ja.md) · [Usage](USAGE.md) · [Capture formats](FORMATS.md) · [Time model](TIME_MODEL.md)
 
-This is the development implementation on `codex/pro-camera-workspace`, after 1.7.1. It adds real Camera2 adjustments and reorganizes the camera screen. It has not been published as an app release.
+Available in 1.7.2. PRO adds supported Camera2 adjustments and a reorganized camera workspace.
 
 ## Three independent choices
 
