@@ -726,6 +726,15 @@ internal class FaultModel constructor(private val sessionSalt: Long = SecureRand
                 val slot = floor(time / .7).toLong()
                 // Intrinsic payload variation follows fault time; automatic congestion requires LIVE.
                 p["networkStall"] = if (config.enabled && random(seed xor mix(slot)) < level * controls.get(id, "sync") * .8f) 1f else 0f
+                p["networkFps"] = 0f
+                if (kind == 2f) {
+                    p["transportLoss"] = level * (1f - NetworkDisplay.scale(controls.get(id, "networkResolution"))) / .8f
+                    val rate = NetworkDisplay.fps(controls.get(id, "networkRate"))
+                    p["networkFps"] = if (level <= 0f || rate == 0) 0f else 60f + (rate - 60f) * level
+                    p["networkStall"] = if (config.enabled && level > 0f && NetworkDisplay.stalled(
+                        time, seed, NetworkDisplay.interval(controls.get(id, "networkInterval")),
+                        NetworkDisplay.duration(controls.get(id, "networkDuration")) * level)) 1f else 0f
+                }
                 p["refreshBand"] = level * controls.get(id, "sync") * .5f
                 p["networkSeed"] = random(seed xor mix(slot)) * 997f
             }

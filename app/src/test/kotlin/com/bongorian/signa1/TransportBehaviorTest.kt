@@ -6,7 +6,7 @@ import org.junit.Test
 class TransportBehaviorTest {
     @Test fun readsLegacyControlsAndPreservesNewSelections() {
         val defaults = EffectParameters.defaults()
-        val legacy = defaults.encode().replace(Regex(",(transport|reduce|cable|upconvert)=[^,;]+"), "")
+        val legacy = defaults.encode().replace(Regex(",(transport|reduce|cable|upconvert|networkInterval|networkDuration|networkRate|networkResolution)=[^,;]+"), "")
         assertEquals(defaults.encode(), EffectParameters.decode(legacy).encode())
         val chosen = defaults.with(Effects.VHS, "transport", 1f).with(Effects.VHS, "cable", 1f)
             .with(Effects.CRT, "transport", 2f / 3)
@@ -16,7 +16,7 @@ class TransportBehaviorTest {
     @Test fun networkStallsUseTimeAndRespectDisabledLive() {
         val model = FaultModel(42)
         val input = FaultModel.Inputs()
-        var parameters = EffectParameters.defaults().with(Effects.CRT, "transport", 2f / 3).with(Effects.CRT, "sync", 1f)
+        var parameters = EffectParameters.defaults().with(Effects.CRT, "transport", 2f / 3).with(Effects.CRT, "networkInterval", .01f)
         val live = FaultConfig.defaults().enabled(true)
         val states = HashSet<Float>()
         for (n in 0..100) {
@@ -26,7 +26,7 @@ class TransportBehaviorTest {
         }
         assertEquals(setOf(0f, 1f), states)
         assertEquals(0f, model.inspect(Effects.CRT, parameters, 1f, live.enabled(false)).get("networkStall"), 0f)
-        parameters = parameters.with(Effects.CRT, "sync", 0f)
+        parameters = parameters.with(Effects.CRT, "networkInterval", 0f)
         assertEquals(0f, model.inspect(Effects.CRT, parameters, 1f, live).get("networkStall"), 0f)
     }
 }

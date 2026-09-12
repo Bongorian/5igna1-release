@@ -482,7 +482,7 @@
     <string name="transport_analog_hint">按连接模型降低分辨率，并添加线缆故障。</string>
     <string name="transport_crt_hint">调整扫描线、荧光体、会聚及同步故障。</string>
     <string name="transport_digital_display_hint">在模拟媒体之后，可选择将低分辨率图像放大到输出的插值方式。</string>
-    <string name="transport_network_hint">拥塞时保持上一帧。LIVE推进画面停顿和丢包状态。</string>
+    <string name="transport_network_hint">通过降低帧率和分辨率模拟连接不良。冻结需要开启LIVE。显示值对应最大FAULT，降低FAULT会减弱劣化。冻结间隔和时长随LIVE速度变化。保存画面的尺寸不变。</string>
     <string name="transport_led_hint">调整LED间距、模块故障和刷新条带。</string>
     <string name="seed_no_target">当前启用的故障不使用随机种子。</string>
     <string name="seed_chain_done">已重新生成有效故障的种子，保留调整值。</string>
@@ -538,4 +538,14 @@
     <string name="external_capture_use" formatted="false">使用</string>
     <string name="external_capture_retake" formatted="false">重拍</string>
     <string name="external_capture_returning" formatted="false">正在返回拍摄结果…</string>
+    <string name="fault_control_networkInterval">冻结间隔</string>
+    <string name="fault_control_networkDuration">冻结时长</string>
+    <string name="fault_control_networkRate">帧率上限</string>
+    <string name="fault_control_networkResolution">接收画面分辨率</string>
+    <string name="network_off">OFF</string>
+    <string name="network_every_seconds">每%1$d秒</string>
+    <string name="network_seconds">%1$.1f秒</string>
+    <string name="network_source_rate">与输入相同</string>
+    <string name="network_fps">%1$d fps</string>
+    <string name="network_percent">宽高各%1$d%%</string>
 </resources>

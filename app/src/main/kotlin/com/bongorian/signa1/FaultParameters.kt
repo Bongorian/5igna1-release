@@ -401,7 +401,7 @@ internal object FaultParameters {
                     add(p, Group.SIGNAL, "transportNoise", 0, 1, .001f)
                 } else {
                     add(p, Group.PROFILE, "upconvert", 0, 1, 1)
-                    add(p, Group.SIGNAL, "networkStall", 0, 1, 1, "refreshBand", 0, 1, .001f, "networkSeed", 0, 997, .1f)
+                    add(p, Group.SIGNAL, "networkFps", 0, 60, 1, "networkStall", 0, 1, 1, "refreshBand", 0, 1, .001f, "networkSeed", 0, 997, .1f)
                 }
             }
             CATALOG.put(id, Collections.unmodifiableList<Spec>(p))

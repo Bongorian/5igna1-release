@@ -191,6 +191,9 @@ internal class EffectChain(private val source: String, private val supportsExter
     private val networkFrame = StageBuffer()
     private var networkValid = false
     private var networkIdentity = 0L
+    private val networkDelivery = NetworkDelivery()
+    private var networkOutputW = 0
+    private var networkOutputH = 0
 
     private fun drawStage(input: Int, external: Boolean, matrix: FloatArray, node: FaultNode?,
                           sourceWidth: Int, sourceHeight: Int, destination: Int, w: Int, h: Int) {
@@ -248,15 +251,18 @@ internal class EffectChain(private val source: String, private val supportsExter
                 break
             }
             val buffer = if (network) networkFrame else transportBuffers.first { it.texture != input }
-            if (network && (buffer.w != ow || buffer.h != oh || networkIdentity != node.identity.seed)) networkValid = false
-            buffer.allocate(ow, oh)
-            if (!network || !networkValid || node.get("networkStall") < .5f) {
+            if (network && (networkOutputW != w || networkOutputH != h || networkIdentity != node.identity.seed)) networkValid = false
+            val now = if (frame.cameraNs > 0) frame.cameraNs else (frame.time * 1e9).toLong()
+            if (!network || networkDelivery.update(now, node.mechanism["networkFps"] ?: 0f,
+                    node.get("networkStall") >= .5f, networkValid)) {
+                // Allocate only when a frame arrives: resolution edits must not discard a held frame.
+                buffer.allocate(ow, oh)
                 drawStage(input, first && oes, if (first) requireNotNull(transform) else IDENTITY,
                     node, if (node.id == Effects.CRT && kind == 3) ow else iw,
                     if (node.id == Effects.CRT && kind == 3) oh else ih, buffer.fbo, ow, oh)
-                if (network) { networkValid = true; networkIdentity = node.identity.seed }
+                if (network) { networkValid = true; networkIdentity = node.identity.seed; networkOutputW = w; networkOutputH = h }
             }
-            input = buffer.texture; iw = ow; ih = oh; first = false
+            input = buffer.texture; iw = buffer.w; ih = buffer.h; first = false
         }
         if (!networkUsed) { networkValid = false; networkFrame.release() }
         if (nearest && !first) {

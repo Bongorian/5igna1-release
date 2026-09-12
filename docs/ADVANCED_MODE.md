@@ -122,3 +122,4 @@ Enabled by the separate experimental Settings switch. INPUT is available on ever
 | MEDIA | SIGNAL | `transportNoise` | 0 … 1 |
 | DISPLAY | SIGNAL | `networkStall`, `refreshBand` | 0 … 1 |
 | DISPLAY | SIGNAL | `networkSeed` | 0 … 997 |
+| DISPLAY | SIGNAL | `networkFps` | 0 … 60 (0 = source rate) |

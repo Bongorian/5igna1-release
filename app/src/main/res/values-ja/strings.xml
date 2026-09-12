@@ -482,7 +482,7 @@
     <string name="transport_analog_hint">接続方式に応じた解像度に下げ、ケーブル周りの故障を加えます。</string>
     <string name="transport_crt_hint">走査線・蛍光体の特性と、色ずれ・同期ずれを調整します。</string>
     <string name="transport_digital_display_hint">アナログMEDIAの後では、縮小された画像を出力へ拡大する補間方法を選べます。</string>
-    <string name="transport_network_hint">輻輳で直前の画面を保持します。LIVEで画面停止やパケットロスの状態が変化します。</string>
+    <string name="transport_network_hint">フレームレートと解像度を下げて通信不良を表現します。フリーズにはLIVEが必要です。表示値はFAULT最大時の値で、FAULTを下げると劣化が弱まります。停止の間隔と長さはLIVEの速度に従います。保存画像の寸法は変わりません。</string>
     <string name="transport_led_hint">LEDの素子間隔、正方形のモジュール故障、更新時のちらつきを調整します。</string>
     <string name="seed_no_target">現在の有効なFAULTには再生成できるSEEDがありません。</string>
     <string name="seed_chain_done">有効なFAULTのSEEDを再生成しました。調整値は保持しています。</string>
@@ -538,4 +538,14 @@
     <string name="external_capture_use" formatted="false">使用</string>
     <string name="external_capture_retake" formatted="false">撮り直す</string>
     <string name="external_capture_returning" formatted="false">撮影結果を返しています…</string>
+    <string name="fault_control_networkInterval">フリーズの間隔</string>
+    <string name="fault_control_networkDuration">フリーズの長さ</string>
+    <string name="fault_control_networkRate">フレームレート上限</string>
+    <string name="fault_control_networkResolution">受信映像の解像度</string>
+    <string name="network_off">OFF</string>
+    <string name="network_every_seconds">%1$d秒ごと</string>
+    <string name="network_seconds">%1$.1f秒</string>
+    <string name="network_source_rate">入力と同じ</string>
+    <string name="network_fps">%1$d fps</string>
+    <string name="network_percent">縦横それぞれ%1$d%%</string>
 </resources>

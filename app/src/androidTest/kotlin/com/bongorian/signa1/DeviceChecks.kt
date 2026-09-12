@@ -42,6 +42,11 @@ class DeviceChecks : Instrumentation() {
         var video = false
         var launchMonitor: ActivityMonitor? = null
         try {
+            if (args!!.getString("action", "") == "network-render") {
+                // Offscreen synthetic GL fixtures only: no activity, screen or accessibility APIs.
+                result.putString("result", FaultRenderChecks.run(targetContext, false, true))
+                return
+            }
             if (args!!.getString("action", "") == "camera-intents") {
                 // This path uses instrumentation callbacks only: no screen capture, UI automation,
                 // coordinate input or accessibility-tree inspection.

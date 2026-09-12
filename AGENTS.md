@@ -144,3 +144,7 @@
 
 - Implement ordinary camera launch and external photo/video result contracts on `codex/camera-intents`. External capture needs JPEG/MP4 only, not RAW. Preserve normal RAW settings, published releases and main; push completed checked work. No new release is requested.
 - The owner prohibits computer use for the rest of this session until explicitly changed. Use source inspection, CLI builds and automated tests; do not use native/browser UI control, screenshots or accessibility inspection.
+
+## Owner direction — Network display clarity, 2026-09-12
+
+- Improve Network display with separate freeze interval/duration controls and source-frame cadence/resolution degradation, replacing its synthetic noise overlay. Work on `codex/network-display-clarity`, preserve CRT/LED settings, and push verified work. No new release requested. The computer-use prohibition remains in force; CLI builds and offscreen synthetic rendering tests are permitted.

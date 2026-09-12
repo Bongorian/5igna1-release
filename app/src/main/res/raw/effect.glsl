@@ -154,14 +154,8 @@ void main(){
         }
     }else if(mode==FX_CRT && transportKind>.5){
         if(transportKind>1.5 && transportKind<2.5){
-            // Corrupt payload appears as short noisy scanline runs, not missing tiles.
-            vec2 px=floor(p*sourceSize);
-            vec2 run=vec2(floor(px.x/24.),floor(px.y/2.));
-            float damaged=step(damageHash(run+networkSeed),transportDamage*.5);
-            float grain=damageHash(px+networkSeed);
-            vec3 noise=vec3(grain,damageHash(px+networkSeed+31.),damageHash(px+networkSeed+71.));
-            vec3 torn=sampleAt(p+vec2((damageHash(run+networkSeed+9.)-.5)*.08,0.));
-            c=mix(c,mix(torn,noise,.55+.35*transportLoss),damaged);
+            // Network degradation is applied to delivery cadence and intermediate resolution.
+            // Preserve acquired colors; no synthetic noise layer is added here.
         }else if(transportKind>2.5){
             // Equal pixel pitch makes failed cabinet modules square at every aspect ratio.
             float pitch=max(1.,floor(min(sourceSize.x,sourceSize.y)/mix(180.,36.,transportLoss)));

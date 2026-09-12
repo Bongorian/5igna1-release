@@ -130,7 +130,7 @@ private constructor(
         val s = StringBuilder()
         for (id in ids) {
             s.append(" | ").append(Effects.name(id)).append(" identity=").append(identity(id))
-            for (c in Effects.CONTROLS[id].filter { it.key !in setOf("transport", "reduce", "cable", "upconvert") || get(id, it.key) != it.initial }) s.append(' ')
+            for (c in Effects.CONTROLS[id].filter { (it.key !in setOf("transport", "reduce", "cable", "upconvert") && it.key !in NetworkDisplay.keys) || get(id, it.key) != it.initial }) s.append(' ')
                 .append(c.key)
                 .append('=')
                 .append(get(id, c.key))
@@ -191,7 +191,7 @@ private constructor(
                         p = p.with(id, pair[0], value)
                     }
                 }
-                require(Effects.CONTROLS[id].all { it.key in keys || it.key in setOf("transport", "reduce", "cable", "upconvert") }) {
+                require(Effects.CONTROLS[id].all { it.key in keys || it.key in setOf("transport", "reduce", "cable", "upconvert") || it.key in NetworkDisplay.keys }) {
                     "Missing controls"
                 }
             }

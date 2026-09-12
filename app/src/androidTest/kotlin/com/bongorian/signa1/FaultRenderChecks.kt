@@ -134,7 +134,7 @@ internal object FaultRenderChecks {
             val analog = defaults.with(Effects.VHS, "transport", 1f).with(Effects.CRT, "transport", 1f / 3)
             check(!render(analog, media or display).contentEquals(render(analog.with(Effects.VHS, "cable", 1f), media or display))) { "Composite/component match" }
             check(!render(analog, media or display).contentEquals(render(analog.with(Effects.CRT, "upconvert", 0f), media or display))) { "Upsampling choices match" }
-            val network = defaults.with(Effects.CRT, "transport", 2f / 3).override(Effects.CRT, "networkStall", 0f)
+            val network = defaults.with(Effects.CRT, "networkRate", 1f).with(Effects.CRT, "transport", 2f / 3).override(Effects.CRT, "networkStall", 0f)
             val before = render(network, display)
             upload(true)
             check(before.contentEquals(render(network.override(Effects.CRT, "networkStall", 1f), display))) { "Network stall did not retain preceding pixels" }
@@ -144,11 +144,12 @@ internal object FaultRenderChecks {
                 .with(Effects.CRT, "convergence", 0f).with(Effects.CRT, "sync", 0f)
             check(solid.contentEquals(render(led, display))) { "LED added element-gap lines" }
             checkTransportFaultGeometry(context)
+            checkNetworkDelivery(context)
             upload(false)
             // Reuse the same specialized programs after switching away from transport models.
             chain.releaseBuffers()
             check(clean.contentEquals(render(digital, media)))
-            return JSONObject().put("result", "PASS digital identity, 16 media/display combinations, media resolution, cable models, upconversion, network frame hold/resume, noisy payload corruption and LIVE timing, square LED modules in both aspect ratios without black gaps")
+            return JSONObject().put("result", "PASS digital identity, 16 media/display combinations, media resolution, cable models, upconversion, network frame hold/resume, source-color preservation, resolution loss and frame cadence, square LED modules in both aspect ratios without black gaps")
                 .put("uniqueFrames", hashes.size)
         } finally {
             image.recycle(); chain.release(); source.release(); target.release()
@@ -186,11 +187,49 @@ internal object FaultRenderChecks {
                 check(failures>0) { "LED has no failed modules" }
                 val network=render(2f/3)
                 check(network.contentEquals(render(2f/3))) { "Fixed NETWORK seed changed" }
-                check(!render(2f/3, true, .7).contentEquals(render(2f/3, true, 4.2))) { "LIVE ON did not advance NETWORK noise" }
-                val values=network.indices.filter { it%4!=3 }.map { network[it].toInt() and 255 }.toSet()
-                check(values.size>100) { "NETWORK corruption is flat blocks instead of noise" }
-                check(network.count { (it.toInt() and 255)<240 }>w*h/4) { "NETWORK corruption missing" }
+                check(network.all { (it.toInt() and 255) == 255 }) { "NETWORK added synthetic color to a white source" }
+                check(render(2f/3, true, 4.2).all { (it.toInt() and 255) == 255 }) { "LIVE added NETWORK noise" }
             }
+        } finally { chain.release(); source.release(); target.release() }
+    }
+
+    private fun checkNetworkDelivery(context: Context) {
+        val chain = EffectChain(PhotoRenderer.shaderSource(context), false)
+        val source = SignalBuffer(); val target = SignalBuffer()
+        val w = 320; val h = 240
+        source.allocate(w, h); target.allocate(w, h)
+        val p = EffectParameters.defaults().with(Effects.CRT, "transport", 2f / 3)
+            .with(Effects.CRT, "networkRate", 9f / 29).with(Effects.CRT, "networkResolution", 1f)
+        fun upload(color: Int) {
+            val b = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888).apply { eraseColor(color) }
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,source.texture)
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,b,0); b.recycle()
+        }
+        fun draw(t: Double, settings: EffectParameters = p): ByteArray {
+            val state = EffectState.defaults().edit(true, 1 shl Effects.CRT, settings).amount(1f)
+            chain.render(source.texture,false,identity,frame(state,false,t),w,h,w,h,target.fbo,target.texture)
+            return pixels(target, ByteBuffer.allocateDirect(w*h*4))
+        }
+        try {
+            upload(android.graphics.Color.RED)
+            val red = draw(0.0)
+            upload(android.graphics.Color.BLUE)
+            check(draw(.05).contentEquals(red)) { "NETWORK ignored 10 fps cap" }
+            val blue = draw(.1)
+            check(!blue.contentEquals(red)) { "NETWORK missed delivery deadline" }
+            upload(android.graphics.Color.GREEN)
+            val stalled = p.with(Effects.CRT, "networkResolution", 0f).override(Effects.CRT,"networkStall",1f)
+            check(draw(.2, stalled).contentEquals(blue)) { "Resolution edit erased held frame" }
+            check(!draw(.21, stalled.override(Effects.CRT,"networkStall",0f)).contentEquals(blue)) { "NETWORK did not resume" }
+            // High-frequency source distinguishes real resampling from a noise overlay.
+            val bitmap = fixture(w,h)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,source.texture)
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bitmap,0); bitmap.recycle()
+            val clear = draw(.4)
+            val reduced = draw(.6, p.with(Effects.CRT,"networkResolution",0f))
+            check(!clear.contentEquals(reduced)) { "NETWORK resolution control had no effect" }
+            chain.releaseBuffers()
+            check(draw(.7).contentEquals(clear)) { "NETWORK retained released history" }
         } finally { chain.release(); source.release(); target.release() }
     }
 

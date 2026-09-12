@@ -61,7 +61,7 @@ constructor(
             .immutableCopy()
 
     companion object {
-        val transportKeys = setOf("transportKind", "mediaReduce", "cableKind", "upconvert", "transportDamage", "transportLoss", "transportNoise", "networkStall", "refreshBand", "networkSeed")
+        val transportKeys = setOf("transportKind", "mediaReduce", "cableKind", "upconvert", "transportDamage", "transportLoss", "transportNoise", "networkFps", "networkStall", "refreshBand", "networkSeed")
     }
 
     fun describe(): String {

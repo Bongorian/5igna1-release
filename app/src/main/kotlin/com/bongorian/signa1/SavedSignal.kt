@@ -41,7 +41,7 @@ internal data class SavedSignal(val description: String, val chain: String, val 
                     }
                     // Older descriptions intentionally omitted these default transport macros.
                     for (control in Effects.CONTROLS[id]) require(control.key in fields ||
-                        control.key in setOf("transport","reduce","cable","upconvert"))
+                        control.key in setOf("transport","reduce","cable","upconvert") || control.key in NetworkDisplay.keys)
                     if (" overrides=" in group) {
                         val tail = group.substringAfter(" overrides=")
                         require(tail.startsWith('{') && '}' in tail)

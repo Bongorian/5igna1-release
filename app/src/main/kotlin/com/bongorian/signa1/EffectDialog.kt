@@ -333,7 +333,10 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 } else for (control in Effects.CONTROLS[id].filter { it.key !in setOf("transport", "reduce", "cable", "upconvert") }) {
                     val kind = if (id == Effects.VHS || id == Effects.CRT) kotlin.math.round(draft.get(id, "transport") * 3).toInt() else 0
                     if (id == Effects.VHS && (kind == 2 || (kind == 1 && control.key in setOf("bandwidth", "noise")) || (kind == 3 && control.key == "bandwidth"))) continue
-                    if (id == Effects.CRT && (kind == 1 || (kind >= 2 && control.key == "phosphor"))) continue
+                    if (id == Effects.CRT && (kind == 1 ||
+                        (kind == 2 && control.key !in NetworkDisplay.keys) ||
+                        (kind != 2 && control.key in NetworkDisplay.keys) ||
+                        (kind == 3 && control.key == "phosphor"))) continue
                     slider(id, control)
                 }
                 val actions = a.row()
@@ -486,17 +489,21 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             "dropout" -> R.string.transport_contact
             else -> R.string.transport_interference
         }
-        if (id == Effects.CRT && kind == 2) return when (key) {
-            "scan" -> R.string.transport_resolution_loss
-            "convergence" -> R.string.transport_packet_loss
-            else -> R.string.transport_stall
-        }
+        if (id == Effects.CRT && kind == 2) return controlLabel(key)
         if (id == Effects.CRT && kind == 3) return when (key) {
             "scan" -> R.string.transport_pitch
             "convergence" -> R.string.transport_module_loss
             else -> R.string.transport_refresh
         }
         return controlLabel(key)
+    }
+
+    private fun controlValue(key: String, value: Float): String = when (key) {
+        "networkInterval" -> NetworkDisplay.interval(value).let { if (it == 0) a.getString(R.string.network_off) else a.getString(R.string.network_every_seconds, it) }
+        "networkDuration" -> a.getString(R.string.network_seconds, NetworkDisplay.duration(value))
+        "networkRate" -> NetworkDisplay.fps(value).let { if (it == 0) a.getString(R.string.network_source_rate) else a.getString(R.string.network_fps, it) }
+        "networkResolution" -> a.getString(R.string.network_percent, Math.round(NetworkDisplay.scale(value) * 100))
+        else -> Math.round(value * 100).toString() + "%"
     }
 
     fun slider(id: Int, control: Effects.Control) {
@@ -511,7 +518,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         slider.setTag(control.key)
         slider.setMax(100)
         slider.setProgress(Math.round(draft.get(id, control.key) * 100))
-        value.setText(slider.progress.toString() + "%")
+        value.setText(controlValue(control.key, draft.get(id, control.key)))
         slider.setProgressTintList(ColorStateList.valueOf(MainActivity.LIME))
         slider.setThumbTintList(ColorStateList.valueOf(MainActivity.LIME))
         body!!.addView(slider, LinearLayout.LayoutParams(-1, a.dp(42f)))
@@ -520,7 +527,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 override fun onProgressChanged(s: SeekBar?, n: Int, user: Boolean) {
                     if (user) {
                         draft = draft.with(id, control.key, n / 100f)
-                        value.setText(n.toString() + "%")
+                        value.setText(controlValue(control.key, n / 100f))
                         preview()
                     }
                 }
@@ -535,6 +542,10 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     companion object {
         fun controlLabel(key: String): Int {
             when (key) {
+                "networkInterval" -> return R.string.fault_control_networkInterval
+                "networkDuration" -> return R.string.fault_control_networkDuration
+                "networkRate" -> return R.string.fault_control_networkRate
+                "networkResolution" -> return R.string.fault_control_networkResolution
                 "transport" -> return R.string.fault_control_transport
                 "reduce" -> return R.string.fault_control_reduce
                 "cable" -> return R.string.fault_control_cable

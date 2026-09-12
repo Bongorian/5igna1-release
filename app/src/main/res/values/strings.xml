@@ -482,7 +482,7 @@
     <string name="transport_analog_hint">Reduces resolution to the selected connection model and adds cable faults.</string>
     <string name="transport_crt_hint">Scan and phosphor appearance, convergence and sync faults.</string>
     <string name="transport_digital_display_hint">After analog media, choose how to enlarge the reduced image for output.</string>
-    <string name="transport_network_hint">Congestion holds the preceding frame; LIVE advances stalls and packet loss.</string>
+    <string name="transport_network_hint">Lower frame rate and resolution simulate a weak connection. Freezes require LIVE. Values are at full FAULT; a lower amount softens degradation. Freeze times follow LIVE speed. Output dimensions stay unchanged.</string>
     <string name="transport_led_hint">LED spacing, square failed modules and refresh flicker.</string>
     <string name="seed_no_target">No active fault uses a seed.</string>
     <string name="seed_chain_done">Regenerated active fault seeds. Controls unchanged.</string>
@@ -538,4 +538,14 @@
     <string name="external_capture_use" formatted="false">Use</string>
     <string name="external_capture_retake" formatted="false">Retake</string>
     <string name="external_capture_returning" formatted="false">Returning capture…</string>
+    <string name="fault_control_networkInterval">Freeze interval</string>
+    <string name="fault_control_networkDuration">Freeze duration</string>
+    <string name="fault_control_networkRate">Frame rate limit</string>
+    <string name="fault_control_networkResolution">Delivered resolution</string>
+    <string name="network_off">OFF</string>
+    <string name="network_every_seconds">Every %1$d s</string>
+    <string name="network_seconds">%1$.1f s</string>
+    <string name="network_source_rate">Source rate</string>
+    <string name="network_fps">%1$d fps</string>
+    <string name="network_percent">%1$d%% per side</string>
 </resources>

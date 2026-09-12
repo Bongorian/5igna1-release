@@ -137,6 +137,7 @@ Android 12以降、Camera2プレビュー/JPEGとOpenGL ES 2.0が必要です。
 
 - `action seed`: SEED field refresh, exact integer input, Apply/Cancel, EVENT SEED and recording guard.
 - `action transport`: model UI, settings order, pixel identity, intermediate resolution, network hold/resume and LED gaps.
+- `action network-render`: offscreen synthetic GPU checks for transport identity, Network frame cadence, hold/resume, resolution edits and source-color preservation; no activity or screen inspection.
 - `action tap`: 写真・動画素材、入力位置、再生／録画、ホーム移動時の終了・保存を確認します。安全なロックを設定していないエミュレーターでは`-e leave lock`で画面ロックも確認できます。DEV領域の`files/tap-fixture.mp4`が必要です。
 
 ## LIGHT / GPU — unreleased
