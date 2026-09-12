@@ -8,14 +8,15 @@ import java.util.HexFormat
 class MigrationGoldenTest {
     @org.junit.Test
     @Throws(Exception::class)
-    fun preservesFaultFramesAndRawBytes() {
+    fun preservesLegacyFaultFramesAndRawBytes() {
         val raw = MessageDigest.getInstance("SHA-256")
         val frames = MessageDigest.getInstance("SHA-256")
-        // This frozen Java fixture covers the original 0..13 catalog only.
+        // Frozen Java evidence uses the legacy model. TimeContractTest separately checks current semantics
+        // and unchanged static mechanisms. Expected Java hashes must remain unchanged.
         for (id in 0..Effects.CRT) for (level in floatArrayOf(0f, .25f, .8f, 1f)) {
             val state = EffectState.defaults().single(id).amount(level)
-            val model = FaultModel(123456)
-            val input = FaultModel.Inputs()
+            val model = LegacyFaultModelReference(123456)
+            val input = LegacyFaultModelReference.Inputs()
             val config = FaultConfig.defaults()
             for (n in 0..119) {
                 input.sensorNs = 1 + n * 16666667L

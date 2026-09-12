@@ -152,3 +152,7 @@
 ## Owner direction — time-model audit, 2026-09-12
 
 - Inventory each model’s internal parameters and assess consistency with the time model on `codex/time-model-audit`. Deliver source-based findings, reproducible characterization and a proposed implementation order. This request is assessment, not authorization to redesign production timing or release another build. Keep the installed Pixel build and the computer-use prohibition in place; push completed checked audit work.
+
+## Owner direction — time-model consistency, 2026-09-12
+
+- The owner approved proceeding with the audit’s implementation. Work on `codex/time-model-consistency`: resolve active models before compilation, separate delivery/content clocks, expose effective values and active parameters, unify incident/noise timing and seed rules, and clarify Exposure/LED generators. This supersedes the assessment-only restriction above. Keep richer temporal afterglow/multi-frame blur as separate future work. Preserve old golden evidence, saved-key readability and release artifacts; no new release is requested. Continue CLI/offscreen verification under the computer-use ban and push checked work.

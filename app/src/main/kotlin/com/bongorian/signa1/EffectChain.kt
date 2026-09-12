@@ -194,6 +194,11 @@ internal class EffectChain(private val source: String, private val supportsExter
     private val networkDelivery = NetworkDelivery()
     private var networkOutputW = 0
     private var networkOutputH = 0
+    private var networkEpoch = 0L
+    private var networkSnapshot: EffectState.Frame? = null
+
+    fun renderedFrame(current: EffectState.Frame): EffectState.Frame =
+        if (networkValid) networkSnapshot?.deliveredAt(current) ?: current else current
 
     private fun drawStage(input: Int, external: Boolean, matrix: FloatArray, node: FaultNode?,
                           sourceWidth: Int, sourceHeight: Int, destination: Int, w: Int, h: Int) {
@@ -251,8 +256,8 @@ internal class EffectChain(private val source: String, private val supportsExter
                 break
             }
             val buffer = if (network) networkFrame else transportBuffers.first { it.texture != input }
-            if (network && (networkOutputW != w || networkOutputH != h || networkIdentity != node.identity.seed)) networkValid = false
-            val now = if (frame.cameraNs > 0) frame.cameraNs else (frame.time * 1e9).toLong()
+            if (network && (networkOutputW != w || networkOutputH != h || networkIdentity != node.identity.seed || networkEpoch != frame.sourceEpoch)) networkValid = false
+            val now = frame.deliveryNs
             if (!network || networkDelivery.update(now, node.mechanism["networkFps"] ?: 0f,
                     node.get("networkStall") >= .5f, networkValid)) {
                 // Allocate only when a frame arrives: resolution edits must not discard a held frame.
@@ -260,11 +265,11 @@ internal class EffectChain(private val source: String, private val supportsExter
                 drawStage(input, first && oes, if (first) requireNotNull(transform) else IDENTITY,
                     node, if (node.id == Effects.CRT && kind == 3) ow else iw,
                     if (node.id == Effects.CRT && kind == 3) oh else ih, buffer.fbo, ow, oh)
-                if (network) { networkValid = true; networkIdentity = node.identity.seed; networkOutputW = w; networkOutputH = h }
+                if (network) { networkValid = true; networkIdentity = node.identity.seed; networkOutputW = w; networkOutputH = h; networkEpoch = frame.sourceEpoch; networkSnapshot = frame }
             }
             input = buffer.texture; iw = buffer.w; ih = buffer.h; first = false
         }
-        if (!networkUsed) { networkValid = false; networkFrame.release() }
+        if (!networkUsed) { networkValid = false; networkSnapshot = null; networkFrame.release() }
         if (nearest && !first) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, input)
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
@@ -291,7 +296,7 @@ internal class EffectChain(private val source: String, private val supportsExter
             renderTransport(texture, oes, transform, frame, w, h, sourceW, sourceH, target, targetTexture)
             return
         }
-        if (networkValid) { networkValid = false; networkFrame.release() }
+        if (networkValid) { networkValid = false; networkSnapshot = null; networkFrame.release() }
         transportBuffers.forEach { if (it.texture != 0) it.release() }
         val count = frame.nodes.size
         // Opt in only for an owned RGBA8 target texture of exactly w × h. The callers keep it
@@ -336,6 +341,7 @@ internal class EffectChain(private val source: String, private val supportsExter
         transportBuffers.forEach { it.release() }
         networkFrame.release()
         networkValid = false
+        networkSnapshot = null
         GLES20.glDeleteTextures(2, textures, 0)
         GLES20.glDeleteFramebuffers(2, fbos, 0)
         textures.fill(0)

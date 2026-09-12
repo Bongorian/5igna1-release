@@ -9,7 +9,7 @@ internal object EffectRandomizer {
     fun supportsSeed(id: Int, parameters: EffectParameters): Boolean {
         if (id in intArrayOf(Effects.CLEAN, Effects.COLOR_MAP, Effects.MOTION_BLUR, Effects.SMEAR)) return false
         if (id == Effects.VHS || id == Effects.CRT) {
-            val kind = Math.round(parameters.resolved(id, "transportKind", parameters.get(id, "transport") * 3))
+            val kind = parameters.transportKind(id)
             if (kind == (if (id == Effects.VHS) 2 else 1)) return false
         }
         return true

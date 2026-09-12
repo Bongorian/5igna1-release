@@ -297,7 +297,8 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             else state.snapshot(videoMode, settings.photoFormat),
             activeFaultConfig().experimental(settings.experimentalSignals),
         )
-        return if (tapInput == null) frame else frame.afterReadout()
+        val sourced = frame.withSourceEpoch(generation.toLong())
+        return if (tapInput == null) sourced else sourced.afterReadout()
     }
 
     val timingCallback: CaptureCallback =
@@ -1579,9 +1580,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
             if (show || recording && !rawVideoMode()) {
                 val renderStarted = System.nanoTime()
                 val currentState = faultFrame((if (previewEffects == null) effectState else previewEffects)!!)
-                val state = if (echo == null) currentState else EffectState.Frame(currentState.ids(),
-                    currentState.amount, currentState.parameters, echo.cameraNs, currentState.time,
-                    currentState.nodes, currentState.experimental, currentState.injection)
+                val state = if (echo == null) currentState else currentState.withContentTimestamp(echo.cameraNs)
                 var didRender = false
                 val slot = if (show && settings.advancedMode) presentedFrames.acquire() else null
                 val rendered: SignalBuffer = (if (slot == null) encoderScratch else slot.value)!!
@@ -1605,7 +1604,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                             rendered.fbo,
                             rendered.texture,
                         )
-                        rendered.frame = state
+                        rendered.frame = previewChain!!.renderedFrame(state)
                         didRender = true
                         renderedFrames++
                     } catch (failure: Exception) {
@@ -1706,13 +1705,12 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
         check(settings.lightMode && captureInputTexture != 0 && captureInputNs > 0)
         current(window)
         val current = faultFrame((previewEffects ?: effectState)!!)
-        val frame = EffectState.Frame(current.ids(), current.amount, current.parameters, captureInputNs,
-            current.time, current.nodes, current.experimental, current.injection)
+        val frame = current.withContentTimestamp(captureInputNs)
         val chain = lightPhotoChain ?: EffectChain(PhotoRenderer.shaderSource(context), true).also { lightPhotoChain = it }
         target.allocate(outW, outH)
         chain.render(captureInputTexture, captureInputExternal, captureInputMatrix, frame,
             outW, outH, captureInputWidth, captureInputHeight, target.fbo, target.texture)
-        target.frame = frame
+        target.frame = chain.renderedFrame(frame)
         target.presentedAt = System.currentTimeMillis()
     }
 

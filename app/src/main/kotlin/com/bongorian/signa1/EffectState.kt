@@ -89,6 +89,9 @@ private constructor(
         nodes: List<FaultNode>,
         val experimental: Boolean = false,
         val injection: Boolean = false,
+        val deliveryNs: Long = cameraNs,
+        val sourceEpoch: Long = 0,
+        val clockVersion: Int = 0,
     ) {
         private val route: IntArray
         val amount: Float
@@ -132,14 +135,23 @@ private constructor(
                     .toArray()
             val selected: MutableList<FaultNode> = ArrayList<FaultNode>()
             for (n in nodes) if (Effects.point(n.id).ordinal <= point.ordinal) selected.add(n)
-            return Frame(prefix, amount, parameters, cameraNs, time, selected, experimental, injection)
+            return Frame(prefix, amount, parameters, cameraNs, time, selected, experimental, injection, deliveryNs, sourceEpoch, clockVersion)
         }
 
         fun afterReadout(): Frame {
             val suffix = route.filter { Effects.point(it).ordinal > Effects.Point.READOUT.ordinal }.toIntArray()
             return Frame(suffix, amount, parameters, cameraNs, time,
-                nodes.filter { Effects.point(it.id).ordinal > Effects.Point.READOUT.ordinal }, experimental, true)
+                nodes.filter { Effects.point(it.id).ordinal > Effects.Point.READOUT.ordinal }, experimental, true, deliveryNs, sourceEpoch, clockVersion)
         }
+
+        fun withSourceEpoch(epoch: Long): Frame = Frame(route, amount, parameters, cameraNs, time, nodes,
+            experimental, injection, deliveryNs, epoch, clockVersion)
+
+        fun withContentTimestamp(stamp: Long): Frame = Frame(route, amount, parameters, stamp, time, nodes,
+            experimental, injection, deliveryNs, sourceEpoch, clockVersion)
+
+        fun deliveredAt(current: Frame): Frame = Frame(route, amount, parameters, cameraNs, time, nodes,
+            experimental, injection, current.deliveryNs, current.sourceEpoch, clockVersion)
 
         fun describe(): String {
             val s =
@@ -149,7 +161,9 @@ private constructor(
                     .append(time)
                     .append(" LEVEL=")
                     .append(amount)
-                    .append(parameters.describe(route))
+            if (clockVersion > 0) s.append(" clockModel=").append(clockVersion)
+                .append(" deliveryNs=").append(deliveryNs).append(" sourceEpoch=").append(sourceEpoch)
+            s.append(parameters.describe(route))
             if (experimental || route.any { id -> FaultSensitivity.keys.any { parameters.manual(id, it) } })
                 s.append(" experimental=").append(experimental)
             if (injection) s.append(" input=TAP@READOUT/DATA")

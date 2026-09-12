@@ -482,7 +482,7 @@
     <string name="transport_analog_hint">Reduces resolution to the selected connection model and adds cable faults.</string>
     <string name="transport_crt_hint">Scan and phosphor appearance, convergence and sync faults.</string>
     <string name="transport_digital_display_hint">After analog media, choose how to enlarge the reduced image for output.</string>
-    <string name="transport_network_hint">Lower frame rate and resolution simulate a weak connection. Freezes require LIVE. Values are at full FAULT; a lower amount softens degradation. Freeze times follow LIVE speed. Output dimensions stay unchanged.</string>
+    <string name="transport_network_hint">Frame rate and freeze duration use the specified values. FAULT changes freeze probability and resolution loss. LIVE speed changes freeze timing. The effective values below follow current modulation. Source rate and output dimensions are unchanged.</string>
     <string name="transport_led_hint">LED spacing, square failed modules and refresh flicker.</string>
     <string name="seed_no_target">No active fault uses a seed.</string>
     <string name="seed_chain_done">Regenerated active fault seeds. Controls unchanged.</string>
@@ -540,7 +540,7 @@
     <string name="external_capture_returning" formatted="false">Returning capture…</string>
     <string name="fault_control_networkInterval">Freeze interval</string>
     <string name="fault_control_networkDuration">Freeze duration</string>
-    <string name="fault_control_networkRate">Frame rate limit</string>
+    <string name="fault_control_networkRate">Frame delivery rate</string>
     <string name="fault_control_networkResolution">Delivered resolution</string>
     <string name="network_off">OFF</string>
     <string name="network_every_seconds">Every %1$d s</string>
@@ -548,4 +548,17 @@
     <string name="network_source_rate">Source rate</string>
     <string name="network_fps">%1$d fps</string>
     <string name="network_percent">%1$d%% per side</string>
+    <string name="fault_control_ledRate">Refresh frequency</string>
+    <string name="led_refresh_hz">%1$.1f Hz</string>
+    <string name="network_actual_fps">%1$.1f fps</string>
+    <string name="network_effective">Effective: %1$s · %2$d%% per side\nOpportunity: %3$.1f s · freeze: %4$.2f s · chance: %5$d%%</string>
+    <string name="network_bypassed">FAULT is bypassed.</string>
+    <string name="network_manual_stall"> · Freeze FIX overrides schedule.</string>
+    <string name="network_live_required"> · Automatic freezes need LIVE.</string>
+    <string name="clock_contract_hint">Time and event seconds follow FAULT speed. HOLD also freezes input response; speed 0 and fixed time do not. Duration is capped at its period. Final FIX values override generators.</string>
+    <string name="inactive_overrides_hint">%1$d saved FIX values are inactive in this model. They are retained; AUTO ALL clears them.</string>
+    <string name="network_effective_off">Effective: %1$s · %2$d%% per side\nAutomatic freeze opportunities: OFF</string>
+    <string name="exposure_clock_label">Exposure clock</string>
+    <string name="exposure_clock_fault">0 · FAULT time only</string>
+    <string name="exposure_clock_measured">1 · Measured exposure timing + FAULT oscillator</string>
 </resources>

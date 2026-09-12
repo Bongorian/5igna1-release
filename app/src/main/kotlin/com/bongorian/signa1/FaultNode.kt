@@ -27,6 +27,7 @@ constructor(
         val position: Float,
         val pattern: Float,
         val identity: Long = 0,
+        val active: Boolean = envelope > 0f,
     )
 
     val profile = profile.immutableCopy()

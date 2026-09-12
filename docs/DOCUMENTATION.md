@@ -74,3 +74,5 @@ Keep historical measurements, hashes and submitted metadata intact. Label the so
 - [Camera integration](CAMERA_INTEGRATION.md) / [日本語](CAMERA_INTEGRATION.ja.md): unreleased camera intents, caller contracts and separate-UID verification.
 
 - [Internal parameters and time-model review](design/TIME_MODEL_REVIEW.md) / [日本語](design/TIME_MODEL_REVIEW.ja.md), [generated catalog and evidence](audit/TIME_MODEL_EVIDENCE.md): 2026-09-12 audit of dd7f027; proposed clock/parameter contract, with no production behavior change.
+
+- [Clock model 2](TIME_MODEL.md) / [日本語](TIME_MODEL.ja.md): unreleased clock ownership, shared incidents, stable seeds, active model parameters and verification scope.

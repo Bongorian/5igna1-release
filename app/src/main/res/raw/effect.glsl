@@ -6,7 +6,7 @@ uniform samplerExternalOES cam;
 uniform mat4 st;
 uniform int mode;
 uniform vec2 sourceSize;
-uniform float transportKind,mediaReduce,cableKind,upconvert,transportDamage,transportLoss,transportNoise,networkStall,refreshBand,networkSeed;
+uniform float transportKind,mediaReduce,cableKind,upconvert,transportDamage,transportLoss,transportNoise,networkStall,refreshBand,networkSeed,refreshSeed;
 // Compiled mechanism parameters. Only the current fault's named values are bound.
 uniform float identitySeed,eventSeed,grainSeed;
 uniform float pixelDensity,columnDensity,hotFraction,hotValue,sensorNoise;
@@ -163,7 +163,7 @@ void main(){
             vec2 module=floor(cell/8.);
             c=sampleAt((cell+.5)*pitch/sourceSize);
             float failed=step(damageHash(module+identitySeed),transportDamage*.3);
-            float flicker=damageHash(module+identitySeed+floor(syncOffset*100.));
+            float flicker=damageHash(module+identitySeed+refreshSeed);
             c*=mix(1.,.08,failed);
             c*=1.-refreshBand*step(flicker,.5);
         }

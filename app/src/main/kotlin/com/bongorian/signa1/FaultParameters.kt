@@ -43,17 +43,15 @@ internal object FaultParameters {
                 -6.283186f,
                 6.283186f,
                 .001f,
-                "identityBias",
-                -1,
-                1,
-                .001f,
             )
+            add(p, Group.PROFILE, "identityBias", -1, 1, .001f)
             if (incidents(id))
                 add(
                     p,
                     Group.EVENT,
+                    "eventPhase", 0, 1, .001f,
                     "eventPeriod",
-                    .03f,
+                    if (id == Effects.CRT) 0f else .03f,
                     60,
                     .01f,
                     "eventDuration",
@@ -393,6 +391,14 @@ internal object FaultParameters {
                 Effects.SMEAR -> add(p, Group.SIGNAL, "smearAmount", 0, 2, .01f, "smearLength", 0, .4f, .001f, "smearThreshold", 0, .99f, .001f)
                 else -> throw IllegalArgumentException("Fault ID")
             }
+            if (id == Effects.EXPOSURE) {
+                add(p, Group.TIME, "exposureRate", -40, 40, .01f, "exposurePhaseOffset", -6.283186f, 6.283186f, .001f)
+                add(p, Group.PROFILE, "exposureClock", 0, 1, 1)
+            }
+            if (id == Effects.CRT) {
+                add(p, Group.TIME, "refreshRate", 0, 60, .1f)
+                add(p, Group.SIGNAL, "refreshSeed", 0, 997, .1f)
+            }
             if (id == Effects.VHS || id == Effects.CRT) {
                 add(p, Group.PROFILE, "transportKind", 0, 3, 1)
                 add(p, Group.SIGNAL, "transportDamage", 0, 1, .001f, "transportLoss", 0, 1, .001f)
@@ -414,7 +420,7 @@ internal object FaultParameters {
             id == Effects.ADDRESS_ERROR ||
             id == Effects.BLOCK_ERROR ||
             id == Effects.STREAM_ERROR ||
-            id == Effects.VHS
+            id == Effects.VHS || id == Effects.CRT
     }
 
     private fun add(p: MutableList<Spec>, group: Group, vararg values: Any) {

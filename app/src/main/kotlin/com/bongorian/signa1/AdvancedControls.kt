@@ -22,11 +22,11 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
         if (!a.settings.experimentalSignals && editor.advancedGroup == FaultParameters.Group.INPUT)
             editor.advancedGroup = FaultParameters.Group.SIGNAL
         if (
-            FaultParameters.all(id).stream().noneMatch { spec: FaultParameters.Spec? ->
+            FaultCapabilities.active(id, editor.draft, a.settings.experimentalSignals).stream().noneMatch { spec: FaultParameters.Spec? ->
                 spec!!.group == editor.advancedGroup
             }
         )
-            editor.advancedGroup = FaultParameters.Group.SIGNAL
+            editor.advancedGroup = FaultCapabilities.active(id, editor.draft, a.settings.experimentalSignals).first().group
         reference = FaultModel(0).inspect(id, editor.draft, editor.amount, a.faultConfig.experimental(a.settings.experimentalSignals))
         a.shownLiveFrame?.let(::update)
     }
@@ -58,11 +58,13 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
         editor.scroll!!.post(Runnable@{ editor.scroll!!.scrollTo(0, y) })
     }
 
+    private fun visible() = FaultCapabilities.active(id, editor.draft, a.settings.experimentalSignals)
+
     fun show(body: LinearLayout) {
         val hint = a.text(a.getString(R.string.ui_advanced_hint), 11, MainActivity.MUTED)
         hint.setPadding(0, a.dp(8f), 0, a.dp(8f))
         body.addView(hint)
-        if (FaultParameters.incidents(id) && EffectRandomizer.supportsSeed(id, editor.draft)) {
+        if (visible().any { it.group == FaultParameters.Group.EVENT } && EffectRandomizer.supportsSeed(id, editor.draft)) {
             val eventRow = a.row()
             val eventSeed =
                 a.button(
@@ -111,6 +113,11 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
                 }
             )
         }
+        if (visible().any { it.group == FaultParameters.Group.TIME || it.group == FaultParameters.Group.EVENT }) {
+            body.addView(a.text(a.getString(R.string.clock_contract_hint), 11, MainActivity.MUTED))
+        }
+        val inactive = editor.draft.overrides(id).keys.count { key -> visible().none { it.key == key } }
+        if (inactive > 0) body.addView(a.text(a.getString(R.string.inactive_overrides_hint, inactive), 11, MainActivity.MUTED))
         val groups = HorizontalScrollView(a)
         groups.setHorizontalScrollBarEnabled(false)
         val row = a.row()
@@ -119,7 +126,7 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
         for (group in FaultParameters.Group.entries) {
             if (group == FaultParameters.Group.INPUT && !a.settings.experimentalSignals) continue
             if (
-                FaultParameters.all(id).stream().noneMatch { spec: FaultParameters.Spec? ->
+                FaultCapabilities.active(id, editor.draft, a.settings.experimentalSignals).stream().noneMatch { spec: FaultParameters.Spec? ->
                     spec!!.group == group
                 }
             )
@@ -142,7 +149,7 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
         }
         if (editor.advancedGroup == FaultParameters.Group.INPUT) body.addView(
             a.text(a.getString(R.string.input_sensitivity_hint), 12, MainActivity.MUTED))
-        for (spec in FaultParameters.all(id)) if (spec.group == editor.advancedGroup)
+        for (spec in visible()) if (spec.group == editor.advancedGroup)
             parameter(
                 body,
                 spec,
@@ -161,7 +168,7 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
     fun parameter(body: LinearLayout, spec: FaultParameters.Spec) {
         val manual = editor.draft.manual(id, spec.key)
         val row = a.row()
-        val label = if (spec.group == FaultParameters.Group.INPUT) a.getString(inputLabel(spec.key)) else spec.key
+        val label = if (spec.group == FaultParameters.Group.INPUT) a.getString(inputLabel(spec.key)) else spec.key + FaultCapabilities.unit(spec.key).let { if (it.isEmpty()) "" else " ($it)" }
         val name = a.text(label, 11, MainActivity.WHITE)
         val value = a.button(SignalControls.value(current(spec)))
         val mode = a.button(if (manual) "FIX" else "AUTO")
@@ -198,6 +205,15 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
         value.setTag("value-" + spec.key)
         value.setOnClickListener(
             OnClickListener@{ v: View? ->
+                if (spec.key == "exposureClock") {
+                    SignalSheet.pick(a, a.getString(R.string.exposure_clock_label),
+                        arrayOf(a.getString(R.string.exposure_clock_fault), a.getString(R.string.exposure_clock_measured)),
+                        if (current(spec) >= .5f) 1 else 0, { choice ->
+                            editor.draft = editor.draft.override(id, spec.key, choice.toFloat())
+                            editor.preview(); refresh()
+                        })
+                    return@OnClickListener
+                }
                 editor.auxiliary =
                     SignalSheet.number(
                         a,
@@ -242,6 +258,7 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
                             editor.draft = editor.draft.override(id, spec.key, next)
                             value.setText(SignalControls.value(next))
                             editor.preview()
+                            if (spec.key == "transportKind") refresh()
                         }
                     }
 

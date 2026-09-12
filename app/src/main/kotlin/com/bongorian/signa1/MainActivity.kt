@@ -574,6 +574,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         }
         shownLiveFrame = frame
         if (effectEditorOwner is EffectDialog) {
+            (effectEditorOwner as EffectDialog).updateNetwork(frame)
             val controls = (effectEditorOwner as EffectDialog).advancedControls
             if (controls != null) controls.update(frame)
         }

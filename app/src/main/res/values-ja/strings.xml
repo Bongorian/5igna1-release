@@ -482,7 +482,7 @@
     <string name="transport_analog_hint">接続方式に応じた解像度に下げ、ケーブル周りの故障を加えます。</string>
     <string name="transport_crt_hint">走査線・蛍光体の特性と、色ずれ・同期ずれを調整します。</string>
     <string name="transport_digital_display_hint">アナログMEDIAの後では、縮小された画像を出力へ拡大する補間方法を選べます。</string>
-    <string name="transport_network_hint">フレームレートと解像度を下げて通信不良を表現します。フリーズにはLIVEが必要です。表示値はFAULT最大時の値で、FAULTを下げると劣化が弱まります。停止の間隔と長さはLIVEの速度に従います。保存画像の寸法は変わりません。</string>
+    <string name="transport_network_hint">fpsと停止時間は指定値を使い、FAULTは停止確率と解像度低下に反映します。停止の時刻はLIVE速度に従います。下の実効値には現在の変調が反映されます。入力fpsと保存寸法は変わりません。</string>
     <string name="transport_led_hint">LEDの素子間隔、正方形のモジュール故障、更新時のちらつきを調整します。</string>
     <string name="seed_no_target">現在の有効なFAULTには再生成できるSEEDがありません。</string>
     <string name="seed_chain_done">有効なFAULTのSEEDを再生成しました。調整値は保持しています。</string>
@@ -540,7 +540,7 @@
     <string name="external_capture_returning" formatted="false">撮影結果を返しています…</string>
     <string name="fault_control_networkInterval">フリーズの間隔</string>
     <string name="fault_control_networkDuration">フリーズの長さ</string>
-    <string name="fault_control_networkRate">フレームレート上限</string>
+    <string name="fault_control_networkRate">フレーム更新レート</string>
     <string name="fault_control_networkResolution">受信映像の解像度</string>
     <string name="network_off">OFF</string>
     <string name="network_every_seconds">%1$d秒ごと</string>
@@ -548,4 +548,17 @@
     <string name="network_source_rate">入力と同じ</string>
     <string name="network_fps">%1$d fps</string>
     <string name="network_percent">縦横それぞれ%1$d%%</string>
+    <string name="fault_control_ledRate">更新周波数</string>
+    <string name="led_refresh_hz">%1$.1f Hz</string>
+    <string name="network_actual_fps">%1$.1f fps</string>
+    <string name="network_effective">実効値：%1$s・縦横%2$d%%\n停止機会：%3$.1f秒ごと・長さ：%4$.2f秒・確率：%5$d%%</string>
+    <string name="network_bypassed">FAULTを迂回中です。</string>
+    <string name="network_manual_stall">・停止FIXが予定より優先されます。</string>
+    <string name="network_live_required">・自動停止にはLIVEが必要です。</string>
+    <string name="clock_contract_hint">時間・イベントの秒数はFAULT速度に従います。HOLDは入力応答も保持しますが、速度0やtime固定では応答が続きます。停止時間は周期以内に制限され、最終値のFIXは生成器より優先されます。</string>
+    <string name="inactive_overrides_hint">保存済みFIXのうち%1$d項目はこのモデルでは無効です。値は保持され、AUTO ALLで解除できます。</string>
+    <string name="network_effective_off">実効値：%1$s・縦横%2$d%%\n自動停止の予定：OFF</string>
+    <string name="exposure_clock_label">露光の時計</string>
+    <string name="exposure_clock_fault">0・FAULT時間のみ</string>
+    <string name="exposure_clock_measured">1・実測の露光時計＋FAULTの発振</string>
 </resources>

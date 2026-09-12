@@ -1,5 +1,7 @@
 # LIVE FAULT
 
+> 開発版の時間規則・モデル別の有効項目・SEEDは[時間モデル2](TIME_MODEL.ja.md)に従います。公開版の挙動はそのリリースタグの資料を参照してください。
+
 [English](LIVE_FAULT.md) · [FAULT](EFFECTS.ja.md) · [ADVANCED MODE](ADVANCED_MODE.ja.md)
 
 LIVEは「今この瞬間にFAULTが時間に沿って変化すること」を表します。時間の進み方、変化の形、任意の端末入力を設定します。LIVEがOFFでもFAULT固有の変化は進み、ONにすると指定した時間操作と変化量を適用します。コールド起動時はLIVE・一時停止ともOFFで、それ以外の設定を保存します。

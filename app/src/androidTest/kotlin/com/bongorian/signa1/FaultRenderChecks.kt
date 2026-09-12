@@ -149,7 +149,7 @@ internal object FaultRenderChecks {
             // Reuse the same specialized programs after switching away from transport models.
             chain.releaseBuffers()
             check(clean.contentEquals(render(digital, media)))
-            return JSONObject().put("result", "PASS digital identity, 16 media/display combinations, media resolution, cable models, upconversion, network frame hold/resume, source-color preservation, resolution loss and frame cadence, square LED modules in both aspect ratios without black gaps")
+            return JSONObject().put("result", "PASS digital identity, 16 media/display combinations, media resolution, cable models, upconversion, network frame hold/resume, source-color preservation, resolution loss, frame cadence, ECHO-safe holds, source epochs and held-frame metadata, square LED modules in both aspect ratios without black gaps")
                 .put("uniqueFrames", hashes.size)
         } finally {
             image.recycle(); chain.release(); source.release(); target.release()
@@ -205,9 +205,18 @@ internal object FaultRenderChecks {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,source.texture)
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,b,0); b.recycle()
         }
-        fun draw(t: Double, settings: EffectParameters = p): ByteArray {
-            val state = EffectState.defaults().edit(true, 1 shl Effects.CRT, settings).amount(1f)
-            chain.render(source.texture,false,identity,frame(state,false,t),w,h,w,h,target.fbo,target.texture)
+        fun draw(t: Double, settings: EffectParameters = p, contentNs: Long? = null, epoch: Long = 0, amount: Float = 1f): ByteArray {
+            val state = EffectState.defaults().edit(true, 1 shl Effects.CRT, settings).amount(amount)
+            val evaluated = frame(state,false,t)
+            val current = EffectState.Frame(evaluated.ids(),evaluated.amount,evaluated.parameters,
+                contentNs ?: evaluated.cameraNs,evaluated.time,evaluated.nodes,evaluated.experimental,evaluated.injection,
+                evaluated.deliveryNs,epoch,evaluated.clockVersion)
+            chain.render(source.texture,false,identity,current,w,h,w,h,target.fbo,target.texture)
+            if (t == .2) {
+                val held = chain.renderedFrame(current)
+                check(held.cameraNs == 100_000_001L && held.deliveryNs == current.deliveryNs) { "Held pixels lost delivery/source provenance" }
+                check(held.parameters.get(Effects.CRT,"networkResolution") == 1f) { "Held pixels described with newer settings" }
+            }
             return pixels(target, ByteBuffer.allocateDirect(w*h*4))
         }
         try {
@@ -219,8 +228,13 @@ internal object FaultRenderChecks {
             check(!blue.contentEquals(red)) { "NETWORK missed delivery deadline" }
             upload(android.graphics.Color.GREEN)
             val stalled = p.with(Effects.CRT, "networkResolution", 0f).override(Effects.CRT,"networkStall",1f)
-            check(draw(.2, stalled).contentEquals(blue)) { "Resolution edit erased held frame" }
+            check(draw(.2, stalled, contentNs = 1).contentEquals(blue)) { "Resolution edit or ECHO timestamp erased held frame" }
             check(!draw(.21, stalled.override(Effects.CRT,"networkStall",0f)).contentEquals(blue)) { "NETWORK did not resume" }
+            upload(android.graphics.Color.MAGENTA)
+            val replaced = draw(.3, stalled, contentNs = 1, epoch = 1)
+            check(!replaced.contentEquals(blue)) { "A new source did not reset Network history" }
+            val clean = draw(.31, stalled, epoch = 1, amount = 0f)
+            check(replaced.contentEquals(clean)) { "Zero FAULT did not bypass delivery" }
             // High-frequency source distinguishes real resampling from a noise overlay.
             val bitmap = fixture(w,h)
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,source.texture)

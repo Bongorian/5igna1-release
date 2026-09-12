@@ -482,7 +482,7 @@
     <string name="transport_analog_hint">按连接模型降低分辨率，并添加线缆故障。</string>
     <string name="transport_crt_hint">调整扫描线、荧光体、会聚及同步故障。</string>
     <string name="transport_digital_display_hint">在模拟媒体之后，可选择将低分辨率图像放大到输出的插值方式。</string>
-    <string name="transport_network_hint">通过降低帧率和分辨率模拟连接不良。冻结需要开启LIVE。显示值对应最大FAULT，降低FAULT会减弱劣化。冻结间隔和时长随LIVE速度变化。保存画面的尺寸不变。</string>
+    <string name="transport_network_hint">帧率和冻结时长使用指定值。FAULT控制冻结概率和分辨率降低。冻结时间跟随LIVE速度。下方有效值反映当前调制。输入帧率和保存尺寸不变。</string>
     <string name="transport_led_hint">调整LED间距、模块故障和刷新条带。</string>
     <string name="seed_no_target">当前启用的故障不使用随机种子。</string>
     <string name="seed_chain_done">已重新生成有效故障的种子，保留调整值。</string>
@@ -540,7 +540,7 @@
     <string name="external_capture_returning" formatted="false">正在返回拍摄结果…</string>
     <string name="fault_control_networkInterval">冻结间隔</string>
     <string name="fault_control_networkDuration">冻结时长</string>
-    <string name="fault_control_networkRate">帧率上限</string>
+    <string name="fault_control_networkRate">画面更新率</string>
     <string name="fault_control_networkResolution">接收画面分辨率</string>
     <string name="network_off">OFF</string>
     <string name="network_every_seconds">每%1$d秒</string>
@@ -548,4 +548,17 @@
     <string name="network_source_rate">与输入相同</string>
     <string name="network_fps">%1$d fps</string>
     <string name="network_percent">宽高各%1$d%%</string>
+    <string name="fault_control_ledRate">刷新频率</string>
+    <string name="led_refresh_hz">%1$.1f Hz</string>
+    <string name="network_actual_fps">%1$.1f fps</string>
+    <string name="network_effective">有效值：%1$s · 宽高%2$d%%\n冻结机会：每%3$.1f秒 · 时长：%4$.2f秒 · 概率：%5$d%%</string>
+    <string name="network_bypassed">正在绕过FAULT。</string>
+    <string name="network_manual_stall"> · 冻结FIX优先于计划。</string>
+    <string name="network_live_required"> · 自动冻结需要LIVE。</string>
+    <string name="clock_contract_hint">时间和事件秒数跟随FAULT速度。HOLD也冻结输入响应，速度0或固定time则不会。时长不超过周期。最终FIX值优先于生成器。</string>
+    <string name="inactive_overrides_hint">已保存的FIX中有%1$d项在此模型中无效。数值会保留，AUTO ALL可清除。</string>
+    <string name="network_effective_off">有效值：%1$s · 宽高%2$d%%\n自动冻结机会：OFF</string>
+    <string name="exposure_clock_label">曝光时钟</string>
+    <string name="exposure_clock_fault">0 · 仅FAULT时间</string>
+    <string name="exposure_clock_measured">1 · 实测曝光时间＋FAULT振荡</string>
 </resources>

@@ -1,5 +1,7 @@
 # ADVANCED MODE
 
+> 開発版の時間規則・モデル別の有効項目・SEEDは[時間モデル2](TIME_MODEL.ja.md)に従います。公開版の挙動はそのリリースタグの資料を参照してください。
+
 [ガイド](README.ja.md) · [English](ADVANCED_MODE.md)
 
 設定（歯車）で **ADVANCED MODE** を一括ONにし、選択中のチェーンのチップをタップします。個々のFAULTにモード切り替えはありません。プレビューは編集領域の上に残ります。内部値の表示と表示フレーム保持を切り替えます。OFFでも固定値とFAULT処理は保持し、出力1枚を再利用する通常撮影になります。撮影フレームが最後の表示と異なる場合があります。ONでは3枚の履歴を保持します。[撮影方式](FORMATS.ja.md)を参照してください。設定のモード切り替えはその場で保存されます。FAULTの編集内容はチェックで適用し、×・戻る・アプリを離れる操作で下書きを破棄します。
@@ -9,13 +11,13 @@
 
 **AUTO**はモデルが生成する現在の内部値です。AUTOをタップして**FIX**にすると固定し、スライダーか数値タップで変更できます。範囲内の有限な数値だけを受け付けます。FIXをタップするとAUTOに戻ります。「すべてAUTO」は対象FAULTの固定値と事故個体の固定を解除します。基本操作はAUTOの値へ作用し、固定値がある項目では固定値を優先します。リセットは対象FAULTの初期操作値へ戻して固定値を解除します。ランダムチェーンは新たに選んだFAULTの固定値を解除し、RESEEDは固定値を保持します。
 
-**SEED**は符号付き64ビットの構造的な個体値です。**EVENT SEED**はROW ERROR・BIT ERROR・ADDRESS ERROR・BLOCK ERROR・STREAM ERROR・VHSにあります。AUTOは起動ごとに事故個体を変え、固定すると同じFAULT時間・入力・設定で事故の系列を再現できます。変化するカメラ画像まで再現するものではありません。SIGNAL内の`identitySeed`／`eventSeed`はRGB描画用に縮約した値で、この整数の個体値とは別です。Bayer RAWでは構造的な個体値も使います。
+**SEED**は符号付き64ビットの構造的な個体値です。**EVENT SEED**はROW ERROR・BIT ERROR・ADDRESS ERROR・BLOCK ERROR・STREAM ERROR・事故を持つMEDIAモデル・Networkにあります。AUTOは構造的なSEEDから安定した事故個体を生成し、同じFAULT時間・入力・設定で系列を再現できます。変化するカメラ画像まで再現するものではありません。SIGNAL内の`identitySeed`／`eventSeed`はRGB描画用に縮約した値で、この整数の個体値とは別です。Bayer RAWでは構造的な個体値も使います。
 
-TIMEは時間の生成器と状態（秒、倍率、drift、phase）、EVENTは事故の周期・継続秒数・確率・通番・強度・位置・パターンです。SIGNALは描画・加工の全内部パラメータ、PROFILEはVHS帯域とCRTの表示特性です。FAULTによっては使わない生成値もあります。下流の値をFIXにした場合、その値は生成器を変更しても変わりません。個数・領域は内部のサンプル格子、変位は原則として正規化値、位相・角度は正規化周期で表す項目を除いてラジアンです。
+TIMEは時間の生成器と状態（秒、倍率、drift、phase）、EVENTは事故の周期・継続秒数・確率・通番・強度・位置・パターンです。SIGNALは選択中のモデルで使用する描画・加工パラメータ、PROFILEは表示・媒体特性と個体biasです。使用先のない項目は表示せず、保存済みの値は保持します。下流の値をFIXにした場合、その値は生成器を変更しても変わりません。個数・領域は内部のサンプル格子、変位は原則として正規化値、位相・角度は正規化周期で表す項目を除いてラジアンです。
 
 LIVEが操作するのはFAULT時間で、カメラの撮影時刻は進み続けます。`time`の固定は一つのFAULTの時計を固定します。PAUSE中もカメラは動きますがFAULTの状態は停止し、PAUSE中にHITした状態は解除かリセットまで保持されます。LEVELが0なら全FAULTをバイパスします。撮影時は内部状態を固定したスナップショットを使います。RAWは先頭6FAULTと、有効化した実験機能のMOTION BLUR・THERMAL NOISE・SMEARをBayer処理します。VHS／CRTなどの後段はJPG／MP4を使います。内部値を操作してもRAWにない処理段は追加されません。
 
-以下が編集可能な全項目です。範囲は数値入力にも表示します。All faultsは全FAULT共通、Incident faultsは上記のEVENT SEED対応6種類です。スライダーの刻みと異なり、数値入力は範囲内の有限値を受け付けます。ただしサンプリング処理で離散化される項目があります。
+以下の一覧には読み込み互換性のための旧項目も含みます。画面には選択モデルで有効な項目を表示します。範囲は数値入力にも表示します。All faultsは全FAULT共通、Incident faultsにはNetworkも含み、Networkの周期0は自動停止の予定をOFFにします。スライダーの刻みと異なり、数値入力は範囲内の有限値を受け付けます。ただしサンプリング処理で離散化される項目があります。
 
 | FAULT | Group | Parameter | Range |
 |---|---|---|---|
@@ -26,7 +28,7 @@ LIVEが操作するのはFAULT時間で、カメラの撮影時刻は進み続�
 | All faults | TIME | `drift` | -1 … 1 |
 | All faults | TIME | `phaseSpeed` | -40 … 40 |
 | All faults | TIME | `phase` | -6.283186 … 6.283186 |
-| All faults | TIME | `identityBias` | -1 … 1 |
+| All faults | PROFILE | `identityBias` | -1 … 1 |
 | Incident faults | EVENT | `eventPeriod` | .03 … 60 |
 | Incident faults | EVENT | `eventDuration` | .005 … 60 |
 | Incident faults | EVENT | `eventProbability` | 0 … 1 |
@@ -123,3 +125,17 @@ LIVEが操作するのはFAULT時間で、カメラの撮影時刻は進み続�
 | DISPLAY | SIGNAL | `networkStall`, `refreshBand` | 0 … 1 |
 | DISPLAY | SIGNAL | `networkSeed` | 0 … 997 |
 | DISPLAY | SIGNAL | `networkFps` | 0 … 60 (0 = source rate) |
+
+### 時間モデル2の追加項目（開発版）
+
+| Model | Group | Parameter | Range / unit |
+|---|---|---|---|
+| Incident models, including Network | EVENT | `eventPhase` | 0–1 cycle |
+| Network | EVENT | `eventPeriod` | 0–60 fault seconds; 0 disables opportunities |
+| EXPOSURE | TIME | `exposureRate` | −40–40 rad/fault second |
+| EXPOSURE | TIME | `exposurePhaseOffset` | −2π–2π rad |
+| EXPOSURE | PROFILE | `exposureClock` | 0 fault oscillator; 1 measured timing plus oscillator |
+| LED | TIME | `refreshRate` | 0–60 Hz in fault time |
+| LED | SIGNAL | `refreshSeed` | 0–997 |
+
+無効な項目や旧`networkSeed`は読み込み互換性のため残します。`identityBias`はPROFILEに移動しました。Networkの周期・長さ・確率・位相はEVENTで操作できます。現在の表示項目とSEED規則は[時間モデル2](TIME_MODEL.ja.md)に従います。

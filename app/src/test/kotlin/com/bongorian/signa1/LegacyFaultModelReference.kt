@@ -1,6 +1,8 @@
+// Frozen dd7f027 model for pre-migration golden evidence. Do not update to new behavior.
 package com.bongorian.signa1
 
 import com.bongorian.signa1.FaultNode.Motion
+import java.security.SecureRandom
 import kotlin.math.ceil
 import kotlin.math.exp
 import kotlin.math.floor
@@ -10,7 +12,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 /** One camera-driven timeline. Snapshot evaluation is pure and never draws random numbers. */
-internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
+internal class LegacyFaultModelReference constructor(private val sessionSalt: Long = SecureRandom().nextLong()) {
     internal class Inputs {
         var ax: Float = 0f
         var ay: Float = 0f
@@ -35,8 +37,6 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
     private var cueAge = Double.POSITIVE_INFINITY
     private var liveWasEnabled = false
     private var heldSignalNs: Long = 0
-    private var deliveryNs = 0L
-    private var sourceEpoch = 0L
     private var cpuPressure = 0f
     private var timingPressure = 0f
     private var audioDisplacement = 0f
@@ -57,16 +57,14 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
     var timingAvailable: Boolean = false
     var motionAvailable: Boolean = false
 
-    fun copy(): FaultModel {
-        val n = FaultModel(sessionSalt)
+    fun copy(): LegacyFaultModelReference {
+        val n = LegacyFaultModelReference(sessionSalt)
         n.lastSeconds = lastSeconds
         n.elapsed = elapsed
         n.performancePosition = performancePosition
         n.cueAge = cueAge
         n.liveWasEnabled = liveWasEnabled
         n.heldSignalNs = heldSignalNs
-        n.deliveryNs = deliveryNs
-        n.sourceEpoch = sourceEpoch
         n.cpuPressure = cpuPressure
         n.timingPressure = timingPressure
         n.audioDisplacement = audioDisplacement
@@ -90,7 +88,6 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
     }
 
     fun reset() {
-        sourceEpoch++
         lastSeconds = Double.NaN
         cpuPressure = 0f; timingPressure = 0f; audioDisplacement = 0f; audioVelocity = 0f; angularSpeed = 0f
         rotation = 0f
@@ -131,7 +128,6 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
             return
         val delta = if (java.lang.Double.isNaN(lastSeconds)) 0.0 else now - lastSeconds
         lastSeconds = now
-        deliveryNs = (now * 1e9).toLong()
         elapsed += delta
         if (config.enabled && !liveWasEnabled) performancePosition = elapsed - delta
         liveWasEnabled = config.enabled
@@ -238,11 +234,14 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
         duration: Double,
         probability: Float,
         serial: Long,
-        phase: Double,
     ): FaultNode.Event {
-        val key = mix(identity xor (id.toLong() shl 48) xor mix(serial) xor 0x4556454e54L)
-        val window = IncidentSchedule.sample(time, period, duration, phase, probability, random(key), serial)
-        return FaultNode.Event(serial, window.envelope, random(key + 1), random(key + 2) * 997, identity, window.active)
+        val age: Double = LivePerformance.wrap(time, period)
+        val key: Long = mix(identity xor (id.toLong() shl 48) xor mix(serial) xor 0x4556454e54L)
+        val gate =
+            (if (random(key) < clamp(probability, 0f, 1f) && age < duration) 1 else 0).toFloat()
+        val envelope: Float =
+            gate * clamp(min(age / .025, (duration - age) / .09).toFloat(), 0f, 1f)
+        return FaultNode.Event(serial, envelope, random(key + 1), random(key + 2) * 997, identity)
     }
 
     fun apply(base: EffectState.Frame, config: FaultConfig): EffectState.Frame {
@@ -250,7 +249,6 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
         val ids = base.ids().filter { config.experimental || !Effects.physical(it) }.toIntArray()
         val time = time(config)
         val cue = cue(config)
-        val performanceSeed = ids.fold(0x504552464f524dL) { value, id -> mix(value xor base.parameters.identity(id) xor id.toLong()) }
         if (base.amount > 0)
             for (index in ids.indices) {
                 val directed =
@@ -259,7 +257,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                             time,
                             index,
                             ids.size,
-                            performanceSeed,
+                            sessionSalt,
                         )
                     else 1f
                 val level: Float =
@@ -267,8 +265,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                 // A fully gated stage bypasses its profile as well as its mechanism.
                 if (level > 0) nodes.add(compile(ids[index], base.parameters, level, config))
             }
-        return EffectState.Frame(ids, base.amount, base.parameters, sensorNs, time, nodes, config.experimental,
-            deliveryNs = deliveryNs, sourceEpoch = sourceEpoch, clockVersion = FaultClock.VERSION)
+        return EffectState.Frame(ids, base.amount, base.parameters, sensorNs, time, nodes, config.experimental)
     }
 
     fun inspect(id: Int, controls: EffectParameters, level: Float, config: FaultConfig): FaultNode {
@@ -281,12 +278,10 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
         baseLevel: Float,
         config: FaultConfig,
     ): FaultNode {
-        val kind = controls.transportKind(id)
-        val network = id == Effects.CRT && kind == 2
         val gains = FaultSensitivity.values(controls, id, config.experimental)
         var extra = 0f
         if (config.enabled && config.experimental) for (source in gains.indices) {
-            if (!FaultSensitivity.native(id, source, kind)) extra += gains[source] * when (source) {
+            if (!FaultSensitivity.native(id, source)) extra += gains[source] * when (source) {
                 0 -> if (config.motion) clamp(max(shock, angularSpeed / 6f), 0f, 1f) else 0f
                 1 -> if (config.audio) audio else 0f
                 2 -> if (config.timing) readout else 0f
@@ -353,8 +348,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
             controls.resolved(
                 id,
                 "eventPeriod",
-                if (network) NetworkDisplay.interval(controls.get(id, "networkInterval")).toFloat()
-                else if (id == Effects.VHS) 2.3f
+                if (id == Effects.VHS) 2.3f
                 else if (id == Effects.STREAM_ERROR) 1.1f
                 else if (id == Effects.ROW_ERROR) 1.7f
                 else if (id == Effects.BIT_ERROR) .6f else 2.7f,
@@ -363,8 +357,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
             controls.resolved(
                 id,
                 "eventDuration",
-                if (network) NetworkDisplay.duration(controls.get(id, "networkDuration"))
-                else if (id == Effects.VHS) .48f else if (id == Effects.STREAM_ERROR) .38f else .19f,
+                if (id == Effects.VHS) .48f else if (id == Effects.STREAM_ERROR) .38f else .19f,
             )
         val activity =
             if (id == Effects.ROW_ERROR || id == Effects.STREAM_ERROR)
@@ -383,14 +376,13 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                     "activity",
                 )
             else if (id == Effects.BLOCK_ERROR) controls.get(id, "misaddress") else 0f
-        val incidents = FaultParameters.incidents(id)
+        val incidents = id != Effects.CRT && FaultParameters.incidents(id)
         val probability =
             controls.resolved(
                 id,
                 "eventProbability",
-                if (network) level else clamp(activity * .8f + pressure * .5f, 0f, 1f),
+                clamp(activity * .8f + pressure * .5f, 0f, 1f),
             )
-        val eventPhase = controls.resolved(id, "eventPhase", if (network) random(seed xor 0x4e45544cL) else 0f)
         val serial =
             if (controls.manual(id, "eventSerial"))
                 Math.round(
@@ -401,18 +393,17 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                         )
                     )
                     .toLong()
-            else IncidentSchedule.serial(time, period.toDouble(), eventPhase.toDouble())
+            else floor(time / period).toLong()
         val automatic =
             if (incidents)
                 event(
-                    controls.eventIdentity(id, seed xor 0x4556454e54L),
+                    controls.eventIdentity(id, seed xor sessionSalt),
                     id,
                     time,
                     period.toDouble(),
                     duration.toDouble(),
                     probability,
                     serial,
-                    eventPhase.toDouble(),
                 )
             else FaultNode.Event(-1, 0f, 0f, 0f)
         val event =
@@ -422,7 +413,6 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                 controls.resolved(id, "eventPosition", automatic.position),
                 controls.resolved(id, "eventPattern", automatic.pattern),
                 automatic.identity,
-                if (!network && controls.manual(id, "eventEnvelope")) controls.resolved(id, "eventEnvelope", 0f) > 0f else automatic.active || cue(config) > 0f,
             )
         val internal: MutableMap<String, Float> = LinkedHashMap<String, Float>()
         put(
@@ -447,8 +437,6 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
         if (incidents)
             put(
                 internal,
-                "eventPhase",
-                eventPhase,
                 "eventPeriod",
                 period,
                 "eventDuration",
@@ -464,13 +452,22 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                 "eventPattern",
                 event.pattern,
             )
-        if (config.experimental || kind != 0) FaultSensitivity.keys.forEachIndexed { source, key ->
-            internal[key] = gains[source]
+        if (config.experimental) FaultSensitivity.keys.forEachIndexed { source, key ->
+            if (controls.manual(id, key)) internal[key] = gains[source]
         }
-        // Artistic noise always samples local fault time, including natural speed and LIVE OFF.
-        val noiseTick = FaultClock.tick(time)
-        // Actual exposure timing remains a separately selectable measured clock.
-        val signalNs = if (config.enabled && config.performance.hold) heldSignalNs else sensorNs
+        val warped =
+            config.enabled &&
+                (config.performance.clock != LivePerformance.FREE ||
+                    config.performance.speed != 1f) ||
+                timeScale != 1f ||
+                timeOffset != 0f ||
+                controls.manual(
+                    id,
+                    "time",
+                )
+        val signalNs =
+            if (warped) (time * 60).toLong() * 16666667L
+            else if (config.enabled && config.performance.hold) heldSignalNs else sensorNs
         val p: MutableMap<String, Float> = LinkedHashMap<String, Float>()
         val profile: MutableMap<String, Float> = LinkedHashMap<String, Float>()
         // Domain-specific values, in sample/normalized signal units; no universal strength uniform.
@@ -491,27 +488,23 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                     "sensorNoise",
                     heat * level * .035f,
                 )
-                p.put("grainSeed", random(seed xor mix(noiseTick)) * 997)
+                p.put("grainSeed", random(seed xor mix(signalNs)) * 997)
             }
 
             Effects.EXPOSURE -> {
                 val rate = controls.get(id, "rate")
                 val bands = controls.get(id, "bands")
-                val exposureRate = controls.resolved(id, "exposureRate", rate * 18)
-                val exposureOffset = controls.resolved(id, "exposurePhaseOffset", (identity.spatialSeed % (Math.PI * 2)).toFloat())
-                internal["exposureRate"] = exposureRate
-                internal["exposurePhaseOffset"] = exposureOffset
-                profile["exposureClock"] = controls.resolved(id, "exposureClock", 1f)
-                var exposurePhase = LivePerformance.wrap(time * exposureRate + exposureOffset, Math.PI * 2).toFloat()
+                var exposurePhase =
+                    ((time * rate * 18 + identity.spatialSeed) % (Math.PI * 2)).toFloat()
                 var scan = 4 + bands * 160
                 var integrate = 1f
-                if (timingAvailable && profile.getValue("exposureClock") >= .5f) {
+                if (timingAvailable) {
                     val basePhase = exposurePhase
                     val baseScan = scan
                     val hz = config.mains * 2.0
                     exposurePhase =
                         ((((signalNs % 1000000000L) * 1e-9 * hz % 1) * Math.PI * 2 +
-                                time * exposureRate + exposureOffset) % (Math.PI * 2))
+                                time * rate * 18) % (Math.PI * 2))
                             .toFloat()
                     scan = (skewNs * 1e-9 * hz * Math.PI * 2).toFloat() * (1 + bands * 8)
                     val x = Math.PI * exposureNs * 1e-9 * hz
@@ -671,7 +664,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                     "tapeNoise",
                     level * controls.get(id, "noise") * .22f,
                 )
-                p.put("grainSeed", random(seed xor mix(noiseTick) xor 0x54415045L) * 997)
+                p.put("grainSeed", random(seed xor mix(signalNs) xor 0x54415045L) * 997)
             }
 
             Effects.CRT -> {
@@ -709,7 +702,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
             Effects.THERMAL_NOISE -> {
                 val exposure = if (timingAvailable) clamp(exposureNs * 1e-9f * 30f * gains[2], 0f, 4f) else 1f
                 val amplitude = level * controls.get(id, "amount") * (controls.get(id, "floor") * .08f + heat * (.06f + .10f * exposure))
-                put(p, "noiseAmplitude", clamp(amplitude, 0f, .5f), "noiseGrain", 1 + controls.get(id, "grain") * 15, "grainSeed", random(seed xor mix(noiseTick) xor 0x4e4f495345L) * 997)
+                put(p, "noiseAmplitude", clamp(amplitude, 0f, .5f), "noiseGrain", 1 + controls.get(id, "grain") * 15, "grainSeed", random(seed xor mix(signalNs) xor 0x4e4f495345L) * 997)
             }
             Effects.SMEAR -> {
                 val readoutDrive = if (config.enabled && timingAvailable) clamp(skewNs * 1e-9f * 45f * gains[2] + readout, 0f, 4f) else 0f
@@ -719,7 +712,8 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
         }
         if ((id == Effects.VHS || id == Effects.CRT) && (controls.get(id, "transport") > 0f ||
                 (id == Effects.VHS && controls.get(id, "reduce") >= .5f) || controls.overrides(id).keys.any { it in FaultNode.transportKeys })) {
-            profile["transportKind"] = kind.toFloat()
+            val kind = Math.round(controls.get(id, "transport") * 3).toFloat()
+            profile["transportKind"] = kind
             if (id == Effects.VHS) {
                 profile["mediaReduce"] = if (controls.get(id, "reduce") >= .5f) 1f else 0f
                 profile["cableKind"] = if (controls.get(id, "cable") >= .5f) 1f else 0f
@@ -734,22 +728,17 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                 // Intrinsic payload variation follows fault time; automatic congestion requires LIVE.
                 p["networkStall"] = if (config.enabled && random(seed xor mix(slot)) < level * controls.get(id, "sync") * .8f) 1f else 0f
                 p["networkFps"] = 0f
-                if (network) {
+                if (kind == 2f) {
                     p["transportLoss"] = level * (1f - NetworkDisplay.scale(controls.get(id, "networkResolution"))) / .8f
                     val rate = NetworkDisplay.fps(controls.get(id, "networkRate"))
-                    p["networkFps"] = if (level <= 0f || rate == 0) 0f else rate.toFloat()
-                    p["networkStall"] = if (config.enabled && level > 0f && event.active) 1f else 0f
+                    p["networkFps"] = if (level <= 0f || rate == 0) 0f else 60f + (rate - 60f) * level
+                    p["networkStall"] = if (config.enabled && level > 0f && NetworkDisplay.stalled(
+                        time, seed, NetworkDisplay.interval(controls.get(id, "networkInterval")),
+                        NetworkDisplay.duration(controls.get(id, "networkDuration")) * level)) 1f else 0f
                 }
                 p["refreshBand"] = level * controls.get(id, "sync") * .5f
-                p["networkSeed"] = random(seed xor mix(slot)) * 997f // Legacy decode-only key, not exposed for current models.
-                val refreshRate = controls.resolved(id, "refreshRate", controls.get(id, "ledRate") * 30)
-                internal["refreshRate"] = refreshRate
-                p["refreshSeed"] = random(seed xor mix(FaultClock.tick(time, refreshRate.toDouble()))) * 997f
+                p["networkSeed"] = random(seed xor mix(slot)) * 997f
             }
-        }
-        if (id == Effects.CRT) {
-            internal.putIfAbsent("refreshRate", controls.resolved(id, "refreshRate", controls.get(id, "ledRate") * 30))
-            p.putIfAbsent("refreshSeed", controls.resolved(id, "refreshSeed", 0f))
         }
         for (value in controls.overrides(id).entries) {
             if (profile.containsKey(value.key)) profile.put(value.key, value.value)

@@ -14,23 +14,31 @@ internal object NetworkDisplay {
     // Interval measures freeze-start to freeze-start in fault time. Seed offsets the schedule.
     fun stalled(time: Double, seed: Long, interval: Int, duration: Float): Boolean {
         if (interval == 0 || duration <= 0f) return false
-        val shifted = time + FaultModel.random(seed xor 0x4e45544cL) * interval
-        val phase = shifted - floor(shifted / interval) * interval
-        return phase < duration
+        return IncidentSchedule.sample(time, interval.toDouble(), duration.toDouble(),
+            FaultModel.random(seed xor 0x4e45544cL).toDouble(), 1f, 0f).active
     }
 }
 
-/** Frame cadence follows source timestamps, independent of LIVE speed or pause. */
+/** Average delivery cadence on a monotonic clock; late input never triggers catch-up bursts. */
 internal class NetworkDelivery {
-    private var last = Long.MIN_VALUE
+    private var next = Double.NaN
+    private var previous = Long.MIN_VALUE
+    private var rate = 0f
     private var wasStalled = false
 
     fun update(now: Long, fps: Float, stalled: Boolean, valid: Boolean): Boolean {
         val resumed = wasStalled && !stalled
+        val reset = !valid || now < previous || fps != rate
         wasStalled = stalled
-        val take = !valid || now < last || (!stalled &&
-            (resumed || fps <= 0f || (now - last).toDouble() >= 1e9 / fps))
-        if (take) last = now
-        return take
+        previous = now
+        rate = fps
+        if (!valid) { next = if (fps > 0) now + 1e9 / fps else Double.NaN; return true }
+        if (stalled) return false
+        if (fps <= 0) { next = Double.NaN; return true }
+        val interval = 1e9 / fps
+        if (reset || resumed || !next.isFinite()) { next = now + interval; return true }
+        if (now.toDouble() + 1 < next) return false
+        next += (floor((now - next).coerceAtLeast(0.0) / interval) + 1) * interval
+        return true
     }
 }

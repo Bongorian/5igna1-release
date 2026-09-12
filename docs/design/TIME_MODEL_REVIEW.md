@@ -1,5 +1,7 @@
 # Internal parameters and time-model review
 
+> The subsequent implementation is [clock model 2](../TIME_MODEL.md). This document preserves the original observations/proposal. Run the historical characterization at commit 6e0aaf1.
+
 [日本語](TIME_MODEL_REVIEW.ja.md) · [Generated catalog and evidence](../audit/TIME_MODEL_EVIDENCE.md) · [Documentation map](../DOCUMENTATION.md)
 
 Review date: 2026-09-12. Application baseline: **dd7f027**, after the Network display changes. This is a design review, not a new behavior specification or release. Production code and the Pixel installation are unchanged by this review.

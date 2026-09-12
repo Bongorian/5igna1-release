@@ -34,6 +34,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     var chained: Boolean = true
     var tuning: Boolean
     var advancedControls: AdvancedControls? = null
+    private var networkSummary: TextView? = null
     var advancedGroup: FaultParameters.Group = FaultParameters.Group.SIGNAL
     var sheet: Dialog? = null
     var auxiliary: Dialog? = null
@@ -219,13 +220,16 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     private fun transportControls(id: Int) {
         if (id != Effects.VHS && id != Effects.CRT) return
         fun choice(key: String, title: Int, labels: Array<String>) {
-            val selected = kotlin.math.round(draft.get(id, key) * (labels.size - 1)).toInt()
+            val resolvedKey = when (key) { "transport" -> "transportKind"; "cable" -> "cableKind"; else -> key }
+            val selected = if (key == "transport") draft.transportKind(id) else
+                kotlin.math.round(draft.resolved(id, resolvedKey, draft.get(id, key) * (labels.size - 1))).toInt()
             val button = a.button(a.getString(title) + " · " + labels[selected])
             button.tag = "transport-$key"
             body!!.addView(button, LinearLayout.LayoutParams(-1, a.dp(48f)))
             button.setOnClickListener {
                 SignalSheet.pick(a, a.getString(title), labels, selected, { n ->
                     draft = draft.with(id, key, n.toFloat() / (labels.size - 1))
+                    draft = draft.automatic(id, resolvedKey)
                     renderBody(); preview()
                 })
             }
@@ -233,11 +237,11 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         choice("transport", R.string.transport_model, if (id == Effects.VHS)
             arrayOf("VHS", "DVD", "Digital thru", "Analog thru")
             else arrayOf("CRT", "Digital thru", "Network display", "LED display"))
-        val kind = kotlin.math.round(draft.get(id, "transport") * 3).toInt()
+        val kind = draft.transportKind(id)
         if (id == Effects.VHS && kind <= 1) {
-            val toggle = SignalToggle(a, a.getString(R.string.transport_reduce), draft.get(id, "reduce") >= .5f)
+            val toggle = SignalToggle(a, a.getString(R.string.transport_reduce), draft.resolved(id, "mediaReduce", draft.get(id, "reduce")) >= .5f)
             body!!.addView(toggle, LinearLayout.LayoutParams(-1, a.dp(48f)))
-            toggle.setOnCheckedChangeListener { _, checked -> draft = draft.with(id, "reduce", if (checked) 1f else 0f); preview() }
+            toggle.setOnCheckedChangeListener { _, checked -> draft = draft.with(id, "reduce", if (checked) 1f else 0f).automatic(id, "mediaReduce"); preview() }
         }
         if (id == Effects.VHS && kind == 3) choice("cable", R.string.transport_cable, arrayOf("Composite", "Component"))
         if (id == Effects.CRT && kind == 1) choice("upconvert", R.string.transport_upconvert,
@@ -245,6 +249,31 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         val hint = a.text(a.getString((if (id == Effects.VHS) intArrayOf(R.string.transport_vhs_hint, R.string.transport_dvd_hint, R.string.transport_digital_media_hint, R.string.transport_analog_hint) else intArrayOf(R.string.transport_crt_hint, R.string.transport_digital_display_hint, R.string.transport_network_hint, R.string.transport_led_hint))[kind]), 12, MainActivity.MUTED)
         hint.setPadding(0, a.dp(8f), 0, a.dp(8f))
         body!!.addView(hint)
+        if (id == Effects.CRT && kind == 2) {
+            networkSummary = a.text("", 12, MainActivity.LIME)
+            networkSummary!!.tag = "network-effective"
+            body!!.addView(networkSummary)
+            updateNetwork(null)
+        }
+    }
+
+    fun updateNetwork(frame: EffectState.Frame?) {
+        val summary = networkSummary ?: return
+        if (frame == null && amount <= 0f) { summary.text = a.getString(R.string.network_bypassed); return }
+        val node = if (frame == null) FaultModel(0).inspect(Effects.CRT, draft, amount, a.faultConfig)
+            else frame.nodes.firstOrNull { it.id == Effects.CRT && Math.round(it.profile["transportKind"] ?: 0f) == 2 }
+        if (node == null) { summary.text = a.getString(R.string.network_bypassed); return }
+        val fps = node.mechanism["networkFps"] ?: 0f
+        val rate = if (fps <= 0) a.getString(R.string.network_source_rate) else a.getString(R.string.network_actual_fps, fps)
+        val current = node.inspect()
+        summary.text = (if ((current["eventPeriod"] ?: 0f) <= 0f) a.getString(R.string.network_effective_off, rate,
+            Math.round((1 - node.get("transportLoss") * .8f) * 100)) else a.getString(R.string.network_effective, rate,
+            Math.round((1 - node.get("transportLoss") * .8f) * 100),
+            current["eventPeriod"] ?: 0f,
+            minOf(current["eventDuration"] ?: 0f, current["eventPeriod"] ?: 0f),
+            Math.round((current["eventProbability"] ?: 0f) * 100))) +
+            if (draft.manual(Effects.CRT, "networkStall")) a.getString(R.string.network_manual_stall)
+            else if (!a.faultConfig.enabled) a.getString(R.string.network_live_required) else ""
     }
 
     fun renderRoute() {
@@ -281,6 +310,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         body!!.removeAllViews()
         choices.clear()
         advancedControls = null
+        networkSummary = null
         if (tuning && focused != Effects.CLEAN) {
             val id = focused
             val title = a.row()
@@ -331,11 +361,12 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                     advancedControls = AdvancedControls(this, id)
                     advancedControls!!.show(requireNotNull(body))
                 } else for (control in Effects.CONTROLS[id].filter { it.key !in setOf("transport", "reduce", "cable", "upconvert") }) {
-                    val kind = if (id == Effects.VHS || id == Effects.CRT) kotlin.math.round(draft.get(id, "transport") * 3).toInt() else 0
+                    val kind = if (id == Effects.VHS || id == Effects.CRT) draft.transportKind(id) else 0
                     if (id == Effects.VHS && (kind == 2 || (kind == 1 && control.key in setOf("bandwidth", "noise")) || (kind == 3 && control.key == "bandwidth"))) continue
                     if (id == Effects.CRT && (kind == 1 ||
                         (kind == 2 && control.key !in NetworkDisplay.keys) ||
                         (kind != 2 && control.key in NetworkDisplay.keys) ||
+                        (control.key == "ledRate" && kind != 3) ||
                         (kind == 3 && control.key == "phosphor"))) continue
                     slider(id, control)
                 }
@@ -482,7 +513,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     }
 
     private fun transportControlLabel(id: Int, key: String): Int {
-        val kind = if (id == Effects.VHS || id == Effects.CRT) kotlin.math.round(draft.get(id, "transport") * 3).toInt() else 0
+        val kind = if (id == Effects.VHS || id == Effects.CRT) draft.transportKind(id) else 0
         if (id == Effects.VHS && kind == 1) return if (key == "tracking") R.string.transport_block_damage else R.string.transport_block_loss
         if (id == Effects.VHS && kind == 3) return when (key) {
             "tracking" -> R.string.transport_sync_loss
@@ -490,6 +521,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             else -> R.string.transport_interference
         }
         if (id == Effects.CRT && kind == 2) return controlLabel(key)
+        if (key == "ledRate") return R.string.fault_control_ledRate
         if (id == Effects.CRT && kind == 3) return when (key) {
             "scan" -> R.string.transport_pitch
             "convergence" -> R.string.transport_module_loss
@@ -499,6 +531,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     }
 
     private fun controlValue(key: String, value: Float): String = when (key) {
+        "ledRate" -> a.getString(R.string.led_refresh_hz, value * 30)
         "networkInterval" -> NetworkDisplay.interval(value).let { if (it == 0) a.getString(R.string.network_off) else a.getString(R.string.network_every_seconds, it) }
         "networkDuration" -> a.getString(R.string.network_seconds, NetworkDisplay.duration(value))
         "networkRate" -> NetworkDisplay.fps(value).let { if (it == 0) a.getString(R.string.network_source_rate) else a.getString(R.string.network_fps, it) }
@@ -528,6 +561,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                     if (user) {
                         draft = draft.with(id, control.key, n / 100f)
                         value.setText(controlValue(control.key, n / 100f))
+                        updateNetwork(null)
                         preview()
                     }
                 }
@@ -542,6 +576,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     companion object {
         fun controlLabel(key: String): Int {
             when (key) {
+                "ledRate" -> return R.string.fault_control_ledRate
                 "networkInterval" -> return R.string.fault_control_networkInterval
                 "networkDuration" -> return R.string.fault_control_networkDuration
                 "networkRate" -> return R.string.fault_control_networkRate

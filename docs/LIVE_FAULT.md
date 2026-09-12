@@ -1,5 +1,7 @@
 # LIVE FAULT
 
+> Unreleased timing, active model controls and seed rules follow [clock model 2](TIME_MODEL.md). Read the matching release tag for published-build behavior.
+
 [日本語](LIVE_FAULT.ja.md) · [Faults](EFFECTS.md) · [ADVANCED MODE](ADVANCED_MODE.md)
 
 LIVE describes faults evolving at the current moment. Its controls define the fault timeline, the shape of variation and optional influence from device measurements. Intrinsic fault evolution remains available with LIVE off; enabling LIVE applies the selected timeline and modulation. LIVE and pause start off on cold launch; other settings are saved.

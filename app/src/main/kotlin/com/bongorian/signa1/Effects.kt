@@ -81,7 +81,7 @@ internal object Effects {
                 c("noise", .25f),
             ),
             arrayOf<Control>(
-                c("transport", 0f), c("upconvert", 1f),
+                c("transport", 0f), c("upconvert", 1f), c("ledRate", .2f),
                 c("networkInterval", 3f / 28), c("networkDuration", 6f / 14),
                 c("networkRate", 11f / 29), c("networkResolution", .5f),
                 c("scan", .5f),
