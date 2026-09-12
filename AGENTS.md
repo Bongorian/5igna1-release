@@ -182,3 +182,5 @@
 - The owner explicitly permits computer use again. Create an emulator matching the connected device’s 1280×2772 resolution and effective 480 dpi, capture and inspect screenshots, improve UI with that evidence, and update Git resources. Move readiness/status text out of the preview to a compact top overview. Emulator screenshots and UI instrumentation are authorized; this supersedes the earlier computer-use ban. Keep release/store publication scope unchanged.
 
 - The owner clarified that Open/Close words should not be visible. Convey disclosure through icon placement and typography while retaining accessibility labels and state.
+
+- Chain review follow-up: refine chain card radii and live-preview action spacing, replace Details/Adjust labels with icons, verify on the matched emulator, update review resources and install the checked USB DEV build.

@@ -66,6 +66,12 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         a.previewEffectEdit(edit, state())
     }
 
+    private fun chainIcon(resource: Int, label: String) = a.iconButton(resource, label).apply {
+        setPadding(a.dp(10f), a.dp(10f), a.dp(10f), a.dp(10f))
+        setColorFilter(MainActivity.WHITE)
+        background = a.detailBg(MainActivity.PANEL, 0)
+    }
+
     fun action(text: Int): TextView {
         val view = a.button(a.getString(text))
         view.setTextSize(11f)
@@ -81,17 +87,20 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         root.setBackground(a.bg(MainActivity.BG, MainActivity.PANEL))
         val toolbar = a.row()
         root.addView(toolbar, LinearLayout.LayoutParams(-1, a.dp(ControlSize.PRIMARY)))
-        val cancel = action(R.string.ui_back)
-        cancel.setText("×")
-        cancel.setTextSize(24f)
-        toolbar.addView(cancel, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
+        val cancel = chainIcon(R.drawable.ic_close, a.getString(R.string.ui_close))
+        cancel.tag = "chain-close"
+        toolbar.addView(cancel, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         cancel.setOnClickListener(OnClickListener@{ v: View? -> sheet!!.dismiss() })
-        val heading = a.title(a.getString(R.string.fault_chain_editor))
+        val heading = a.title(a.getString(R.string.fault_chain_editor).replace(" · ", "\n"))
         heading.setGravity(Gravity.CENTER)
+        heading.textSize = 14f
+        heading.maxLines = 2
+        heading.setAutoSizeTextTypeUniformWithConfiguration(11, 14, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
+        heading.setPadding(a.dp(8f), 0, a.dp(8f), 0)
         toolbar.addView(heading, LinearLayout.LayoutParams(0, -1, 1f))
-        val random = a.iconButton(R.drawable.ic_shuffle, a.getString(R.string.ui_random_chain))
+        val random = chainIcon(R.drawable.ic_shuffle, a.getString(R.string.ui_random_chain))
         random.setTag("random-chain")
-        toolbar.addView(random, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
+        toolbar.addView(random, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         random.setOnClickListener(
             OnClickListener@{ v: View? ->
                 if (a.rawOriginal()) return@OnClickListener
@@ -107,13 +116,11 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         )
         random.setEnabled(!a.rawOriginal())
         random.setAlpha(if (a.rawOriginal()) .35f else 1f)
-        val apply = action(R.string.ui_apply)
+        val apply = chainIcon(R.drawable.ic_check, a.getString(R.string.ui_apply))
         apply.setTag("apply")
-        apply.setText("✓")
-        apply.setTextSize(22f)
-        apply.setTextColor(MainActivity.BG)
-        apply.setBackground(a.bg(MainActivity.LIME, 0))
-        toolbar.addView(apply, LinearLayout.LayoutParams(a.dp(ControlSize.PRIMARY), a.dp(ControlSize.PRIMARY)))
+        apply.setColorFilter(MainActivity.BG)
+        apply.setBackground(a.detailBg(MainActivity.LIME, 0))
+        toolbar.addView(apply, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)).apply { leftMargin = a.dp(8f) })
         apply.setOnClickListener(
             OnClickListener@{ v: View? ->
                 a.finishEffectEdit(edit, state(), true)
@@ -129,10 +136,10 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         route = a.row()
         path.addView(route)
         routeRow.addView(path, LinearLayout.LayoutParams(0, -1, 1f))
-        val add = a.button(a.getString(R.string.chain_choose))
-        add.setTextSize(12f)
+        val add = chainIcon(R.drawable.ic_add, a.getString(R.string.fault_add_remove))
+        add.tag = "chain-choose"
         add.setContentDescription(a.getString(R.string.fault_add_remove))
-        routeRow.addView(add, LinearLayout.LayoutParams(a.dp(76f), a.dp(44f)))
+        routeRow.addView(add, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         add.setOnClickListener(
             OnClickListener@{ v: View? ->
                 tuning = false
@@ -292,7 +299,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 else if (a.effectAvailable(id)) MainActivity.WHITE else MainActivity.MUTED
             )
             chip.setBackground(
-                a.bg(
+                a.detailBg(
                     if (focus) MainActivity.LIME else MainActivity.PANEL,
                     0,
                 )
@@ -427,10 +434,10 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 choice.minHeight = a.dp(80f)
                 choices[id] = choice
                 row.addView(choice, LinearLayout.LayoutParams(0, -2, 1f))
-                val detail = a.button(a.getString(R.string.chain_details))
-                detail.textSize = 12f
+                val detail = chainIcon(R.drawable.ic_tune, a.getString(R.string.chain_details))
+                detail.tag = "chain-detail:$id"
                 detail.contentDescription = Effects.label(id) + " · " + a.getString(R.string.chain_details)
-                row.addView(detail, LinearLayout.LayoutParams(a.dp(72f), -1).apply { leftMargin = a.dp(6f) })
+                row.addView(detail, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)).apply { leftMargin = a.dp(6f) })
                 detail.setOnClickListener {
                     focused = id
                     tuning = true
@@ -517,7 +524,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             else if (available) MainActivity.WHITE else MainActivity.MUTED
         )
         view.setBackground(
-            a.bg(
+            a.detailBg(
                 if (selected) MainActivity.LIME else MainActivity.PANEL,
                 0,
             )

@@ -300,7 +300,7 @@
     <string name="fault_requires_rgb">この効果には現像後の画像が必要です。撮影形式を切り替えると使えます。RAWのチェーン設定は保持されます。</string>
     <string name="fault_switch_mp4">MP4に切り替えて使う</string>
     <string name="fault_switch_jpeg">JPGに切り替えて使う</string>
-    <string name="fault_catalog_hint">行をタップして選択・解除。「詳細・調整」で内容とパラメータを確認できます。処理順は固定です。</string>
+    <string name="fault_catalog_hint">行をタップして選択・解除。右のスライダーアイコンで内容とパラメータを確認できます。処理順は固定です。</string>
     <string name="ui_invalid_number">表示範囲内の数値を入力してください。</string>
     <string name="ui_advanced_mode">ADVANCED MODE</string>
     <string name="ui_advanced_hint">AUTOはモデルによる更新、FIXは手動固定。数値をタップして直接入力します。</string>

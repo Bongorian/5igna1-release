@@ -264,19 +264,21 @@ internal fun MainActivity.buildUi() {
     chainRow.addView(scroll, LinearLayout.LayoutParams(0, -1, 1f))
     selectedRoute = row()
     scroll.addView(selectedRoute)
-    val add = button("＋")
+    val add = iconButton(R.drawable.ic_add, getString(R.string.fault_add_remove))
     add.tag = "guide-add"
-    add.setTextSize(20f)
-    add.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
+    add.setPadding(dp(10f), dp(10f), dp(10f), dp(10f))
+    add.background = detailBg(PANEL, 0)
     add.setContentDescription(getString(R.string.fault_add_remove))
-    chainRow.addView(add, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    chainRow.addView(add, LinearLayout.LayoutParams(dp(ControlSize.STANDARD), dp(ControlSize.STANDARD)).apply { leftMargin = dp(6f) })
     add.setOnClickListener(OnClickListener@{ v: View? -> showChain() })
     val random =
         iconButton(
             R.drawable.ic_shuffle,
             getString(R.string.ui_tap_to_randomize_an_effect_hold_to_randomize),
         )
-    chainRow.addView(random, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    random.setPadding(dp(10f), dp(10f), dp(10f), dp(10f))
+    random.background = detailBg(PANEL, 0)
+    chainRow.addView(random, LinearLayout.LayoutParams(dp(ControlSize.STANDARD), dp(ControlSize.STANDARD)).apply { leftMargin = dp(6f) })
     random.setOnClickListener(OnClickListener@{ v: View? -> randomChain() })
     random.setOnLongClickListener(
         OnLongClickListener@{ v: View? ->

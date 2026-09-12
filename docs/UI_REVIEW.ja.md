@@ -49,3 +49,21 @@
 ## 画像の出典
 
 プロジェクトのApache-2.0 UIと、AOSPエミュレーターが生成する家のテストパターンを撮影したものです。ROW ERRORはアプリ自身が適用しています。Apache-2.0のテストパターンの帰属は[素材監査](audit/ASSETS.md)と[NOTICE](../NOTICE)に記録しています。私的な実写素材、UI合成、広告用生成画像、レタッチは含みません。システムUIはAndroidシステムイメージのものです。公開済みリリース・ストアの画像とは分けて保存しています。
+
+## チェーン編集の追加レビュー
+
+チェーン要素の角丸を4 dpに統一し、操作を40 dp・アイコンを20 dpに整理しました。閉じる、シャッフル、適用を重ならない位置に並べ、右のスライダーアイコンから各要素の説明と調整を開きます。横画面では編集中の背後の折り畳み操作も隠します。
+
+| チェーン | 選択 | 調整 |
+|---|---|---|
+| <img src="chain-review/ja/portrait-deck.png" width="240" alt="Chain deck"> | <img src="chain-review/ja/portrait-catalog.png" width="240" alt="Chain catalog"> | <img src="chain-review/ja/portrait-adjust.png" width="240" alt="Chain adjust"> |
+
+![Landscape chain editor](chain-review/ja/landscape-catalog.png)
+
+日本語・英語の縦横12枚を収録し、アイコンの欠け・重なり、背後の操作の非表示、キャンセル／適用の動作を確認しています。[記録](chain-review/manifest.json)。再取得は上記のビルド・インストール後、次を実行します。
+
+```sh
+adb -s emulator-5554 shell am instrument -w -e action chain-review -e language ja com.bongorian.signa1.debug.test/com.bongorian.signa1.DeviceChecks
+adb -s emulator-5554 shell am instrument -w -e action chain-review -e language en com.bongorian.signa1.debug.test/com.bongorian.signa1.DeviceChecks
+python3 tools/collect-workspace-review.py --suite chain
+```

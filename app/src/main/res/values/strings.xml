@@ -300,7 +300,7 @@
     <string name="fault_requires_rgb">This effect needs a processed image. Switch the capture format to use it. Your RAW chain is kept.</string>
     <string name="fault_switch_mp4">Switch to MP4 and use</string>
     <string name="fault_switch_jpeg">Switch to JPG and use</string>
-    <string name="fault_catalog_hint">Tap a row to select or remove. Open Details to read and adjust. Processing order is fixed.</string>
+    <string name="fault_catalog_hint">Tap a row to select or remove a stage. Use its sliders icon for details and controls. Processing order is fixed.</string>
     <string name="ui_invalid_number">Enter a finite number within the shown range.</string>
     <string name="ui_advanced_mode">ADVANCED MODE</string>
     <string name="ui_advanced_hint">AUTO follows the model; FIX holds a value. Tap a number for exact entry.</string>

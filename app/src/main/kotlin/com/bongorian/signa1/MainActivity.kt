@@ -396,6 +396,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             editorHiddenViews[cameraRoot.controlsColumn] = cameraRoot.controlsColumn.visibility
             effectEditorSpace = Space(this)
             if (!cameraRoot.wide) cameraRoot.addView(effectEditorSpace)
+            cameraRoot.requestLayout()
         }
         cameraRoot.controlsColumn.visibility = if (cameraRoot.wide) View.INVISIBLE else View.GONE
         effectEditorSpace!!.layoutParams = LinearLayout.LayoutParams(-1, if (cameraRoot.wide) 0 else pixels)
@@ -412,6 +413,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             obj!!.setVisibility(visibility!!)
         }
         editorHiddenViews.clear()
+        cameraRoot.requestLayout()
     }
 
     fun rawOriginal(): Boolean {
@@ -557,7 +559,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
                 )
             chip.setTextSize(12f)
             chip.setTextColor(if (enabled) LIME else MUTED)
-            val cp = LinearLayout.LayoutParams(-2, dp(44f))
+            chip.background = detailBg(PANEL, 0)
+            val cp = LinearLayout.LayoutParams(-2, dp(ControlSize.STANDARD))
             cp.rightMargin = dp(6f)
             selectedRoute.addView(chip, cp)
             chip.setOnClickListener(OnClickListener@{ v: View? -> showEffect(id) })
@@ -565,7 +568,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         if (effectState.mask == 0) {
             val empty = button(getString(R.string.fault_chain_empty))
             empty.setTextColor(MUTED)
-            selectedRoute.addView(empty, LinearLayout.LayoutParams(-2, dp(44f)))
+            empty.background = detailBg(PANEL, 0)
+            selectedRoute.addView(empty, LinearLayout.LayoutParams(-2, dp(ControlSize.STANDARD)))
             empty.setOnClickListener(OnClickListener@{ v: View? -> showChain() })
         }
         renderFaultDeck()

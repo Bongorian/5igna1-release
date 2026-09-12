@@ -93,7 +93,8 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
             collapsed -> GONE
             else -> VISIBLE
         }
-        foldRail.visibility = if (wide && a.effectEditorSpace == null) VISIBLE else GONE
+        // Keep the rail width reserved while editing so the dialog and preview keep their bounds.
+        foldRail.visibility = if (!wide) GONE else if (a.effectEditorSpace != null) INVISIBLE else VISIBLE
         val foldLabel = ""
         DisclosureUi.bind(a, foldButton, !collapsed, true, foldLabel)
         foldButton.contentDescription = a.getString(if (collapsed) R.string.workspace_expand else R.string.workspace_collapse)

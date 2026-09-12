@@ -64,3 +64,21 @@ The system image is `system-images;android-35;google_apis;arm64-v8a`. The script
 ## Image provenance
 
 These are captures of the project's Apache-2.0 UI over the AOSP emulator's generated house pattern, with ROW ERROR applied by the app. Source attribution for that Apache-2.0 pattern is recorded in [the asset audit](audit/ASSETS.md) and [NOTICE](../NOTICE). There is no private camera imagery, composited interface, generated promotional artwork or retouching. System UI belongs to the Android system image. These review images do not replace the published release/store screenshots.
+
+## Additional chain editor review
+
+Chain cards use a consistent 4 dp radius. Actions use 40 dp targets with 20 dp icons. Close, shuffle and apply have separate positions; the sliders icon opens each stage’s description and controls. The workspace collapse action is hidden behind the editor in landscape.
+
+| Chain | Selection | Adjustment |
+|---|---|---|
+| <img src="chain-review/en/portrait-deck.png" width="240" alt="Chain deck"> | <img src="chain-review/en/portrait-catalog.png" width="240" alt="Chain catalog"> | <img src="chain-review/en/portrait-adjust.png" width="240" alt="Chain adjust"> |
+
+![Landscape chain editor](chain-review/en/landscape-catalog.png)
+
+Twelve Japanese/English portrait/landscape captures cover icon clipping/overlap, hidden underlying controls, and cancel/apply behavior. See the [manifest](chain-review/manifest.json). After building and installing as above, reproduce with:
+
+```sh
+adb -s emulator-5554 shell am instrument -w -e action chain-review -e language ja com.bongorian.signa1.debug.test/com.bongorian.signa1.DeviceChecks
+adb -s emulator-5554 shell am instrument -w -e action chain-review -e language en com.bongorian.signa1.debug.test/com.bongorian.signa1.DeviceChecks
+python3 tools/collect-workspace-review.py --suite chain
+```

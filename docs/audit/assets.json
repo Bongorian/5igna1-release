@@ -143,5 +143,20 @@
     "path": "app/src/main/res/drawable/ic_mode_video.xml",
     "sha256": "399bfa30da98b1dc8c55200893ef0249a67d5515f2d38fa4b4993ba5c5a64253",
     "bytes": 440
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_close.xml",
+    "sha256": "6edc2484598dc83c2931dfea6ce267c9bed41a742f743933ee43b1122dc6a506",
+    "bytes": 391
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_check.xml",
+    "sha256": "bb5fef14863a174facc5ed1242b420995ed8ed3590d2a1b5d68669d902809721",
+    "bytes": 386
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_add.xml",
+    "sha256": "644f337c332957a6caa68b0fe55d1f5ea6fe3fbc1865a6e7b4c92c577695b777",
+    "bytes": 393
   }
 ]

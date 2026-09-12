@@ -1,0 +1,85 @@
+{
+  "capturedAtUtc": "2026-09-12T14:56:17.409265+00:00",
+  "avd": "Signal_Review_1280_480",
+  "api": 35,
+  "width": 1280,
+  "height": 2772,
+  "densityDpi": 480,
+  "navigation": "three-button",
+  "source": "Android emulator emulated camera with app ROW ERROR; unedited screenshots",
+  "files": [
+    {
+      "path": "ja/portrait-deck.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "428520b3186a5677a1444884f223aa9366f475b4fd18c5ea7454f1497fd090a8"
+    },
+    {
+      "path": "ja/portrait-catalog.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "7f5392c7c56f4c4a6c37b6e160e8165fea279d37c3db2a875fcbcb33f0377821"
+    },
+    {
+      "path": "ja/portrait-adjust.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "8f394723c40c59c5f2d4a82edbe9d2911dd11ecbbfea410b401b61e7cf2860b3"
+    },
+    {
+      "path": "ja/landscape-deck.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "bd7bf207e207fdf63751b9d2f08fce3f9ead3de1ba61408e03203121cfee94b7"
+    },
+    {
+      "path": "ja/landscape-catalog.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "809aa14d93449fa62cf475523a421c45046336788538cefbd6bf180575cb09f0"
+    },
+    {
+      "path": "ja/landscape-adjust.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "5da73387357b4add7335f9c29a0fa065327b9da11d700b1fca6e6f61102be5b7"
+    },
+    {
+      "path": "en/portrait-deck.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "02dda180d08dbaeecf5392008018645564a232921d679864ed6b0873c583849b"
+    },
+    {
+      "path": "en/portrait-catalog.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "2c6f5848fddca93caeddff0f974c627d95e603260068deb76c3f6d10e9fc84c6"
+    },
+    {
+      "path": "en/portrait-adjust.png",
+      "width": 1280,
+      "height": 2772,
+      "sha256": "012dc69f639d403e84c5b7e5d4638f54ecd979844d302ef2e1fd98f775fff130"
+    },
+    {
+      "path": "en/landscape-deck.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "614d4d9cf90a921db2eb0302308c93fbd0d4d23733a44f07ebc2eec05a94b798"
+    },
+    {
+      "path": "en/landscape-catalog.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "c479ec5c5d967d6d11f9ca4b476e3c08e5a07cde53174a3ae65f36f97a7d5a7c"
+    },
+    {
+      "path": "en/landscape-adjust.png",
+      "width": 2772,
+      "height": 1280,
+      "sha256": "fde9d66acb47bf0aa3420de4f6ede4999700bdbda02935e3bd625efe07465881"
+    }
+  ],
+  "appSourceSha256": "1aa6ab6bdbb81a233c756ebd6de46a4b78338bb63ca1d45553af7866ed5d949c"
+}

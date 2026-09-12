@@ -55,3 +55,7 @@ All 26 recorded file hashes match this checkout. Store screenshots remain the su
 `docs/ui-review/{ja,en}/*.png`: 18 original emulator screenshots of the unreleased PRO workspace, 1280×2772/2772×1280 at 480 dpi, API 35 and three-button navigation. Project UI and the same AOSP-generated house scene described above; no compositing or retouching. Screenshot dimensions, SHA-256 values and source digest are in [the review manifest](../ui-review/manifest.json). See [visual review](../UI_REVIEW.md) for reproduction and limitations.
 
 `DisclosureUi.kt` draws the panel/chevron symbols directly using simple paths written for this project (Apache-2.0); no external icon asset or image generator is used.
+
+## チェーン操作アイコン（2026-09-12）
+
+`ic_close.xml`、`ic_check.xml`、`ic_add.xml` は本プロジェクトで記述した20 dp Androidベクターです。閉じる、適用、追加を示す単純な線分を24×24座標で作成し、線幅1.8・丸い端点で統一しました。外部素材や画像生成モデルは使用せず、Apache-2.0を適用します。`docs/chain-review` の未加工スクリーンショットも上記と同じAOSPエミュレーターのカメラパターンを使用します。

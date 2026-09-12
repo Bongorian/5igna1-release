@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give chain cards a consistent 4 dp radius, align compact chain actions, and replace cramped close/apply/detail text with clearly sized icons.
+
 - Move readiness/output status above the preview, use icon-only disclosure controls, fit all PRO entries and keep recording time visible when collapsed.
 - Add a matched-density emulator review, original screenshots and repeatable workspace checks.
 

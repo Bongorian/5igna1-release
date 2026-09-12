@@ -12,8 +12,11 @@ import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--serial', default='emulator-5554')
-parser.add_argument('--output', type=Path, default=Path('docs/ui-review'))
+parser.add_argument('--suite', choices=['workspace', 'chain'], default='workspace')
+parser.add_argument('--output', type=Path)
 args = parser.parse_args()
+if args.output is None:
+    args.output = Path('docs/chain-review' if args.suite == 'chain' else 'docs/ui-review')
 if not args.serial.startswith('emulator-'):
     raise SystemExit('This collector is for emulator review captures.')
 sdk = Path(os.environ.get('ANDROID_HOME', Path.home() / 'Library/Android/sdk'))
@@ -26,6 +29,9 @@ api = int(subprocess.check_output(adb + ['shell', 'getprop', 'ro.build.version.s
 shots = ['01-portrait-auto', '02-portrait-fault', '03-portrait-pro', '04-pro-exposure',
          '05-landscape', '06-landscape-collapsed', '07-landscape-video',
          '08-landscape-recording-collapsed', '09-settings']
+if args.suite == 'chain':
+    shots = [f'{orientation}-{state}' for orientation in ['portrait', 'landscape']
+             for state in ['deck', 'catalog', 'adjust']]
 metadata = {
     'capturedAtUtc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
     'avd': 'Signal_Review_1280_480', 'api': api, 'width': 1280, 'height': 2772,
@@ -43,7 +49,7 @@ for language in ['ja', 'en']:
     target.mkdir(parents=True, exist_ok=True)
     for shot in shots:
         data = subprocess.check_output(adb + ['exec-out', 'run-as', 'com.bongorian.signa1.debug',
-            'cat', f'files/verification/language-workspace-{language}-{shot}.png'])
+            'cat', f'files/verification/language-{args.suite}-{language}-{shot}.png'])
         if data[:8] != b'\x89PNG\r\n\x1a\n':
             raise SystemExit(f'Not a PNG: {language}/{shot}')
         width, height = struct.unpack('>II', data[16:24])
