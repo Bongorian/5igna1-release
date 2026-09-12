@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Consolidate capture tools into one top row and distinguish primary, standard and compact button heights across app panels.
+
 - Fix empty PRO controls on pinned physical lenses by distinguishing shared camera settings from per-sensor overrides.
 - Use PHOTO/VIDEO/TAP labels, direct focal-length buttons, upper location/audio controls and consistent capture-control spacing.
 

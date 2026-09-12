@@ -17,7 +17,7 @@ internal fun MainActivity.buildProStrip(): LinearLayout {
     val scroll = HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false }
     val fields = row()
     scroll.addView(fields)
-    root.addView(scroll, LinearLayout.LayoutParams(-1, dp(64f)))
+    root.addView(scroll, LinearLayout.LayoutParams(-1, dp(ControlSize.PRIMARY)))
     listOf("exposure" to R.string.pro_exposure, "wb" to R.string.pro_white_balance,
         "focus" to R.string.pro_focus, "lens" to R.string.pro_lens).forEach { (key, title) ->
         val field = button(getString(title)).apply {

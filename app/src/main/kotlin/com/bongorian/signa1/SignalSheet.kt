@@ -52,16 +52,16 @@ internal object SignalSheet {
         root.addView(scroll, LinearLayout.LayoutParams(-1, 0, 1f))
         val actions = a.row()
         actions.setPadding(0, a.dp(12f), 0, 0)
-        root.addView(actions, LinearLayout.LayoutParams(-1, a.dp(60f)))
+        root.addView(actions, LinearLayout.LayoutParams(-1, a.dp(68f)))
         val cancel = a.button(a.getString(R.string.ui_back))
         cancel.setTextColor(MainActivity.MUTED)
         cancel.setBackgroundColor(Color.TRANSPARENT)
-        actions.addView(cancel, LinearLayout.LayoutParams(0, -1, 1f))
+        actions.addView(cancel, LinearLayout.LayoutParams(0, a.dp(ControlSize.TOOLBAR), 1f))
         cancel.setOnClickListener(OnClickListener@{ v: View? -> dialog.dismiss() })
         val done = a.button(a.getString(R.string.ui_apply))
         done.setTextColor(MainActivity.BG)
         done.setBackground(a.bg(MainActivity.LIME, 0))
-        actions.addView(done, LinearLayout.LayoutParams(0, -1, 1f))
+        actions.addView(done, LinearLayout.LayoutParams(0, a.dp(ControlSize.PRIMARY), 1f))
         done.setOnClickListener(
             OnClickListener@{ v: View? ->
                 apply.run()
@@ -104,7 +104,7 @@ internal object SignalSheet {
         val close = a.button("×")
         close.setTextSize(24f)
         close.setContentDescription(a.getString(R.string.ui_close))
-        header.addView(close, LinearLayout.LayoutParams(a.dp(44f), a.dp(44f)))
+        header.addView(close, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
         close.setOnClickListener(OnClickListener@{ v: View? -> dialog.dismiss() })
         root.addView(header)
         val scroll = ScrollView(a)
@@ -116,7 +116,7 @@ internal object SignalSheet {
         if (secondary != 0) {
             val button = a.button(a.getString(secondary))
             button.setTextColor(MainActivity.LIME)
-            val bp = LinearLayout.LayoutParams(-1, a.dp(48f))
+            val bp = LinearLayout.LayoutParams(-1, a.dp(ControlSize.TOOLBAR))
             bp.topMargin = a.dp(12f)
             root.addView(button, bp)
             button.setOnClickListener(

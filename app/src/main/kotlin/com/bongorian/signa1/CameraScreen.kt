@@ -66,15 +66,15 @@ internal fun MainActivity.buildUi() {
     root.utilityBlock = utility
     previewColumn.addView(utility, LinearLayout.LayoutParams(-1, -2))
     val header = row()
-    utility.addView(header, LinearLayout.LayoutParams(-1, dp(48f)))
+    utility.addView(header, LinearLayout.LayoutParams(-1, dp(ControlSize.TOOLBAR)))
     formatButton = button("")
     formatButton.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
     formatButton.setTextSize(12f)
     formatButton.setPadding(dp(4f), 0, dp(4f), 0)
     formatButton.setOnClickListener(OnClickListener@{ v: View? -> cycleFormat() })
     torchButton = iconButton(R.drawable.ic_flash, getString(R.string.ui_light_off))
-    header.addView(torchButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
-    header.addView(formatButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    header.addView(torchButton, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
+    header.addView(formatButton, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
     count = text("—", 12, MainActivity.WHITE).apply {
         gravity = Gravity.CENTER
         setSingleLine(true)
@@ -82,7 +82,7 @@ internal fun MainActivity.buildUi() {
         contentDescription = getString(R.string.pro_output_size)
         setOnClickListener { ResolutionPicker.show(this@buildUi, videoMode) }
     }
-    header.addView(count, LinearLayout.LayoutParams(0, dp(48f), 1f))
+    header.addView(count, LinearLayout.LayoutParams(0, dp(ControlSize.TOOLBAR), 1f))
     proModeButton = button("AUTO").apply {
         textSize = 12f
         contentDescription = getString(R.string.pro_mode)
@@ -93,7 +93,7 @@ internal fun MainActivity.buildUi() {
             }
         }
     }
-    header.addView(proModeButton, LinearLayout.LayoutParams(dp(64f), dp(48f)))
+    header.addView(proModeButton, LinearLayout.LayoutParams(dp(48f), dp(ControlSize.TOOLBAR)))
     renderTorch()
     torchButton.setOnClickListener(
         OnClickListener@{ v: View? ->
@@ -118,19 +118,18 @@ internal fun MainActivity.buildUi() {
     val settingsButton =
         iconButton(R.drawable.ic_settings, getString(R.string.ui_capture_and_language_settings))
     settingsButton.tag = "guide-settings"
-    header.addView(settingsButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    header.addView(settingsButton, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
     settingsButton.setOnClickListener(OnClickListener@{ v: View? -> showSettings() })
-    val info = row()
-    utility.addView(info, LinearLayout.LayoutParams(-1, dp(48f)))
-    info.addView(geoButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
-    info.addView(micButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    header.addView(geoButton, 1, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
+    header.addView(micButton, 2, LinearLayout.LayoutParams(dp(ControlSize.TOOLBAR), dp(ControlSize.TOOLBAR)))
+    for (icon in listOf(torchButton, geoButton, micButton, settingsButton)) icon.setPadding(dp(10f), dp(10f), dp(10f), dp(10f))
+    proModeButton.setPadding(dp(4f), 0, dp(4f), 0)
     status = text(getString(R.string.ui_preparing_the_camera), 12, MUTED)
     status.setTypeface(Typeface.MONOSPACE)
     status.setSingleLine(true)
     status.setEllipsize(TextUtils.TruncateAt.END)
     status.gravity = Gravity.CENTER_VERTICAL or Gravity.END
     status.setPadding(dp(8f), 0, dp(8f), 0)
-    info.addView(status, LinearLayout.LayoutParams(0, -1, 1f))
     // Fit the actual signal aspect without cropping or stretching.
     previewArea = FrameLayout(this)
     previewColumn.addView(previewArea, LinearLayout.LayoutParams(-1, 0, 1f))
@@ -172,17 +171,22 @@ internal fun MainActivity.buildUi() {
     viewfinder.addView(preview, FrameLayout.LayoutParams(-1, -1))
     overlay = Overlay()
     viewfinder.addView(overlay, FrameLayout.LayoutParams(-1, -1))
+    status.background = bg(0x99101410.toInt(), 0)
+    status.gravity = Gravity.CENTER
+    viewfinder.addView(status, FrameLayout.LayoutParams(-1, dp(24f), Gravity.BOTTOM).apply {
+        bottomMargin = dp(60f); leftMargin = dp(12f); rightMargin = dp(12f)
+    })
     tapControls = row()
     tapControls.visibility = View.GONE
     tapControls.setPadding(dp(8f), dp(4f), dp(8f), dp(8f))
     tapPlay = button(getString(R.string.tap_play))
     tapPlay.tag = "tap-play"
     tapPlay.setOnClickListener { engine.toggleTapPlayback() }
-    tapControls.addView(tapPlay, LinearLayout.LayoutParams(0, dp(48f), 1f))
+    tapControls.addView(tapPlay, LinearLayout.LayoutParams(0, dp(ControlSize.TOOLBAR), 1f))
     tapChoose = button(getString(R.string.tap_choose))
     tapChoose.tag = "tap-choose"
     tapChoose.setOnClickListener { chooseTap() }
-    tapControls.addView(tapChoose, LinearLayout.LayoutParams(0, dp(48f), 1f).apply { leftMargin = dp(8f) })
+    tapControls.addView(tapChoose, LinearLayout.LayoutParams(0, dp(ControlSize.TOOLBAR), 1f).apply { leftMargin = dp(8f) })
     viewfinder.addView(tapControls, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM))
 
     preview.setOnTouchListener(
@@ -229,13 +233,13 @@ internal fun MainActivity.buildUi() {
         isHorizontalScrollBarEnabled = false
         addView(lensRail)
     }
-    viewfinder.addView(lensScroll, FrameLayout.LayoutParams(-2, dp(48f), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {
+    viewfinder.addView(lensScroll, FrameLayout.LayoutParams(-2, dp(ControlSize.COMPACT), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {
         bottomMargin = dp(12f); leftMargin = dp(12f); rightMargin = dp(12f)
     })
     proStrip = buildProStrip()
     controlBody.addView(proStrip, LinearLayout.LayoutParams(-1, -2))
     val faultBar = row()
-    controlBody.addView(faultBar, LinearLayout.LayoutParams(-1, dp(48f)).apply { topMargin = dp(8f) })
+    controlBody.addView(faultBar, LinearLayout.LayoutParams(-1, dp(ControlSize.TOOLBAR)).apply { topMargin = dp(8f) })
     faultDeckButton = button("").apply {
         gravity = Gravity.CENTER_VERTICAL or Gravity.START
         textSize = 12f
@@ -357,7 +361,7 @@ internal fun MainActivity.buildUi() {
         }
     )
     liveTransport = row()
-    val timeRow = LinearLayout.LayoutParams(-1, dp(48f))
+    val timeRow = LinearLayout.LayoutParams(-1, dp(ControlSize.TOOLBAR))
     timeRow.topMargin = dp(8f)
     timeRow.bottomMargin = dp(4f)
     faultDeck.addView(liveTransport, timeRow)
@@ -385,7 +389,7 @@ internal fun MainActivity.buildUi() {
     echoButton = button(getString(R.string.echo_trigger))
     echoButton.contentDescription = getString(R.string.echo_hint)
     echoButton.setOnClickListener { engine.triggerEcho() }
-    faultDeck.addView(echoButton, LinearLayout.LayoutParams(-1, dp(48f)))
+    faultDeck.addView(echoButton, LinearLayout.LayoutParams(-1, dp(ControlSize.COMPACT)))
     val controls = row()
     controls.setGravity(Gravity.CENTER)
     controlsColumn.addView(controls, LinearLayout.LayoutParams(-1, dp(88f)))

@@ -30,7 +30,7 @@ internal object ResponsiveUiChecks {
             test.runOnMainSync {
                 val root = a.cameraRoot
                 for (mode in listOf(a.photoTab,a.videoTab,a.tapTab)) check(mode.width>=a.dp(48f))
-                check(a.formatButton.height == a.photoTab.height)
+                check(a.formatButton.height == a.dp(ControlSize.TOOLBAR))
                 check(a.photoTab.text.toString() == a.getString(R.string.capture_label_photo))
                 val label = a.faultSwitch
                 if (!root.wide) {

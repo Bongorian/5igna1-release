@@ -80,10 +80,10 @@ internal class ProCameraDialog(private val a: MainActivity, private val group: S
                 contentDescription = a.getString(title) + " · " + label
                 setOnClickListener { choose(id) }
             }
-            row.addView(button, LinearLayout.LayoutParams(-2, a.dp(48f)).apply { rightMargin = a.dp(8f) })
+            row.addView(button, LinearLayout.LayoutParams(-2, a.dp(ControlSize.COMPACT)).apply { rightMargin = a.dp(8f) })
         }
         scroll.addView(row)
-        body.addView(scroll, LinearLayout.LayoutParams(-1, a.dp(56f)).apply { topMargin = a.dp(8f); bottomMargin = a.dp(8f) })
+        body.addView(scroll, LinearLayout.LayoutParams(-1, a.dp(ControlSize.TOOLBAR)).apply { topMargin = a.dp(8f); bottomMargin = a.dp(8f) })
     }
     private fun toggle(title: Int, checked: Boolean, on: Int = R.string.pro_on, off: Int = R.string.pro_off, choose: (Boolean) -> Unit) {
         choices(title, listOf(0 to a.getString(off), 1 to a.getString(on)), if (checked) 1 else 0) { choose(it == 1) }

@@ -559,7 +559,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         close.setTextSize(24f)
         close.setBackgroundColor(Color.TRANSPARENT)
         close.setContentDescription(a.getString(R.string.ui_close))
-        header.addView(close, LinearLayout.LayoutParams(a.dp(44f), a.dp(48f)))
+        header.addView(close, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
         close.setOnClickListener(OnClickListener@{ v: View? -> dismiss() })
         title = a.text(a.getString(R.string.media_preview_title), 13, MainActivity.WHITE)
         title.setSingleLine(true)
@@ -571,7 +571,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         external.setContentDescription(a.getString(R.string.media_open_external))
         external.setTooltipText(external.contentDescription)
         external.setBackgroundColor(Color.TRANSPARENT)
-        header.addView(external, LinearLayout.LayoutParams(a.dp(44f), a.dp(48f)))
+        header.addView(external, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
         external.setOnClickListener(
             OnClickListener@{ v: View? ->
                 if (!items.isEmpty()) a.openExternal(items.get(index).uri)
@@ -660,7 +660,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         next.setOnClickListener(OnClickListener@{ v: View? -> move(1) })
         footer.addView(controls)
         // Keep media navigation together, with a separate full-width signal action below it.
-        val signalPosition = LinearLayout.LayoutParams(-1, a.dp(44f))
+        val signalPosition = LinearLayout.LayoutParams(-1, a.dp(ControlSize.COMPACT))
         signalPosition.topMargin = a.dp(12f)
         footer.addView(signal, signalPosition)
         panel.addView(footer)

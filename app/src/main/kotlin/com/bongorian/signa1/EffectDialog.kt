@@ -80,18 +80,18 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         root.setPadding(a.dp(12f), a.dp(6f), a.dp(12f), a.dp(8f))
         root.setBackground(a.bg(MainActivity.BG, MainActivity.PANEL))
         val toolbar = a.row()
-        root.addView(toolbar, LinearLayout.LayoutParams(-1, a.dp(48f)))
+        root.addView(toolbar, LinearLayout.LayoutParams(-1, a.dp(ControlSize.PRIMARY)))
         val cancel = action(R.string.ui_back)
         cancel.setText("×")
         cancel.setTextSize(24f)
-        toolbar.addView(cancel, LinearLayout.LayoutParams(a.dp(44f), a.dp(44f)))
+        toolbar.addView(cancel, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
         cancel.setOnClickListener(OnClickListener@{ v: View? -> sheet!!.dismiss() })
         val heading = a.title(a.getString(R.string.fault_chain_editor))
         heading.setGravity(Gravity.CENTER)
         toolbar.addView(heading, LinearLayout.LayoutParams(0, -1, 1f))
         val random = a.iconButton(R.drawable.ic_shuffle, a.getString(R.string.ui_random_chain))
         random.setTag("random-chain")
-        toolbar.addView(random, LinearLayout.LayoutParams(a.dp(48f), a.dp(48f)))
+        toolbar.addView(random, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
         random.setOnClickListener(
             OnClickListener@{ v: View? ->
                 if (a.rawOriginal()) return@OnClickListener
@@ -113,7 +113,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
         apply.setTextSize(22f)
         apply.setTextColor(MainActivity.BG)
         apply.setBackground(a.bg(MainActivity.LIME, 0))
-        toolbar.addView(apply, LinearLayout.LayoutParams(a.dp(44f), a.dp(44f)))
+        toolbar.addView(apply, LinearLayout.LayoutParams(a.dp(ControlSize.PRIMARY), a.dp(ControlSize.PRIMARY)))
         apply.setOnClickListener(
             OnClickListener@{ v: View? ->
                 a.finishEffectEdit(edit, state(), true)
@@ -297,7 +297,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                     0,
                 )
             )
-            val p = LinearLayout.LayoutParams(-2, a.dp(44f))
+            val p = LinearLayout.LayoutParams(-2, a.dp(ControlSize.COMPACT))
             p.rightMargin = a.dp(6f)
             route!!.addView(chip, p)
             chip.setOnClickListener(
@@ -328,7 +328,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
             title.addView(name, LinearLayout.LayoutParams(0, a.dp(40f), 1f))
             if ((mask and (1 shl id)) == 0 && a.effectAvailable(id)) {
                 val add = action(R.string.chain_add)
-                title.addView(add, LinearLayout.LayoutParams(-2, a.dp(44f)))
+                title.addView(add, LinearLayout.LayoutParams(-2, a.dp(ControlSize.COMPACT)))
                 add.setOnClickListener {
                     mask = mask or (1 shl id)
                     renderRoute()
@@ -390,7 +390,7 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                 }
                 val actions = a.row()
                 val reset = action(R.string.ui_reset)
-                actions.addView(reset, LinearLayout.LayoutParams(0, a.dp(44f), 1f))
+                actions.addView(reset, LinearLayout.LayoutParams(0, a.dp(ControlSize.TOOLBAR), 1f))
                 body!!.addView(actions)
                 reset.setOnClickListener(
                     OnClickListener@{ v: View? ->

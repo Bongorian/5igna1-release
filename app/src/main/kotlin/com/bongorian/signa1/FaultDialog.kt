@@ -252,7 +252,7 @@ internal object FaultDialog {
                 button.tag = "live-page-$index"
                 button.textSize = 11f
                 button.setTextColor(if (page == index) MainActivity.LIME else MainActivity.MUTED)
-                val layout = LinearLayout.LayoutParams(0, a.dp(44f), 1f)
+                val layout = LinearLayout.LayoutParams(0, a.dp(ControlSize.COMPACT), 1f)
                 if (index > 0) layout.leftMargin = a.dp(6f)
                 pages.addView(button, layout)
                 button.setOnClickListener { page = index; render() }

@@ -36,7 +36,7 @@ internal fun MainActivity.renderCameraLens() {
                     }
                 }
             }
-            lensRail.addView(choice, LinearLayout.LayoutParams(-2, dp(48f)).apply { leftMargin = dp(4f); rightMargin = dp(4f) })
+            lensRail.addView(choice, LinearLayout.LayoutParams(-2, dp(ControlSize.COMPACT)).apply { leftMargin = dp(4f); rightMargin = dp(4f) })
         }
     }
     flipButton.contentDescription = getString(R.string.camera_flip_facing)

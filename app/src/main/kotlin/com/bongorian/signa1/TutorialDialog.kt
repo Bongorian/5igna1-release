@@ -109,12 +109,12 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
         val actions = a.row()
         back = a.button(a.getString(R.string.ui_back)).apply {
             tag = "tutorial-back"
-            minHeight = a.dp(48f)
+            minHeight = a.dp(ControlSize.TOOLBAR)
             setOnClickListener { if (page > 0) { page--; render() } }
         }
         next = a.button("").apply {
             tag = "tutorial-next"
-            minHeight = a.dp(48f)
+            minHeight = a.dp(ControlSize.PRIMARY)
             setTextColor(MainActivity.BG)
             background = a.bg(MainActivity.LIME, 0)
             setOnClickListener {
@@ -124,7 +124,7 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
         actions.addView(back, LinearLayout.LayoutParams(0, -2, 1f))
         actions.addView(a.button(a.getString(R.string.tutorial_skip)).apply {
             tag = "tutorial-skip"
-            minHeight = a.dp(48f)
+            minHeight = a.dp(ControlSize.COMPACT)
             setTextColor(MainActivity.MUTED)
             setBackgroundColor(Color.TRANSPARENT)
             setOnClickListener { dialog.dismiss() }

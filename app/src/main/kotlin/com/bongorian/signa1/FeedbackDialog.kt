@@ -69,7 +69,7 @@ internal object FeedbackDialog {
                 ClipData.newPlainText(a.getString(R.string.feedback_title), "$ADDRESS\n${subject.text}\n\n${draft()}"))
             Toast.makeText(a, R.string.feedback_copied, Toast.LENGTH_SHORT).show()
         }
-        body.addView(copy, LinearLayout.LayoutParams(-1, a.dp(48f)))
+        body.addView(copy, LinearLayout.LayoutParams(-1, a.dp(ControlSize.TOOLBAR)))
         val email = a.button(a.getString(R.string.feedback_email)).apply { tag = "feedback-email" }
         email.setOnClickListener {
             try { a.startActivity(intent(subject.text.toString(), draft())) }
@@ -77,7 +77,7 @@ internal object FeedbackDialog {
                 Toast.makeText(a, R.string.feedback_no_email, Toast.LENGTH_LONG).show()
             }
         }
-        body.addView(email, LinearLayout.LayoutParams(-1, a.dp(48f)))
+        body.addView(email, LinearLayout.LayoutParams(-1, a.dp(ControlSize.PRIMARY)))
         val dialog = SignalSheet.content(a, a.getString(R.string.feedback_title), body, 0, null, .9f)
         a.feedbackDialog = dialog
         dialog.setOnDismissListener { if (a.feedbackDialog === dialog) a.feedbackDialog = null }
