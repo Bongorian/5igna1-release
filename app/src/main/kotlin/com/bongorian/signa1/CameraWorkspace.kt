@@ -16,28 +16,22 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
     private val previewTools = LinearLayout(a).apply { orientation = VERTICAL; gravity = Gravity.CENTER_HORIZONTAL }
     private val foldRail = LinearLayout(a).apply { orientation = VERTICAL; gravity = Gravity.CENTER_HORIZONTAL }
     private lateinit var foldButton: TextView
-    private lateinit var foldedCapture: TextView
+    lateinit var captureHome: FrameLayout
+    private val foldedCaptureHost = FrameLayout(a)
 
     fun buildFoldRail() {
         foldButton = a.button("›").apply {
-            textSize = 22f
-            setPadding(0, 0, 0, 0)
+            textSize = 11f
+            setPadding(a.dp(4f), 0, a.dp(4f), 0)
             setBackgroundColor(android.graphics.Color.TRANSPARENT)
             setOnClickListener {
                 a.workspaceCollapsed = !a.workspaceCollapsed
                 requestLayout()
             }
         }
-        foldRail.addView(foldButton, LayoutParams(-1, a.dp(40f)))
+        foldRail.addView(foldButton, LayoutParams(-1, a.dp(48f)))
         foldRail.addView(android.widget.Space(a), LayoutParams(1, 0, 1f))
-        foldedCapture = a.button("＋").apply {
-            textSize = 24f
-            setPadding(0, 0, 0, 0)
-            setTextColor(MainActivity.BG)
-            background = a.bg(MainActivity.LIME, 0)
-            setOnClickListener { a.shoot() }
-        }
-        foldRail.addView(foldedCapture, LayoutParams(-1, a.dp(48f)))
+        foldRail.addView(foldedCaptureHost, LayoutParams(-1, a.dp(88f)))
         foldRail.addView(android.widget.Space(a), LayoutParams(1, 0, 1f))
         addView(foldRail, LayoutParams(a.dp(32f), -1))
     }
@@ -93,14 +87,17 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
             else -> VISIBLE
         }
         foldRail.visibility = if (wide && a.effectEditorSpace == null) VISIBLE else GONE
-        val foldLabel = if (collapsed) "‹" else "›"
-        if (foldButton.text.toString() != foldLabel) foldButton.text = foldLabel
+        val foldLabel = a.getString(R.string.workspace_controls) + "\n" + a.getString(if (collapsed) R.string.disclosure_open else R.string.disclosure_close)
+        DisclosureUi.bind(a, foldButton, !collapsed, true, foldLabel)
         foldButton.contentDescription = a.getString(if (collapsed) R.string.workspace_expand else R.string.workspace_collapse)
-        foldedCapture.visibility = if (collapsed) VISIBLE else GONE
-        val captureLabel = if (a.recording) "■" else "＋"
-        if (foldedCapture.text.toString() != captureLabel) foldedCapture.text = captureLabel
-        foldedCapture.contentDescription = a.capture.contentDescription
-        size(foldRail, LayoutParams(a.dp(if (collapsed) 48f else 28f), -1))
+        foldButton.tooltipText = foldButton.contentDescription
+        foldedCaptureHost.visibility = if (collapsed) VISIBLE else GONE
+        val captureParent = if (collapsed) foldedCaptureHost else captureHome
+        if (a.capture.parent !== captureParent) {
+            (a.capture.parent as? android.view.ViewGroup)?.removeView(a.capture)
+            captureParent.addView(a.capture, FrameLayout.LayoutParams(a.dp(80f), a.dp(80f), Gravity.CENTER))
+        }
+        size(foldRail, LayoutParams(a.dp(if (collapsed) 88f else 64f), -1))
         val utilityParent = if (wide) controlsColumn else previewColumn
         if (utilityBlock.parent !== utilityParent) {
             (utilityBlock.parent as? LinearLayout)?.removeView(utilityBlock)
@@ -111,7 +108,7 @@ internal class CameraWorkspace(val a: MainActivity) : LinearLayout(a) {
         val content = controlsScroll.getChildAt(0)
         content.measure(MeasureSpec.makeMeasureSpec(controlW, MeasureSpec.EXACTLY),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
-        val controlH = (content.measuredHeight + a.dp(72f + ControlSize.TOOLBAR)).coerceAtMost((h * .55f).toInt())
+        val controlH = (content.measuredHeight + a.dp(88f + ControlSize.TOOLBAR)).coerceAtMost((h * .55f).toInt())
         size(previewColumn, if (wide) LayoutParams(0, -1, 1f) else LayoutParams(-1, 0, 1f))
         size(controlsColumn, if (wide) LayoutParams(controlW, -1).apply { leftMargin = a.dp(12f) }
             else LayoutParams(-1, controlH))

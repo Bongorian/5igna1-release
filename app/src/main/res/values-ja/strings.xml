@@ -621,4 +621,9 @@
     <string name="capture_label_tap">TAP</string>
     <string name="workspace_expand">撮影操作を表示</string>
     <string name="workspace_collapse">撮影操作を折りたたむ</string>
+    <string name="disclosure_open">開く</string>
+    <string name="disclosure_close">閉じる</string>
+    <string name="workspace_controls">操作</string>
+    <string name="disclosure_expanded">展開中</string>
+    <string name="disclosure_collapsed">折りたたみ中</string>
 </resources>

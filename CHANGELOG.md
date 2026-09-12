@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore the 80 dp shutter in both expanded and collapsed layouts, and label workspace/FAULT disclosure actions with shared icons.
+
 - Reduce control heights, simplify collapsed FAULT and capture tabs, and let landscape controls collapse while moving overlays out of the preview.
 
 - Consolidate capture tools into one top row and distinguish primary, standard and compact button heights across app panels.

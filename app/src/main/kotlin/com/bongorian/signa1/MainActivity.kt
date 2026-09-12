@@ -454,8 +454,9 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         faultDeck.visibility = if (faultDeckExpanded) View.VISIBLE else View.GONE
         val selected = effectState.ids().size
         val applied = uiEffects().size
-        faultDeckButton.text = "FAULT  " + selected + (if (applied != selected) "/" + applied else "") +
-            "  ·  " + Math.round(effectState.amount * 100) + "%  " + (if (faultDeckExpanded) "⌃" else "⌄")
+        val summary = "FAULT " + selected + (if (applied != selected) "/" + applied else "") + " · " +
+            getString(if (faultDeckExpanded) R.string.disclosure_close else R.string.disclosure_open)
+        DisclosureUi.bind(this, faultDeckButton, faultDeckExpanded, false, summary)
         faultDeckButton.contentDescription = getString(R.string.pro_fault_panel) + " · " + getString(R.string.chain_counts, selected, applied)
     }
 

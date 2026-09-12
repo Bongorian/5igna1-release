@@ -621,4 +621,9 @@
     <string name="capture_label_tap">TAP</string>
     <string name="workspace_expand">显示拍摄控制</string>
     <string name="workspace_collapse">收起拍摄控制</string>
+    <string name="disclosure_open">展开</string>
+    <string name="disclosure_close">收起</string>
+    <string name="workspace_controls">控制</string>
+    <string name="disclosure_expanded">已展开</string>
+    <string name="disclosure_collapsed">已收起</string>
 </resources>

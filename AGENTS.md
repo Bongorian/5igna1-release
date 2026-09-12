@@ -174,3 +174,5 @@
 - The owner further requested a single horizontal top row and differentiated button heights throughout the app. Use shared primary/standard/toolbar/compact sizes, retaining the larger shutter; apply to capture, editors, viewer and help actions, then install the checked DEV update over USB.
 
 - Screenshot review: reduce all action-height tiers to 48/40/32/28 dp, make capture modes text tabs and collapsed FAULT visually compact. In landscape move preview overlays out to the controls, hide the preview badge, and provide a collapsible controls column with capture/stop still available. The supplied screenshot may be inspected; no new computer-use or screenshot capture is authorized. Install the checked DEV update over USB.
+
+- Restore the original 80 dp shutter. Landscape collapse must retain the same CaptureButton instance, size, colors and photo/video/stop behavior. Replace ambiguous glyph-only disclosures with consistent drawn chevrons, explicit open/close labels and accessible state for both the workspace and FAULT. Account for connected-device dimensions; install the checked DEV build.

@@ -621,4 +621,9 @@
     <string name="capture_label_tap">TAP</string>
     <string name="workspace_expand">Show camera controls</string>
     <string name="workspace_collapse">Collapse camera controls</string>
+    <string name="disclosure_open">Open</string>
+    <string name="disclosure_close">Close</string>
+    <string name="workspace_controls">Panel</string>
+    <string name="disclosure_expanded">Expanded</string>
+    <string name="disclosure_collapsed">Collapsed</string>
 </resources>
