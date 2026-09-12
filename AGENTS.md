@@ -190,3 +190,7 @@
 ## Owner direction — 1.7.2 release, 2026-09-13
 
 - Release the completed PRO workspace and chain/camera controls as 1.7.2 / code 21. Integrate verified source into main, publish the signed GitHub/Obtainium APK with the existing distribution key, update GitHub Pages and install DEV. Preserve prior artifacts and store reviews; configured Play draft automation may run.
+
+## Owner direction — PRO sheet close fix, 2026-09-13
+
+- Fix overlapping close controls inside PRO adjustment sheets on `codex/pro-sheet-close`, including the shared sheet header used by nested choices. Verify layout and install DEV; preserve published 1.7.2 artifacts. No new release requested.

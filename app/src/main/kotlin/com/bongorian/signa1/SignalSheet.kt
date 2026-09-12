@@ -101,10 +101,17 @@ internal object SignalSheet {
         val header = a.row()
         val heading = a.title(title)
         header.addView(heading, LinearLayout.LayoutParams(0, a.dp(ControlSize.STANDARD), 1f))
-        val close = a.button("×")
-        close.setTextSize(24f)
-        close.setContentDescription(a.getString(R.string.ui_close))
-        header.addView(close, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
+        heading.maxLines = 2
+        heading.setAutoSizeTextTypeUniformWithConfiguration(12, MainActivity.TEXT_TITLE, 1, android.util.TypedValue.COMPLEX_UNIT_SP)
+        val close = a.iconButton(R.drawable.ic_close, a.getString(R.string.ui_close)).apply {
+            tag = "sheet-close"
+            setPadding(a.dp(10f), a.dp(10f), a.dp(10f), a.dp(10f))
+            setColorFilter(MainActivity.WHITE)
+            background = a.detailBg(MainActivity.PANEL, 0)
+        }
+        header.addView(close, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)).apply {
+            leftMargin = a.dp(8f)
+        })
         close.setOnClickListener(OnClickListener@{ v: View? -> dialog.dismiss() })
         root.addView(header)
         val scroll = ScrollView(a)

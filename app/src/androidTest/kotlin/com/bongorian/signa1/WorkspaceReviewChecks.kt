@@ -55,6 +55,39 @@ internal object WorkspaceReviewChecks {
             test.languageScreenshot("workspace-$locale-$name")
         }
         try {
+            if (test.args?.getString("proSheets") == "true") {
+                for (wide in listOf(false, true)) {
+                    orient(wide)
+                    test.runOnMainSync { host().engine.setProMode(true) }
+                    settle()
+                    for (group in listOf("exposure", "wb", "focus", "lens")) {
+                        test.runOnMainSync {
+                            host().window.decorView.findViewWithTag<View>("deviceCheckOverlay")?.visibility = View.GONE
+                            host().showProCamera(group)
+                        }
+                        settle()
+                        test.runOnMainSync {
+                            val a = host()
+                            val root = requireNotNull(a.proCameraDialog?.dialog?.window?.decorView)
+                            val close = root.findViewWithTag<android.widget.ImageView>("sheet-close")
+                            val visible = Rect()
+                            check(close.width == a.dp(40f) && close.height == a.dp(40f))
+                            check(close.width - close.paddingLeft - close.paddingRight == a.dp(20f))
+                            check(close.getGlobalVisibleRect(visible) && visible.width() == close.width && visible.height() == close.height)
+                            val heading = (close.parent as android.view.ViewGroup).getChildAt(0) as TextView
+                            val headingBounds = Rect()
+                            heading.getGlobalVisibleRect(headingBounds)
+                            check(headingBounds.right < visible.left) { "PRO heading overlaps close" }
+                        }
+                        test.languageScreenshot("pro-sheet-$locale-${if (wide) "landscape" else "portrait"}-$group")
+                        test.runOnMainSync {
+                            host().proCameraDialog!!.dialog!!.window!!.decorView.findViewWithTag<View>("sheet-close").performClick()
+                        }
+                        test.await("PRO sheet dismissed", { host().proCameraDialog == null }, 3000)
+                    }
+                }
+                return "PASS PRO sheets: 8 captures, 20 dp vector, 40 dp unclipped target, separate headings and working close"
+            }
             orient(false)
             test.runOnMainSync {
                 val a = host()

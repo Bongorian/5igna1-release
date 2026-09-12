@@ -85,3 +85,7 @@ adb -s emulator-5554 shell am instrument -w -e action chain-review -e language j
 adb -s emulator-5554 shell am instrument -w -e action chain-review -e language en com.bongorian.signa1.debug.test/com.bongorian.signa1.DeviceChecks
 python3 tools/collect-workspace-review.py --suite chain
 ```
+
+## PRO sheet close action (post-1.7.2 fix)
+
+PRO exposure, WB, focus and lens sheets and shared choice sheets replace the text × with a 20 dp vector, a 40 dp target and a separate heading margin. Run `workspace-review` with `-e proSheets true -e language ja` to check eight portrait/landscape screens for clipping, heading overlap and dismissal.

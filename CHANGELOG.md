@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Replace the cramped text close button in PRO and shared sheets with a 20 dp vector in a separate 40 dp target; keep long headings clear of the close action.
+
 ## [1.7.2] - 2026-09-13
 
 - Add capability-aware PRO shooting mode in Settings: shutter/ISO, EV/AE lock, white balance, manual focus and supported lens controls, with saved per-lens choices and automatic restoration when disabled.

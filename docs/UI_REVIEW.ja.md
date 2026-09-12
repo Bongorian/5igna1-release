@@ -70,3 +70,7 @@ adb -s emulator-5554 shell am instrument -w -e action chain-review -e language j
 adb -s emulator-5554 shell am instrument -w -e action chain-review -e language en com.bongorian.signa1.debug.test/com.bongorian.signa1.DeviceChecks
 python3 tools/collect-workspace-review.py --suite chain
 ```
+
+## PRO調整画面の閉じる操作（1.7.2以降の修正）
+
+PROの露出・WB・フォーカス・レンズ画面と共通の選択画面は、文字の×から20 dpの描画アイコンへ変更。40 dpの操作領域と見出しとの間隔を確保します。再確認は `workspace-review` に `-e proSheets true -e language ja` を指定し、縦横8画面で欠け・見出しとの重なり・閉じる動作を確認します。
