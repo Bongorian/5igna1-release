@@ -69,11 +69,11 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
     val title: TextView
     val page: TextView
     val notice: TextView
-    val previous: TextView
-    val next: TextView
+    val previous: ImageView
+    val next: ImageView
     val play: TextView
     val time: TextView
-    val external: TextView
+    val external: ImageView
     val signal: TextView
     var savedSignal: SavedSignal? = null
     var signalDialog: Dialog? = null
@@ -546,6 +546,14 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
             }
         }
 
+    private fun navigationIcon(resource: Int, label: Int, name: String) =
+        a.iconButton(resource, a.getString(label)).apply {
+            tag = name
+            setPadding(a.dp(10f), a.dp(10f), a.dp(10f), a.dp(10f))
+            setColorFilter(MainActivity.WHITE)
+            background = a.detailBg(MainActivity.PANEL, 0)
+        }
+
     init {
         audio = a.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
         dialog = Dialog(a)
@@ -555,23 +563,18 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         panel.setBackgroundColor(MainActivity.BG)
         panel.setPadding(a.dp(16f), a.dp(8f), a.dp(16f), a.dp(8f))
         val header = a.row()
-        val close = a.button("×")
-        close.setTextSize(24f)
+        val close = navigationIcon(R.drawable.ic_close, R.string.ui_close, "media-close")
         close.setBackgroundColor(Color.TRANSPARENT)
-        close.setContentDescription(a.getString(R.string.ui_close))
-        header.addView(close, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
+        header.addView(close, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         close.setOnClickListener(OnClickListener@{ v: View? -> dismiss() })
         title = a.text(a.getString(R.string.media_preview_title), 13, MainActivity.WHITE)
         title.setSingleLine(true)
         title.setEllipsize(TextUtils.TruncateAt.END)
         title.setGravity(Gravity.CENTER)
         header.addView(title, LinearLayout.LayoutParams(0, a.dp(ControlSize.STANDARD), 1f))
-        external = a.button("↗")
-        external.setTextSize(23f)
-        external.setContentDescription(a.getString(R.string.media_open_external))
-        external.setTooltipText(external.contentDescription)
+        external = navigationIcon(R.drawable.ic_open_external, R.string.media_open_external, "media-external")
         external.setBackgroundColor(Color.TRANSPARENT)
-        header.addView(external, LinearLayout.LayoutParams(a.dp(ControlSize.TOOLBAR), a.dp(ControlSize.TOOLBAR)))
+        header.addView(external, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         external.setOnClickListener(
             OnClickListener@{ v: View? ->
                 if (!items.isEmpty()) a.openExternal(items.get(index).uri)
@@ -639,9 +642,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
             }
         )
         val controls = a.row()
-        previous = a.button("‹")
-        previous.setTextSize(28f)
-        previous.setContentDescription(a.getString(R.string.media_previous))
+        previous = navigationIcon(R.drawable.ic_previous, R.string.media_previous, "media-previous")
         controls.addView(previous, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         previous.setOnClickListener(OnClickListener@{ v: View? -> move(-1) })
         page = a.text("", 12, MainActivity.MUTED)
@@ -651,9 +652,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         play.setContentDescription(a.getString(R.string.live_pause))
         controls.addView(play, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         play.setOnClickListener(OnClickListener@{ v: View? -> togglePlayback() })
-        next = a.button("›")
-        next.setTextSize(28f)
-        next.setContentDescription(a.getString(R.string.media_next))
+        next = navigationIcon(R.drawable.ic_next, R.string.media_next, "media-next")
         val np = LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD))
         np.leftMargin = a.dp(8f)
         controls.addView(next, np)

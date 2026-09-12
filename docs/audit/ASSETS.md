@@ -59,3 +59,7 @@ All 26 recorded file hashes match this checkout. Store screenshots remain the su
 ## チェーン操作アイコン（2026-09-12）
 
 `ic_close.xml`、`ic_check.xml`、`ic_add.xml` は本プロジェクトで記述した20 dp Androidベクターです。閉じる、適用、追加を示す単純な線分を24×24座標で作成し、線幅1.8・丸い端点で統一しました。外部素材や画像生成モデルは使用せず、Apache-2.0を適用します。`docs/chain-review` の未加工スクリーンショットも上記と同じAOSPエミュレーターのカメラパターンを使用します。
+
+## 保存メディアの操作アイコン（2026-09-13）
+
+`ic_previous.xml`、`ic_next.xml`、`ic_open_external.xml` は本プロジェクトで記述した20 dp Androidベクターです。24×24座標で中央に置いた左右のシェブロンと外部表示を示す枠・矢印を線幅1.8で作成しました。外部素材は使わず、Apache-2.0を適用します。

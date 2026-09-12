@@ -194,3 +194,5 @@
 ## Owner direction — PRO sheet close fix, 2026-09-13
 
 - Fix overlapping close controls inside PRO adjustment sheets on `codex/pro-sheet-close`, including the shared sheet header used by nested choices. Verify layout and install DEV; preserve published 1.7.2 artifacts. No new release requested.
+
+- Also fix the saved-media viewer close/external-open glyphs and center its previous/next icons. Continue on the same UI fix branch and install DEV.

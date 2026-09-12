@@ -158,5 +158,20 @@
     "path": "app/src/main/res/drawable/ic_add.xml",
     "sha256": "644f337c332957a6caa68b0fe55d1f5ea6fe3fbc1865a6e7b4c92c577695b777",
     "bytes": 393
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_previous.xml",
+    "sha256": "b0442b325d5db804b4aa18e96049a96c0396a76ab44717ca3d8c014704ca5a79",
+    "bytes": 386
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_next.xml",
+    "sha256": "ebc0158c5324e5282792363372005b3fb8bee099311fba32ae7033129009166d",
+    "bytes": 385
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_open_external.xml",
+    "sha256": "bb71462b9338e312a1e4529223a7def5e0e0843185131e87fc74d35f7afb979b",
+    "bytes": 429
   }
 ]

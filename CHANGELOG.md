@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Center the saved-media viewer navigation icons and replace close/external-open text glyphs with consistent vectors.
+
 - Replace the cramped text close button in PRO and shared sheets with a 20 dp vector in a separate 40 dp target; keep long headings clear of the close action.
 
 ## [1.7.2] - 2026-09-13
