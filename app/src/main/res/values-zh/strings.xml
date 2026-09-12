@@ -616,4 +616,7 @@
     <string name="pro_ready">可以拍摄</string>
     <string name="pro_fault_panel">展开或收起FAULT控制</string>
     <string name="pro_aperture_manual">请将曝光切换为手动以调整光圈。</string>
+    <string name="capture_label_photo">PHOTO</string>
+    <string name="capture_label_video">VIDEO</string>
+    <string name="capture_label_tap">TAP</string>
 </resources>

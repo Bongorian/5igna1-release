@@ -4,7 +4,41 @@ import android.widget.LinearLayout
 
 internal fun MainActivity.renderCameraLens() {
     val selected = engine.activeLens
-    lensButton.text = selected?.label(this) ?: getString(R.string.lens_select)
+    lensRail.removeAllViews()
+    for (lens in engine.lenses.filter { it.front == (selected?.front ?: engine.front) }.sortedBy { it.equivalentMm ?: Double.MAX_VALUE }) {
+        val focals = lens.opticalFocals.takeIf { it.size > 1 } ?: listOfNotNull(lens.focalMm)
+        for (focal in focals.ifEmpty { listOf(0f) }) {
+            val equivalent = lens.equivalentMm?.let { it * focal / (lens.focalMm ?: focal) }
+            val label = if (equivalent != null) String.format(java.util.Locale.US, "%.0f mm", equivalent)
+                else if (focal > 0) String.format(java.util.Locale.US, "%.1f mm", focal) else "—"
+            val active = lens.key == engine.cameraSelection && (focals.size <= 1 || focal == engine.opticalFocal)
+            val choice = button(label).apply {
+                textSize = 12f
+                setPadding(dp(12f), 0, dp(12f), 0)
+                isSingleLine = true
+                isSelected = active
+                isEnabled = !recording && !engine.photoBusy
+                setTextColor(if (active) MainActivity.BG else MainActivity.WHITE)
+                background = bg(if (active) MainActivity.LIME else 0xCC101410.toInt(), 0)
+                contentDescription = if (equivalent != null) getString(R.string.lens_equivalent, equivalent) else label
+                tooltipText = lens.detail(this@renderCameraLens)
+                setOnClickListener {
+                    if (!recording && !engine.photoBusy && !tapMode) {
+                        cancelEffectPreview()
+                        if (lens.key == engine.cameraSelection) {
+                            engine.setOpticalFocal(focal)
+                            handler.postDelayed({ renderCameraLens() }, 100)
+                        } else {
+                            if (lens.opticalFocals.size > 1) getSharedPreferences("signal", 0).edit()
+                                .putFloat("opticalFocal:" + lens.key, focal).apply()
+                            engine.selectCamera(lens.key)
+                        }
+                    }
+                }
+            }
+            lensRail.addView(choice, LinearLayout.LayoutParams(-2, dp(48f)).apply { leftMargin = dp(4f); rightMargin = dp(4f) })
+        }
+    }
     flipButton.contentDescription = getString(R.string.camera_flip_facing)
     renderTorch()
 }

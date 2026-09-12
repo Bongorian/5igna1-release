@@ -12,11 +12,11 @@ import java.util.concurrent.atomic.AtomicReference
 
 /** Camera2 requests against an offscreen YUV sink. No Activity, UI automation or image capture files. */
 internal object ProCameraDeviceChecks {
-    fun run(context: Context): String {
+    fun run(context: Context, cameraKey: String? = null): String {
         val manager = context.getSystemService(CameraManager::class.java)
         val lenses = CameraLenses.read(manager)
         check(lenses.isNotEmpty())
-        val lens = lenses.firstOrNull { !it.front && it.physicalId == null } ?: requireNotNull(lenses.firstOrNull { it.physicalId == null })
+        val lens = lenses.firstOrNull { it.key == cameraKey } ?: lenses.firstOrNull { !it.front && it.physicalId == null } ?: requireNotNull(lenses.firstOrNull { it.physicalId == null })
         val controls = ProCameraControls(lens)
         val capabilities = controls.capabilities
         val thread = HandlerThread("ProCameraChecks").apply { start() }
@@ -43,12 +43,14 @@ internal object ProCameraDeviceChecks {
             reader = ImageReader.newInstance(size.width, size.height, ImageFormat.YUV_420_888, 3)
             reader.setOnImageAvailableListener({ it.acquireLatestImage()?.close() }, handler)
             val configured = CountDownLatch(1)
-            camera.createCaptureSession(listOf(reader.surface), object : CameraCaptureSession.StateCallback() {
+            val output = android.hardware.camera2.params.OutputConfiguration(reader.surface).apply { lens.physicalId?.let { setPhysicalCameraId(it) } }
+            camera.createCaptureSessionByOutputConfigurations(listOf(output), object : CameraCaptureSession.StateCallback() {
                 override fun onConfigured(value: CameraCaptureSession) { session.set(value); configured.countDown() }
                 override fun onConfigureFailed(value: CameraCaptureSession) { failure.set(IllegalStateException("Session rejected")); configured.countDown() }
             }, handler)
             wait(configured, "session")
-            val builder = camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            val builder = if (lens.physicalId == null) camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                else camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW, setOf(lens.physicalId))
             builder.addTarget(reader.surface)
             controls.remember(CameraDevice.TEMPLATE_PREVIEW, builder)
             val baseline = builder.build()
@@ -67,7 +69,8 @@ internal object ProCameraDeviceChecks {
                 }, handler)
                 wait(complete, tag)
                 session.get()!!.stopRepeating()
-                return requireNotNull(latest.get())
+                val total = requireNotNull(latest.get())
+                return if (lens.physicalId == null) total else requireNotNull(total.physicalCameraTotalResults[lens.physicalId])
             }
             val automatic = capture("auto")
             val desired = ProCameraState(manualExposure = true, exposureNs = 8_000_000L, iso = 200,

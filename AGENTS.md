@@ -168,3 +168,5 @@
 ## Owner direction — PRO camera workspace, 2026-09-12
 
 - Implement capability-aware real camera adjustments in a PRO shooting mode and reorganize the capture UI for later owner review on `codex/pro-camera-workspace`. Keep camera controls separate from FAULT and processing modes, preserve native optical framing and unsupported-device fallbacks. Stop the wireless-device investigation. Continue CLI and offscreen verification under the computer-use prohibition, provide a DEV review build, and push checked work. No new release is requested.
+
+- USB review follow-up: fix empty PRO controls on the connected device, use PHOTO/VIDEO/TAP labels in all languages, move location outside the preview, restore audio toggles, show focal-length choices directly, and standardize control typography and spacing. Verify camera requests offscreen and install the corrected DEV build on the connected USB device; preserve release app and the computer-use ban.

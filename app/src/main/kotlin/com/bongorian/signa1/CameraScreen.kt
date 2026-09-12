@@ -69,11 +69,11 @@ internal fun MainActivity.buildUi() {
     utility.addView(header, LinearLayout.LayoutParams(-1, dp(48f)))
     formatButton = button("")
     formatButton.background = android.graphics.drawable.InsetDrawable(bg(PANEL, 0), 0, dp(2f), 0, dp(2f))
-    formatButton.setTextSize(11f)
-    formatButton.setPadding(dp(2f), 0, dp(2f), 0)
+    formatButton.setTextSize(12f)
+    formatButton.setPadding(dp(4f), 0, dp(4f), 0)
     formatButton.setOnClickListener(OnClickListener@{ v: View? -> cycleFormat() })
     torchButton = iconButton(R.drawable.ic_flash, getString(R.string.ui_light_off))
-    header.addView(torchButton, LinearLayout.LayoutParams(dp(44f), dp(48f)))
+    header.addView(torchButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     header.addView(formatButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     count = text("—", 12, MainActivity.WHITE).apply {
         gravity = Gravity.CENTER
@@ -84,7 +84,7 @@ internal fun MainActivity.buildUi() {
     }
     header.addView(count, LinearLayout.LayoutParams(0, dp(48f), 1f))
     proModeButton = button("AUTO").apply {
-        textSize = 11f
+        textSize = 12f
         contentDescription = getString(R.string.pro_mode)
         setOnClickListener {
             if (!recording && !engine.photoBusy && !tapMode && externalCapture == null) {
@@ -121,11 +121,15 @@ internal fun MainActivity.buildUi() {
     header.addView(settingsButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     settingsButton.setOnClickListener(OnClickListener@{ v: View? -> showSettings() })
     val info = row()
-    utility.addView(info, LinearLayout.LayoutParams(-1, dp(27f)))
-    status = text(getString(R.string.ui_preparing_the_camera), 11, MUTED)
+    utility.addView(info, LinearLayout.LayoutParams(-1, dp(48f)))
+    info.addView(geoButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    info.addView(micButton, LinearLayout.LayoutParams(dp(48f), dp(48f)))
+    status = text(getString(R.string.ui_preparing_the_camera), 12, MUTED)
     status.setTypeface(Typeface.MONOSPACE)
     status.setSingleLine(true)
     status.setEllipsize(TextUtils.TruncateAt.END)
+    status.gravity = Gravity.CENTER_VERTICAL or Gravity.END
+    status.setPadding(dp(8f), 0, dp(8f), 0)
     info.addView(status, LinearLayout.LayoutParams(0, -1, 1f))
     // Fit the actual signal aspect without cropping or stretching.
     previewArea = FrameLayout(this)
@@ -168,25 +172,17 @@ internal fun MainActivity.buildUi() {
     viewfinder.addView(preview, FrameLayout.LayoutParams(-1, -1))
     overlay = Overlay()
     viewfinder.addView(overlay, FrameLayout.LayoutParams(-1, -1))
-    micButton.background = bg(0xAA101410.toInt(), 0)
-    geoButton.background = bg(0xAA101410.toInt(), 0)
-    viewfinder.addView(micButton, FrameLayout.LayoutParams(dp(44f), dp(44f), Gravity.TOP or Gravity.END).apply {
-        topMargin = dp(8f); rightMargin = dp(8f)
-    })
-    viewfinder.addView(geoButton, FrameLayout.LayoutParams(dp(44f), dp(44f), Gravity.TOP or Gravity.END).apply {
-        topMargin = dp(8f); rightMargin = dp(58f)
-    })
     tapControls = row()
     tapControls.visibility = View.GONE
     tapControls.setPadding(dp(8f), dp(4f), dp(8f), dp(8f))
     tapPlay = button(getString(R.string.tap_play))
     tapPlay.tag = "tap-play"
     tapPlay.setOnClickListener { engine.toggleTapPlayback() }
-    tapControls.addView(tapPlay, LinearLayout.LayoutParams(0, dp(44f), 1f))
+    tapControls.addView(tapPlay, LinearLayout.LayoutParams(0, dp(48f), 1f))
     tapChoose = button(getString(R.string.tap_choose))
     tapChoose.tag = "tap-choose"
     tapChoose.setOnClickListener { chooseTap() }
-    tapControls.addView(tapChoose, LinearLayout.LayoutParams(0, dp(44f), 1f).apply { leftMargin = dp(6f) })
+    tapControls.addView(tapChoose, LinearLayout.LayoutParams(0, dp(48f), 1f).apply { leftMargin = dp(8f) })
     viewfinder.addView(tapControls, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM))
 
     preview.setOnTouchListener(
@@ -228,18 +224,18 @@ internal fun MainActivity.buildUi() {
     tagP.setMargins(dp(12f), dp(12f), 0, 0)
     viewfinder.addView(liveTag, tagP)
     liveTag.setTag("fx")
-    lensButton = button(getString(R.string.lens_select))
-    lensButton.setTextSize(11f)
-    lensButton.setPadding(dp(12f),0,dp(12f),0)
-    lensButton.setBackground(bg(-0x33ede8ee,0))
-    lensButton.setOnClickListener { showCameras() }
-    viewfinder.addView(lensButton,FrameLayout.LayoutParams(-2,dp(44f),Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {
-        bottomMargin=dp(12f)
+    lensRail = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER }
+    lensScroll = HorizontalScrollView(this).apply {
+        isHorizontalScrollBarEnabled = false
+        addView(lensRail)
+    }
+    viewfinder.addView(lensScroll, FrameLayout.LayoutParams(-2, dp(48f), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply {
+        bottomMargin = dp(12f); leftMargin = dp(12f); rightMargin = dp(12f)
     })
     proStrip = buildProStrip()
     controlBody.addView(proStrip, LinearLayout.LayoutParams(-1, -2))
     val faultBar = row()
-    controlBody.addView(faultBar, LinearLayout.LayoutParams(-1, dp(48f)).apply { topMargin = dp(6f) })
+    controlBody.addView(faultBar, LinearLayout.LayoutParams(-1, dp(48f)).apply { topMargin = dp(8f) })
     faultDeckButton = button("").apply {
         gravity = Gravity.CENTER_VERTICAL or Gravity.START
         textSize = 12f
@@ -296,7 +292,7 @@ internal fun MainActivity.buildUi() {
     )
     val power = row()
     effects.addView(power, LinearLayout.LayoutParams(-1, dp(39f)))
-    val strengthLabel = text(getString(R.string.ui_strength), 11, MUTED)
+    val strengthLabel = text(getString(R.string.ui_strength), 12, MUTED)
     power.addView(strengthLabel, LinearLayout.LayoutParams(dp(48f), -1))
     strength = SeekBar(this)
     strength.setContentDescription(getString(R.string.ui_strength))
@@ -305,7 +301,7 @@ internal fun MainActivity.buildUi() {
     strength.setProgressTintList(ColorStateList.valueOf(LIME))
     strength.setThumbTintList(ColorStateList.valueOf(LIME))
     power.addView(strength, LinearLayout.LayoutParams(0, dp(36f), 1f))
-    strengthValue = text(strength.progress.toString() + "%", 11, LIME)
+    strengthValue = text(strength.progress.toString() + "%", 12, LIME)
     strengthValue.setTypeface(Typeface.MONOSPACE)
     strengthValue.setGravity(Gravity.END or Gravity.CENTER_VERTICAL)
     power.addView(strengthValue, LinearLayout.LayoutParams(dp(43f), -1))
@@ -325,9 +321,9 @@ internal fun MainActivity.buildUi() {
     )
     val modes = CaptureToolbar(this)
     controlsColumn.addView(modes, LinearLayout.LayoutParams(-1, dp(48f)))
-    photoTab = CaptureModeButton(this, R.drawable.ic_mode_photo, getString(R.string.ui_photo))
-    videoTab = CaptureModeButton(this, R.drawable.ic_mode_video, getString(R.string.ui_video))
-    tapTab = CaptureModeButton(this, R.drawable.ic_mode_tap, getString(R.string.tap_mode))
+    photoTab = CaptureModeButton(this, R.drawable.ic_mode_photo, getString(R.string.capture_label_photo))
+    videoTab = CaptureModeButton(this, R.drawable.ic_mode_video, getString(R.string.capture_label_video))
+    tapTab = CaptureModeButton(this, R.drawable.ic_mode_tap, getString(R.string.capture_label_tap))
     tapTab.visibility = if (externalCapture == null && settings.experimentalSignals) View.VISIBLE else View.GONE
     for (mode in listOf(photoTab, videoTab, tapTab)) modes.addView(mode, LinearLayout.LayoutParams(dp(96f), dp(48f)))
     tapTab.setOnClickListener { if (!tapMode) { if (tapInput != null) enterTap(tapInput!!) else chooseTap() } }
@@ -343,7 +339,7 @@ internal fun MainActivity.buildUi() {
     faultSwitch = ToggleButton(this)
     faultSwitch.setTextOn("LIVE ON")
     faultSwitch.setTextOff("LIVE OFF")
-    typography(faultSwitch, 11, true)
+    typography(faultSwitch, 12, true)
     faultSwitch.setAllCaps(false)
     faultSwitch.setBackgroundColor(Color.TRANSPARENT)
     faultSwitch.setPadding(0, 0, 0, 0)
@@ -352,8 +348,8 @@ internal fun MainActivity.buildUi() {
     faultSwitch.setContentDescription(getString(R.string.ui_toggle_live_fault))
     live.addView(faultSwitch, LinearLayout.LayoutParams(dp(84f), -1))
     val reactions = iconButton(R.drawable.ic_tune, getString(R.string.ui_live_fault_settings))
-    reactions.setPadding(dp(11f), dp(11f), dp(11f), dp(11f))
-    live.addView(reactions, LinearLayout.LayoutParams(dp(42f), -1))
+    reactions.setPadding(dp(14f), dp(14f), dp(14f), dp(14f))
+    live.addView(reactions, LinearLayout.LayoutParams(dp(48f), -1))
     reactions.setOnClickListener(OnClickListener@{ v: View? -> FaultDialog.show(this) })
     faultSwitch.setOnCheckedChangeListener(
         OnCheckedChangeListener@{ view: CompoundButton?, checked: Boolean ->
@@ -361,7 +357,7 @@ internal fun MainActivity.buildUi() {
         }
     )
     liveTransport = row()
-    val timeRow = LinearLayout.LayoutParams(-1, dp(44f))
+    val timeRow = LinearLayout.LayoutParams(-1, dp(48f))
     timeRow.topMargin = dp(8f)
     timeRow.bottomMargin = dp(4f)
     faultDeck.addView(liveTransport, timeRow)
@@ -389,13 +385,13 @@ internal fun MainActivity.buildUi() {
     echoButton = button(getString(R.string.echo_trigger))
     echoButton.contentDescription = getString(R.string.echo_hint)
     echoButton.setOnClickListener { engine.triggerEcho() }
-    faultDeck.addView(echoButton, LinearLayout.LayoutParams(-1, dp(44f)))
+    faultDeck.addView(echoButton, LinearLayout.LayoutParams(-1, dp(48f)))
     val controls = row()
     controls.setGravity(Gravity.CENTER)
     controlsColumn.addView(controls, LinearLayout.LayoutParams(-1, dp(88f)))
     galleryButton = MediaThumbnail(this)
     val gallerySlot = FrameLayout(this)
-    gallerySlot.addView(galleryButton, FrameLayout.LayoutParams(dp(44f), dp(44f), Gravity.CENTER))
+    gallerySlot.addView(galleryButton, FrameLayout.LayoutParams(dp(48f), dp(48f), Gravity.CENTER))
     controls.addView(gallerySlot, LinearLayout.LayoutParams(dp(48f), dp(48f)))
     galleryButton.setOnClickListener(OnClickListener@{ v: View? -> openGallery() })
     galleryButton.load(latest, latestVideo)

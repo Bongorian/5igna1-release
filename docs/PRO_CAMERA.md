@@ -20,12 +20,12 @@ PRO does not enable Experimental or change FAULT parameters. PRO itself can use 
 |---|---|---|
 | Top bar | Torch, save format, output resolution/fps, AUTO/PRO, Settings | Capture setup stays above the image, without mixing it with FAULT |
 | Status line | Readiness, errors and recording time | Short user-facing status; the processing engine still retains diagnostics |
-| Preview | Uncropped fit, compact FAULT indicator, centered lens selector at the bottom | Preserve framing; lens selection remains close to the image |
-| Preview indicators | Microphone in video only; location indicator when enabled | Show relevant capture state without permanent inactive icons |
+| Preview | Uncropped fit, compact FAULT indicator, centered focal-length buttons at the bottom | Preserve framing; lens selection remains close to the image |
+| Upper utility row | Location and microphone controls in the upper utility row, including OFF state | Show relevant capture state without permanent inactive icons |
 | PRO strip | Actual shutter/ISO and shortcuts to supported Exposure, WB, Focus and Lens controls | Adjust real camera behavior while retaining a visible preview |
 | FAULT bar | Selected/applied count, LEVEL, expand/collapse; LIVE toggle and settings | Keep creative effects available without always occupying the capture area |
 | Expanded FAULT panel | Chain, add/remove, random/reseed, LEVEL, live state and transport, optional ECHO | Existing behavior grouped into one place |
-| Mode rail | Labeled Photo, Video, optional TAP | Stable position directly above capture |
+| Mode rail | PHOTO, VIDEO, optional TAP in every app language | Stable position directly above capture |
 | Shutter row | Saved media on the left, capture in the center, front/rear on the right | Capture remains centered regardless of source, PRO or expanded panels |
 
 Portrait uses the order above. Wide windows put capture tools in the right column and reserve the remaining area for preview. The controls area scrolls if needed, while the mode rail and shutter stay outside that scroll. The PRO and FAULT editors use a bottom/side sheet with preview space reserved. Closing PRO retains adjustments; FAULT still uses Apply/Cancel. The quick-start guide temporarily expands FAULT to reveal the controls it explains, then restores the previous expansion state.
@@ -34,7 +34,7 @@ Horizontal swipes over the preview switch Photo/Video and retain the chain. Tapp
 
 ## Capability and combination rules
 
-The app reads characteristics and writable keys for the selected camera. A physical sensor must advertise the relevant physical request keys; capabilities of a neighboring lens are not substituted. Unsupported controls are omitted. The camera's returned values are shown separately from requested settings, because requests can take time to settle or be quantized.
+The app reads characteristics and writable keys for the selected camera. Shared camera settings use the logical request. Keys advertised for independent physical-camera override use that override; its absence does not mean shared settings are unsupported. The selected sensor supplies control ranges. Unsupported controls are omitted. The camera's returned values are shown separately from requested settings, because requests can take time to settle or be quantized.
 
 | Control | Availability and combination |
 |---|---|
@@ -73,3 +73,7 @@ Review AUTO/PRO, collapsed/expanded FAULT, Photo/Video, TAP opt-in, portrait and
 Automated coverage includes sensor/video range constraints, AE/AWB dependencies, unsupported/high-speed behavior, per-lens serialization, and logarithmic shutter controls. A separate no-Activity Camera2 check uses an offscreen YUV sink: it verifies manual shutter/ISO, WB and restoration of AUTO requests and results. It does not create capture files or inspect the screen. Hardware behavior beyond the tested emulator remains device-dependent.
 
 Verification on 2026-09-12: 75 unit tests passed; F-Droid debug lint, both debug variants and the instrumentation APK built successfully; 616 localized strings passed the locale check. Android 35 emulator Camera2 returned exposure 8,000,000 ns, ISO 200 and daylight WB (5), then restored AUTO request and result values. UI instrumentation was compiled but not run; no screenshots or visual inspection were performed.
+
+USB review follow-up: capture controls use 48 dp targets, 12 sp compact labels, 14 sp editor choices and 18 sp adjustment values, with 4/8/12 dp spacing. Focal buttons use approximate 35 mm equivalents when sensor dimensions are available; tooltip details retain the actual focal length. Location and audio stay outside the preview, with audio available before switching to VIDEO.
+
+USB verification on 2026-09-12 (25060RK16C): pinned physical:0:2 and physical:0:3 both returned manual exposure 8,000,000 ns, ISO 200 and daylight WB (5), and restored AUTO request/result values. These checks use offscreen YUV and never open an Activity or save images. This fixes the earlier mistaken interpretation of physical override keys as the complete set of supported controls.

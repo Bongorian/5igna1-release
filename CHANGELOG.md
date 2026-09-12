@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fix empty PRO controls on pinned physical lenses by distinguishing shared camera settings from per-sensor overrides.
+- Use PHOTO/VIDEO/TAP labels, direct focal-length buttons, upper location/audio controls and consistent capture-control spacing.
+
 - Add capability-aware PRO camera controls: shutter/ISO, EV/AE lock, WB, manual focus and supported lens adjustments, with per-lens preferences and AUTO restoration.
 - Reorganize capture setup, measured camera values, collapsible FAULT controls and labeled capture modes around a centered shutter; preview swipes now preserve the chain.
 

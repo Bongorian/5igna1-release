@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView
 internal class CaptureModeButton(a: MainActivity, @Suppress("UNUSED_PARAMETER") icon: Int, label: String) : AppCompatTextView(a), Checkable {
     init {
         text = label
-        a.typography(this, 13, true)
+        a.typography(this, 12, true)
         gravity = Gravity.CENTER
         setSingleLine(true)
         setPadding(a.dp(12f), 0, a.dp(12f), 0)

@@ -8,8 +8,8 @@ import android.widget.TextView
 
 internal fun MainActivity.buildProStrip(): LinearLayout {
     val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; visibility = View.GONE }
-    proReadingLabel = text("", 11, MainActivity.MUTED).apply {
-        setPadding(dp(4f), dp(6f), dp(4f), dp(6f))
+    proReadingLabel = text("", 12, MainActivity.MUTED).apply {
+        setPadding(dp(4f), dp(8f), dp(4f), dp(8f))
         setSingleLine(true)
         ellipsize = android.text.TextUtils.TruncateAt.END
     }
@@ -17,7 +17,7 @@ internal fun MainActivity.buildProStrip(): LinearLayout {
     val scroll = HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false }
     val fields = row()
     scroll.addView(fields)
-    root.addView(scroll, LinearLayout.LayoutParams(-1, dp(60f)))
+    root.addView(scroll, LinearLayout.LayoutParams(-1, dp(64f)))
     listOf("exposure" to R.string.pro_exposure, "wb" to R.string.pro_white_balance,
         "focus" to R.string.pro_focus, "lens" to R.string.pro_lens).forEach { (key, title) ->
         val field = button(getString(title)).apply {
@@ -27,7 +27,7 @@ internal fun MainActivity.buildProStrip(): LinearLayout {
             setPadding(dp(12f), dp(6f), dp(12f), dp(6f))
             setOnClickListener { showProCamera(key) }
         }
-        fields.addView(field, LinearLayout.LayoutParams(dp(98f), -1).apply { rightMargin = dp(6f) })
+        fields.addView(field, LinearLayout.LayoutParams(dp(98f), -1).apply { rightMargin = dp(8f) })
     }
     return root
 }

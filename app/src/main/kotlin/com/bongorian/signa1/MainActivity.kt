@@ -114,7 +114,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     fun configureEngine() = engine.configure(settings, videoMode, effectState, if (tapMode) tapInput else null)
 
     lateinit var flipButton: ImageView
-    lateinit var lensButton: TextView
+    lateinit var lensRail: LinearLayout
+    lateinit var lensScroll: android.widget.HorizontalScrollView
     var lensDialog: android.app.Dialog? = null
     lateinit var galleryButton: MediaThumbnail
     lateinit var selectedRoute: LinearLayout
@@ -729,7 +730,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         tapControls.visibility = if (settings.experimentalSignals && tapMode) View.VISIBLE else View.GONE
         tapChoose.visibility = if (settings.experimentalSignals && tapMode) View.VISIBLE else View.GONE
         flipButton.visibility = if (tapMode) View.INVISIBLE else View.VISIBLE
-        lensButton.visibility = if (tapMode) View.GONE else View.VISIBLE
+        lensScroll.visibility = if (tapMode) View.GONE else View.VISIBLE
         torchButton.visibility = if (tapMode) View.GONE else View.VISIBLE
         photoTab.setChecked(!value && !tapMode)
         videoTab.setChecked(value && !tapMode)
@@ -970,8 +971,8 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
             else if (videoMode) getString(R.string.ui_start_video_recording)
             else getString(R.string.ui_take_a_photo)
         )
-        lensButton.isEnabled = !value
-        lensButton.alpha = if (value) .3f else 1f
+        lensScroll.alpha = if (value) .3f else 1f
+        for (i in 0 until lensRail.childCount) lensRail.getChildAt(i).isEnabled = !value
         flipButton.setEnabled(!value)
         flipButton.setAlpha(if (value) .3f else 1f)
         micButton.setAlpha(if (value) .3f else 1f)
@@ -1192,7 +1193,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     fun renderAudio() {
         if (micButton != null) {
-            micButton.visibility = if (videoMode) View.VISIBLE else View.GONE
+            micButton.visibility = View.VISIBLE
             val silent = videoMode && captureRawVideo
             val sourceAudio = tapMode && engine.tapSource?.hasAudio == true
             val enabled = sourceAudio || sound && !silent
@@ -1224,7 +1225,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
 
     fun renderGeo() {
         if (geoButton != null) {
-            geoButton.visibility = if (geo.enabled && externalCapture == null) View.VISIBLE else View.GONE
+            geoButton.visibility = if (externalCapture == null) View.VISIBLE else View.GONE
             geoButton.setColorFilter(if (geo.enabled) LIME else MUTED)
             geoButton.setSelected(geo.enabled)
             val label = getString(R.string.ui_capture_location_settings) + " · " + geo.label()

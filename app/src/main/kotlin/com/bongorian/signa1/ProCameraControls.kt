@@ -5,11 +5,11 @@ import android.hardware.camera2.CaptureRequest as R
 import android.hardware.camera2.CaptureResult
 import android.hardware.camera2.TotalCaptureResult
 
-/** Writes only keys advertised for this exact logical/physical request target. */
+/** Shared settings use the logical request; advertised physical overrides target the pinned sensor. */
 internal class ProCameraControls(private val lens: CameraLens) {
     private val cc = lens.characteristics
-    private val keys = (if (lens.physicalId == null) lens.logical.availableCaptureRequestKeys
-        else lens.logical.availablePhysicalCameraRequestKeys).orEmpty().toSet()
+    private val keys = lens.logical.availableCaptureRequestKeys.orEmpty().toSet()
+    private val physicalKeys = if (lens.physicalId == null) emptySet() else lens.logical.availablePhysicalCameraRequestKeys.orEmpty().toSet()
     private val defaults = mutableMapOf<Int, R>()
     private val physicalDefaults = mutableMapOf<Int, Map<R.Key<*>, Any?>>()
     private fun supports(vararg wanted: R.Key<*>) = wanted.all { it in keys }
@@ -42,19 +42,19 @@ internal class ProCameraControls(private val lens: CameraLens) {
 
     fun remember(template: Int, builder: R.Builder) {
         defaults[template] = builder.build()
-        lens.physicalId?.let { id -> physicalDefaults[template] = keys.associateWith { builder.getPhysicalCameraKey(it, id) } }
+        lens.physicalId?.let { id -> physicalDefaults[template] = physicalKeys.associateWith { builder.getPhysicalCameraKey(it, id) } }
     }
 
     fun autofocus(builder: R.Builder, mode: Int) { write(builder, R.CONTROL_AF_MODE, mode) }
 
     private fun <T> write(builder: R.Builder, key: R.Key<T>, value: T?) {
         if (key !in keys) return
-        if (lens.physicalId == null) builder.set(key, value)
-        else builder.setPhysicalCameraKey(key, value, lens.physicalId)
+        if (lens.physicalId != null && key in physicalKeys) builder.setPhysicalCameraKey(key, value, lens.physicalId)
+        else builder.set(key, value)
     }
     private fun <T> restore(builder: R.Builder, template: Int, key: R.Key<T>) {
         @Suppress("UNCHECKED_CAST")
-        val value = if (lens.physicalId == null) defaults[template]?.get(key)
+        val value = if (lens.physicalId == null || key !in physicalKeys) defaults[template]?.get(key)
             else physicalDefaults[template]?.get(key) as T?
         write(builder, key, value)
     }

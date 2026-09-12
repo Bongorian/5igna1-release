@@ -43,7 +43,7 @@ class DeviceChecks : Instrumentation() {
         var launchMonitor: ActivityMonitor? = null
         try {
             if (args!!.getString("action", "") == "pro-camera") {
-                result.putString("result", ProCameraDeviceChecks.run(targetContext))
+                result.putString("result", ProCameraDeviceChecks.run(targetContext, args!!.getString("camera")))
                 return
             }
             if (args!!.getString("action", "") == "network-render") {
