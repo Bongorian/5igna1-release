@@ -1,6 +1,6 @@
 # Architecture
 
-[Redesign and release audit](design/FAULT_SYSTEM.md) · [日本語](ARCHITECTURE.ja.md)
+[Redesign and release audit](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/design/FAULT_SYSTEM.md) · [日本語](ARCHITECTURE.ja.md)
 
 The application and tests are Kotlin, with the GPU pipeline in GLSL. `CameraScreen` builds and binds the screen; `MainActivity` coordinates lifecycle and user actions. `CaptureStorage` persists completed captures while `GlitchEngine` owns camera and GL resources. Immutable snapshot collections take defensive copies and reject mutation, including through Java. Existing Android views and platform camera APIs keep the dependency surface small.
 

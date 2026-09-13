@@ -1,6 +1,6 @@
 # SEED and RESEED
 
-> Unreleased timing, active model controls and seed rules follow [clock model 2](TIME_MODEL.md). Read the matching release tag for published-build behavior.
+> Timing, active model controls and seed rules follow [clock model 2](TIME_MODEL.md). Read the matching release tag when using an earlier version.
 
 [Guides](README.md) · [日本語](SEEDS.ja.md)
 

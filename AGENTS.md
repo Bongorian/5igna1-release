@@ -196,3 +196,7 @@
 - Fix overlapping close controls inside PRO adjustment sheets on `codex/pro-sheet-close`, including the shared sheet header used by nested choices. Verify layout and install DEV; preserve published 1.7.2 artifacts. No new release requested.
 
 - Also fix the saved-media viewer close/external-open glyphs and center its previous/next icons. Continue on the same UI fix branch and install DEV.
+
+## Owner direction — main integration and documentation cleanup, 2026-09-13
+
+- Merge the completed PRO/viewer UI fixes into main. Remove superseded work reports and transient review captures from the current docs; retain immutable historical links, provenance, submission records, raw comparison data and test expectations. Consolidate navigation in docs/README and keep future review output under ignored verification/. This authorizes removing the obsolete documents despite earlier keep-all report guidance. No new release is requested.

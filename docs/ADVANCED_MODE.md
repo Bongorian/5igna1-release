@@ -1,13 +1,13 @@
 # ADVANCED MODE
 
-> Unreleased timing, active model controls and seed rules follow [clock model 2](TIME_MODEL.md). Read the matching release tag for published-build behavior.
+> Timing, active model controls and seed rules follow [clock model 2](TIME_MODEL.md). Read the matching release tag when using an earlier version.
 
 [Guides](README.md) · [日本語](ADVANCED_MODE.ja.md)
 
 Open Settings (gear) and enable **ADVANCED MODE**, then tap any selected chain chip. The preview remains above the editor. The mode controls internal parameter visibility and precise displayed-frame capture. OFF preserves manual values and FAULT processing while reusing one output texture; the captured frame can differ from the last displayed frame. ON retains the three-slot history. See [capture behavior](FORMATS.md). The Settings mode switch saves immediately. In the fault editor, Apply commits the draft; ×, Back or leaving the app discards it.
 
 
-The unreleased LIGHT MODE is mutually exclusive with ADVANCED and EXPERT. Enabling ADVANCED turns LIGHT off and restores full-size displayed-frame retention. [Performance modes](PERFORMANCE.md).
+LIGHT MODE is mutually exclusive with ADVANCED and EXPERT. Enabling ADVANCED turns LIGHT off and restores full-size displayed-frame retention. [Performance modes](PERFORMANCE.md).
 
 **AUTO** follows the fault model and displays its current compiled value. Tap AUTO to FIX the current value, use its slider, or tap the number for precise input. Each value has a finite allowed range. Tap FIX to return that value to AUTO. ALL AUTO clears all fixed values and the event identity for this fault. Basic controls continue to affect values that are automatic; fixed values take precedence. Reset restores the selected fault's defaults and removes overrides. Random chain clears overrides for newly selected faults; reseed preserves fixed values.
 
@@ -126,7 +126,7 @@ Enabled by the separate experimental Settings switch. INPUT is available on ever
 | DISPLAY | SIGNAL | `networkSeed` | 0 … 997 |
 | DISPLAY | SIGNAL | `networkFps` | 0 … 60 (0 = source rate) |
 
-### Clock model 2 catalog additions (unreleased)
+### Clock model 2 catalog additions
 
 | Model | Group | Parameter | Range / unit |
 |---|---|---|---|

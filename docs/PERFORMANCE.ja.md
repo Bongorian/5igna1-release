@@ -24,7 +24,7 @@ JPEG撮影時は、取得済みの最新入力を選択した保存解像度で�
 
 RGB録画中は元の解像度で処理し、停止後に小さなプレビューへ戻ります。動画の保存サイズ・記録周期は維持します。NETWORKは保持する処理画像を守るため、元の解像度で処理します。RAWは別のフル解像度センサー露光のままです。TIME ECHOの低解像度履歴入力も従来どおりです。ウィンドウを変更すると表示用サイズだけが追従します。既存の更新頻度・温度による自動制御はLIGHTでも有効です。
 
-[実測と端末検証](audit/GPU_DETAIL_LIGHT.ja.md)はPixel 9での結果です。消費電力や長時間の発熱低下は未確認です。
+[実測と端末検証](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/audit/GPU_DETAIL_LIGHT.ja.md)はPixel 9での結果です。消費電力や長時間の発熱低下は未確認です。
 
 ## EXPERT MODE
 

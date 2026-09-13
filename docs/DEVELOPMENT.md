@@ -39,11 +39,11 @@ Video parameters include `videoKey` (an advertised `WIDTHxHEIGHT@FPS`), `seconds
 - `action network-render`: offscreen synthetic GPU checks for transport identity, Network frame cadence, hold/resume, resolution edits and source-color preservation; no activity or screen inspection.
 - `action tap`: image/video fixtures, injection boundary, playback/recording and stop/save on Home (add `-e leave lock` on an emulator without a secure lock to check screen locking). Requires `files/tap-fixture.mp4` in DEV app storage.
 
-## LIGHT / GPU — unreleased
+## LIGHT / GPU
 
 - `action light-mode`: immediate exclusive mode switches, view-sized preview, unchanged full-resolution JPEG/RAW/video output, live-camera byte comparison, resized view, NETWORK retention and ADVANCED history. Its own saved fixtures are removed.
 - `action gpu-detail`: bounded CFA/DEMOSAIC shader candidates, output comparisons, final-display transfer and view-cap timing. Test-only alternatives are not shipping shaders.
 
-## Camera intent checks — unreleased
+## Camera intent checks
 
 `action camera-intents` uses a separate-UID caller fixture to verify result delivery. See [camera integration](CAMERA_INTEGRATION.md#verification) for the opt-in build and test commands.

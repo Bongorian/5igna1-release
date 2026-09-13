@@ -22,7 +22,7 @@ The Console accepted one change: Alpha release **11 (1.3.0)**, with rollout set 
 - JAR signature verification and bundletool validation passed. Manifest checks confirmed the application ID, version 1.3.0, code 11 and non-debuggable release.
 - Google Play accepted minimum API 31 and target API 36. No previously supported devices became unsupported.
 - One informational warning requests a deobfuscation file. This build has `minifyEnabled false`, so no R8/ProGuard mapping is produced.
-- The app source already passed Ubuntu/macOS CI, local release checks and physical-device validation. See [Validation](VALIDATION.md) and [FAULT/buffer verification](audit/FAULT_RENDER_AND_BUFFERS.md).
+- The app source already passed Ubuntu/macOS CI, local release checks and physical-device validation. See [Validation](VALIDATION.md) and [FAULT/buffer verification](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/audit/FAULT_RENDER_AND_BUFFERS.md).
 
 Existing code-8/code-9 Play artifacts, signing keys and published GitHub tags remain intact.
 

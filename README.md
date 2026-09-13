@@ -1,9 +1,5 @@
 # 5igna1
 
-[PRO workspace and screenshot review](docs/UI_REVIEW.md).
-
-The app supports rotating/resizable camera layouts, exclusive PHOTO/VIDEO/TAP text tabs and an optional email feedback draft. See [development verification](docs/audit/ADAPTIVE_WINDOW_FEEDBACK.md).
-
 Version 1.7.2 adds PRO shooting mode in Settings, direct optical lens selection and a compact camera workspace with clearer chain controls. See [PRO controls](docs/PRO_CAMERA.md).
 
 **Every glitch is an encounter.**
@@ -41,7 +37,7 @@ Scene samples come from the camera or selected media in experimental TAP. There 
 
 CLEAN is an empty route. Each fault has a few named controls mapped to its own internal mechanism parameters. RANDOM CHAIN creates a new combination and controls; hold it to reseed identities while keeping the settings. LIVE controls current fault-time progression, variation patterns, second-based intervals and optional device inputs. Pause, trigger and reset act on the fault state. ADVANCED MODE exposes every compiled fault parameter and its time/event generators through AUTO or fixed values. VHS/CRT profiles are distinct from tracking, dropout, convergence and sync faults. STREAM ERROR is an explicit decoded-region loss/reuse model, not actual packet corruption.
 
-[Fault models](docs/EFFECTS.md) · [LIVE time evolution and inputs](docs/LIVE_FAULT.md) · [ADVANCED MODE](docs/ADVANCED_MODE.md) · [Release audit and migration design](docs/design/FAULT_SYSTEM.md)
+[Fault models](docs/EFFECTS.md) · [LIVE time evolution and inputs](docs/LIVE_FAULT.md) · [ADVANCED MODE](docs/ADVANCED_MODE.md)
 
 ## Photograph the processed signal
 

@@ -1,4 +1,4 @@
-# 他アプリとのカメラ連携 — 未リリース
+# 他アプリとのカメラ連携
 
 [ガイド](README.ja.md) · [English](CAMERA_INTEGRATION.md)
 

@@ -1,4 +1,4 @@
-# Camera app integration — unreleased
+# Camera app integration
 
 [Guides](README.md) · [日本語](CAMERA_INTEGRATION.ja.md)
 

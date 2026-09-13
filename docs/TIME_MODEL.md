@@ -1,4 +1,4 @@
-# Time and parameter contract (unreleased)
+# Time and parameter contract
 
 [日本語](TIME_MODEL.ja.md) · [LIVE](LIVE_FAULT.md) · [Internal controls](ADVANCED_MODE.md) · [SEED](SEEDS.md)
 
@@ -54,4 +54,4 @@ Per-input sensitivity defaults now follow the active variant. For example, the C
 
 The legacy Java migration hashes remain unchanged and run against the frozen pre-change model. Current semantic tests separately check unchanged static mechanisms, selected-variant parity, frame provenance, source epochs, 24/30/60/120 fps delivery, noise ticks, seeds, short/reversed event windows, Exposure/LED generators and retained inactive settings. Offscreen GPU checks cover all 16 MEDIA/DISPLAY combinations, ECHO-safe holds, resolution changes and held-frame metadata. No screenshot or UI automation is required for these checks.
 
-The [dated audit](design/TIME_MODEL_REVIEW.md) and [original observations](audit/TIME_MODEL_EVIDENCE.md) describe dd7f027, not this implementation. Their historical reproduction command belongs to audit commit 6e0aaf1. Current regression coverage is `TimeContractTest` and the `network-render` instrumentation action.
+The [dated audit](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/design/TIME_MODEL_REVIEW.md) and [original observations](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/audit/TIME_MODEL_EVIDENCE.md) describe dd7f027, not this implementation. Their historical reproduction command belongs to audit commit 6e0aaf1. Current regression coverage is `TimeContractTest` and the `network-render` instrumentation action.

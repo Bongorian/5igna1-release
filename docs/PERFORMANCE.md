@@ -30,7 +30,7 @@ JPEG capture renders the latest acquired source once at the selected save resolu
 
 RGB recording uses full-size processing and resumes the smaller preview after stopping; recorded dimensions and frame cadence stay selected. NETWORK retains its full-resolution processed history, so that route keeps full-size preview processing. RAW capture remains a separate full-resolution sensor exposure. TIME ECHO retains its existing limited-resolution historical input. Window resizing adjusts the display-only budget. Existing automatic frame pacing/thermal behavior remains enabled in LIGHT.
 
-[Measurements and device checks](audit/GPU_DETAIL_LIGHT.md) cover Pixel 9; no power or long-duration heat reduction is claimed.
+[Measurements and device checks](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/audit/GPU_DETAIL_LIGHT.md) cover Pixel 9; no power or long-duration heat reduction is claimed.
 
 ## EXPERT MODE
 

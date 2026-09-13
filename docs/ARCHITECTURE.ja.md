@@ -1,6 +1,6 @@
 # 内部設計
 
-[English](ARCHITECTURE.md) · [現状調査と移行設計](design/FAULT_SYSTEM.ja.md)
+[English](ARCHITECTURE.md) · [現状調査と移行設計](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/design/FAULT_SYSTEM.ja.md)
 
 アプリ本体とテストはKotlin、GPU処理はGLSLです。`CameraScreen`が画面構築と操作の結び付け、`MainActivity`がライフサイクルと操作の調整を担当します。`CaptureStorage`が完成した撮影データを保存し、カメラとGLの資源は`GlitchEngine`が所有します。スナップショットのコレクションは防御的コピーを取り、Java経由の変更も拒否します。既存のAndroid Viewと標準カメラAPIを利用します。
 

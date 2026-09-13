@@ -1,9 +1,5 @@
 # 5igna1
 
-[PRO画面・スクリーンショットレビュー](docs/UI_REVIEW.ja.md)。
-
-画面回転・サイズ変更に応じたカメラ配置、写真・動画・TAPの排他選択アイコン、任意のメール下書きによる不具合報告に対応しています。[検証記録](docs/audit/ADAPTIVE_WINDOW_FEEDBACK.md)。
-
 1.7.2では設定内のPRO撮影モード、光学レンズの直接選択、コンパクトな撮影画面とチェーン操作の改善を追加しました。[PRO操作](docs/PRO_CAMERA.ja.md)。
 
 **壊れた信号を、写真にする。**
@@ -37,7 +33,7 @@ Androidのためのグリッチカメラ。行のずれ、色の裂け、読み�
 
 CLEANはFAULTなし。各FAULTの少数の操作値から、固有の故障パラメータへ変換します。「ランダムチェーン」は組み合わせと操作値を生成し、長押しでは設定を保って故障個体だけを変えます。LIVEは今この瞬間のFAULTの時間進行・変化の形・秒単位の間隔と端末入力を設定します。一時停止・故障の発生・時間リセットを操作できます。ADVANCED MODEでは全FAULTの内部パラメータと時間・事故の生成値をAUTO／固定値で操作できます。VHS／CRTは媒体・表示特性と内部故障を区別します。STREAM ERRORは復号画像領域の欠落・再利用モデルで、実packetは破壊しません。
 
-[FAULT一覧](docs/EFFECTS.ja.md) · [LIVE](docs/LIVE_FAULT.ja.md) · [ADVANCED MODE](docs/ADVANCED_MODE.ja.md) · [調査・移行設計](docs/design/FAULT_SYSTEM.ja.md)
+[FAULT一覧](docs/EFFECTS.ja.md) · [LIVE](docs/LIVE_FAULT.ja.md) · [ADVANCED MODE](docs/ADVANCED_MODE.ja.md)
 
 ## 最初の一枚
 

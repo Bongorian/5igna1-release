@@ -54,4 +54,4 @@ LEDに明示的な**更新周波数**を追加しました。通常は0〜30 Hz�
 
 旧Java実装のgoldenハッシュは変更せず、凍結した旧モデルで保持しています。現在の仕様は別のテストで確認し、変更対象外の静的機構との一致、モデル選択、フレームの由来、入力世代、24／30／60／120 fpsでの配送、粒子の時刻、SEED、短い事故・負時刻、EXPOSURE／LEDの生成器、無効な保存値を検証しています。画面操作なしのGPU検証ではMEDIA／DISPLAY全16通り、ECHO中の保持、解像度編集、保持画像の保存情報を確認します。
 
-[棚卸し資料](design/TIME_MODEL_REVIEW.ja.md)と[当時の観測値](audit/TIME_MODEL_EVIDENCE.md)はdd7f027の記録です。旧検証コマンドの再現には監査コミット6e0aaf1を使います。現在の回帰検証は`TimeContractTest`とinstrumentationの`network-render`です。
+[棚卸し資料](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/design/TIME_MODEL_REVIEW.ja.md)と[当時の観測値](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/audit/TIME_MODEL_EVIDENCE.md)はdd7f027の記録です。旧検証コマンドの再現には監査コミット6e0aaf1を使います。現在の回帰検証は`TimeContractTest`とinstrumentationの`network-render`です。

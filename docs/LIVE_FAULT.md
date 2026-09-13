@@ -1,6 +1,6 @@
 # LIVE FAULT
 
-> Unreleased timing, active model controls and seed rules follow [clock model 2](TIME_MODEL.md). Read the matching release tag for published-build behavior.
+> Timing, active model controls and seed rules follow [clock model 2](TIME_MODEL.md). Read the matching release tag when using an earlier version.
 
 [日本語](LIVE_FAULT.ja.md) · [Faults](EFFECTS.md) · [ADVANCED MODE](ADVANCED_MODE.md)
 

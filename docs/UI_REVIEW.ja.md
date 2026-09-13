@@ -1,76 +1,16 @@
-# PRO撮影画面：画像付きレビュー
+# UIの検証
 
+[開発手順](DEVELOPMENT.ja.md) · [English](UI_REVIEW.md)
 
-このページの画像は2026-09-12時点の記録です。1.7.2では、上部のAUTO/PRO切り替えを「設定 → モード → PRO撮影モード」へ移動しています。
+`Signal_Review_1280_480`（1280×2772、480 dpi、API 35）で配置を再確認します。確認した端末と実効密度を揃えていますが、OSの外観・カメラ性能を再現するものではありません。
 
-[English](UI_REVIEW.md) · [PRO操作](PRO_CAMERA.ja.md) · [オリジナル画像の台帳](ui-review/manifest.json)
+1. `python3 tools/review-emulator.py` を実行し、表示されたコマンドで起動します。
+2. [開発手順](DEVELOPMENT.ja.md)に従い、DEV版と検証APKをインストールします。
+3. `DeviceChecks` の `-e action workspace-review -e language ja` で撮影画面と録画、`-e action chain-review` でチェーンを確認します。workspace-reviewに `-e proSheets true` を加えると、PROの4画面を縦横で確認します。
+4. `python3 tools/collect-workspace-review.py --suite workspace` または `--suite chain` で画像・ハッシュを取得します。出力はGit管理外の `verification/` 内です。PRO画像はアプリ内のverificationファイルから `adb exec-out run-as` で取得します。
 
-2026-09-12に確認した**未リリースの開発UI**です。専用エミュレーター `Signal_Review_1280_480` は、接続端末25060RK16Cと同じ **1280×2772ピクセル・実効480dpi** に設定しました。3ボタンナビゲーションを有効にし、下端・右端のシステム操作領域も含めて確認しています。エミュレーターはAPI 35、実機はAPI 36で、メーカーのシステムUIは異なります。カメラのテストパターン・対応レンズ・性能は実機を再現しません。
+テスト結果とスクリーンショットの両方を確認します。シャッター寸法・欠け、折り畳み、ステータス位置、アイコン領域と見出し、編集の適用／取消・閉じる操作を対象にします。保存画像ビューアは `-e action saved-signal` と `language-saved-signal-footer.png` で確認します。
 
-## 画像で確認して直した点
+一時的な画像を毎回ガイドへ追加しません。未解決の問題を説明する資料に絞り、完了したレビューはGit履歴を参照します。
 
-- 「撮影できます」と保存解像度・品質の概況を、横1行の上部ツールバー直下へ移動。プレビューには重ねません。
-- FAULTは先頭の山形アイコン、操作領域は外側のパネルアイコンで開閉。開く／閉じるの文字は表示せず、読み上げには意味を残します。
-- PHOTO／VIDEO／TAPは文字タブ。対応するPROの4項目は右端を欠かずに収めます。
-- 横画面の焦点距離をプレビュー外で中央配置。操作部を開いても収納しても同じ80dpシャッターを使います。
-- 収納中の録画時間をシャッター上部に残し、MP4表示の途中改行を解消しました。
-
-## 縦画面
-
-| AUTO | FAULT展開 | PRO |
-|---|---|---|
-| <img src="ui-review/ja/01-portrait-auto.png" width="240" alt="縦画面AUTO"> | <img src="ui-review/ja/02-portrait-fault.png" width="240" alt="FAULT展開"> | <img src="ui-review/ja/03-portrait-pro.png" width="240" alt="縦画面PRO"> |
-
-| PRO露出調整 | 設定 |
-|---|---|
-| <img src="ui-review/ja/04-pro-exposure.png" width="300" alt="PRO露出シート"> | <img src="ui-review/ja/09-settings.png" width="300" alt="設定"> |
-
-## 横画面
-
-操作部を開いた状態：
-
-![横画面の操作部](ui-review/ja/05-landscape.png)
-
-収納した状態：
-
-![横画面の収納](ui-review/ja/06-landscape-collapsed.png)
-
-動画の準備状態：
-
-![横画面の動画](ui-review/ja/07-landscape-video.png)
-
-収納したまま録画中：
-
-![収納中の録画](ui-review/ja/08-landscape-recording-collapsed.png)
-
-## 検証と再現
-
-日本語・英語の `workspace-review` が両方成功しました。各9枚の画像を取得し、80dpシャッターが欠けないこと、収納・録画中も同じ撮影Viewであること、録画開始・停止、上部の状態行、PRO項目の幅、保存形式の1行表示、収納時の録画時計を検査しています。18枚のPNGは無加工・元解像度です。[台帳](ui-review/manifest.json)に画像サイズ・ハッシュ・アプリソースのダイジェストを記録しています。75件の単体テスト、ビルド、lintに加えた検証であり、すべてのメーカーUIや文字拡大率で同じ表示になるという意味ではありません。
-
-エミュレーターは `python3 tools/review-emulator.py` で再作成でき、起動コマンドが表示されます。[英語版の実行手順](UI_REVIEW.md#verification-and-reproduction)でビルド・検証・画像収集まで再現できます。必要なシステムイメージは `system-images;android-35;google_apis;arm64-v8a` です。既存の専用AVDはデータを保持して再利用します。検証用の短い動画はエミュレーター内だけに保存し、USB実機を自動操作しません。
-
-## 画像の出典
-
-プロジェクトのApache-2.0 UIと、AOSPエミュレーターが生成する家のテストパターンを撮影したものです。ROW ERRORはアプリ自身が適用しています。Apache-2.0のテストパターンの帰属は[素材監査](audit/ASSETS.md)と[NOTICE](../NOTICE)に記録しています。私的な実写素材、UI合成、広告用生成画像、レタッチは含みません。システムUIはAndroidシステムイメージのものです。公開済みリリース・ストアの画像とは分けて保存しています。
-
-## チェーン編集の追加レビュー
-
-チェーン要素の角丸を4 dpに統一し、操作を40 dp・アイコンを20 dpに整理しました。閉じる、シャッフル、適用を重ならない位置に並べ、右のスライダーアイコンから各要素の説明と調整を開きます。横画面では編集中の背後の折り畳み操作も隠します。
-
-| チェーン | 選択 | 調整 |
-|---|---|---|
-| <img src="chain-review/ja/portrait-deck.png" width="240" alt="Chain deck"> | <img src="chain-review/ja/portrait-catalog.png" width="240" alt="Chain catalog"> | <img src="chain-review/ja/portrait-adjust.png" width="240" alt="Chain adjust"> |
-
-![Landscape chain editor](chain-review/ja/landscape-catalog.png)
-
-日本語・英語の縦横12枚を収録し、アイコンの欠け・重なり、背後の操作の非表示、キャンセル／適用の動作を確認しています。[記録](chain-review/manifest.json)。再取得は上記のビルド・インストール後、次を実行します。
-
-```sh
-adb -s emulator-5554 shell am instrument -w -e action chain-review -e language ja com.bongorian.signa1.debug.test/com.bongorian.signa1.DeviceChecks
-adb -s emulator-5554 shell am instrument -w -e action chain-review -e language en com.bongorian.signa1.debug.test/com.bongorian.signa1.DeviceChecks
-python3 tools/collect-workspace-review.py --suite chain
-```
-
-## PRO調整画面の閉じる操作（1.7.2以降の修正）
-
-PROの露出・WB・フォーカス・レンズ画面と共通の選択画面は、文字の×から20 dpの描画アイコンへ変更。40 dpの操作領域と見出しとの間隔を確保します。再確認は `workspace-review` に `-e proSheets true -e language ja` を指定し、縦横8画面で欠け・見出しとの重なり・閉じる動作を確認します。
+[過去の画面レビュー](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/UI_REVIEW.ja.md)には元画像・ハッシュ・再現手順が残っています。現在と配置が異なる部分があります。

@@ -1,6 +1,6 @@
 # Distribution status and owner checklist
 
-Last documented check: **2026-09-09 (Japan time)**. This is a dated maintainer status, not a live store monitor. [Release procedure](RELEASING.md) · [Documentation map](DOCUMENTATION.md)
+Last documented check: **2026-09-09 (Japan time)**. This is a dated maintainer status, not a live store monitor. [Release procedure](RELEASING.md) · [Documentation map](README.md)
 
 | Channel | Last verified state | Record |
 |---|---|---|
@@ -29,4 +29,4 @@ GitHub-triggered Play draft uploads are configured. This is separate from the op
 - [Privacy policy](https://bongorian.github.io/5igna1-release/privacy/)
 - [Distribution certificate](DISTRIBUTION_CERTIFICATE.md)
 
-Do not invent public store listing links. Initial launch preparation and download checks are in [the 1.0.0 report](DISTRIBUTION_REPORT.md); earlier Play submission steps are in [1.1.0](PLAY_1_1_0.md) and [1.3.0](PLAY_1_3_0.md). Those dated records are retained as evidence, not as the current task list.
+Do not invent public store listing links. Initial launch preparation and download checks are in [the 1.0.0 report](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/DISTRIBUTION_REPORT.md); earlier Play submission steps are in [1.1.0](PLAY_1_1_0.md) and [1.3.0](PLAY_1_3_0.md). Those dated records are retained as evidence, not as the current task list.

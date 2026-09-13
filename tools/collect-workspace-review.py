@@ -16,7 +16,7 @@ parser.add_argument('--suite', choices=['workspace', 'chain'], default='workspac
 parser.add_argument('--output', type=Path)
 args = parser.parse_args()
 if args.output is None:
-    args.output = Path('docs/chain-review' if args.suite == 'chain' else 'docs/ui-review')
+    args.output = Path('verification/chain-review' if args.suite == 'chain' else 'verification/ui-review')
 if not args.serial.startswith('emulator-'):
     raise SystemExit('This collector is for emulator review captures.')
 sdk = Path(os.environ.get('ANDROID_HOME', Path.home() / 'Library/Android/sdk'))
