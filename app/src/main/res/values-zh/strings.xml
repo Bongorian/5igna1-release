@@ -627,4 +627,10 @@
     <string name="workspace_controls">控制</string>
     <string name="disclosure_expanded">已展开</string>
     <string name="disclosure_collapsed">已收起</string>
+    <string name="play_update_checking">正在检查更新…\n打开 Google Play</string>
+    <string name="play_update_available">有可用更新\n打开 Google Play</string>
+    <string name="play_update_none">目前没有可用更新\n打开 Google Play</string>
+    <string name="play_update_unknown">无法检查更新\n打开 Google Play</string>
+    <string name="play_update_dev">更新检查仅适用于 Google Play 正式版本</string>
+    <string name="play_update_store_unavailable">无法打开 Google Play</string>
 </resources>

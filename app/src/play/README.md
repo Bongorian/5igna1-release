@@ -1,3 +1,5 @@
-# play
+# Play distribution services
 
-Google Play固有のBilling・任意支援・Play API用の拡張点です。現在は固有コードもSDKもありません。追加する依存は `playImplementation` に限定してください。
+`DistributionUpdates` queries Google Play when Settings opens and displays update availability with a link to the store. Failure, unknown status and a 10-second timeout never appear as “up to date”. DEV builds display an explanation because their package ID is not the release listing.
+
+Play App Update 2.1.0 and its dependencies are restricted to `playImplementation`. No permissions are added. See [third-party notices](../../../THIRD_PARTY_LICENSES.md).

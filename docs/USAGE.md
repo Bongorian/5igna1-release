@@ -65,3 +65,5 @@ TAP and its source controls stay hidden unless Experimental features is enabled;
 The chain catalog uses full-width rows with a description and selection state. Tap the row to add/remove; the sliders icon opens explanation and adjustment separately, including an Add action for an unselected available fault. The upper + icon returns to the catalog. The checkmark commits the draft and the close icon cancels it. Selection does not change processing order. The editor and live chain inspection show selected/applied counts; inspection retains bypassed stages with an explanation. Event percentages still refer only to transient events, not overall effect strength.
 
 Enable **PRO shooting mode** in **Settings → Modes**. The switch is saved immediately and retained between sessions; the top toolbar has no AUTO/PRO switch.
+
+In the Google Play edition, Settings → App checks for updates and links to Google Play. It distinguishes checking, available, none currently available and unable to check. Availability depends on your Play account and eligible release track. DEV builds cannot check the release listing; F-Droid/GitHub builds omit this service.

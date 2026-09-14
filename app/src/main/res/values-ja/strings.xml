@@ -627,4 +627,10 @@
     <string name="workspace_controls">操作</string>
     <string name="disclosure_expanded">展開中</string>
     <string name="disclosure_collapsed">折りたたみ中</string>
+    <string name="play_update_checking">アップデートを確認中…\nGoogle Playで開く</string>
+    <string name="play_update_available">アップデートがあります\nGoogle Playで開く</string>
+    <string name="play_update_none">現在利用できるアップデートはありません\nGoogle Playで開く</string>
+    <string name="play_update_unknown">アップデートを確認できませんでした\nGoogle Playで開く</string>
+    <string name="play_update_dev">更新確認はGoogle Playのリリース版で利用できます</string>
+    <string name="play_update_store_unavailable">Google Playを開けませんでした</string>
 </resources>

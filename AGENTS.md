@@ -200,3 +200,8 @@
 ## Owner direction — main integration and documentation cleanup, 2026-09-13
 
 - Merge the completed PRO/viewer UI fixes into main. Remove superseded work reports and transient review captures from the current docs; retain immutable historical links, provenance, submission records, raw comparison data and test expectations. Consolidate navigation in docs/README and keep future review output under ignored verification/. This authorizes removing the obsolete documents despite earlier keep-all report guidance. No new release is requested.
+
+## Owner direction — Play update status, 2026-09-15
+
+- Add permission-preserving Google Play update availability to Settings on `codex/play-update-status`. Keep the SDK in Play-only sources/dependencies and preserve the FOSS build. Check on settings open, link to Play, distinguish failure/timeout from no update, and explain the DEV package limitation. No new release or store submission requested.
+- Assess the supplied Red Bull FPV pilot video for a suitable processing stage. The observed changing colored interference suggests an analog FPV transmission model; keep this assessment distinct from the update-status implementation.

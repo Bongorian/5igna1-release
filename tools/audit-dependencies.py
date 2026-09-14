@@ -18,7 +18,7 @@ CACHE = Path(os.environ.get("GRADLE_USER_HOME", Path.home() / ".gradle")) / "cac
 
 def pom_url(coordinate):
     group, artifact, version = coordinate.split(":")
-    host = "https://dl.google.com/dl/android/maven2/" if group.startswith(("androidx.", "com.android.")) else "https://repo.maven.apache.org/maven2/"
+    host = "https://dl.google.com/dl/android/maven2/" if group.startswith(("androidx.", "com.android.", "com.google.android.")) else "https://repo.maven.apache.org/maven2/"
     return f"{host}{group.replace('.', '/')}/{artifact}/{version}/{artifact}-{version}.pom"
 
 
@@ -64,7 +64,7 @@ def main():
     for coordinate in modules:
         entry = {"coordinate": coordinate, **read_pom(coordinate)}
         entry["scopes"] = [name for name, scope in resolution.items() if coordinate in scope["modules"]]
-        entry["packaged_runtime"] = any(artifact["module"] == coordinate for artifact in resolution["fdroidReleaseRuntimeClasspath"]["artifacts"])
+        entry["packaged_runtime"] = any(artifact["module"] == coordinate for scope in ("fdroidReleaseRuntimeClasspath", "playReleaseRuntimeClasspath") for artifact in resolution[scope]["artifacts"])
         # POMs are declarations, not proof about every embedded source file.
         inventory.append(entry)
     document = {"schema": 1, "method": "Resolved Gradle graphs and Maven POM declarations (including parent POMs). Embedded source exceptions are reviewed separately in THIRD_PARTY_LICENSES.md.",

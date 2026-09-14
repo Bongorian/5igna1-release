@@ -1,12 +1,12 @@
 # Third-party licenses
 
-監査日: 2026-09-09。対象はKotlin移行開発版のPlay / F-Droid構成です。
+監査日: 2026-09-15。対象はPlay更新確認機能を含むPlay / F-Droid構成です。
 
 アプリ本体は[Apache-2.0](LICENSE)。第三者の著作権・ライセンスはそのまま維持します。依存コードを本プロジェクトの著作物として再ライセンスするものではありません。
 
 ## Runtime and compile dependencies
 
-`implementation` はAndroidX AppCompat 1.7.1、Startup 1.1.1（manifestで参照）、Kotlin標準ライブラリ 2.2.20です。両flavorのrelease runtimeグラフは一致します。46モジュール（BOM・メタデータを含む）を選択し、44アーティファクトを解決しました。下表はruntimeアーティファクトのあるモジュールです。compile-only/platformも含む全194件の座標・POMライセンス宣言・親POM・アーティファクトSHA-256は[依存一覧](docs/audit/dependencies.json)に記録しています。
+`implementation` はAndroidX AppCompat 1.7.1、Startup 1.1.1（manifestで参照）、Kotlin標準ライブラリ 2.2.20です。F-Droid版はFOSS依存のみです。Play版には下記の更新確認SDKを追加しています。解決済み座標、POMライセンス宣言とアーティファクトSHA-256は[依存一覧](docs/audit/dependencies.json)に記録しています。
 
 | Component | Version | Declared license |
 |---|---|---|
@@ -55,7 +55,7 @@
 
 Kotlin標準ライブラリの `MathJVM.kt` にはBoost由来コード（BSL-1.0）が含まれます。[上流の例外一覧](https://github.com/JetBrains/kotlin/blob/v2.2.20/license/README.md)も確認し、[全文](licenses/Kotlin-Boost-1.0.txt)と著作権表示を同梱します。GWT / Guava由来の標準ライブラリ部分はApache-2.0です。時刻処理のThreeTen由来コードはBSD-3-Clauseで、[全文と著作権](licenses/Kotlin-ThreeTen-BSD-3-Clause.txt)を同梱します。POMの単一ライセンス宣言だけで組み込みコード全体を判断しないでください。
 
-`androidx.emoji2` はFOSSです。アプリはその自動初期化を無効にしており、絵文字フォントのダウンロードプロバイダを起動しません。OS標準フォントを利用します。AndroidXやApache-2.0のGuavaはGoogle Play Servicesとは異なります。Billing / Firebase / Analytics / AdMob / GMS SDKは含みません。
+`androidx.emoji2` はFOSSです。アプリはその自動初期化を無効にしており、絵文字フォントのダウンロードプロバイダを起動しません。OS標準フォントを利用します。AndroidXやApache-2.0のGuavaはGoogle Play Servicesとは異なります。Billing / Firebase / Analytics / AdMobは含みません。F-Droid版にはGMS / Play SDKも含みません。
 
 ## Build and test tools (not packaged in the APK)
 
@@ -97,3 +97,10 @@ python3 tools/audit-dependencies.py --write
 ```
 
 新しい依存のPOM・上流ソース・埋め込み例外を確認してから一覧とNOTICEを更新します。CIは `--check` で解決された座標・ハッシュを比較し、未レビューの変更を失敗にします。POMが示すライセンスは著作者による宣言であり、自動的な法的保証や全ソースの類似性検査ではありません。
+
+## Google Play update checks (Play flavor only)
+
+- `com.google.android.play:app-update:2.1.0` and `core-common:2.0.3`: [Play Core SDK Terms of Service](https://developer.android.com/guide/playcore/license).
+- `com.google.android.gms:play-services-basement:18.1.0` and `play-services-tasks:18.0.2`: [Android Software Development Kit License](https://developer.android.com/studio/terms), as declared in their Google Maven POMs.
+
+These proprietary distribution libraries are included only through `playImplementation`, never in F-Droid/GitHub builds. They query the installed Play Store for update availability. No analytics or billing integration is added. The notices above are bundled with the app; the resolved POM declarations are retained in the dependency inventory.
