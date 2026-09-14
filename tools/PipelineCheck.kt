@@ -195,7 +195,7 @@ object PipelineCheck {
             Arrays.equals(frame.through(Effects.Point.DATA).ids(), intArrayOf(1, 2, 3, 4, 5)),
             "causal recording tap prefix",
         )
-        check(frame.through(Effects.Point.MEDIA).nodes.size == 12, "VHS tap excludes CRT")
+        check(frame.through(Effects.Point.MEDIA).nodes.map { it.id } == ((1..11).toList() + Effects.ANALOG_FPV + Effects.VHS), "Media tap includes FPV before VHS and excludes CRT")
         check(
             Effects.point(Effects.CFA_ERROR) == Effects.point(Effects.DEMOSAIC_ERROR),
             "reconstruction point",

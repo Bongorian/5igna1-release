@@ -31,7 +31,7 @@ Scene samples come from the camera or selected media in experimental TAP. There 
 | DATA | BIT ERROR · ADDRESS ERROR |
 | CFA / RECONSTRUCTION | CFA ERROR · DEMOSAIC ERROR |
 | COLOR | CHROMA ERROR · COLOR MAP |
-| CODEC / STREAM | BLOCK ERROR · STREAM ERROR |
+| CODEC / STREAM | BLOCK ERROR · STREAM ERROR · ANALOG FPV |
 | MEDIA | VHS · DVD · Digital thru · Analog thru |
 | DISPLAY | CRT · Digital thru · Network · LED |
 

@@ -633,4 +633,10 @@
     <string name="play_update_unknown">Could not check for updates\nOpen Google Play</string>
     <string name="play_update_dev">Update checks are available in the Google Play release</string>
     <string name="play_update_store_unavailable">Could not open Google Play</string>
+    <string name="fault_description_17">Analog FPV reception: colored static, localized interference and horizontal sync disturbance.</string>
+    <string name="fault_control_fpvQuality">Reception quality</string>
+    <string name="fault_control_fpvInterference">Interference</string>
+    <string name="fault_control_fpvBand">Interference band width</string>
+    <string name="fault_control_fpvColor">Color noise</string>
+    <string name="fault_control_fpvSync">Sync disturbance</string>
 </resources>

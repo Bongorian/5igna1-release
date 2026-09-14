@@ -14,3 +14,5 @@
 一時的な画像を毎回ガイドへ追加しません。未解決の問題を説明する資料に絞り、完了したレビューはGit履歴を参照します。
 
 [過去の画面レビュー](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/UI_REVIEW.ja.md)には元画像・ハッシュ・再現手順が残っています。現在と配置が異なる部分があります。
+
+アナログFPVはDeviceChecksの `-e action analog-fpv -e language ja` で確認します。無加工時の一致、スナップショット再現、局所的な干渉、5つの調整項目を検証し、DEVアプリの `files/verification/fpv-{source,default,band,controls}.png` に画像を出力します。取得した画像は追跡対象外の `verification/fpv/` に置きます。

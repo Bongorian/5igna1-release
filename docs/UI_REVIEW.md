@@ -14,3 +14,5 @@ Inspect screenshots as well as test results. Checks cover shutter size and clipp
 Do not add every transient capture to the reference documentation. Preserve only evidence needed to explain an unresolved issue; use Git history for completed visual reviews.
 
 [Archived workspace and chain screenshots](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/UI_REVIEW.md) retain original hashes and reproduction details. They show earlier UI, not the current placement of every control.
+
+Analog FPV: run DeviceChecks with `-e action analog-fpv -e language ja`. It verifies neutral output, deterministic snapshot replay, localized interference and the five tuning controls. It writes `files/verification/fpv-{source,default,band,controls}.png` in the DEV app; keep pulled captures under ignored `verification/fpv/`.

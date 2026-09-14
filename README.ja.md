@@ -27,7 +27,7 @@ Androidのためのグリッチカメラ。行のずれ、色の裂け、読み�
 | DATA | BIT ERROR · ADDRESS ERROR |
 | CFA / RECONSTRUCTION | CFA ERROR · DEMOSAIC ERROR |
 | COLOR | CHROMA ERROR · COLOR MAP |
-| CODEC / STREAM | BLOCK ERROR · STREAM ERROR |
+| CODEC / STREAM | BLOCK ERROR · STREAM ERROR · ANALOG FPV |
 | MEDIA | VHS · DVD · Digital thru · Analog thru |
 | DISPLAY | CRT · Digital thru · Network · LED |
 

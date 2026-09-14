@@ -296,6 +296,30 @@ class DeviceChecks : Instrumentation() {
                     "result",
                     "PASS anchored format menu, top utilities, live fault meters, camera interruption and stalled-preview recovery",
                 )
+            } else if (action == "analog-fpv") {
+                result.putString("result", AnalogFpvChecks.run(getTargetContext()))
+                val a = activity!!
+                val oldSettings = CaptureSettings(a.settings)
+                val oldState = a.effectState
+                var fpvDialog: EffectDialog? = null
+                try {
+                    runOnMainSync {
+                        a.applySettings(CaptureSettings(a.settings).apply { photoFormat = 0; advancedMode = false })
+                        a.commitEffects(EffectState.defaults().single(Effects.ANALOG_FPV).amount(1f))
+                        fpvDialog = EffectDialog(a, true).also { it.show() }
+                        check(fpvDialog!!.focused == Effects.ANALOG_FPV)
+                        for (key in listOf("fpvQuality", "fpvInterference", "fpvBand", "fpvColor", "fpvSync"))
+                            check(fpvDialog!!.body!!.findViewWithTag<View>(key) != null) { "Missing FPV slider $key" }
+                    }
+                    waitForIdleSync()
+                    saveUi("fpv-controls.png")
+                } finally {
+                    runOnMainSync {
+                        fpvDialog?.sheet?.dismiss()
+                        a.commitEffects(oldState)
+                        a.applySettings(oldSettings)
+                    }
+                }
             } else if (action == "experimental") {
                 result.putString("gpu", ExperimentalSignalChecks.run(getTargetContext()))
                 checkExperimentalControls()

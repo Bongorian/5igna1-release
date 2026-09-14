@@ -205,3 +205,7 @@
 
 - Add permission-preserving Google Play update availability to Settings on `codex/play-update-status`. Keep the SDK in Play-only sources/dependencies and preserve the FOSS build. Check on settings open, link to Play, distinguish failure/timeout from no update, and explain the DEV package limitation. No new release or store submission requested.
 - Assess the supplied Red Bull FPV pilot video for a suitable processing stage. The observed changing colored interference suggests an analog FPV transmission model; keep this assessment distinct from the update-status implementation.
+
+## Owner direction — Analog FPV, 2026-09-15
+
+- Implement the assessed Analog FPV effect on `codex/analog-fpv`, based on the completed Play update-status branch. Add a shared RGB transmission-stage model with receiver noise, localized interference and sync disturbance, preserving old IDs, RAW behavior and existing time semantics. Verify deterministic GPU output and saved settings. Push checked development work; no new release requested.

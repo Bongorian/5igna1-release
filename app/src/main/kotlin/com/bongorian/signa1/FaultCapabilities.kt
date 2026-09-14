@@ -14,6 +14,7 @@ internal object FaultCapabilities {
         Effects.CHROMA_ERROR to keys("chromaOffset chromaAngle chromaBlock"),
         Effects.COLOR_MAP to keys("paletteMix palettePhase paletteCycles"),
         Effects.BLOCK_ERROR to keys("identitySeed eventSeed quantLevels blockColumns blockError blockOffset"),
+        Effects.ANALOG_FPV to keys("fpvNoise fpvBurst fpvBandCenter fpvBandWidth fpvChroma fpvShift fpvSoftness grainSeed"),
         Effects.STREAM_ERROR to keys("eventSeed streamLoss streamColumns concealment"),
         Effects.MOTION_BLUR to keys("blurX blurY"),
         Effects.THERMAL_NOISE to keys("noiseAmplitude noiseGrain grainSeed"),
@@ -28,8 +29,8 @@ internal object FaultCapabilities {
         val analog = id == Effects.VHS && kind == 3
         val crt = id == Effects.CRT && kind == 0
         val incidents = !digital && (FaultParameters.incidents(id) && (id != Effects.CRT || network))
-        val drift = id in setOf(Effects.PIXEL_DAMAGE, Effects.ROW_ERROR, Effects.CHROMA_ERROR, Effects.BLOCK_ERROR) || vhs || crt
-        val phase = vhs || analog
+        val drift = id == Effects.ANALOG_FPV || id in setOf(Effects.PIXEL_DAMAGE, Effects.ROW_ERROR, Effects.CHROMA_ERROR, Effects.BLOCK_ERROR) || vhs || crt
+        val phase = vhs || analog || id == Effects.ANALOG_FPV
         val time = drift || phase || incidents || led || id in setOf(Effects.EXPOSURE, Effects.THERMAL_NOISE)
         val imageKeys = when (id) {
             Effects.VHS -> when (kind) {

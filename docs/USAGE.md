@@ -67,3 +67,9 @@ The chain catalog uses full-width rows with a description and selection state. T
 Enable **PRO shooting mode** in **Settings → Modes**. The switch is saved immediately and retained between sessions; the top toolbar has no AUTO/PRO switch.
 
 In the Google Play edition, Settings → App checks for updates and links to Google Play. It distinguishes checking, available, none currently available and unable to check. Availability depends on your Play account and eligible release track. DEV builds cannot check the release listing; F-Droid/GitHub builds omit this service.
+
+## Analog FPV
+
+Choose **ANALOG FPV** in CODEC / STREAM. It adds receiver-like colored static, localized interference and horizontal sync disturbance before MEDIA and DISPLAY. The five controls are reception quality (higher is cleaner), interference, interference band width, color noise and sync disturbance. For a clean bypass within the effect, set reception quality to 100% and interference to 0%; global amount 0 also bypasses it.
+
+Noise follows the existing local fault clock: natural variation continues with LIVE off; LIVE adds speed, HOLD, LOOP and direction. HOLD freezes the fault pattern, not the camera scene. Saved snapshots reproduce the same parameters and noise seed. ADVANCED offers fixed time, band location and individual signal values. This is an artistic RGB approximation, not measurement of real radio reception; it applies to the viewfinder, JPEG and ordinary video, not RAW samples. No FPV telemetry overlay or external media is included.

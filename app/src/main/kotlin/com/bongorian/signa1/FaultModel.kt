@@ -316,6 +316,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                 else if (id == Effects.CRT) .16f else if (id == Effects.EXPOSURE) .8f else .42f,
             )
         val moving =
+            id == Effects.ANALOG_FPV ||
             id == Effects.PIXEL_DAMAGE ||
                 id == Effects.EXPOSURE ||
                 id == Effects.ROW_ERROR ||
@@ -638,6 +639,24 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                     "blockOffset",
                     (identity.bias + drift) * .25f,
                 )
+
+            Effects.ANALOG_FPV -> {
+                val weak = 1f - controls.get(id, "fpvQuality")
+                // A smooth reception envelope drives localized interference; grain uses the
+                // same local clock as other artistic noise, so HOLD/LOOP/FIX are reproducible.
+                val reception = .15f + .85f * ((drift + 1f) * .5f)
+                val interference = level * controls.get(id, "fpvInterference") * reception
+                put(p,
+                    "fpvNoise", level * weak * .12f,
+                    "fpvBurst", interference * .65f,
+                    "fpvBandCenter", .5f + .48f * sin(phase),
+                    "fpvBandWidth", .04f + controls.get(id, "fpvBand") * .65f,
+                    "fpvChroma", controls.get(id, "fpvColor"),
+                    "fpvShift", level * controls.get(id, "fpvSync") * (weak * .2f + interference) * .035f,
+                    "fpvSoftness", level * weak * .004f,
+                    "grainSeed", random(seed xor mix(noiseTick) xor 0x465056L) * 997f,
+                )
+            }
 
             Effects.STREAM_ERROR ->
                 put(

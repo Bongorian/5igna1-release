@@ -633,4 +633,10 @@
     <string name="play_update_unknown">アップデートを確認できませんでした\nGoogle Playで開く</string>
     <string name="play_update_dev">更新確認はGoogle Playのリリース版で利用できます</string>
     <string name="play_update_store_unavailable">Google Playを開けませんでした</string>
+    <string name="fault_description_17">アナログFPVの受信劣化。色付きのざらつき、局所的な干渉、水平同期の揺れを加えます。</string>
+    <string name="fault_control_fpvQuality">受信品質</string>
+    <string name="fault_control_fpvInterference">干渉の強さ</string>
+    <string name="fault_control_fpvBand">干渉帯の幅</string>
+    <string name="fault_control_fpvColor">色ノイズ</string>
+    <string name="fault_control_fpvSync">同期の揺れ</string>
 </resources>

@@ -18,6 +18,7 @@ uniform float cfaCoverage,cfaPhase,cfaRegion,interpolationMix,sampleScale;
 uniform float chromaOffset,chromaAngle,chromaBlock;
 uniform float paletteMix,palettePhase,paletteCycles;
 uniform float quantLevels,blockColumns,blockError,blockOffset;
+uniform float fpvNoise,fpvBurst,fpvBandCenter,fpvBandWidth,fpvChroma,fpvShift,fpvSoftness;
 uniform float streamLoss,streamColumns,concealment;
 uniform float tapeBandwidth,trackingOffset,trackingWave,trackingPhase,trackingSlip,tapeDropout,dropoutPosition,tapeNoise;
 uniform float scanDepth,scanLines,phosphorMix,convergenceOffset,syncOffset;
@@ -133,6 +134,27 @@ void main(){
         c=sampleAt(p);float levels=max(4.,quantLevels*(.75+.25*hash(block+identitySeed)));
         // Exactly bypass quantization at the neutral control value.
         if(quantLevels<256.)c=floor(c*levels+.5)/levels;
+    }else if(mode==FX_ANALOG_FPV){
+        // Receiver-like analog interference, not a simulation of a specific radio.
+        // Band width and sample grids are normalized so exports match the viewfinder.
+        float band=1.-smoothstep(fpvBandWidth*.25,fpvBandWidth,abs(p.y-fpvBandCenter));
+        float row=floor(p.y*480.);
+        float tear=(damageHash(vec2(row,grainSeed))-.5)*fpvShift*band;
+        vec2 q=p+vec2(tear,0.);
+        vec3 signal=toYuv(sampleAt(q));
+        vec3 left=toYuv(sampleAt(q-vec2(fpvSoftness,0.)));
+        vec3 right=toYuv(sampleAt(q+vec2(fpvSoftness,0.)));
+        signal=(signal*2.+left+right)*.25;
+        vec2 cell=floor(p*vec2(640.,480.));
+        float n=damageHash(cell+vec2(grainSeed,grainSeed*.37))-.5;
+        float streak=damageHash(vec2(floor(cell.x/5.),row)+grainSeed+19.);
+        float gain=fpvNoise+fpvBurst*band*(.3+.7*streak);
+        signal.x+=n*gain;
+        vec2 colorNoise=vec2(damageHash(cell+grainSeed+71.),damageHash(cell+grainSeed+137.))-.5;
+        signal.yz=signal.yz*(1.-min(.8,gain*.6))+colorNoise*gain*fpvChroma;
+        c=fromYuv(signal);
+        // Preserve exact neutral output rather than round-tripping RGB through YUV.
+        if(fpvNoise+fpvBurst+fpvShift+fpvSoftness<=0.)c=clean;
     }else if(mode==FX_STREAM_ERROR){
         vec2 grid=vec2(streamColumns,streamColumns*sourceSize.y/sourceSize.x),region=floor(p*grid);
         if(hash(region+eventSeed)<streamLoss){vec2 previous=p-vec2(0.,1./grid.y);c=previous.y<0.?vec3(0.):sampleAt(previous)*concealment;}

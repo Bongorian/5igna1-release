@@ -603,6 +603,11 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     companion object {
         fun controlLabel(key: String): Int {
             when (key) {
+                "fpvQuality" -> return R.string.fault_control_fpvQuality
+                "fpvInterference" -> return R.string.fault_control_fpvInterference
+                "fpvBand" -> return R.string.fault_control_fpvBand
+                "fpvColor" -> return R.string.fault_control_fpvColor
+                "fpvSync" -> return R.string.fault_control_fpvSync
                 "ledRate" -> return R.string.fault_control_ledRate
                 "networkInterval" -> return R.string.fault_control_networkInterval
                 "networkDuration" -> return R.string.fault_control_networkDuration

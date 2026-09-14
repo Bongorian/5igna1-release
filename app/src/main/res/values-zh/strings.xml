@@ -633,4 +633,10 @@
     <string name="play_update_unknown">无法检查更新\n打开 Google Play</string>
     <string name="play_update_dev">更新检查仅适用于 Google Play 正式版本</string>
     <string name="play_update_store_unavailable">无法打开 Google Play</string>
+    <string name="fault_description_17">模拟 FPV 接收劣化：彩色噪点、局部干扰及水平同步抖动。</string>
+    <string name="fault_control_fpvQuality">接收质量</string>
+    <string name="fault_control_fpvInterference">干扰强度</string>
+    <string name="fault_control_fpvBand">干扰带宽度</string>
+    <string name="fault_control_fpvColor">彩色噪声</string>
+    <string name="fault_control_fpvSync">同步抖动</string>
 </resources>
