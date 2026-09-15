@@ -313,6 +313,41 @@ class DeviceChecks : Instrumentation() {
                     }
                     waitForIdleSync()
                     saveUi("fpv-controls.png")
+                    runOnMainSync {
+                        fpvDialog!!.sheet!!.dismiss()
+                        a.applySettings(CaptureSettings(a.settings).apply { photoFormat = 0; advancedMode = true })
+                        val id = Effects.STREAM_ERROR
+                        val digital = EffectParameters.defaults()
+                        val analog = digital.with(id, "streamModel", 1f)
+                        fun frame(p: EffectParameters) = EffectState.Frame(intArrayOf(id), 1f, p, 0, 0.0,
+                            listOf(FaultModel(0).inspect(id, p, 1f, a.faultConfig.experimental(a.settings.experimentalSignals))))
+                        a.commitEffects(EffectState.defaults().single(id).amount(1f))
+                        a.shownLiveFrame = frame(digital)
+                        fpvDialog = EffectDialog(a, true).also { it.show() }
+                        val dialog = fpvDialog!!
+                        fun select(choice: Int) {
+                            dialog.body!!.findViewWithTag<View>("stream-model").performClick()
+                            val picker = android.view.inspector.WindowInspector.getGlobalWindowViews()
+                                .first { it.findViewWithTag<View>("choice-$choice") != null }
+                            picker.findViewWithTag<View>("choice-$choice").performClick()
+                        }
+                        repeat(3) {
+                            a.shownLiveFrame = frame(digital)
+                            select(1)
+                            check(dialog.draft.analogFpv(id))
+                            val controls = dialog.advancedControls!!
+                            check(dialog.body!!.findViewWithTag<View>("value-fpvNoise") != null)
+                            controls.update(frame(digital))
+                            controls.update(frame(analog))
+                            check(controls.reference.inspect().containsKey("fpvNoise"))
+                            a.shownLiveFrame = frame(analog)
+                            select(0)
+                            check(!dialog.draft.analogFpv(id))
+                            dialog.advancedControls!!.update(frame(analog))
+                            dialog.advancedControls!!.update(frame(digital))
+                            check(dialog.body!!.findViewWithTag<View>("value-streamLoss") != null)
+                        }
+                    }
                 } finally {
                     runOnMainSync {
                         fpvDialog?.sheet?.dismiss()

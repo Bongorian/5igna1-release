@@ -32,6 +32,10 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
     }
 
     fun update(frame: EffectState.Frame) {
+        // The displayed frame can still belong to the previous model while the
+        // editor has already rebuilt its controls for the new draft.
+        if (frame.parameters.analogFpv(id) != editor.draft.analogFpv(id) ||
+            frame.parameters.transportKind(id) != editor.draft.transportKind(id)) return
         for (node in frame.nodes) if (node.id == id) {
             reference = node
             break

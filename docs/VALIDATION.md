@@ -8,6 +8,8 @@ Analog FPV GPU checks on the connected development device before release prepara
 
 Play update availability requires an eligible Play-installed release and account; actual store update availability has not been verified end to end. DEV explains its package limitation. The update SDK is confined to Play and does not add application permissions.
 
+The post-1.7.3 ADVANCED model-switch fix reproduces the original NullPointerException on the unpatched DEV build using the actual model picker. The patched build passes three Digital stream / Analog FPV round trips with stale frames in both directions, the existing FPV GPU checks, 80 FOSS debug unit tests and debug lint on the connected device/build environment. This fix is not yet a published release.
+
 Use [UI verification](UI_REVIEW.md) for current reproduction steps. The JVM suite retains independent RAW fixtures and pre-Kotlin golden hashes in the test sources. [Retained measurement data](audit/README.md) are historical comparisons with their original conditions, not current benchmark claims.
 
 Emulator checks do not certify hardware RAW, microphone quality, sustained speed, heat or battery use. No broad device matrix or multi-hour recording/energy study is claimed. Include version, device/OS, format, resolution/fps, processing mode and reproduction steps with an issue.

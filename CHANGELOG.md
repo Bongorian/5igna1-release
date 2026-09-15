@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Fix the ADVANCED editor crash when switching STREAM ERROR between Digital stream and Analog FPV while a previous-model frame is still displayed.
+
 ## [1.7.3] - 2026-09-15
 
 - Add an Analog FPV model inside STREAM ERROR, with reception quality, interference bands, colored noise, smoothly moving color patches and sync disturbance. Preserve digital transmission behavior and released effect IDs.
