@@ -2,13 +2,20 @@
 
 [Guides](README.md) · [日本語](VALIDATION.ja.md) · [Run checks](DEVELOPMENT.md)
 
-The 1.7.3 release passed lint, 80 unit tests in each of four variants (320 total), FOSS dependency checks, debug builds and unsigned FOSS release assembly. Release packaging additionally verifies the existing distribution certificate, application ID and version. Locale, dependency inventory, release metadata, repository and documentation checks passed.
+The 1.7.4 candidate passes lint, 82 unit tests in each of four variants (328 total), FOSS dependency checks, unsigned FOSS release assembly and both debug flavors. The new JVM tests check every selectable model's active inspection keys and stage-specific snapshot compatibility. Release packaging verifies the existing distribution certificate, application ID and version.
 
-Analog FPV GPU checks on the connected development device before release preparation covered neutral output, deterministic replay, smoothly moving broad color patches, localized interference and all six controls. PRO sheets in both orientations and saved-signal behavior were checked during the preceding UI fixes. After USB reconnection, the final DEV build was installed successfully on the connected 25060RK16C; Android reports 1.7.3-debug / versionCode 22.
+## State consistency audit
 
-Play update availability requires an eligible Play-installed release and account; actual store update availability has not been verified end to end. DEV explains its package limitation. The update SDK is confined to Play and does not add application permissions.
+- Advanced editor values now require matching stage macros, identities, overrides, level, experimental mode and camera generation. All visible keys must exist in the evaluated node; missing values are not replaced with invented zeroes.
+- STREAM/VHS/CRT model pickers rebuild the editor. Fixed model sliders now rebuild for both `streamKind` and `transportKind`. Network display summaries also reject snapshots from previous settings or camera generations.
+- Camera open/configure callbacks already check the generation, capture results check the current session, and PRO sheets dismiss when their lens changes. The queued live-frame callback now checks camera generation as well as configuration revision.
+- RAW/photo/video routes are filtered when snapshots are produced; generation/configuration checks protect camera restarts. This is a source audit, not a claim of support for every sensor/format combination.
 
-The post-1.7.3 ADVANCED model-switch fix reproduces the original NullPointerException on the unpatched DEV build using the actual model picker. The patched build passes three Digital stream / Analog FPV round trips with stale frames in both directions, the existing FPV GPU checks, 80 FOSS debug unit tests and debug lint on the connected device/build environment. This fix is not yet a published release.
+The original ADVANCED Analog FPV crash was reproduced on the unpatched 1.7.3 DEV build with the actual model picker. The patched development build passed the original FPV GPU checks and three model round trips before this broader audit. The new `editor-transitions` device check exercises model pickers and fixed model sliders, normal/ADVANCED modes, portrait/landscape, all active groups, stale seeds, Apply/Cancel and background/resume. On the connected 25060RK16C, this check passed 80 model selections including fixed model sliders, all active groups, stale seed rejection, normal/ADVANCED, portrait/landscape, Apply/Cancel and background/resume.
+
+The physical lens/format check passed on all three exposed cameras (rear wide, rear ultra-wide, front): matching sensor results and JPEG focal-length metadata, preserved settings, native uncropped framing, a physical-sensor DNG and MP4 recording with the lens-switch guard. The final 1.7.4-debug / code 23 build is installed on the device.
+
+Play's actual update-available UI still requires an eligible Play-installed release and account and has not been verified end to end. [Distribution status](LAUNCH_TASKS.md) separately records upload, review and tester delivery.
 
 Use [UI verification](UI_REVIEW.md) for current reproduction steps. The JVM suite retains independent RAW fixtures and pre-Kotlin golden hashes in the test sources. [Retained measurement data](audit/README.md) are historical comparisons with their original conditions, not current benchmark claims.
 

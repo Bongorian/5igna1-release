@@ -216,3 +216,7 @@
 
 - Integrate completed work into main and release 1.7.3 / code 22 with the existing distribution key; update the existing Pages site and installed DEV build. Publish verified GitHub artifacts; configured Play Alpha draft automation may run. Preserve older release artifacts and signing material.
 - Delete past local and remote development branches only after proving their tips are ancestors of main. Preserve the Pages branch, unmerged work and all worktree files; detach any obsolete merged worktree branch before deleting its ref.
+
+## Owner direction — transition audit and 1.7.4, 2026-09-15
+
+- The owner selected publication of the crash fix, cross-model/camera/format state audit, transition testing and consolidation of distribution records. Complete these as 1.7.4 / code 23, integrate main, publish the signed GitHub APK, update existing GitHub Pages and install DEV. Configured Play Alpha draft automation may run; preserve published tags, signing keys, reviews and tester/country settings.

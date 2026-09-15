@@ -31,6 +31,11 @@ private constructor(
     fun analogFpv(id: Int): Boolean = id == Effects.STREAM_ERROR &&
         resolved(id, "streamKind", get(id, "streamModel")) >= .5f
 
+    /** Compare one stage without allocating or serializing a whole chain on each UI tick. */
+    fun sameStage(id: Int, other: EffectParameters): Boolean =
+        values[id] == other.values[id] && identities[id] == other.identities[id] &&
+            overrides(id) == other.overrides(id) && eventIdentities[id] == other.eventIdentities[id]
+
     fun identity(id: Int): Long {
         return identities.getValue(id)
     }

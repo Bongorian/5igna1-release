@@ -1,0 +1,1 @@
+Fixes the ADVANCED editor crash when switching to Analog FPV. Effect controls and Network display summaries reject stale values after setting or camera-session changes. Adds checks for model switching, Apply/Cancel and background resume.

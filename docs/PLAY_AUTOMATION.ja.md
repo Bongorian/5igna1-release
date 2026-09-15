@@ -1,5 +1,7 @@
 # Playへの自動アップロード
 
+現在のアップロード・審査・テスター配信の状況は[配布状況](LAUNCH_TASKS.md)に集約しています。以下の版別記録は過去の検証資料です。
+
 [English](PLAY_AUTOMATION.md) · [リリース手順](RELEASING.md)
 
 安定版の `vX.Y.Z` GitHub Releaseを公開すると、**Upload Play AAB** が実行されます。公開タグのソースを取得し、検査・テスト・署名付きAABのビルド・証明書の検証を行い、日本語と英語の更新内容を付けた **Alphaの下書き** に保存します。審査への送信と公開はPlay Consoleで行います。

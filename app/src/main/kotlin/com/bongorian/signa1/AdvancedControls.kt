@@ -32,14 +32,15 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
     }
 
     fun update(frame: EffectState.Frame) {
-        // The displayed frame can still belong to the previous model while the
-        // editor has already rebuilt its controls for the new draft.
-        if (frame.parameters.analogFpv(id) != editor.draft.analogFpv(id) ||
-            frame.parameters.transportKind(id) != editor.draft.transportKind(id)) return
-        for (node in frame.nodes) if (node.id == id) {
-            reference = node
-            break
-        }
+        // Only accept values produced for this draft and camera session. A previous
+        // model, seed or macro value must not overwrite the draft's inspected node.
+        if (!frame.parameters.sameStage(id, editor.draft) || frame.amount != editor.amount ||
+            frame.experimental != a.settings.experimentalSignals ||
+            frame.sourceEpoch != a.engine.generation.toLong()) return
+        val node = frame.nodes.firstOrNull { it.id == id } ?: return
+        val inspected = node.inspect()
+        if (visible().any { it.key !in inspected } || values.keys.any { it !in inspected }) return
+        reference = node
         val current = reference.inspect()
         values.forEach { (key: String, view: TextView?) ->
             if (
@@ -262,7 +263,7 @@ internal class AdvancedControls(val editor: EffectDialog, val id: Int) {
                             editor.draft = editor.draft.override(id, spec.key, next)
                             value.setText(SignalControls.value(next))
                             editor.preview()
-                            if (spec.key == "transportKind") refresh()
+                            if (spec.key == "transportKind" || spec.key == "streamKind") refresh()
                         }
                     }
 

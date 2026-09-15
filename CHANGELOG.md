@@ -1,8 +1,12 @@
 # Changelog
 
-## Unreleased
+## [1.7.4] - 2026-09-15
 
 - Fix the ADVANCED editor crash when switching STREAM ERROR between Digital stream and Analog FPV while a previous-model frame is still displayed.
+
+- Reject stale editor values after seed, macro and camera-session changes; keep Network display summaries consistent with the current draft.
+- Add model-picker transition checks across normal/ADVANCED and portrait/landscape, plus Apply/Cancel and background/resume coverage.
+- Consolidate current distribution status, separating GitHub publication, Play upload and confirmed tester delivery.
 
 ## [1.7.3] - 2026-09-15
 

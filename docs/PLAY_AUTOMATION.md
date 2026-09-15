@@ -1,5 +1,7 @@
 # Automatic Play uploads
 
+Current upload, review and tester-delivery status is maintained only in [Distribution status](LAUNCH_TASKS.md). The entries below are historical evidence.
+
 [日本語](PLAY_AUTOMATION.ja.md) · [Releasing](RELEASING.md)
 
 Publishing a stable `vX.Y.Z` GitHub release triggers **Upload Play AAB**. It resolves the published tag to its commit, checks metadata/tests/dependencies, builds a signed `playRelease` AAB, verifies its manifest and existing upload certificate, and saves it as an **Alpha draft** with English/Japanese release notes. Review submission and publication remain in Play Console.

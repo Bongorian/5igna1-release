@@ -1708,7 +1708,7 @@ internal class GlitchEngine(val context: Activity, val listener: Listener) {
                         val revision = appliedRevision
                         ui.post(
                             Runnable@{
-                                if (revision == configRevision.get()) listener.liveFrame(state)
+                                if (revision == configRevision.get() && state.sourceEpoch == generation.toLong()) listener.liveFrame(state)
                             }
                         )
                     }

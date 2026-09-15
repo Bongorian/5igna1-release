@@ -248,7 +248,9 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "chain-review") {
+            if (action == "editor-transitions") {
+                result.putString("result", EditorTransitionChecks.run(this))
+            } else if (action == "chain-review") {
                 result.putString("result", ChainReviewChecks.run(this))
             } else if (action == "workspace-review") {
                 result.putString("result", WorkspaceReviewChecks.run(this))

@@ -1,6 +1,6 @@
 # Releasing 5igna1
 
-Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current release source is 1.7.3 / code 22. Changes after its tag require a higher version/code before packaging. GitHub 1.1.0 / code 9 retains its original tagged source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
+Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0 / code 8 is the first public release. Current release source is 1.7.4 / code 23. Changes after its tag require a higher version/code before packaging. GitHub 1.1.0 / code 9 retains its original tagged source. Existing 1.0.0 submissions, artifacts and tags remain unchanged. [Launch checklist](LAUNCH_TASKS.md)
 
 ## Distribution and identity
 
@@ -78,7 +78,7 @@ The [metadata candidate](fdroid/com.bongorian.signa1.yml) uses this repository, 
 
 Publishing a stable GitHub release now triggers a signed AAB build and upload to an Alpha draft. See [automatic Play uploads](PLAY_AUTOMATION.md) ([日本語](PLAY_AUTOMATION.ja.md)) for setup, verification and retries. Review submission and publication remain owner actions in Play Console.
 
-Play 1.3.0 / code 11 was published to Alpha testers on 2026-09-09, skipping 1.2.0 on Play. Preserve existing submitted candidates. See the [1.3.0 submission record](PLAY_1_3_0.md). The existing ignored `signing.properties` applies only to Play upload signing. Build with `./tools/build.sh bundlePlayRelease`; see [Play submission materials](../store/google-play/README.md). Billing/Supporter Pack is not implemented, so no product creation is needed for launch.
+Current upload, review and tester-delivery status is maintained in [Distribution status](LAUNCH_TASKS.md). The existing ignored `signing.properties` applies only to Play upload signing. Build with `./tools/build.sh bundlePlayRelease`; see [Play submission materials](../store/google-play/README.md). Billing/Supporter Pack is not implemented, so no product creation is needed for launch.
 
 ## Owner checklist
 

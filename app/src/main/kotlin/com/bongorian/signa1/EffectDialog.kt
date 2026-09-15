@@ -284,6 +284,8 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
 
     fun updateNetwork(frame: EffectState.Frame?) {
         val summary = networkSummary ?: return
+        if (frame != null && (!frame.parameters.sameStage(Effects.CRT, draft) ||
+                frame.amount != amount || frame.sourceEpoch != a.engine.generation.toLong())) return
         if (frame == null && amount <= 0f) { summary.text = a.getString(R.string.network_bypassed); return }
         val node = if (frame == null) FaultModel(0).inspect(Effects.CRT, draft, amount, a.faultConfig)
             else frame.nodes.firstOrNull { it.id == Effects.CRT && Math.round(it.profile["transportKind"] ?: 0f) == 2 }

@@ -1,14 +1,18 @@
 # Distribution status and owner checklist
 
-Last documented check: **2026-09-09 (Japan time)**. This is a dated maintainer status, not a live store monitor. [Release procedure](RELEASING.md) · [Documentation map](README.md)
+Last verified: **2026-09-15 (Japan time)**. This is the single current distribution-status record. Release procedures explain how to publish; dated reports preserve evidence and are not current status.
 
-| Channel | Last verified state | Record |
+| Stage | Verified state | Evidence / next step |
 |---|---|---|
-| GitHub / Obtainium | 1.5.1 / code 15 published; earlier tags retained | [Latest GitHub release](https://github.com/Bongorian/5igna1-release/releases/latest) |
-| Google Play Alpha | 1.3.0 / code 11 published to selected testers | [1.3.0 record](PLAY_1_3_0.md) |
-| Google Play Alpha draft | 1.5.1 / code 15 uploaded as an unpublished draft; review/publication require Console action | [Automatic upload records](PLAY_AUTOMATION.md) |
-| F-Droid | Owner-reported 1.0.0 / code 8 submission awaiting merge; later release work did not replace it | [Candidate audit](FDROID_READINESS.md) |
-| Current release source | 1.5.1 / code 15 source: foreground-only capture and permissions cleanup | [Guide scope](README.md) |
+| GitHub / Obtainium | 1.7.3 / code 22 published; signed APK and checksum publicly verified | [Release](https://github.com/Bongorian/5igna1-release/releases/tag/v1.7.3) |
+| Current source | Preparing 1.7.4 / code 23: stale-frame crash fix and transition checks | Complete verification, then publish a new immutable tag |
+| Google Play AAB upload | 1.7.3 / code 22 uploaded to Alpha as a draft | [Successful upload](https://github.com/Bongorian/5igna1-release/actions/runs/34919818036); SHA-256 `c6c8bd4c228b5dbbe71347cf174597274c6973da1b4b3a8097495da8e2cd33de` |
+| Google Play review submission | Current submission status not verified | Check Play Console; upload success does not prove submission |
+| Google Play tester delivery | Current served version not verified; historical confirmation is 1.3.0 / code 11 on September 9 | [Historical record](PLAY_1_3_0.md); do not treat this as the current version |
+| F-Droid | Owner-reported 1.0.0 / code 8 submission; current review/merge status not rechecked | [Candidate audit](FDROID_READINESS.md) |
+| Public website | 1.7.3 content and all three privacy languages publicly verified | [Website](https://bongorian.github.io/5igna1-release/) |
+
+For each release, update the source, GitHub publication and website rows after verifying them. Update the Play upload row only from a successful upload result. Review and tester-delivery rows require separate Console evidence. Record the checked date and link; use “not verified” when no current evidence exists.
 
 ## Remaining owner work
 
