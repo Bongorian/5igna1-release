@@ -286,7 +286,7 @@
     <string name="fault_description_8" formatted="false">"色度偏移与粗色度采样。"</string>
     <string name="fault_description_9" formatted="false">"将相机亮度映射为伪彩色。"</string>
     <string name="fault_description_10" formatted="false">"解码图像的块量化与地址错误模型。"</string>
-    <string name="fault_description_11" formatted="false">"解码区域丢失与复用模型，不修改实际数据包。"</string>
+    <string name="fault_description_11" formatted="false">模拟数字传输区域丢失，或模拟 FPV 彩色噪声、干扰及同步抖动。</string>
     <string name="fault_description_12">磁带、DVD、模拟或数字媒体的响应与故障。</string>
     <string name="fault_description_13">CRT、LCD、Network或LED显示的响应与故障。</string>
     <string name="ui_random_chain" formatted="false">"随机效果链"</string>
@@ -633,10 +633,14 @@
     <string name="play_update_unknown">无法检查更新\n打开 Google Play</string>
     <string name="play_update_dev">更新检查仅适用于 Google Play 正式版本</string>
     <string name="play_update_store_unavailable">无法打开 Google Play</string>
-    <string name="fault_description_17">模拟 FPV 接收劣化：彩色噪点、局部干扰及水平同步抖动。</string>
     <string name="fault_control_fpvQuality">接收质量</string>
     <string name="fault_control_fpvInterference">干扰强度</string>
     <string name="fault_control_fpvBand">干扰带宽度</string>
     <string name="fault_control_fpvColor">彩色噪声</string>
     <string name="fault_control_fpvSync">同步抖动</string>
+    <string name="fault_control_fpvColorSize">彩色噪声大小</string>
+    <string name="stream_model">传输模型</string>
+    <string name="stream_digital">数字传输</string>
+    <string name="stream_analog">模拟 FPV</string>
+    <string name="fault_control_streamModel">传输模型</string>
 </resources>

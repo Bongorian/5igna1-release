@@ -19,7 +19,10 @@ internal object FaultSensitivity {
     fun initial(id: Int, source: Int) = if (native(id, source)) 1f else 0f
     private val defaults = Array(Effects.NAMES.size) { id -> FloatArray(5) { initial(id, it) } }
     fun values(parameters: EffectParameters, id: Int, experimental: Boolean): FloatArray =
-        if (parameters.transportKind(id) == 0 && (!experimental || keys.none { parameters.manual(id, it) })) defaults[id]
+        if (parameters.analogFpv(id)) FloatArray(5) { source ->
+            if (experimental) parameters.resolved(id, keys[source], 0f) else 0f
+        }
+        else if (parameters.transportKind(id) == 0 && (!experimental || keys.none { parameters.manual(id, it) })) defaults[id]
         else FloatArray(5) { source ->
             val initial = if (native(id, source, parameters.transportKind(id))) 1f else 0f
             if (experimental) parameters.resolved(id, keys[source], initial) else initial

@@ -16,7 +16,7 @@
 | COLOR | CHROMA ERROR | 色差のずれ、サンプリング、方向 |
 | COLOR | COLOR MAP | パレット位相、周期、混合 |
 | CODEC / STREAM | BLOCK ERROR | 量子化の欠落、ブロックサイズ、誤読事故 |
-| CODEC / STREAM | STREAM ERROR | 欠落事故、領域、サンプル再利用 |
+| CODEC / STREAM | STREAM ERROR | デジタル伝送：欠落・再利用。アナログFPV：干渉・色ノイズ・同期の揺れ |
 | MEDIA | VHS | 帯域特性、tracking、dropout、noise |
 | DISPLAY | CRT | 走査・蛍光体の特性、convergence・syncの故障 |
 

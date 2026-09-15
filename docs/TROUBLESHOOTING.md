@@ -12,7 +12,7 @@ Allow camera access in Android's app permissions. Close another app that may be 
 
 ## An effect does nothing
 
-Check that you are not in CLEAN or original RAW. In a chain, the stage must be enabled and LEVEL and its relevant fault controls must be above zero. Some controls also have a no-change value, such as a ADDRESS ERROR offset of 0 bytes. STREAM ERROR can be quiet between incidents.
+Check that you are not in CLEAN or original RAW. In a chain, the stage must be enabled and LEVEL and its relevant fault controls must be above zero. Some controls also have a no-change value, such as a ADDRESS ERROR offset of 0 bytes. The digital model of STREAM ERROR can be quiet between incidents.
 
 In the FAULT or LIVE editor, choose **Apply** to keep an edit. Settings save immediately. Back, tapping outside, or leaving the app cancels the previewed changes.
 

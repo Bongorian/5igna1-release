@@ -286,7 +286,7 @@
     <string name="fault_description_8" formatted="false">"Chroma displacement and coarse chroma sampling."</string>
     <string name="fault_description_9" formatted="false">"False-color transfer of camera luminance."</string>
     <string name="fault_description_10" formatted="false">"Decoded-block quantization and address-error model."</string>
-    <string name="fault_description_11" formatted="false">"Decoded-region loss/reuse model; no actual packets are edited."</string>
+    <string name="fault_description_11" formatted="false">Digital decoded-region loss or analog FPV colored interference and sync disturbance.</string>
     <string name="fault_description_12">Tape, DVD, analog or digital media response and faults.</string>
     <string name="fault_description_13">CRT, LCD, Network or LED display response and faults.</string>
     <string name="ui_random_chain" formatted="false">"RANDOM CHAIN"</string>
@@ -633,10 +633,14 @@
     <string name="play_update_unknown">Could not check for updates\nOpen Google Play</string>
     <string name="play_update_dev">Update checks are available in the Google Play release</string>
     <string name="play_update_store_unavailable">Could not open Google Play</string>
-    <string name="fault_description_17">Analog FPV reception: colored static, localized interference and horizontal sync disturbance.</string>
     <string name="fault_control_fpvQuality">Reception quality</string>
     <string name="fault_control_fpvInterference">Interference</string>
     <string name="fault_control_fpvBand">Interference band width</string>
     <string name="fault_control_fpvColor">Color noise</string>
     <string name="fault_control_fpvSync">Sync disturbance</string>
+    <string name="fault_control_fpvColorSize">Color noise size</string>
+    <string name="stream_model">Transmission model</string>
+    <string name="stream_digital">Digital stream</string>
+    <string name="stream_analog">Analog FPV</string>
+    <string name="fault_control_streamModel">Transmission model</string>
 </resources>

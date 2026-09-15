@@ -286,7 +286,7 @@
     <string name="fault_description_8" formatted="false">"色差のずれと、粗い色差サンプリング。"</string>
     <string name="fault_description_9" formatted="false">"カメラ由来の輝度を疑似色へ変換。"</string>
     <string name="fault_description_10" formatted="false">"復号画像のブロック量子化・アドレス誤読モデル。"</string>
-    <string name="fault_description_11" formatted="false">"復号画像領域の欠落・再利用モデル。実packetは破壊しません。"</string>
+    <string name="fault_description_11" formatted="false">デジタル伝送の領域欠落、またはアナログFPVの色ノイズ・干渉・同期の揺れを加えます。</string>
     <string name="fault_description_12">テープ・DVD・アナログ・デジタル媒体の応答と故障。</string>
     <string name="fault_description_13">CRT・LCD・Network・LED表示の応答と故障。</string>
     <string name="ui_random_chain" formatted="false">"ランダムチェーン"</string>
@@ -633,10 +633,14 @@
     <string name="play_update_unknown">アップデートを確認できませんでした\nGoogle Playで開く</string>
     <string name="play_update_dev">更新確認はGoogle Playのリリース版で利用できます</string>
     <string name="play_update_store_unavailable">Google Playを開けませんでした</string>
-    <string name="fault_description_17">アナログFPVの受信劣化。色付きのざらつき、局所的な干渉、水平同期の揺れを加えます。</string>
     <string name="fault_control_fpvQuality">受信品質</string>
     <string name="fault_control_fpvInterference">干渉の強さ</string>
     <string name="fault_control_fpvBand">干渉帯の幅</string>
     <string name="fault_control_fpvColor">色ノイズ</string>
     <string name="fault_control_fpvSync">同期の揺れ</string>
+    <string name="fault_control_fpvColorSize">色ノイズの大きさ</string>
+    <string name="stream_model">伝送モデル</string>
+    <string name="stream_digital">デジタル伝送</string>
+    <string name="stream_analog">アナログFPV</string>
+    <string name="fault_control_streamModel">伝送モデル</string>
 </resources>

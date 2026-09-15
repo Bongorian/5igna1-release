@@ -70,6 +70,8 @@ In the Google Play edition, Settings → App checks for updates and links to Goo
 
 ## Analog FPV
 
-Choose **ANALOG FPV** in CODEC / STREAM. It adds receiver-like colored static, localized interference and horizontal sync disturbance before MEDIA and DISPLAY. The five controls are reception quality (higher is cleaner), interference, interference band width, color noise and sync disturbance. For a clean bypass within the effect, set reception quality to 100% and interference to 0%; global amount 0 also bypasses it.
+Choose **STREAM ERROR → Transmission model → Analog FPV** in CODEC / STREAM. It adds receiver-like colored static, localized interference and horizontal sync disturbance before MEDIA and DISPLAY. The six controls are reception quality (higher is cleaner), interference, interference band width, color noise, color noise size and sync disturbance. A larger color noise size makes broad seeded color patches move smoothly; 0% retains fine per-pixel chroma static. Switching models retains each model’s controls. For a clean bypass within the effect, set reception quality to 100% and interference to 0%; global amount 0 also bypasses it.
 
 Noise follows the existing local fault clock: natural variation continues with LIVE off; LIVE adds speed, HOLD, LOOP and direction. HOLD freezes the fault pattern, not the camera scene. Saved snapshots reproduce the same parameters and noise seed. ADVANCED offers fixed time, band location and individual signal values. This is an artistic RGB approximation, not measurement of real radio reception; it applies to the viewfinder, JPEG and ordinary video, not RAW samples. No FPV telemetry overlay or external media is included.
+
+SEED changes the pattern and temporal phase without changing the control values.

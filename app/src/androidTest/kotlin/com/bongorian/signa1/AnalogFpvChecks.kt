@@ -8,7 +8,7 @@ import java.io.File
 
 internal object AnalogFpvChecks {
     fun run(context: Context): String {
-        val id = Effects.ANALOG_FPV
+        val id = Effects.STREAM_ERROR
         val source = Bitmap.createBitmap(640, 480, Bitmap.Config.ARGB_8888)
         for (y in 0 until 480) for (x in 0 until 640)
             source.setPixel(x, y, if (x < 320) Color.rgb(110, 110, 110)
@@ -23,7 +23,7 @@ internal object AnalogFpvChecks {
         fun state(p: EffectParameters) = EffectState.defaults().single(id).amount(1f).edit(false, 1 shl id, p)
         fun render(s: EffectState) = requireNotNull(PhotoRenderer.render(context, jpeg, false, model.apply(s.snapshot(false, 0), cfg)))
         fun save(name: String, image: Bitmap) = File(directory, name).outputStream().use { image.compress(Bitmap.CompressFormat.PNG, 100, it) }
-        val p = EffectParameters.defaults()
+        val p = EffectParameters.defaults().with(id, "streamModel", 1f)
         val clean = render(EffectState.defaults())
         val neutral = render(state(p.with(id, "fpvQuality", 1f).with(id, "fpvInterference", 0f)))
         val image = render(state(p))
@@ -31,7 +31,24 @@ internal object AnalogFpvChecks {
         val band = render(state(p.override(id, "fpvNoise", 0f).override(id, "fpvBurst", .9f)
             .override(id, "fpvBandCenter", .75f).override(id, "fpvBandWidth", .2f)
             .override(id, "fpvShift", 0f).override(id, "fpvSoftness", 0f)))
+        val field = p.override(id, "fpvNoise", .4f).override(id, "fpvBurst", 0f)
+            .override(id, "fpvShift", 0f).override(id, "fpvSoftness", 0f)
+            .override(id, "fpvChroma", 1f)
+        val fine = render(state(field.with(id, "fpvColorSize", 0f)))
+        val broad = render(state(field.with(id, "fpvColorSize", 1f)))
+        val moved = render(state(field.with(id, "fpvColorSize", 1f).override(id, "fpvColorX", -.22f)))
+        fun chromaRoughness(bitmap: Bitmap): Long {
+            var sum = 0L
+            for (y in 20 until 460) for (x in 20 until 298) {
+                fun chroma(px: Int) = Color.red(px) - Color.blue(px)
+                sum += kotlin.math.abs(chroma(bitmap.getPixel(x,y)) - chroma(bitmap.getPixel(x+1,y)))
+            }
+            return sum
+        }
         try {
+            check(chromaRoughness(broad) * 3 < chromaRoughness(fine)) { "Color size did not form larger patches" }
+            check(!broad.sameAs(moved)) { "Large color patches do not move" }
+            save("fpv-color-fine.png", fine); save("fpv-color-broad.png", broad); save("fpv-color-moved.png", moved)
             check(clean.sameAs(neutral)) { "Neutral FPV changed output" }
             check(image.sameAs(replay)) { "FPV snapshot replay differs" }
             check(!image.sameAs(clean)) { "FPV produced no artifact" }
@@ -44,7 +61,7 @@ internal object AnalogFpvChecks {
             }
             check(center > outside * 4 + 1000) { "Interference is not localized: $center / $outside" }
             save("fpv-source.png", clean); save("fpv-default.png", image); save("fpv-band.png", band)
-            return "PASS neutral, deterministic replay, visible default, localized band ($center / $outside)"
-        } finally { listOf(clean,neutral,image,replay,band).forEach { it.recycle() } }
+            return "PASS neutral, deterministic replay, visible default, large moving color patches, localized band ($center / $outside)"
+        } finally { listOf(clean,neutral,image,replay,band,fine,broad,moved).forEach { it.recycle() } }
     }
 }

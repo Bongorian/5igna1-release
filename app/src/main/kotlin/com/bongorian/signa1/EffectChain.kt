@@ -55,6 +55,7 @@ internal class EffectChain(private val source: String, private val supportsExter
             if (node != null) {
                 // Retain profile-then-mechanism override order, including overlapping names.
                 if (node.id == Effects.VHS || node.id == Effects.CRT) bindScalars(mapOf("transportKind" to (node.profile["transportKind"] ?: 0f)))
+                if (node.id == Effects.STREAM_ERROR) bindScalars(mapOf("streamKind" to (node.profile["streamKind"] ?: 0f)))
                 bindScalars(node.profile)
                 bindScalars(node.mechanism)
             }

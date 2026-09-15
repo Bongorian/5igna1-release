@@ -18,6 +18,8 @@ uniform float cfaCoverage,cfaPhase,cfaRegion,interpolationMix,sampleScale;
 uniform float chromaOffset,chromaAngle,chromaBlock;
 uniform float paletteMix,palettePhase,paletteCycles;
 uniform float quantLevels,blockColumns,blockError,blockOffset;
+uniform float streamKind;
+uniform float fpvColorScale,fpvColorX,fpvColorY;
 uniform float fpvNoise,fpvBurst,fpvBandCenter,fpvBandWidth,fpvChroma,fpvShift,fpvSoftness;
 uniform float streamLoss,streamColumns,concealment;
 uniform float tapeBandwidth,trackingOffset,trackingWave,trackingPhase,trackingSlip,tapeDropout,dropoutPosition,tapeNoise;
@@ -30,6 +32,10 @@ float damageHash(vec2 p){
     vec3 q=fract(vec3(p.x,p.y,p.x)*.1031);
     q+=dot(q,q.yzx+33.33);
     return fract((q.x+q.y)*q.z);
+}
+float fpvCloud(vec2 p){
+    // Analytic smooth field avoids lattice seams from mobile GPU hash precision.
+    return (sin(p.x*1.7+sin(p.y*1.3))+sin(p.y*1.9+cos(p.x*.9)))*.25;
 }
 vec3 sampleAt(vec2 p){p=clamp(p,vec2(.00001),vec2(.99999));return texture2D(cam,(st*vec4(p,0.,1.)).xy).rgb;}
 // Synthetic RGGB mosaic reconstructed from processed RGB, not access to sensor RAW.
@@ -134,7 +140,7 @@ void main(){
         c=sampleAt(p);float levels=max(4.,quantLevels*(.75+.25*hash(block+identitySeed)));
         // Exactly bypass quantization at the neutral control value.
         if(quantLevels<256.)c=floor(c*levels+.5)/levels;
-    }else if(mode==FX_ANALOG_FPV){
+    }else if(mode==FX_STREAM_ERROR && streamKind>.5){
         // Receiver-like analog interference, not a simulation of a specific radio.
         // Band width and sample grids are normalized so exports match the viewfinder.
         float band=1.-smoothstep(fpvBandWidth*.25,fpvBandWidth,abs(p.y-fpvBandCenter));
@@ -151,6 +157,13 @@ void main(){
         float gain=fpvNoise+fpvBurst*band*(.3+.7*streak);
         signal.x+=n*gain;
         vec2 colorNoise=vec2(damageHash(cell+grainSeed+71.),damageHash(cell+grainSeed+137.))-.5;
+        if(fpvColorScale>0.){
+            // Stable seeded color field moves continuously; luma grain remains fine.
+            float size=1.+128.*fpvColorScale*fpvColorScale;
+            vec2 cloud=(p+vec2(fpvColorX,fpvColorY))*vec2(640.,480.)/size;
+            vec2 broad=vec2(fpvCloud(cloud+mod(identitySeed,32.)),fpvCloud(cloud+mod(identitySeed,32.)+17.))*1.7;
+            colorNoise=mix(colorNoise,broad,smoothstep(0.,.3,fpvColorScale));
+        }
         signal.yz=signal.yz*(1.-min(.8,gain*.6))+colorNoise*gain*fpvChroma;
         c=fromYuv(signal);
         // Preserve exact neutral output rather than round-tripping RGB through YUV.

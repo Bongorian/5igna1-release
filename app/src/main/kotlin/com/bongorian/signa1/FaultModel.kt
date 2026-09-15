@@ -282,11 +282,12 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
         config: FaultConfig,
     ): FaultNode {
         val kind = controls.transportKind(id)
+        val analogFpv = controls.analogFpv(id)
         val network = id == Effects.CRT && kind == 2
         val gains = FaultSensitivity.values(controls, id, config.experimental)
         var extra = 0f
         if (config.enabled && config.experimental) for (source in gains.indices) {
-            if (!FaultSensitivity.native(id, source, kind)) extra += gains[source] * when (source) {
+            if (analogFpv || !FaultSensitivity.native(id, source, kind)) extra += gains[source] * when (source) {
                 0 -> if (config.motion) clamp(max(shock, angularSpeed / 6f), 0f, 1f) else 0f
                 1 -> if (config.audio) audio else 0f
                 2 -> if (config.timing) readout else 0f
@@ -316,7 +317,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                 else if (id == Effects.CRT) .16f else if (id == Effects.EXPOSURE) .8f else .42f,
             )
         val moving =
-            id == Effects.ANALOG_FPV ||
+            analogFpv ||
             id == Effects.PIXEL_DAMAGE ||
                 id == Effects.EXPOSURE ||
                 id == Effects.ROW_ERROR ||
@@ -384,7 +385,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                     "activity",
                 )
             else if (id == Effects.BLOCK_ERROR) controls.get(id, "misaddress") else 0f
-        val incidents = FaultParameters.incidents(id)
+        val incidents = !analogFpv && FaultParameters.incidents(id)
         val probability =
             controls.resolved(
                 id,
@@ -465,7 +466,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                 "eventPattern",
                 event.pattern,
             )
-        if (config.experimental || kind != 0) FaultSensitivity.keys.forEachIndexed { source, key ->
+        if (config.experimental || kind != 0 || analogFpv) FaultSensitivity.keys.forEachIndexed { source, key ->
             internal[key] = gains[source]
         }
         // Artistic noise always samples local fault time, including natural speed and LIVE OFF.
@@ -640,7 +641,8 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                     (identity.bias + drift) * .25f,
                 )
 
-            Effects.ANALOG_FPV -> {
+            Effects.STREAM_ERROR -> if (analogFpv) {
+                profile["streamKind"] = 1f
                 val weak = 1f - controls.get(id, "fpvQuality")
                 // A smooth reception envelope drives localized interference; grain uses the
                 // same local clock as other artistic noise, so HOLD/LOOP/FIX are reproducible.
@@ -652,14 +654,14 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                     "fpvBandCenter", .5f + .48f * sin(phase),
                     "fpvBandWidth", .04f + controls.get(id, "fpvBand") * .65f,
                     "fpvChroma", controls.get(id, "fpvColor"),
+                    "fpvColorScale", controls.get(id, "fpvColorSize"),
+                    "fpvColorX", .22f * sin(phase + 1.5707963f),
+                    "fpvColorY", .22f * sin(phase),
                     "fpvShift", level * controls.get(id, "fpvSync") * (weak * .2f + interference) * .035f,
                     "fpvSoftness", level * weak * .004f,
                     "grainSeed", random(seed xor mix(noiseTick) xor 0x465056L) * 997f,
                 )
-            }
-
-            Effects.STREAM_ERROR ->
-                put(
+            } else put(
                     p,
                     "streamLoss",
                     level * controls.get(id, "loss") * event.envelope,
@@ -766,6 +768,7 @@ internal class FaultModel constructor(private val sessionSalt: Long = 0L) {
                 p["refreshSeed"] = random(seed xor mix(FaultClock.tick(time, refreshRate.toDouble()))) * 997f
             }
         }
+        if (id == Effects.STREAM_ERROR) internal["streamKind"] = controls.resolved(id, "streamKind", controls.get(id, "streamModel"))
         if (id == Effects.CRT) {
             internal.putIfAbsent("refreshRate", controls.resolved(id, "refreshRate", controls.get(id, "ledRate") * 30))
             p.putIfAbsent("refreshSeed", controls.resolved(id, "refreshSeed", 0f))

@@ -16,7 +16,7 @@ Choose a damaged system, then watch what happens inside it. CLEAN is an empty ro
 | COLOR | CHROMA ERROR | Chroma separation, sampling, direction |
 | COLOR | COLOR MAP | Palette phase, cycles, mixture |
 | CODEC / STREAM | BLOCK ERROR | Quantization loss, block size, wrong-block incidents |
-| CODEC / STREAM | STREAM ERROR | Loss incidents, region, acquired-sample reuse |
+| CODEC / STREAM | STREAM ERROR | Digital: loss incidents and sample reuse. Analog FPV: interference, colored static, sync disturbance |
 | MEDIA | VHS / DVD / Digital thru / Analog thru | Media resolution, tape/DVD faults, composite/component cable faults |
 | DISPLAY | CRT / Digital thru / Network / LED | Scan/phosphor, analog upconversion, network stalls/loss, LED module faults |
 
@@ -35,7 +35,7 @@ The camera, or a user-selected experimental TAP source, supplies every scene sam
 - PIXEL DAMAGE through CFA ERROR have RAW16 adapters. Row displacements and row reuse preserve Bayer parity; CFA ERROR deliberately changes it. ADDRESS ERROR can intentionally break byte and component alignment.
 - RGB CFA/reconstruction faults remosaic the already processed camera RGB. They do not access or reconstruct the sensor's actual RAW pipeline.
 - CHROMA ERROR operates through an explicit luma/chroma conversion. COLOR MAP maps camera luminance to a false-color transfer function.
-- BLOCK ERROR simulates decoded-image block quantization and address errors. STREAM ERROR erases decoded regions or conceals them with acquired samples from the same frame. Neither edits an actual codec bitstream or network packet. There is no previous-frame datamoshing in this implementation.
+- BLOCK ERROR simulates decoded-image block quantization and address errors. The digital model of STREAM ERROR erases decoded regions or conceals them with acquired samples from the same frame. Neither edits an actual codec bitstream or network packet. There is no previous-frame datamoshing in this implementation.
 - VHS first supplies a tape bandwidth/chroma profile, then tracking drift/slips, dropout and noise. CRT separates scan/phosphor appearance from convergence and sync faults. Green monochrome is a CRT profile, not a separate TERMINAL effect.
 
 These are causal artistic models, not a complete engineering simulation. Their ranges deliberately exceed normal hardware failure magnitudes. RAW, camera RGB, luma/chroma and the outputs of media/display models are different representations along a route; none is the sole true image.

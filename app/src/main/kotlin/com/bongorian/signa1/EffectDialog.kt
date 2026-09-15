@@ -228,6 +228,21 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     }
 
     private fun transportControls(id: Int) {
+        if (id == Effects.STREAM_ERROR) {
+            val model = a.button(a.getString(R.string.stream_model) + " · " + a.getString(
+                if (draft.analogFpv(id)) R.string.stream_analog else R.string.stream_digital))
+            model.tag = "stream-model"
+            body!!.addView(model, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
+            model.setOnClickListener {
+                SignalSheet.pick(a, a.getString(R.string.stream_model),
+                    arrayOf(a.getString(R.string.stream_digital), a.getString(R.string.stream_analog)),
+                    if (draft.analogFpv(id)) 1 else 0, { n ->
+                        draft = draft.with(id, "streamModel", n.toFloat()).automatic(id, "streamKind")
+                        renderBody(); preview()
+                    })
+            }
+            return
+        }
         if (id != Effects.VHS && id != Effects.CRT) return
         fun choice(key: String, title: Int, labels: Array<String>) {
             val resolvedKey = when (key) { "transport" -> "transportKind"; "cable" -> "cableKind"; else -> key }
@@ -393,6 +408,8 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
                         (kind != 2 && control.key in NetworkDisplay.keys) ||
                         (control.key == "ledRate" && kind != 3) ||
                         (kind == 3 && control.key == "phosphor"))) continue
+                    if (id == Effects.STREAM_ERROR && (control.key == "streamModel" ||
+                        control.key.startsWith("fpv") != draft.analogFpv(id))) continue
                     slider(id, control)
                 }
                 val actions = a.row()
@@ -603,9 +620,11 @@ internal class EffectDialog(val a: MainActivity, single: Boolean) {
     companion object {
         fun controlLabel(key: String): Int {
             when (key) {
+                "streamModel" -> return R.string.fault_control_streamModel
                 "fpvQuality" -> return R.string.fault_control_fpvQuality
                 "fpvInterference" -> return R.string.fault_control_fpvInterference
                 "fpvBand" -> return R.string.fault_control_fpvBand
+                "fpvColorSize" -> return R.string.fault_control_fpvColorSize
                 "fpvColor" -> return R.string.fault_control_fpvColor
                 "fpvSync" -> return R.string.fault_control_fpvSync
                 "ledRate" -> return R.string.fault_control_ledRate

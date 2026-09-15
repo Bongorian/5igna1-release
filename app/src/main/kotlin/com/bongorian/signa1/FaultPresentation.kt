@@ -21,8 +21,7 @@ internal object FaultPresentation {
         R.string.fault_description_13,
         R.string.fault_description_14,
         R.string.fault_description_15,
-        R.string.fault_description_16,
-        R.string.fault_description_17
+        R.string.fault_description_16
     )
     fun description(context: Context, id: Int): String = context.getString(descriptions[id])
 }

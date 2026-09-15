@@ -209,3 +209,5 @@
 ## Owner direction — Analog FPV, 2026-09-15
 
 - Implement the assessed Analog FPV effect on `codex/analog-fpv`, based on the completed Play update-status branch. Add a shared RGB transmission-stage model with receiver noise, localized interference and sync disturbance, preserving old IDs, RAW behavior and existing time semantics. Verify deterministic GPU output and saved settings. Push checked development work; no new release requested.
+
+- FPV follow-up: enlarge color noise into smoothly moving patches, and integrate it as the Analog FPV model inside STREAM ERROR (ID 11). The owner explicitly does not need compatibility with the transient standalone ID 17: remove it rather than keeping a legacy parser. Preserve released IDs 0–16 and digital stream behavior. Continue checked DEV installation on the connected device; no release requested.

@@ -11,7 +11,7 @@ LIGHT MODEはADVANCED／EXPERTと併用しません。ADVANCEDをONにするとL
 
 **AUTO**はモデルが生成する現在の内部値です。AUTOをタップして**FIX**にすると固定し、スライダーか数値タップで変更できます。範囲内の有限な数値だけを受け付けます。FIXをタップするとAUTOに戻ります。「すべてAUTO」は対象FAULTの固定値と事故個体の固定を解除します。基本操作はAUTOの値へ作用し、固定値がある項目では固定値を優先します。リセットは対象FAULTの初期操作値へ戻して固定値を解除します。ランダムチェーンは新たに選んだFAULTの固定値を解除し、RESEEDは固定値を保持します。
 
-**SEED**は符号付き64ビットの構造的な個体値です。**EVENT SEED**はROW ERROR・BIT ERROR・ADDRESS ERROR・BLOCK ERROR・STREAM ERROR・事故を持つMEDIAモデル・Networkにあります。AUTOは構造的なSEEDから安定した事故個体を生成し、同じFAULT時間・入力・設定で系列を再現できます。変化するカメラ画像まで再現するものではありません。SIGNAL内の`identitySeed`／`eventSeed`はRGB描画用に縮約した値で、この整数の個体値とは別です。Bayer RAWでは構造的な個体値も使います。
+**SEED**は符号付き64ビットの構造的な個体値です。**EVENT SEED**はROW ERROR・BIT ERROR・ADDRESS ERROR・BLOCK ERROR・STREAM ERRORのデジタル伝送・事故を持つMEDIAモデル・Networkにあります。AUTOは構造的なSEEDから安定した事故個体を生成し、同じFAULT時間・入力・設定で系列を再現できます。変化するカメラ画像まで再現するものではありません。SIGNAL内の`identitySeed`／`eventSeed`はRGB描画用に縮約した値で、この整数の個体値とは別です。Bayer RAWでは構造的な個体値も使います。
 
 TIMEは時間の生成器と状態（秒、倍率、drift、phase）、EVENTは事故の周期・継続秒数・確率・通番・強度・位置・パターンです。SIGNALは選択中のモデルで使用する描画・加工パラメータ、PROFILEは表示・媒体特性と個体biasです。使用先のない項目は表示せず、保存済みの値は保持します。下流の値をFIXにした場合、その値は生成器を変更しても変わりません。個数・領域は内部のサンプル格子、変位は原則として正規化値、位相・角度は正規化周期で表す項目を除いてラジアンです。
 

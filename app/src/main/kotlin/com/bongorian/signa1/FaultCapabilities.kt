@@ -3,6 +3,7 @@ package com.bongorian.signa1
 /** UI capabilities follow actual consumers. Inactive serialized overrides remain readable. */
 internal object FaultCapabilities {
     private fun keys(value: String) = value.split(' ').filter { it.isNotEmpty() }.toSet()
+    private val fpvSignals = keys("identitySeed fpvColorScale fpvColorX fpvColorY fpvNoise fpvBurst fpvBandCenter fpvBandWidth fpvChroma fpvShift fpvSoftness grainSeed")
     private val signals = mapOf(
         Effects.PIXEL_DAMAGE to keys("identitySeed pixelDensity columnDensity hotFraction hotValue sensorNoise grainSeed"),
         Effects.EXPOSURE to keys("exposureDepth exposurePhase scanPhase integration exposureClock"),
@@ -14,7 +15,6 @@ internal object FaultCapabilities {
         Effects.CHROMA_ERROR to keys("chromaOffset chromaAngle chromaBlock"),
         Effects.COLOR_MAP to keys("paletteMix palettePhase paletteCycles"),
         Effects.BLOCK_ERROR to keys("identitySeed eventSeed quantLevels blockColumns blockError blockOffset"),
-        Effects.ANALOG_FPV to keys("fpvNoise fpvBurst fpvBandCenter fpvBandWidth fpvChroma fpvShift fpvSoftness grainSeed"),
         Effects.STREAM_ERROR to keys("eventSeed streamLoss streamColumns concealment"),
         Effects.MOTION_BLUR to keys("blurX blurY"),
         Effects.THERMAL_NOISE to keys("noiseAmplitude noiseGrain grainSeed"),
@@ -22,17 +22,18 @@ internal object FaultCapabilities {
     )
     fun active(id: Int, p: EffectParameters, experimental: Boolean): List<FaultParameters.Spec> {
         val kind = p.transportKind(id)
+        val fpv = p.analogFpv(id)
         val digital = id == Effects.VHS && kind == 2 || id == Effects.CRT && kind == 1
         val network = id == Effects.CRT && kind == 2
         val led = id == Effects.CRT && kind == 3
         val vhs = id == Effects.VHS && kind == 0
         val analog = id == Effects.VHS && kind == 3
         val crt = id == Effects.CRT && kind == 0
-        val incidents = !digital && (FaultParameters.incidents(id) && (id != Effects.CRT || network))
-        val drift = id == Effects.ANALOG_FPV || id in setOf(Effects.PIXEL_DAMAGE, Effects.ROW_ERROR, Effects.CHROMA_ERROR, Effects.BLOCK_ERROR) || vhs || crt
-        val phase = vhs || analog || id == Effects.ANALOG_FPV
+        val incidents = !fpv && !digital && (FaultParameters.incidents(id) && (id != Effects.CRT || network))
+        val drift = fpv || id in setOf(Effects.PIXEL_DAMAGE, Effects.ROW_ERROR, Effects.CHROMA_ERROR, Effects.BLOCK_ERROR) || vhs || crt
+        val phase = vhs || analog || fpv
         val time = drift || phase || incidents || led || id in setOf(Effects.EXPOSURE, Effects.THERMAL_NOISE)
-        val imageKeys = when (id) {
+        val imageKeys = if (fpv) fpvSignals + "streamKind" else when (id) {
             Effects.VHS -> when (kind) {
                 0 -> keys("transportKind mediaReduce tapeBandwidth identitySeed eventSeed trackingOffset trackingWave trackingPhase trackingSlip tapeDropout dropoutPosition tapeNoise grainSeed")
                 1 -> keys("transportKind mediaReduce identitySeed eventSeed transportDamage transportLoss")
@@ -45,7 +46,7 @@ internal object FaultCapabilities {
                 2 -> keys("transportKind transportLoss networkFps networkStall")
                 else -> keys("transportKind identitySeed transportLoss transportDamage refreshBand refreshSeed")
             }
-            else -> signals.getValue(id)
+            else -> signals.getValue(id) + if (id == Effects.STREAM_ERROR) setOf("streamKind") else emptySet()
         }
         val position = id == Effects.ROW_ERROR || vhs || analog
         val pattern = id in setOf(Effects.BIT_ERROR, Effects.BLOCK_ERROR, Effects.STREAM_ERROR) || vhs || id == Effects.VHS && kind == 1

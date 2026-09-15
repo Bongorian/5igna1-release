@@ -38,7 +38,9 @@ object AdvancedPerformanceCheck {
                 "duplicate internal key",
             )
             check(
-                catalog == automatic.inspect().keys,
+                if (id == Effects.STREAM_ERROR) catalog.containsAll(automatic.inspect().keys) &&
+                    automatic.inspect().keys.containsAll(FaultCapabilities.active(id, state.parameters(), true).map { it.key })
+                else catalog == automatic.inspect().keys,
                 "complete internal catalog for " +
                     Effects.name(id) +
                     " missing=" +
@@ -46,7 +48,7 @@ object AdvancedPerformanceCheck {
                     " vs " +
                     catalog,
             )
-            for (spec in FaultParameters.all(id)) {
+            for (spec in if (id == Effects.STREAM_ERROR) FaultCapabilities.active(id, state.parameters(), true) else FaultParameters.all(id)) {
                 val value = spec.min + (spec.max - spec.min) * .63f
                 val changed = state.parameters().override(id, spec.key, value)
                 val actual = model.inspect(id, changed, state.amount, off)

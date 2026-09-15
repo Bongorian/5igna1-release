@@ -297,7 +297,7 @@ internal object FaultParameters {
                         .001f,
                     )
 
-                Effects.STREAM_ERROR ->
+                Effects.STREAM_ERROR -> {
                     add(
                         p,
                         Group.SIGNAL,
@@ -314,6 +314,15 @@ internal object FaultParameters {
                         1,
                         .001f,
                     )
+
+                    add(p, Group.SIGNAL,
+                        "fpvNoise", 0, .5f, .001f, "fpvBurst", 0, 1, .001f,
+                        "fpvBandCenter", 0, 1, .001f, "fpvBandWidth", .01f, 1, .001f,
+                        "fpvChroma", 0, 1, .001f, "fpvColorScale", 0, 1, .001f,
+                        "fpvColorX", -.5f, .5f, .001f, "fpvColorY", -.5f, .5f, .001f, "fpvShift", 0, .08f, .001f,
+                        "fpvSoftness", 0, .01f, .0001f, "grainSeed", 0, 997, .1f)
+                    add(p, Group.PROFILE, "streamKind", 0, 1, 1)
+                }
 
                 Effects.VHS -> {
                     add(p, Group.PROFILE, "tapeBandwidth", 0, 1, .001f)
@@ -386,11 +395,6 @@ internal object FaultParameters {
                     )
                 }
 
-                Effects.ANALOG_FPV -> add(p, Group.SIGNAL,
-                    "fpvNoise", 0, .5f, .001f, "fpvBurst", 0, 1, .001f,
-                    "fpvBandCenter", 0, 1, .001f, "fpvBandWidth", .01f, 1, .001f,
-                    "fpvChroma", 0, 1, .001f, "fpvShift", 0, .08f, .001f,
-                    "fpvSoftness", 0, .01f, .0001f, "grainSeed", 0, 997, .1f)
                 Effects.MOTION_BLUR -> add(p, Group.SIGNAL, "blurX", -.12f, .12f, .001f, "blurY", -.12f, .12f, .001f)
                 Effects.THERMAL_NOISE -> add(p, Group.SIGNAL, "noiseAmplitude", 0, .5f, .001f, "noiseGrain", 1, 16, 1, "grainSeed", 0, 997, .1f)
                 Effects.SMEAR -> add(p, Group.SIGNAL, "smearAmount", 0, 2, .01f, "smearLength", 0, .4f, .001f, "smearThreshold", 0, .99f, .001f)

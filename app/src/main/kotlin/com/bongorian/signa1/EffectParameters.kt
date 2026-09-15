@@ -28,6 +28,9 @@ private constructor(
     fun transportKind(id: Int): Int = if (id != Effects.VHS && id != Effects.CRT) 0
         else kotlin.math.round(resolved(id, "transportKind", get(id, "transport") * 3)).toInt().coerceIn(0, 3)
 
+    fun analogFpv(id: Int): Boolean = id == Effects.STREAM_ERROR &&
+        resolved(id, "streamKind", get(id, "streamModel")) >= .5f
+
     fun identity(id: Int): Long {
         return identities.getValue(id)
     }
@@ -133,7 +136,7 @@ private constructor(
         val s = StringBuilder()
         for (id in ids) {
             s.append(" | ").append(Effects.name(id)).append(" identity=").append(identity(id))
-            for (c in Effects.CONTROLS[id].filter { (it.key !in setOf("transport", "reduce", "cable", "upconvert", "ledRate") && it.key !in NetworkDisplay.keys) || get(id, it.key) != it.initial }) s.append(' ')
+            for (c in Effects.CONTROLS[id].filter { (it.key !in setOf("transport", "reduce", "cable", "upconvert", "ledRate") && it.key !in NetworkDisplay.keys && !(id == Effects.STREAM_ERROR && (it.key == "streamModel" || it.key.startsWith("fpv")))) || get(id, it.key) != it.initial }) s.append(' ')
                 .append(c.key)
                 .append('=')
                 .append(get(id, c.key))
@@ -194,7 +197,7 @@ private constructor(
                         p = p.with(id, pair[0], value)
                     }
                 }
-                require(Effects.CONTROLS[id].all { it.key in keys || it.key in setOf("transport", "reduce", "cable", "upconvert", "ledRate") || it.key in NetworkDisplay.keys }) {
+                require(Effects.CONTROLS[id].all { it.key in keys || (id == Effects.STREAM_ERROR && (it.key == "streamModel" || it.key.startsWith("fpv"))) || it.key in setOf("transport", "reduce", "cable", "upconvert", "ledRate") || it.key in NetworkDisplay.keys }) {
                     "Missing controls"
                 }
             }

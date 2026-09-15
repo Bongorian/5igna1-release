@@ -305,10 +305,10 @@ class DeviceChecks : Instrumentation() {
                 try {
                     runOnMainSync {
                         a.applySettings(CaptureSettings(a.settings).apply { photoFormat = 0; advancedMode = false })
-                        a.commitEffects(EffectState.defaults().single(Effects.ANALOG_FPV).amount(1f))
+                        a.commitEffects(EffectState.defaults().single(Effects.STREAM_ERROR).amount(1f).edit(false, 1 shl Effects.STREAM_ERROR, EffectParameters.defaults().with(Effects.STREAM_ERROR, "streamModel", 1f)))
                         fpvDialog = EffectDialog(a, true).also { it.show() }
-                        check(fpvDialog!!.focused == Effects.ANALOG_FPV)
-                        for (key in listOf("fpvQuality", "fpvInterference", "fpvBand", "fpvColor", "fpvSync"))
+                        check(fpvDialog!!.focused == Effects.STREAM_ERROR)
+                        for (key in listOf("fpvQuality", "fpvInterference", "fpvBand", "fpvColor", "fpvColorSize", "fpvSync"))
                             check(fpvDialog!!.body!!.findViewWithTag<View>(key) != null) { "Missing FPV slider $key" }
                     }
                     waitForIdleSync()

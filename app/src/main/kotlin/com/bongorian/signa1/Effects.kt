@@ -25,7 +25,6 @@ internal object Effects {
     const val MOTION_BLUR = 14
     const val THERMAL_NOISE = 15
     const val SMEAR = 16
-    const val ANALOG_FPV = 17
     val NAMES: Array<String> =
         arrayOf<String>(
             "CLEAN",
@@ -45,9 +44,8 @@ internal object Effects {
             "MOTION BLUR",
             "THERMAL NOISE",
             "SMEAR",
-            "ANALOG FPV",
         )
-    val ORDER: IntArray = intArrayOf(0, MOTION_BLUR, THERMAL_NOISE, PIXEL_DAMAGE, EXPOSURE, SMEAR, ROW_ERROR, BIT_ERROR, ADDRESS_ERROR, CFA_ERROR, DEMOSAIC_ERROR, CHROMA_ERROR, COLOR_MAP, BLOCK_ERROR, STREAM_ERROR, ANALOG_FPV, VHS, CRT)
+    val ORDER: IntArray = intArrayOf(0, MOTION_BLUR, THERMAL_NOISE, PIXEL_DAMAGE, EXPOSURE, SMEAR, ROW_ERROR, BIT_ERROR, ADDRESS_ERROR, CFA_ERROR, DEMOSAIC_ERROR, CHROMA_ERROR, COLOR_MAP, BLOCK_ERROR, STREAM_ERROR, VHS, CRT)
 
     fun rank(id: Int): Int = ORDER.indexOf(id)
 
@@ -74,7 +72,8 @@ internal object Effects {
             arrayOf<Control>(c("separation", .45f), c("sampling", .35f), c("direction", 0f)),
             arrayOf<Control>(c("palette", .5f), c("cycles", .4f), c("mix", .8f)),
             arrayOf<Control>(c("quantization", .5f), c("block_size", .45f), c("misaddress", .4f)),
-            arrayOf<Control>(c("loss", .5f), c("region", .4f), c("concealment", .7f)),
+            arrayOf<Control>(c("streamModel", 0f), c("loss", .5f), c("region", .4f), c("concealment", .7f),
+                c("fpvQuality", .65f), c("fpvInterference", .55f), c("fpvBand", .45f), c("fpvColor", .65f), c("fpvColorSize", .45f), c("fpvSync", .25f)),
             arrayOf<Control>(
                 c("transport", 0f), c("reduce", 0f), c("cable", 0f),
                 c("bandwidth", .6f),
@@ -94,7 +93,6 @@ internal object Effects {
             arrayOf(c("amount", .6f), c("direction", .5f), c("floor", 0f)),
             arrayOf(c("amount", .6f), c("grain", .2f), c("floor", 0f)),
             arrayOf(c("amount", .6f), c("length", .6f), c("threshold", .75f)),
-            arrayOf(c("fpvQuality", .65f), c("fpvInterference", .55f), c("fpvBand", .45f), c("fpvColor", .65f), c("fpvSync", .25f)),
         )
 
     fun label(id: Int) = if (id == VHS) "MEDIA" else if (id == CRT) "DISPLAY" else name(id)
@@ -109,7 +107,6 @@ internal object Effects {
         if (id <= ADDRESS_ERROR) return Point.DATA
         if (id <= DEMOSAIC_ERROR) return Point.RECONSTRUCTION
         if (id <= COLOR_MAP) return Point.COLOR
-        if (id == ANALOG_FPV) return Point.STREAM
         if (id <= STREAM_ERROR) return Point.STREAM
         return if (id == VHS) Point.MEDIA else Point.DISPLAY
     }
