@@ -2,7 +2,7 @@
 
 [Guides](README.md) · [日本語](VALIDATION.ja.md) · [Run checks](DEVELOPMENT.md)
 
-The 1.7.4 candidate passes lint, 82 unit tests in each of four variants (328 total), FOSS dependency checks, unsigned FOSS release assembly and both debug flavors. The new JVM tests check every selectable model's active inspection keys and stage-specific snapshot compatibility. Release packaging verifies the existing distribution certificate, application ID and version.
+The 1.7.4 release passed lint, 82 unit tests in each of four variants (328 total), FOSS dependency checks, unsigned FOSS release assembly and both debug flavors. The new JVM tests check every selectable model's active inspection keys and stage-specific snapshot compatibility. Release packaging verifies the existing distribution certificate, application ID and version.
 
 ## State consistency audit
 
