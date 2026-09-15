@@ -1,0 +1,1 @@
+STREAM ERROR now includes Analog FPV with adjustable reception, interference and smoothly moving color noise. Play builds show available updates in Settings without new permissions. Fixed close buttons in PRO sheets, saved-image viewer icons and navigation alignment. Updated guides.

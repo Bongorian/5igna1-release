@@ -2,7 +2,11 @@
 
 [Guides](README.md) · [日本語](VALIDATION.ja.md) · [Run checks](DEVELOPMENT.md)
 
-The 1.7.2 release passed lint, 75 unit tests in each of four variants, signed FOSS packaging and debug builds. Subsequent main changes fix PRO/shared-sheet close controls and saved-media viewer icons. Their checks cover PRO sheets in both orientations and existing saved-signal behavior; these changes are not a new published release.
+The 1.7.3 release passed lint, 80 unit tests in each of four variants (320 total), FOSS dependency checks, debug builds and unsigned FOSS release assembly. Release packaging additionally verifies the existing distribution certificate, application ID and version. Locale, dependency inventory, release metadata, repository and documentation checks passed.
+
+Analog FPV GPU checks on the connected development device before release preparation covered neutral output, deterministic replay, smoothly moving broad color patches, localized interference and all six controls. PRO sheets in both orientations and saved-signal behavior were checked during the preceding UI fixes. After the interrupted release session resumed, no ADB device was connected, so the final version-bumped DEV build was not installed.
+
+Play update availability requires an eligible Play-installed release and account; actual store update availability has not been verified end to end. DEV explains its package limitation. The update SDK is confined to Play and does not add application permissions.
 
 Use [UI verification](UI_REVIEW.md) for current reproduction steps. The JVM suite retains independent RAW fixtures and pre-Kotlin golden hashes in the test sources. [Retained measurement data](audit/README.md) are historical comparisons with their original conditions, not current benchmark claims.
 

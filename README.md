@@ -1,6 +1,6 @@
 # 5igna1
 
-Version 1.7.2 adds PRO shooting mode in Settings, direct optical lens selection and a compact camera workspace with clearer chain controls. See [PRO controls](docs/PRO_CAMERA.md).
+Version 1.7.3 adds Analog FPV inside STREAM ERROR, larger moving color noise, Play-only update checks in Settings and clearer PRO/viewer icons. See [controls](docs/USAGE.md).
 
 **Every glitch is an encounter.**
 
@@ -16,7 +16,7 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 
 ## One damaged system, fleeting moments
 
-This source is **1.7.2 (versionCode 21)**. The offline quick start introduces capture and fault controls. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
+This source is **1.7.3 (versionCode 22)**. The offline quick start introduces capture and fault controls. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 

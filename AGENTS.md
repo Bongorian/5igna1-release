@@ -211,3 +211,8 @@
 - Implement the assessed Analog FPV effect on `codex/analog-fpv`, based on the completed Play update-status branch. Add a shared RGB transmission-stage model with receiver noise, localized interference and sync disturbance, preserving old IDs, RAW behavior and existing time semantics. Verify deterministic GPU output and saved settings. Push checked development work; no new release requested.
 
 - FPV follow-up: enlarge color noise into smoothly moving patches, and integrate it as the Analog FPV model inside STREAM ERROR (ID 11). The owner explicitly does not need compatibility with the transient standalone ID 17: remove it rather than keeping a legacy parser. Preserve released IDs 0–16 and digital stream behavior. Continue checked DEV installation on the connected device; no release requested.
+
+## Owner direction — 1.7.3 release and branch cleanup, 2026-09-15
+
+- Integrate completed work into main and release 1.7.3 / code 22 with the existing distribution key; update the existing Pages site and installed DEV build. Publish verified GitHub artifacts; configured Play Alpha draft automation may run. Preserve older release artifacts and signing material.
+- Delete past local and remote development branches only after proving their tips are ancestors of main. Preserve the Pages branch, unmerged work and all worktree files; detach any obsolete merged worktree branch before deleting its ref.
