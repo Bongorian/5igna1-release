@@ -463,9 +463,10 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     }
 
     fun confirmHaptic(view: View, kind: Int) {
-        if (!((recording || engine.recording) && !captureRawVideo &&
-                (sound || tapMode && engine.tapSource?.hasAudio == true)))
-            view.performHapticFeedback(kind)
+        // Silence video controls even before the recorder's asynchronous start and
+        // after a mode change while stop/finalization is still pending.
+        if (videoMode || recording || engine.recording) return
+        view.performHapticFeedback(kind)
     }
 
     fun commitEffects(next: EffectState) {

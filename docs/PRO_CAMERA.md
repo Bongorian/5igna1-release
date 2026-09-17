@@ -65,7 +65,7 @@ Camera2 semantics: [capture requests](https://developer.android.com/reference/an
 - FAULT EXPOSURE remains image processing, and HOLD remains a fault-clock control. Neither substitutes for real AE lock or a manual shutter setting.
 - TAP bypasses PRO. Imported media retains the camera/color processing already present in that file.
 - External capture requests use automatic camera defaults and preserve the user's PRO preference for normal use.
-- Changes and mode/lens switches are blocked while recording or processing a photo. Confirmation vibration remains suppressed for audio-enabled recording.
+- Changes and mode/lens switches are blocked while recording or processing a photo. Video mode disables confirmation vibration regardless of audio or RAW settings.
 - Saved-media “Use these settings” still restores FAULT settings, not real-camera PRO settings.
 - If the camera rejects a repeating PRO request, the app returns to AUTO, retains the per-lens preference, and displays the rejection. It does not report the rejected settings as applied.
 

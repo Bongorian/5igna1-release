@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Disable confirmation haptics throughout video mode, including silent/RAW video, fault triggers and recording start/stop. Preserve photo-mode feedback.
+
 ## [1.7.4] - 2026-09-15
 
 - Fix the ADVANCED editor crash when switching STREAM ERROR between Digital stream and Analog FPV while a previous-model frame is still displayed.

@@ -60,7 +60,7 @@ In the saved-media viewer, the SIGNAL row shows the current photo or video’s r
 
 ### Development control update
 
-TAP and its source controls stay hidden unless Experimental features is enabled; playback and file selection appear only while TAP is active. Confirmation vibration is suppressed during audio-enabled recording, including the fault trigger and recording stop.
+TAP and its source controls stay hidden unless Experimental features is enabled; playback and file selection appear only while TAP is active. Video mode disables confirmation vibration regardless of audio or RAW settings, including the fault trigger and recording start/stop. Photo mode retains confirmation vibration.
 
 The chain catalog uses full-width rows with a description and selection state. Tap the row to add/remove; the sliders icon opens explanation and adjustment separately, including an Add action for an unselected available fault. The upper + icon returns to the catalog. The checkmark commits the draft and the close icon cancels it. Selection does not change processing order. The editor and live chain inspection show selected/applied counts; inspection retains bypassed stages with an explanation. Event percentages still refer only to transient events, not overall effect strength.
 
