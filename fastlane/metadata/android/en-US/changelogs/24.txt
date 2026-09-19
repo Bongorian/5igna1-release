@@ -1,0 +1,5 @@
+Open received photos and reuse their recorded effect settings after review.
+Copy diagnostic information optionally from Feedback.
+Refined photo viewer and twelve-step guide for randomization, LIVE and capture.
+Disable confirmation vibration throughout video mode.
+Fix reading digital STREAM settings with omitted defaults.

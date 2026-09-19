@@ -1,6 +1,6 @@
 # 5igna1
 
-Version 1.7.4 fixes the ADVANCED Analog FPV model-switch crash and prevents stale values in effect controls after setting or camera-session changes. See [controls](docs/USAGE.md).
+Version 1.7.5 adds photo-based effect-setting exchange, optional diagnostic copying, clearer viewer controls and a redesigned guide for randomization and LIVE. Video-mode confirmation vibration is disabled. See [controls](docs/USAGE.md).
 
 **Every glitch is an encounter.**
 
@@ -16,7 +16,7 @@ A camera for finding images in a broken signal. Shift the readout. Tear the colo
 
 ## One damaged system, fleeting moments
 
-This source is **1.7.4 (versionCode 23)**. The offline quick start introduces capture and fault controls. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
+This source is **1.7.5 (versionCode 24)**. The offline quick start introduces capture and fault controls. Upgrading from 1.0.0 resets legacy effect settings for the new fault model and preserves saved captures.
 
 The same damaged system keeps its character while readout drift, exposure phase and brief loss incidents keep moving. Choose the fault points, watch the camera signal, and capture an instant. Ordinary time progression never shuffles your route or regenerates its identity.
 

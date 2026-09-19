@@ -224,3 +224,7 @@
 ## Owner direction — photo-based reuse and diagnostics, 2026-09-20
 
 - Add Open photo to the saved-media viewer, available before a first capture, and use embedded settings only after explicit review/apply. Preserve source media and capture preferences; do not require Experimental/TAP or add storage permissions. Extend Feedback with reviewed, optional diagnostic copying, separate from photo metadata and automatic email content. Connected DEV testing is authorized; no release requested.
+
+## Owner direction — 1.7.5 release, 2026-09-20
+
+- Merge completed photo-setting exchange, diagnostics, video haptics and viewer/tutorial improvements into main and release 1.7.5 / code 24 with the existing distribution key. Update GitHub artifacts and existing Pages, and verify configured Play Alpha draft upload. Preserve previous releases, signing keys, Play reviews and tester settings.
