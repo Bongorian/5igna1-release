@@ -2,6 +2,8 @@
 
 [Guides](README.md) · [日本語](VALIDATION.ja.md) · [Run checks](DEVELOPMENT.md)
 
+1.7.5 passed lint and 83 unit tests in each of four variants (332 total), unsigned FOSS release and both debug builds, locale/document checks and the reviewed dependency inventory check. Signed packaging and public APK/checksum downloads verified the existing certificate, application ID, version and exact bytes. CPH2437 has 1.7.5 DEV installed; photo import/diagnostics and the twelve-page tutorial in all three languages passed physical checks during development. [Release and upload status](LAUNCH_TASKS.md).
+
 The 1.7.4 release passed lint, 82 unit tests in each of four variants (328 total), FOSS dependency checks, unsigned FOSS release assembly and both debug flavors. The new JVM tests check every selectable model's active inspection keys and stage-specific snapshot compatibility. Release packaging verifies the existing distribution certificate, application ID and version.
 
 ## State consistency audit
