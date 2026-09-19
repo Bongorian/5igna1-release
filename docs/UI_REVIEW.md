@@ -18,3 +18,5 @@ Do not add every transient capture to the reference documentation. Preserve only
 Analog FPV: run DeviceChecks with `-e action analog-fpv -e language ja`. It verifies neutral output, deterministic snapshot replay, localized interference and the six tuning controls. It writes `files/verification/fpv-{source,default,band,controls}.png` in the DEV app; keep pulled captures under ignored `verification/fpv/`.
 
 Run `-e action tutorial` for all twelve pages in Japanese, English and Simplified Chinese. It checks first launch, page restoration, Back/Skip/completion, settings preservation and camera suspension/recovery, and writes `files/verification/language-tutorial-{ja,en,zh}-{0..11}.png`. The connected CPH2437 passed on 2026-09-20; revised randomization, LIVE and saved-viewer text was also visually inspected. Keep pulled images in `verification/tutorial-refresh/`.
+
+The guide header contains only the step count and Skip; Back/Next share a fixed height below the scrollable content. Cards fit their content up to the available-height cap. Verify readable text and control highlights without a product-name prefix in the counter.

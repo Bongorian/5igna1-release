@@ -63,19 +63,33 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
         card = LinearLayout(a).apply {
             tag = "tutorial-card"
             orientation = LinearLayout.VERTICAL
-            setPadding(a.dp(18f), a.dp(14f), a.dp(18f), a.dp(8f))
-            background = a.bg(MainActivity.BG, MainActivity.LIME)
+            setPadding(a.dp(20f), a.dp(12f), a.dp(20f), a.dp(16f))
+            background = a.detailBg(MainActivity.BG, MainActivity.PANEL)
         }
-        progress = a.text("", 12, MainActivity.LIME).apply {
+        progress = a.text("", 12, MainActivity.MUTED).apply {
+            tag = "tutorial-progress"
             accessibilityLiveRegion = View.ACCESSIBILITY_LIVE_REGION_POLITE
         }
-        card.addView(progress)
-        scroll = ScrollView(a)
+        val header = a.row()
+        header.addView(progress, LinearLayout.LayoutParams(0, a.dp(ControlSize.TOOLBAR), 1f))
+        header.addView(a.button(a.getString(R.string.tutorial_skip)).apply {
+            tag = "tutorial-skip"
+            textSize = 12f
+            setTextColor(MainActivity.MUTED)
+            setBackgroundColor(Color.TRANSPARENT)
+            setPadding(a.dp(12f), 0, 0, 0)
+            setOnClickListener { dialog.dismiss() }
+        }, LinearLayout.LayoutParams(-2, a.dp(ControlSize.STANDARD)))
+        card.addView(header)
+        scroll = ScrollView(a).apply {
+            isFillViewport = false
+            clipToPadding = false
+        }
         val content = LinearLayout(a).apply { orientation = LinearLayout.VERTICAL }
-        heading = a.text("", 23, MainActivity.WHITE).apply {
+        heading = a.text("", 20, MainActivity.WHITE).apply {
             tag = "tutorial-heading"
             isAccessibilityHeading = true
-            setPadding(0, a.dp(8f), 0, a.dp(8f))
+            setPadding(0, a.dp(8f), 0, a.dp(16f))
         }
         content.addView(heading)
         body = a.text("", 15, MainActivity.WHITE).apply {
@@ -112,29 +126,22 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
         val actions = a.row()
         back = a.button(a.getString(R.string.ui_back)).apply {
             tag = "tutorial-back"
-            minHeight = a.dp(ControlSize.TOOLBAR)
+            background = a.detailBg(MainActivity.PANEL, 0)
             setOnClickListener { if (page > 0) { page--; render() } }
         }
         next = a.button("").apply {
             tag = "tutorial-next"
-            minHeight = a.dp(ControlSize.PRIMARY)
             setTextColor(MainActivity.BG)
-            background = a.bg(MainActivity.LIME, 0)
+            background = a.detailBg(MainActivity.LIME, 0)
             setOnClickListener {
                 if (page == PAGE_COUNT - 1) dialog.dismiss() else { page++; render() }
             }
         }
-        actions.addView(back, LinearLayout.LayoutParams(0, -2, 1f))
-        actions.addView(a.button(a.getString(R.string.tutorial_skip)).apply {
-            tag = "tutorial-skip"
-            minHeight = a.dp(ControlSize.COMPACT)
-            setTextColor(MainActivity.MUTED)
-            setBackgroundColor(Color.TRANSPARENT)
-            setOnClickListener { dialog.dismiss() }
-        }, LinearLayout.LayoutParams(a.dp(76f), -2))
-        actions.addView(next, LinearLayout.LayoutParams(0, -2, 1f))
-        card.addView(actions)
-        ButtonSpacing.apply(a, card)
+        actions.addView(back, LinearLayout.LayoutParams(0, a.dp(ControlSize.STANDARD), 1f))
+        actions.addView(next, LinearLayout.LayoutParams(0, a.dp(ControlSize.STANDARD), 1f).apply {
+            leftMargin = a.dp(12f)
+        })
+        card.addView(actions, LinearLayout.LayoutParams(-1, -2).apply { topMargin = a.dp(20f) })
         root.addView(card)
         root.setOnApplyWindowInsetsListener { _, insets -> root.post { position() }; insets }
         root.addOnLayoutChangeListener { _, l, t, r, b, ol, ot, or, ob ->
@@ -208,7 +215,7 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
             val rightRoom = right - targetBounds.right.toInt() - margin
             val width = minOf(a.dp(480f), maxOf(leftRoom, rightRoom))
             if (width >= a.dp(260f)) {
-                val height = minOf(a.dp(470f), bottom - top)
+                val height = cardHeight(width, bottom - top)
                 card.layoutParams = FrameLayout.LayoutParams(width, height).apply {
                     leftMargin = if (leftRoom >= rightRoom) left else right - width
                     topMargin = top + (bottom - top - height) / 2
@@ -221,7 +228,7 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
         val available = if (targetBounds.isEmpty) bottom - top
             else if (above) targetBounds.top.toInt() - top - margin
             else bottom - targetBounds.bottom.toInt() - margin
-        val height = minOf(a.dp(470f), available.coerceAtLeast(1))
+        val height = cardHeight(right - left, available)
         card.layoutParams = FrameLayout.LayoutParams(right - left, height).apply {
             leftMargin = left
             topMargin = if (targetBounds.isEmpty) top + (bottom - top - height) / 2
@@ -230,9 +237,17 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
         spotlight.invalidate()
     }
 
+    private fun cardHeight(width: Int, available: Int): Int {
+        card.measure(
+            View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+        )
+        return minOf(card.measuredHeight, activity.dp(500f), available.coerceAtLeast(1))
+    }
+
     private fun render() {
         changed = false
-        progress.text = "5IGNA1 / " + activity.getString(R.string.tutorial_progress, page + 1, PAGE_COUNT)
+        progress.text = activity.getString(R.string.tutorial_progress, page + 1, PAGE_COUNT)
         heading.setText(HEADINGS[topic])
         body.setText(BODIES[topic])
         back.isEnabled = page > 0

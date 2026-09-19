@@ -18,3 +18,5 @@
 アナログFPVはDeviceChecksの `-e action analog-fpv -e language ja` で確認します。無加工時の一致、スナップショット再現、局所的な干渉、6つの調整項目を検証し、DEVアプリの `files/verification/fpv-{source,default,band,controls}.png` に画像を出力します。取得した画像は追跡対象外の `verification/fpv/` に置きます。
 
 チュートリアルは `-e action tutorial` で12ページを日本語・英語・簡体字中国語で検証します。初回表示、ページ復元、戻る・スキップ・完了、設定保持、カメラの休止と復帰を確認し、`files/verification/language-tutorial-{ja,en,zh}-{0..11}.png` に出力します。2026-09-20の接続実機CPH2437ではこの検査を通過し、ランダム・LIVE・作品閲覧の改訂文面も画面で確認しました。取得画像は `verification/tutorial-refresh/` に置きます。
+
+ガイドのヘッダーはステップ数とスキップ、下部は同じ高さの戻る・次へです。カードは本文の自然な高さに合わせ、画面内の上限を超える内容はスクロールします。ステップ数に製品名を混ぜず、操作位置の強調と本文の可読性を確認してください。
