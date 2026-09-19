@@ -264,6 +264,7 @@ internal fun MainActivity.buildUi() {
             R.drawable.ic_shuffle,
             getString(R.string.ui_tap_to_randomize_an_effect_hold_to_randomize),
         )
+    random.tag = "guide-random"
     random.setPadding(dp(10f), dp(10f), dp(10f), dp(10f))
     random.background = detailBg(PANEL, 0)
     chainRow.addView(random, LinearLayout.LayoutParams(dp(ControlSize.STANDARD), dp(ControlSize.STANDARD)).apply { leftMargin = dp(6f) })

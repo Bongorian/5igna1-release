@@ -16,7 +16,7 @@ On a RAW-capable camera, choose processed DNG with **ADDRESS ERROR → CFA ERROR
 
 ## Another individual, the same system
 
-Keep a route you like and press RESEED. The settings remain while the fault sites and biases change. Let that new individual run for a while before changing it again. The app saves your current route, controls and identities; named presets are not implemented.
+Keep a route you like and hold shuffle on the capture screen to RESEED. The settings remain while the fault sites and biases change. Let that new individual run for a while before changing it again. Captured photos also record effect settings. Open SIGNAL below a photo in the viewer to inspect and reuse them. [Exchange settings through photos](USAGE.md).
 
 If a fault seems absent, check LEVEL, enablement and its own neutral controls. The digital model of STREAM ERROR is intentionally quiet between incidents. [Controls](USAGE.md) · [Fault models](EFFECTS.md).
 

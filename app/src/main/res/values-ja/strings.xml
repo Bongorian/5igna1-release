@@ -321,7 +321,7 @@
     <string name="live_loop">ループ</string>
     <string name="live_ping_pong">往復</string>
     <string name="live_step">一定間隔で更新</string>
-    <string name="live_editor_hint">今のFAULTを調整します。適用するまで変更はプレビューです。</string>
+    <string name="live_editor_hint">上の映像で変更を確認し、✓で確定、×で取り消します。LIVE OFFでも固有に動く効果があります。一時停止は映像ではなく故障の状態を保持します。</string>
     <string name="live_enabled">LIVE</string>
     <string name="live_style">変化の形</string>
     <string name="live_clock">時間の進み方</string>
@@ -378,39 +378,29 @@
     <string name="media_previous">前の撮影</string>
     <string name="media_next">次の撮影</string>
     <string name="media_play">再生</string>
-    <string name="media_gestures">左右で切り替え · 下スワイプで閉じる</string>
-    <string name="media_preview_unavailable">このファイルは表示できません。右上の↗から対応アプリで開けます。</string>
+    <string name="media_gestures">写真はピンチで拡大・ドラッグで移動・タップで拡大解除。等倍では左右スワイプで移動、下スワイプで閉じる。動画はタップで再生／一時停止。</string>
+    <string name="media_preview_unavailable">このファイルは表示できません。作品の下の↗から対応アプリで開けます。</string>
     <string name="tutorial_title">操作チュートリアル</string>
     <string name="tutorial_skip">スキップ</string>
     <string name="tutorial_next">次へ</string>
     <string name="tutorial_done">撮影を始める</string>
     <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_heading_0">自分だけのFAULTを作る</string>
-    <string name="tutorial_body_0">5igna1は、カメラの映像に意図的なデジタル故障を加えるアプリです。まずは撮影し、故障の表情を調整してみましょう。この説明は設定からいつでも開けます。</string>
-    <string name="tutorial_heading_1">写真・動画を撮る</string>
-    <string name="tutorial_body_1">「写真」／「動画」を選び、大きな撮影ボタンをタップします。動画はもう一度タップすると停止します。形式の表示からJPG／RAWを選べます。使える形式はカメラによって異なります。上部ではライト・位置情報・録音を切り替えられます。</string>
-    <string name="tutorial_heading_2">FAULTを組み合わせる</string>
-    <string name="tutorial_body_2">プレビュー下の＋から故障を選んで組み合わせます。選択中のFAULTをタップすると、各パラメーターを調整できます。編集は「適用」で確定し、「戻る」で破棄します。LEVELスライダーは全体の強さをその場で変更します。シャッフルアイコンでランダムな組み合わせを試せます。</string>
-    <string name="tutorial_heading_3">LIVEで変化を加える</string>
-    <string name="tutorial_body_3">LIVEをオンにすると、時間や、有効にした動き・音などの入力に応じて故障が変化します。「一時停止」で変化を止め、「故障を発生」で一時的な変化を加えられます。音への反応には必要に応じてマイクの許可を求めます。RAWのプレビューは保存結果の近似表示です。</string>
-    <string name="tutorial_heading_4">保存した写真・動画を見る</string>
-    <string name="tutorial_body_4">サムネイルをタップすると保存した写真・動画が開きます。左右のスワイプで前後へ移動し、写真はピンチで拡大できます。動画には再生操作があります。下へスワイプすると撮影画面に戻ります。設定では、この説明の再表示・撮影品質・言語を変更できます。</string>
-    <string name="guide_heading_0">信号に触れる</string>
-    <string name="guide_heading_1">FAULTを組み立てる</string>
-    <string name="guide_heading_2">強さを探る</string>
-    <string name="guide_heading_3">LIVEで変化をつくる</string>
-    <string name="guide_heading_4">保存形式を選ぶ</string>
-    <string name="guide_heading_5">いまの信号を撮る</string>
-    <string name="guide_heading_6">撮れた結果を確かめる</string>
-    <string name="guide_heading_7">実験を続けるために</string>
-    <string name="guide_body_0">光る操作部をたどり、設定の変更や保存をせずに練習できます。カメラとビデオのアイコンで撮影モードを選びます。横画面では左にプレビュー、右に操作部が並びます。</string>
-    <string name="guide_body_1">＋からFAULTを追加すると、信号処理の順番で作用します。選択済みFAULTをタップして調整し、適用で確定、戻るで破棄します。MEDIAとDISPLAYはモデルを選べます。SEEDは乱れの個体、RESEEDは調整値を保った個体の変更です。シャッフルはタップで組み直し、長押しでチェーン全体をRESEEDします。</string>
-    <string name="guide_body_2">LEVELは全体の強さをすぐに変えます。この練習用スライダーで違いを比べましょう。カメラ／ビデオのアイコンを長押しすると解像度を選べます。RAWのプレビューは対応するセンサー処理の近似で、RGB専用のFAULTはRAWには作用しません。</string>
-    <string name="guide_body_3">LIVEはFAULTの時間進行と変化を調整します。隣の調整アイコンから設定できます。一時停止でFAULTの変化を止め、トリガーで一時的な乱れ、リセットで時間を戻します。カメラ映像は動き続けます。LIVE OFFでも固有の動きを持つFAULTがあり、端末への反応には各入力の有効化が必要です。</string>
-    <string name="guide_body_4">対応カメラでは、撮影モードとLIVEの間の形式表示をタップするとJPG ↔ RAWが切り替わります。動画は通常MP4です。設定でRAW動画の切り替えを有効にすると、対応カメラではMP4 ↔ RAW ZIPを選べます。RAW動画は無加工のDNG連番で、音声は付きません。下のボタンで切り替えを練習しましょう。</string>
-    <string name="guide_body_5">シャッターで写真を撮影し、動画では録画の開始と停止を行います。アプリを離れると録画を停止して保存します。実験機能を有効にすると、TAPから画像や動画を読み込み、後段のFAULTを通してJPG／MP4で保存できます。ガイド中は練習用信号だけが変わります。</string>
-    <string name="guide_body_6">サムネイルから保存結果を開きます。左右スワイプで移動、写真はピンチで拡大、動画は再生操作ができます。下へスワイプするとカメラへ戻ります。ライト・位置情報・音声の操作は上部にあり、横画面では右上に並びます。</string>
-    <string name="guide_body_7">歯車から設定を開き、変更はその場で保存されます。RAW ZIPへ切り替える前に、ここでRAW動画を有効にします。実験機能でTAPや端末への反応、ADVANCED MODEでFAULTの詳細パラメーターを使えます。推奨解像度では負荷を自動調整します。このガイドも設定から再表示できます。</string>
+    <string name="guide_heading_0" formatted="false">このアプリでできること</string>
+    <string name="guide_heading_1" formatted="false">映像に加える効果を選ぶ</string>
+    <string name="guide_heading_2" formatted="false">映像に加える効果を弱める・強める</string>
+    <string name="guide_heading_3" formatted="false">映像の乱れの動きを止める・変える</string>
+    <string name="guide_heading_4" formatted="false">保存する写真・動画の形式を選ぶ</string>
+    <string name="guide_heading_5" formatted="false">写真を撮る・動画を録る</string>
+    <string name="guide_heading_6" formatted="false">撮影済みの写真・動画を見る</string>
+    <string name="guide_heading_7" formatted="false">撮影の設定を変える・不具合を報告する</string>
+    <string name="guide_body_0" formatted="false">5igna1は、カメラの映像に乱れや色の変化を加えて、写真や動画を撮るアプリです。画面では、この効果を「FAULT」と呼びます。\n\nこのガイドでは、撮影、効果の調整、撮影済みの写真を見る操作を案内します。練習用の操作で撮影設定や保存済みの写真が変わることはありません。</string>
+    <string name="guide_body_1" formatted="false">撮影画面のFAULTバーを開き、＋を押します。効果の一覧で名前の行を押すと、その効果を追加・解除できます。組み合わせた効果を「チェーン」と呼びます。\n\n効果の横のスライダーアイコンを押すと、説明と調整画面が開きます。画面上部の映像で変更を確かめてください。✓で変更を保存し、×で変更前に戻します。効果がかかる順番は固定です。</string>
+    <string name="guide_body_2" formatted="false">撮影画面のFAULTバーを開き、LEVELスライダーを動かします。選んだ効果全体が、その場で弱くなったり強くなったりします。0%にすると効果がかからなくなります。\n\n一つの効果だけを調整したい場合は、その効果の名前を押して調整画面を開きます。調整画面の変更は✓を押すまで保存されません。\n\n下のスライダーは練習用です。実際の撮影設定は変わりません。</string>
+    <string name="guide_body_3" formatted="false">撮影画面で効果を選び、FAULTバーのLIVEをONにします。バーを開いて「一時停止」を押すと、映像に加えている乱れの動きが止まります。被写体の動きは止まりません。「再開」で乱れが再び動きます。\n\n「故障を発生」は一時的な乱れを加え、「時間リセット」は効果の時間を最初に戻します。速さや周期を変えるには、LIVE横の調整アイコンを押し、映像を見ながら調整して✓で保存します。\n\nLIVEをOFFにしても動く効果があります。効果をすべて外すにはLEVELを0%にします。</string>
+    <string name="guide_body_4" formatted="false">撮影画面の上部にあるJPGなどの表示を押すと、保存形式を切り替えられます。写真はJPGまたは対応カメラのRAW、動画は通常MP4です。\n\n解像度を変えるには、上部のサイズ表示を押すか、PHOTO／VIDEOを長押しします。\n\nRAW写真は保存結果と画面の見え方が異なります。設定で有効にできるRAW動画は、効果や音声を含まないDNG画像の連番です。下の形式ボタンは練習用です。</string>
+    <string name="guide_body_5" formatted="false">撮影画面でPHOTOを選び、中央の大きなボタンを押すと写真を保存します。VIDEOを選んだ場合は、同じボタンで録画を開始し、もう一度押すと停止します。\n\n効果の調整画面を開いている場合は、✓で保存するか×で取り消してから撮影してください。通常の動画録画中も、LIVEの一時停止や「故障を発生」を操作できます。\n\n他のアプリへ移動したり画面をロックしたりすると、録画は終了して保存されます。戻っても自動再開しません。動画モードでは操作時の確認振動はありません。</string>
+    <string name="guide_body_6" formatted="false">撮影画面の左下にある小さな写真を押すと、保存した写真や動画を見る画面が開きます。上部の×で撮影に戻り、「写真を開く」で別の写真を選べます。写真の切り替え矢印と枚数は、複数枚ある場合だけ表示します。\n\n写真の下には、その写真の日時・形式と、効果の設定を確認するSIGNALボタンがあります。↗を押すと、その写真を他のアプリで開きます。\n\n写真は2本指で拡大、ドラッグで移動、タップで拡大解除できます。拡大解除後の左右スワイプで写真を切り替え、下スワイプで閉じます。動画をタップすると再生・一時停止します。</string>
+    <string name="guide_body_7" formatted="false">撮影画面の歯車から設定を開きます。ここでの変更はすぐに保存されます。\n\n「モード」のPRO撮影モードをONにすると、対応するカメラの露出やピントなどを調整できます。ADVANCEDは、映像に加える効果をさらに細かく調整する機能です。\n\n不具合報告では、アプリ版やGPUなどの診断情報を画面で確認してから、必要な場合だけコピーできます。コピーした内容は報告文に貼り付けて使えます。Google Play版の更新状況と、このガイドを開く項目も設定にあります。</string>
     <string name="guide_try">光る操作部をタップして試す</string>
     <string name="guide_tried">練習用信号を変更しました · もう一度</string>
     <string name="guide_sandbox">練習用 · 保存されません</string>
@@ -652,4 +642,12 @@
     <string name="diagnostics_copied">診断情報をコピーしました</string>
     <string name="diagnostics_hint">アプリ・端末・GPU・撮影設定を確認してからコピーできます。自動送信や写真・メール下書きへの自動追加は行いません。</string>
     <string name="photo_imported">読み込んだ写真</string>
+    <string name="guide_heading_8" formatted="false">効果の組み合わせをランダムに試す</string>
+    <string name="guide_body_8" formatted="false">撮影画面のFAULTバーを開くと、交差した矢印のシャッフルボタンがあります。押すと、効果の組み合わせ・調整値・強さをその場で作り直します。通常は使用できる効果から2〜5個を選びます。\n\n同じボタンを長押しすると、選んだ効果と調整値を保ち、乱れの模様を決めるSEEDだけを変えます。この操作をRESEEDと呼びます。\n\n元に戻せる状態で試すには、＋で調整画面を開き、その中のシャッフルを使ってください。✓で採用、×で変更前に戻せます。録画中は使えません。</string>
+    <string name="guide_heading_9" formatted="false">画面をタップ・スワイプする</string>
+    <string name="guide_body_9" formatted="false">撮影前の映像をタップすると、カメラにピントを合わせ直すよう要求します。タップした場所にピントを指定する機能ではありません。横スワイプではPHOTO／VIDEOを切り替えます。\n\n効果の調整画面では、上部の映像を見ながら、下の操作で効果を変えます。✓で変更を保存し、×で取り消します。\n\n撮影済みの写真を見る画面では、タップは拡大の解除に使います。動画なら再生・一時停止です。</string>
+    <string name="guide_heading_10" formatted="false">受け取った写真と同じ設定で撮る</string>
+    <string name="guide_body_10" formatted="false">撮影画面の左下から写真を見る画面を開き、上部の「写真を開く」で受け取った写真を選びます。まだ撮影していない場合も使えます。\n\n写真の下のSIGNALを押して、写真に記録された効果の設定を確認します。「この写真の設定で撮る」を押すと、その設定が撮影画面に適用されます。写真を開くだけでは設定は変わりません。\n\n設定情報のない写真からは読み込めません。写真は元のファイルでやりとりしてください。同じ設定を使っても、被写体や時間の変化まで同じにはなりません。</string>
+    <string name="guide_heading_11" formatted="false">手元の写真・動画そのものを加工する</string>
+    <string name="guide_body_11" formatted="false">撮影画面の歯車から実験機能をONにし、TAPを選ぶと、手元の写真や動画を加工用の素材として選べます。効果を調整してシャッターを押すと、加工結果を別のファイルに保存します。元の写真や動画は変わりません。\n\nTAPではカメラのセンサーに関する効果は使わず、DATA以降の効果を加えます。\n\n動画素材の再生ボタンは素材を動かす操作、シャッターは加工結果を録画する操作です。</string>
 </resources>

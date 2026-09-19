@@ -2,7 +2,7 @@
 
 [プロジェクト](../README.ja.md) · [English](README.md)
 
-公開版1.7.2と、その後のmainのUI修正を対象にします。初めて使う方は[初回撮影](GETTING_STARTED.ja.md)、操作の確認は[操作ガイド](USAGE.ja.md)、カメラ調整は[PRO撮影](PRO_CAMERA.ja.md)から始めてください。
+初めて使う方は[初回撮影](GETTING_STARTED.ja.md)、操作の確認は[操作ガイド](USAGE.ja.md)、カメラ調整は[PRO撮影](PRO_CAMERA.ja.md)から始めてください。
 
 ## 使い方
 

@@ -8,6 +8,13 @@ LIVE describes faults evolving at the current moment. Its controls define the fa
 
 Open the adjustment button beside LIVE. The camera remains visible above the panel. Changes preview immediately in a separate draft; Apply retains the draft state and time, while closing discards it. Configure before recording; the three time controls also work during ordinary recording.
 
+## Try it on the capture screen
+
+Choose a fault, set LEVEL above 0 and turn LIVE ON. Expand FAULT for Pause, Trigger and Reset time. First try Pause/Resume and watch the subject keep moving while the fault state holds. Use the sliders icon beside LIVE for speed/cycle changes, inspect the image above and ✓ to keep or × to discard. No device inputs are required.
+
+LIVE does not rebuild the chain; that is [randomization/RESEED](SEEDS.md). LEVEL 0% bypasses processing. Event percentages can be 0% while fixed processing or intrinsic motion continues.
+
+
 | Setting | Role |
 |---|---|
 | Time progression | Continuous, repeating, forward/backward, or a fixed update interval |

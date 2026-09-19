@@ -2,7 +2,7 @@
 
 [Project](../README.md) · [日本語](README.ja.md)
 
-Covers release 1.7.2 and subsequent UI fixes on main. Start with [your first photograph](GETTING_STARTED.md), look up [controls](USAGE.md), or enable [PRO camera settings](PRO_CAMERA.md).
+Start with [your first photograph](GETTING_STARTED.md), look up [controls](USAGE.md), or enable [PRO camera settings](PRO_CAMERA.md).
 
 ## Use the app
 

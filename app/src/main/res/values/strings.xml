@@ -321,7 +321,7 @@
     <string name="live_loop">Loop</string>
     <string name="live_ping_pong">Ping-pong</string>
     <string name="live_step">Fixed update interval</string>
-    <string name="live_editor_hint">Adjust the current FAULT. Changes preview until you Apply.</string>
+    <string name="live_editor_hint">Review changes in the image above; ✓ keeps them, × discards them. Some faults move with LIVE OFF. Pause holds faults, not the camera image.</string>
     <string name="live_enabled">LIVE</string>
     <string name="live_style">Variation pattern</string>
     <string name="live_clock">Time progression</string>
@@ -378,39 +378,29 @@
     <string name="media_previous">Previous capture</string>
     <string name="media_next">Next capture</string>
     <string name="media_play">Play</string>
-    <string name="media_gestures">Swipe sideways to browse · swipe down to close</string>
-    <string name="media_preview_unavailable">Preview unavailable. Open this file in another app using ↗.</string>
+    <string name="media_gestures">Photos: pinch to zoom, drag to pan, tap to reset. At default zoom, swipe sideways to browse or down to close. Tap video to play/pause.</string>
+    <string name="media_preview_unavailable">Preview unavailable. Use ↗ below the work to open it in another app.</string>
     <string name="tutorial_title">Quick start</string>
     <string name="tutorial_skip">Skip</string>
     <string name="tutorial_next">Next</string>
     <string name="tutorial_done">Start shooting</string>
     <string name="tutorial_progress">%1$d of %2$d</string>
-    <string name="tutorial_heading_0">Make a fault your own</string>
-    <string name="tutorial_body_0">5igna1 turns camera images into deliberate digital faults. Start with a photo, then shape the damage. This guide is always available in Settings.</string>
-    <string name="tutorial_heading_1">Shoot a photo or video</string>
-    <string name="tutorial_body_1">Choose PHOTO or VIDEO, then tap the large capture button. Tap again to stop a video. Use the format label to choose JPG or RAW; available formats depend on your camera. Light, location and recording audio are controlled at the top.</string>
-    <string name="tutorial_heading_2">Build your FAULT chain</string>
-    <string name="tutorial_body_2">Tap + below the preview to select and combine faults. Tap a selected fault to adjust its controls. Apply keeps editor changes; Back discards them. The LEVEL slider changes overall strength immediately. The shuffle icon tries a new random chain.</string>
-    <string name="tutorial_heading_3">Let faults react with LIVE</string>
-    <string name="tutorial_body_3">Enable LIVE for variation over time and reactions to enabled inputs such as motion and sound. PAUSE freezes the variation; TRIGGER triggers a burst. Microphone access is requested when audio reaction needs it. RAW previews are approximations of the saved result.</string>
-    <string name="tutorial_heading_4">Review what you saved</string>
-    <string name="tutorial_body_4">Tap the thumbnail to open saved photos and videos. Swipe left or right to browse, pinch photos to zoom, and use playback controls for video. Swipe down to return to the camera. Settings also contains this guide, capture options and language.</string>
-    <string name="guide_heading_0">Meet your signal</string>
-    <string name="guide_heading_1">Build a fault chain</string>
-    <string name="guide_heading_2">Dial the intensity</string>
-    <string name="guide_heading_3">Let LIVE vary it</string>
-    <string name="guide_heading_4">Choose your format</string>
-    <string name="guide_heading_5">Capture the signal</string>
-    <string name="guide_heading_6">Review your captures</string>
-    <string name="guide_heading_7">Make room to experiment</string>
-    <string name="guide_body_0">Follow the highlighted controls to practice without changing settings or saving media. The camera and video icons choose capture mode. In landscape, the viewfinder sits on the left and controls on the right.</string>
-    <string name="guide_body_1">Use ＋ to add faults in signal-processing order. Tap a selected fault to edit it; Apply keeps changes and Back discards them. MEDIA and DISPLAY each offer different models. SEED fixes the identity; RESEED changes it while keeping controls. Tap shuffle for a new chain, or hold it to reseed the chain.</string>
-    <string name="guide_body_2">LEVEL changes overall strength immediately. Drag this practice slider to compare. Hold the camera or video icon to choose resolution. RAW previews approximate the supported sensor effects; RGB-only effects do not process RAW samples.</string>
-    <string name="guide_body_3">LIVE controls fault timing and variation. The adjacent sliders icon opens its settings. PAUSE holds fault evolution, TRIGGER produces a burst and RESET restarts fault time. The camera keeps moving. Some faults have their own motion even with LIVE off; device reactions require their inputs to be enabled.</string>
-    <string name="guide_body_4">Tap the format label between capture mode and LIVE to cycle JPG ↔ RAW on supported cameras. Video stays MP4 unless RAW video switching is enabled in Settings; supported cameras can then cycle MP4 ↔ RAW ZIP. RAW video saves original DNG frames without audio. Try the format button below.</string>
-    <string name="guide_body_5">Tap the shutter to take a photo or to start and stop video recording. Leaving the app stops recording and saves it. With Experimental features enabled, TAP imports an image or video for downstream faults; it exports JPG or MP4. The guide only changes the practice signal.</string>
-    <string name="guide_body_6">The thumbnail opens saved captures. Swipe sideways to browse, pinch photos to zoom and use playback controls for video. Swipe down to return. The light, location and audio controls sit at the top, on the right in landscape.</string>
-    <string name="guide_body_7">The gear opens Settings; changes save immediately. Enable RAW video here before switching to RAW ZIP. Experimental features expose TAP and device responses; ADVANCED MODE exposes detailed fault parameters. Use recommended resolution for adaptive load control. Replay this guide from Settings.</string>
+    <string name="guide_heading_0" formatted="false">What you can do with 5igna1</string>
+    <string name="guide_heading_1" formatted="false">Choose effects for your image</string>
+    <string name="guide_heading_2" formatted="false">Make the effects weaker or stronger</string>
+    <string name="guide_heading_3" formatted="false">Pause or change the moving faults</string>
+    <string name="guide_heading_4" formatted="false">Choose the file format to save</string>
+    <string name="guide_heading_5" formatted="false">Take a photo or record a video</string>
+    <string name="guide_heading_6" formatted="false">View photos and videos you saved</string>
+    <string name="guide_heading_7" formatted="false">Change settings or report a problem</string>
+    <string name="guide_body_0" formatted="false">5igna1 adds visual faults and color changes to camera images so you can capture them as photos or videos. The app calls these effects FAULTs.\n\nThis guide explains capture, effect adjustment and viewing saved work. Practice controls never change your capture settings or saved photos.</string>
+    <string name="guide_body_1" formatted="false">On the capture screen, expand FAULT and press +. Press a name in the list to add or remove that effect. The combination of effects is called a chain.\n\nPress the sliders icon beside an effect for its explanation and controls. Review your changes in the image above. Press ✓ to save them or × to restore the previous settings. The processing order is fixed.</string>
+    <string name="guide_body_2" formatted="false">On the capture screen, expand FAULT and move LEVEL. It immediately changes the overall amount of your selected effects. At 0%, no effects are applied.\n\nTo adjust just one effect, press its name to open its controls. Changes in that editor are not saved until you press ✓.\n\nThe slider below is for practice; your capture settings stay unchanged.</string>
+    <string name="guide_body_3" formatted="false">On the capture screen, choose an effect and turn LIVE ON in the FAULT bar. Expand the bar and press Pause: the added fault pattern stops moving, but your subject keeps moving. Press Resume to continue the pattern.\n\nTrigger adds a temporary disturbance. Reset time returns the effect clock to its start. For speed or cycle changes, press the sliders icon beside LIVE, watch the image while adjusting and save with ✓.\n\nSome effects move with LIVE OFF. Set LEVEL to 0% to remove all effects.</string>
+    <string name="guide_body_4" formatted="false">Press JPG or the other format label at the top of the capture screen to change the saved format. Photos use JPG or RAW on supported cameras; video normally uses MP4.\n\nFor resolution, press the size at the top or hold PHOTO/VIDEO.\n\nRAW photos differ from their screen preview. RAW video, enabled in Settings, saves a sequence of DNG images without effects or audio. The format button below is practice only.</string>
+    <string name="guide_body_5" formatted="false">Choose PHOTO on the capture screen and press the large central button to save a photo. In VIDEO, press that button to start recording and press again to stop.\n\nIf an effect editor is open, first save with ✓ or cancel with ×. During ordinary video recording you can still use LIVE Pause and Trigger.\n\nChanging apps or locking the screen ends and saves recording. Returning never restarts it automatically. Video mode has no confirmation vibration.</string>
+    <string name="guide_body_6" formatted="false">Press the small photo at the bottom left of the capture screen to open saved work. At the top, × returns to capture and Open photo selects another photo. Browse arrows and the count appear only when there are multiple items.\n\nBelow the photo are its date/format and SIGNAL, which opens its recorded effect settings. ↗ opens that photo in another app.\n\nPinch to enlarge a photo, drag to pan and tap to reset zoom. After resetting, swipe sideways to browse or down to close. Tap a video to play/pause.</string>
+    <string name="guide_body_7" formatted="false">Open Settings with the gear on the capture screen. Changes here save immediately.\n\nUnder Modes, enable PRO shooting mode for supported camera exposure, focus and other controls. ADVANCED instead gives finer control over the image effects.\n\nIn Feedback, review app version, GPU and other diagnostic information before optionally copying it. Paste the copied information into your report when needed. Settings also contains Google Play update status in the Play edition and a way to reopen this guide.</string>
     <string name="guide_try">TRY THE HIGHLIGHTED CONTROL</string>
     <string name="guide_tried">PRACTICE UPDATED · TAP AGAIN</string>
     <string name="guide_sandbox">PRACTICE ONLY · NOTHING SAVED</string>
@@ -652,4 +642,12 @@
     <string name="diagnostics_copied">Diagnostic information copied</string>
     <string name="diagnostics_hint">Review app, device, GPU and capture settings before copying. Nothing is sent or added to photos or the email draft automatically.</string>
     <string name="photo_imported">Opened photo</string>
+    <string name="guide_heading_8" formatted="false">Try a random combination of effects</string>
+    <string name="guide_body_8" formatted="false">Expand FAULT on the capture screen to find shuffle, the crossed-arrows button. Press it to immediately rebuild the effects, control values and overall strength, normally choosing 2–5 available effects.\n\nHold the same button to keep effects and controls while changing only the seeds that determine patterns. This is called RESEED.\n\nTo keep the option of undoing your experiment, open + and use shuffle inside that editor. ✓ adopts it; × restores the previous settings. These actions are unavailable while recording.</string>
+    <string name="guide_heading_9" formatted="false">Tap and swipe on the image</string>
+    <string name="guide_body_9" formatted="false">Tap the camera image before capture to request autofocus again. This does not set focus to the tapped position. Swipe sideways to switch PHOTO/VIDEO.\n\nIn an effect editor, watch the image above as you adjust the controls below. ✓ saves the changes and × discards them.\n\nWhen viewing a saved photo, tap to reset enlargement. For saved video, tap to play/pause. </string>
+    <string name="guide_heading_10" formatted="false">Shoot using settings from a received photo</string>
+    <string name="guide_body_10" formatted="false">Open the viewer from the bottom left of the capture screen, then choose Open photo at the top to select a received photo. This works before your first capture too.\n\nPress SIGNAL below the photo to review its recorded effect settings. Press Shoot with this photo’s settings to apply them to the capture screen. Opening a photo alone changes nothing.\n\nA photo without settings cannot supply them. Exchange original files. Matching settings do not recreate the subject or all time variation.</string>
+    <string name="guide_heading_11" formatted="false">Process an existing photo or video</string>
+    <string name="guide_body_11" formatted="false">Open Settings from the capture-screen gear and enable Experimental features. Choose TAP to select an existing photo/video as a source. Adjust effects and press the shutter to save a new processed file. The original is unchanged.\n\nTAP bypasses camera-sensor effects and applies effects from DATA onward.\n\nFor video sources, playback controls move the source; the shutter records the processed output.</string>
 </resources>

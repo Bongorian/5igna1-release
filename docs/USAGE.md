@@ -2,78 +2,107 @@
 
 [Guides](README.md) · [日本語](USAGE.ja.md) · [First photograph](GETTING_STARTED.md)
 
-## Capture a photo or video
+Learn how to capture, adjust effects and view your saved work.
 
-Choose Photo or Video, then use the center button or a volume key to capture or start/stop recording. Tap the viewfinder to focus. Digital zoom is disabled in 1.7.0. On the current development branch, the lower-right camera icon switches front/rear. Focal-length buttons in the viewfinder select lenses on the current side, using approximate 35 mm equivalents when available. When individual sensors are available, selection pins a physical sensor instead of using the combined logical route. The last successfully used camera is remembered. A lens that exposes multiple controllable optical focal lengths gets an optical adjustment control; it selects only advertised focal lengths, with no digital interpolation. Fixed-focal-length lenses have no zoom control. Available sizes and RAW support follow the selected sensor. Selection is disabled during capture and in TAP. Some manufacturers do not expose every built-in camera to other apps.
+## Find the action you need
 
-In the PRO workspace, the top toolbar contains light, save format, resolution/fps and Settings. Location and audio controls occupy the single top toolbar and remain accessible when OFF. Readiness and output settings appear immediately below it, outside the preview. In landscape, capture controls sit to the right of the preview. Audio starts OFF; experimental RAW video is always silent. [PRO controls and layout inventory](PRO_CAMERA.md).
+| Screen | Purpose | Meaning of an action |
+|---|---|---|
+| Camera workspace | Prepare your next photo/video | Tap the image to request autofocus again; swipe sideways to switch PHOTO/VIDEO |
+| FAULT/LIVE edit preview | Try uncommitted settings in the image | ✓ keeps changes; ×, Back, outside dismissal or leaving the app discards them |
+| Saved-media viewer | Browse recorded work and its settings | Zoom photos, browse work and play video |
+| TAP | Process an image/video as a new source | Enable Experimental features, select a source and capture a new output |
 
-The camera workspace places labeled capture modes above the centered shutter, with saved media on the left and front/rear switching on the right. LIVE sits in the collapsible FAULT bar. Tap the format label to cycle JPG/RAW on supported cameras. Video stays MP4 until RAW video switching is enabled in Settings; it can then cycle MP4/RAW ZIP where supported. Switching back to MP4 keeps that opt-in; disabling it in Settings returns recording format to MP4. TAP exports JPG or MP4 according to the imported media. Changing format preserves the selected fault route and its controls. RAW applies only supported faults; MEDIA and DISPLAY remain visible in the catalog with a format-switch action when needed. [Formats and capture limits](FORMATS.md).
+A camera tap does not set the AF region to the tapped coordinates. It requests autofocus again and shows a central indicator; it does not override PRO manual focus. The viewfinder has no pinch-based digital zoom.
 
-Keep the capture screen active while recording. Switching apps, going Home or locking the device stops recording and saves the recorded portion. Returning opens preview without restarting recording. This applies to camera, TAP and RAW recording. [Recording and permissions](RECORDING.md).
+## Camera workspace layout
 
-## Build and adjust a fault route
+The top toolbar has light, location, audio, format, resolution and Settings, with readiness below it. **PHOTO/VIDEO** tabs sit above the shutter. Saved media is at bottom left, the shutter in the center and front/rear switching at bottom right. Focal-length buttons in the image select lenses on that side. Only cameras exposed by the device are selectable; RAW support and sizes follow the selected camera.
 
-Expand the FAULT bar below the preview to see selected faults in processing order. Tap **+** to add a fault, then tap its chip to adjust it. Removing every fault gives a clean image. In the camera workspace, horizontal swipes switch Photo/Video while preserving the fault route. LEVEL changes the selected model's mechanisms; individual control names describe their effects.
+Expand the **FAULT** bar using its chevron for the selected chain, +, shuffle and LEVEL. With LIVE ON, Pause, Trigger and Reset time are also shown. Expand FAULT if these controls are hidden. In landscape the image is on the left and controls on the right; collapsing the controls keeps the shutter accessible.
 
-The editor keeps the live preview above its controls. The checkmark keeps an edit; ×, Back, outside dismissal or leaving the app cancels it. Apply or discard edits before capturing. If you explicitly change capture format inside the editor, cancelling effect edits does not undo that format choice.
+## Choose faults and inspect the edit preview
 
-The shuffle button creates a route of 2–5 available faults, their controls and an overall LEVEL. On the capture screen it applies immediately; in the editor it remains a draft. Hold the capture screen's shuffle button to reseed the route without changing its controls. Reset restores the focused fault's controls. Draft editing and random route generation are unavailable during recording. [SEED and RESEED](SEEDS.md).
+1. Open + and tap catalog rows to add/remove faults. Removing all faults gives a clean image.
+2. Open individual adjustments with a row’s sliders icon or a selected chip on the capture screen. The image above shows your draft.
+3. STREAM ERROR offers Digital/Analog FPV; MEDIA offers VHS, DVD, Digital thru and Analog thru; DISPLAY offers CRT, Digital thru, Network and LED. Controls follow the model.
+4. Confirm with ✓ to return to capture, or cancel with ×/Back. Finish or discard editing before capturing.
 
-MEDIA contains VHS, DVD, Digital thru and Analog thru models. DISPLAY contains CRT, Digital thru, Network and LED models. Their controls depend on the chosen model. [Effect models](EFFECTS.md).
+Processing order is fixed. Selected and applied counts may differ because RAW, TAP or other conditions bypass stages; bypassed stages remain listed with reasons. **LEVEL is overall amount**; 0% bypasses processing. Capture-screen LEVEL changes are immediate; editor changes are drafts. An explicit capture-format change made inside an editor survives cancellation of effect edits. [Effects and models](EFFECTS.md).
 
-## Control time and inputs
+## Random chain, RESEED and Reset
 
-LIVE sets fault-time progression, speed/reverse, loops, update intervals and variation patterns. PAUSE freezes fault evolution while the camera continues; TRIGGER creates a temporary fault. FAULT STATE shows time and event meters below the preview. An event meter at 0% does not imply that fixed image processing or intrinsic motion is off.
+| Location/action | What changes | When it is kept |
+|---|---|---|
+| Tap capture-screen shuffle | Normally 2–5 available faults, controls, seeds and overall LEVEL | Immediately; no cancelable editor opens |
+| Hold capture-screen shuffle | Pattern/identity seeds of currently available, seed-using faults | Immediately; chain, LEVEL and controls are retained |
+| Shuffle in chain editor | Preview a new random chain and values | ✓ keeps it; × restores the state from before editing |
+| Individual SEED entry/RESEED | That fault’s pattern/identity | ✓ keeps it; controls are retained |
+| Individual Reset | Default controls; clear internal fixed overrides | ✓ keeps it; structural seed is retained |
 
-Motion, audio and other device inputs are optional. LIVE starts OFF on cold launch. TIME ECHO introduces past frames using one probability control. [LIVE settings](LIVE_FAULT.md).
+**To try before choosing, open + and shuffle inside the editor.** Randomization generates settings once per action; LIVE controls variation over time. Randomization, RESEED and chain editing are unavailable during recording. Fewer than two faults may be selected when fewer are available. LEVEL 0, bypassed stages and models that do not use seeds can explain why RESEED has no visible effect. [Seeds and reproduction limits](SEEDS.md).
 
-## Use an imported image or video
+## Use LIVE on the capture screen
 
-Enable Experimental features in Settings to show **TAP**. Select an image or video with Android's picker. It enters the route after READOUT, before DATA; SENSOR and READOUT faults are bypassed for that source. The source file is not modified.
+1. Select a fault and set LEVEL above 0. Turn **LIVE ON** in the FAULT bar.
+2. Expand FAULT. **Pause** holds the fault state while the camera keeps moving; **Resume** continues it.
+3. **Trigger** adds a temporary fault. Its appearance depends on the fault and controls. Triggering while held retains the event until resume/reset.
+4. **Reset time** returns the fault clock to its start and clears a manual trigger. It does not reset the chain or its controls.
+5. The sliders icon beside LIVE opens speed, variation and cycle settings. Inspect changes in the image above, then ✓ to keep or × to discard.
 
-For a video source, playback and output recording have separate controls. Play/Pause controls the source; the shutter starts/stops the processed MP4 output. A paused source can still be recorded with evolving effects. Leaving the capture screen stops both playback and recording. [Experimental features and TAP](EXPERIMENTAL_SIGNALS.md).
+LIVE OFF means neither clean output nor a completely static pattern. Effects such as Analog FPV have intrinsic motion. Use LEVEL 0% to bypass processing. FAULT STATE event percentages describe temporary events; 0% does not remove fixed processing or intrinsic motion.
 
-## Change settings
+Start by trying time controls without adding inputs. Motion, audio and other device reactions are optional. LIVE and Pause return to OFF on cold launch; other settings persist. Capture-screen time controls work during ordinary video recording; finish detailed editing beforehand. [Timing, inputs and TIME ECHO](LIVE_FAULT.md).
 
-Settings save immediately. They include language, capture format, resolution, quality, optional location metadata and processing modes. The Experimental section is between saved-information options and App information. Experimental features, ADVANCED, EXPERT and linked audio start OFF; saved choices are retained.
+## Formats, capture and camera adjustments
 
-ADVANCED exposes internal parameters and retains displayed frames for JPEG capture. With it OFF, capture uses the current processed output and may differ from the last displayed frame. RAW photos use a separate exposure and differ from the RGB preview. [ADVANCED MODE](ADVANCED_MODE.md).
+Tap the top format label to switch JPG/RAW on supported cameras. Use the size at the top or hold PHOTO/VIDEO to select resolution; holding a tab does not switch mode. The shutter or a volume key captures a photo or starts/stops recording.
 
-The app recommends a conservative initial size for the device; manual sizes and Maximum remain available. Automatic preview workload reduction limits work under load. EXPERT removes app-level preview and cooling limits. [Performance modes](PERFORMANCE.md).
+Video normally uses MP4. Enable RAW video switching in Settings to also select RAW ZIP where supported. RAW ZIP saves unprocessed, silent DNG sequences. RAW photos apply supported sensor faults; the RGB preview is an approximation. JPG saves processed output; ADVANCED ON retains displayed frames. [Formats](FORMATS.md).
 
-The eight-step Quick start highlights the actual controls and offers isolated LEVEL and format-switching practice. It covers capture icons and resolution long-press, SEED/RESEED, LIVE timing, TAP and immediately saved Settings. The camera pauses during the guide. Skip, close or finish to dismiss it; replay it from Settings. It works offline in English, Japanese and Simplified Chinese.
+Enable **Settings → Modes → PRO shooting mode** to expose supported real-camera exposure, WB, focus and other controls. Changes save immediately. This differs from ADVANCED fault-internal adjustments. [PRO shooting](PRO_CAMERA.md).
 
-## View saved captures
+Going Home, changing apps or locking the screen ends recording and saves the recorded portion. Returning never restarts it. Video mode suppresses confirmation vibration regardless of audio settings; photo mode retains it. [Recording and permissions](RECORDING.md).
 
-The bottom-left thumbnail opens the photo/video viewer. Swipe sideways to browse, pinch to enlarge a photo, and swipe down or tap × to return to capture. Videos support Play/Pause and seeking. The ↗ button opens the current item in another app. DNG uses an available system thumbnail; RAW ZIP opens externally.
+## Saved-media viewer
 
-JPG, DNG and MP4 are saved in `DCIM/5igna1`; RAW sequence ZIPs are in `Download/5igna1`. Existing files remain in their original folders. Optional GPS metadata is saved only when enabled and a location is available. [Privacy](PRIVACY.md).
+Open it from the bottom-left thumbnail, including before your first capture.
 
-If the camera is interrupted or no preview is presented for six seconds, the app attempts to reconnect up to three times while active, outside capture and cooling pauses. Tap the preview to retry after those attempts. Reconnecting never restarts recording. [Troubleshooting](TROUBLESHOOTING.md).
+| Scope | Placement and actions |
+|---|---|
+| Whole viewer | Top × closes; Open photo chooses another photo |
+| Browsed collection | Previous/next arrows and item count below the header, only for multiple items |
+| Current work | Date/format, SIGNAL and external-open ↗ below the work |
+| Current video | Playback, time and seeking below the work |
 
-Settings introduced in 1.6.1: Settings → Modes → LIGHT MODE reduces display-only processing to the view size. Fresh setups on constrained devices start with LIGHT; it excludes ADVANCED/EXPERT; saved dimensions remain selected. [Details and exceptions](PERFORMANCE.md).
+Pinch a photo to enlarge, drag to pan and tap to reset zoom. With zoom reset, swipe sideways to browse or down to close. Tapping a video toggles playback. DNG uses an available thumbnail; use ↗ below the work for files requiring another app.
 
-## Reuse saved signal settings
+JPG, DNG and MP4 are saved in `DCIM/5igna1`; RAW ZIP is saved in `Download/5igna1`. [Privacy](PRIVACY.md).
 
-In the saved-media viewer, the SIGNAL row shows the current photo or video’s recorded chain. Tap it to inspect the metadata and choose **Use these settings**. This restores the recorded chain, LEVEL, controls, seeds and detailed overrides, plus the Experimental switch when recorded. It leaves capture format, resolution and LIVE settings unchanged. LIVE time, measured inputs and source media cannot be replayed from these records, so the resulting image is not guaranteed to match. MP4 recordings made with 1.7.0 or later store the recording-start settings, including in each automatically split file; later changes are not recorded. Older videos and other media without usable metadata cannot supply settings. Incomplete or unsupported records remain viewable but cannot be applied. The original media is never modified. Video settings are stored in an MP4 user-extension box; other editors may remove this data when exporting.
+## Exchange settings through photos
 
-### Development control update
+1. Choose **Open photo** at the top of the viewer and select a received photo. Experimental features and TAP are not required.
+2. Open **SIGNAL** below the photo and review its recorded chain/controls. Opening alone changes no capture settings.
+3. Choose **Shoot with this photo’s settings** to apply and return to the camera. For your own saved captures, **Use these settings** applies the record.
 
-TAP and its source controls stay hidden unless Experimental features is enabled; playback and file selection appear only while TAP is active. Video mode disables confirmation vibration regardless of audio or RAW settings, including the fault trigger and recording start/stop. Photo mode retains confirmation vibration.
+This restores chain, LEVEL, controls, seeds, detailed parameters and the Experimental switch when recorded. Capture format, resolution and LIVE settings stay unchanged. The source remains untouched. Missing/incomplete/unsupported settings cannot be applied; the app does not reconstruct them from appearance.
 
-The chain catalog uses full-width rows with a description and selection state. Tap the row to add/remove; the sliders icon opens explanation and adjustment separately, including an Add action for an unselected available fault. The upper + icon returns to the catalog. The checkmark commits the draft and the close icon cancels it. Selection does not change processing order. The editor and live chain inspection show selected/applied counts; inspection retains bypassed stages with an explanation. Event percentages still refer only to transient events, not overall effect strength.
+**Exchange original files.** Social apps and re-exporting may remove metadata. The subject, input media, LIVE time and device inputs cannot all be reconstructed, so matching settings do not guarantee an identical image. Saved MP4 from 1.7.0 onward records initial recording settings, not the history of later changes.
 
-Enable **PRO shooting mode** in **Settings → Modes**. The switch is saved immediately and retained between sessions; the top toolbar has no AUTO/PRO switch.
+## Use TAP to process the photo itself
 
-In the Google Play edition, Settings → App checks for updates and links to Google Play. It distinguishes checking, available, none currently available and unable to check. Availability depends on your Play account and eligible release track. DEV builds cannot check the release listing; F-Droid/GitHub builds omit this service.
+TAP lets you create new work from an existing photo or video. Enable Experimental features, choose TAP and select media with Android’s picker. The source enters after READOUT, before DATA, bypassing SENSOR/READOUT. Capture a new JPG/MP4 with the shutter; the original is unchanged.
 
-## Analog FPV
+Source playback and output recording are separate. You can pause source video and still record evolving faults. Leaving the screen stops both source playback and recording. [TAP and Experimental features](EXPERIMENTAL_SIGNALS.md).
 
-Choose **STREAM ERROR → Transmission model → Analog FPV** in CODEC / STREAM. It adds receiver-like colored static, localized interference and horizontal sync disturbance before MEDIA and DISPLAY. The six controls are reception quality (higher is cleaner), interference, interference band width, color noise, color noise size and sync disturbance. A larger color noise size makes broad seeded color patches move smoothly; 0% retains fine per-pixel chroma static. Switching models retains each model’s controls. For a clean bypass within the effect, set reception quality to 100% and interference to 0%; global amount 0 also bypasses it.
+## Settings, updates and troubleshooting
 
-Noise follows the existing local fault clock: natural variation continues with LIVE off; LIVE adds speed, HOLD, LOOP and direction. HOLD freezes the fault pattern, not the camera scene. Saved snapshots reproduce the same parameters and noise seed. ADVANCED offers fixed time, band location and individual signal values. This is an artistic RGB approximation, not measurement of real radio reception; it applies to the viewfinder, JPEG and ordinary video, not RAW samples. No FPV telemetry overlay or external media is included.
+Settings save immediately; closing does not cancel them. PRO, ADVANCED, LIGHT and EXPERT serve different purposes. Start with recommended resolution. [Advanced adjustments](ADVANCED_MODE.md) · [Workload and performance modes](PERFORMANCE.md).
 
-SEED changes the pattern and temporal phase without changing the control values.
+In Feedback, **Review diagnostic information** displays version, device, GPU, capture mode, models and other diagnostic fields. **Copy diagnostic information** is optional. This is separate from photo settings metadata: nothing is written into work, automatically sent or attached.
 
-From the capture thumbnail, open the photo viewer and choose **Open photo** in the top header. Select a received photo, inspect its signal information, then choose **Shoot with this photo’s settings** to apply it and return to the camera. This is available before your first capture and does not require Experimental/TAP. Opening a photo does not apply anything or change the original; missing or unsupported metadata cannot be reconstructed. Transfer the original file because other apps may remove metadata. Feedback offers **Review diagnostic information** and a separate **Copy diagnostic information** button; nothing is automatically sent or attached.
+The Google Play edition checks updates in Settings → App. It distinguishes checking, available, none currently available and unable to check. Availability depends on the account and eligible release; DEV cannot check the release listing. F-Droid/GitHub editions omit this service.
+
+Replay the twelve-step guide from **Settings → Quick start**. Only LEVEL and format have isolated practice controls; capture settings and work remain unchanged. The camera pauses during the guide and resumes when closed. It works offline in English, Japanese and Simplified Chinese.
+
+If camera reconnection fails, follow the prompt to tap the viewfinder and retry. Recording never restarts automatically. [Troubleshooting](TROUBLESHOOTING.md).

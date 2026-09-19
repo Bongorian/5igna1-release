@@ -902,12 +902,14 @@ class DeviceChecks : Instrumentation() {
                     val guide = activity!!.tutorial!!
                     if (activity!!.ready || activity!!.engine.attached)
                         throw AssertionError("Camera active behind guide")
-                    if (page > 0 && guide.targetBounds.isEmpty)
+                    if (guide.hasTarget && guide.targetBounds.isEmpty)
                         throw AssertionError("Missing real control highlight")
                     val beforeEffect = activity!!.effectState.encode()
                     val beforeCount = activity!!.captureCount
-                    tutorialClick("tutorial-practice")
-                    if (page > 0) tutorialClick("tutorial-target")
+                    if (guide.hasPractice) {
+                        tutorialClick("tutorial-practice")
+                        if (guide.hasTarget) tutorialClick("tutorial-target")
+                    }
                     if (beforeEffect != activity!!.effectState.encode() || beforeCount != activity!!.captureCount)
                         throw AssertionError("Guide changed capture state")
                     languageScreenshot("tutorial-" + tag + "-" + page)

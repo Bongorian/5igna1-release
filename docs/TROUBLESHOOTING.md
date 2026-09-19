@@ -46,13 +46,27 @@ Keep 5igna1 in the foreground with the screen on. Check free space, reduce resol
 
 LIVE couples measured input to the selected faults. Turn it on, enable the relevant source and choose a fault that uses it (motion for ROW ERROR, audio for VHS). Audio needs microphone permission; unavailable sensors contribute no input. Intrinsic fault motion continues even with LIVE off. CLEAN and original RAW taps bypass fault processing.
 
+## I want to try random effects without losing my current settings
+
+Open + on the capture screen, then press shuffle inside the chain editor. Review the image and choose ✓ to keep the changes or × to restore the settings from before editing. Tapping capture-screen shuffle applies immediately. Holding it changes only pattern seeds. [Randomization](SEEDS.md).
+
+## LIVE is off but the effect still moves
+
+Some effects have intrinsic motion. Turn LIVE ON and use Pause to hold the fault state while the subject keeps moving. Set LEVEL to 0% to remove processing. Reset time restarts the effect clock; it does not reset effect settings. [LIVE controls](LIVE_FAULT.md).
+
+## A received photo cannot supply settings
+
+Open the bottom-left viewer, choose Open photo at the top and inspect SIGNAL below the photo. The app can apply only supported settings recorded inside the file. Ask for the original file if sharing or re-exporting removed that record. It cannot reconstruct settings from the appearance alone. [Using photo settings](USAGE.md).
+
 ## Android says the app cannot be installed or updated
 
 Confirm Android 12 or later, download the APK again, and check free space. For an update, use the same source and signing identity as the installed app. A similarly named development build is separate; a differently signed release with the same ID cannot update it. [Installation and signatures](INSTALLATION.md)
 
 ## Report a problem
 
-Open an [issue](https://github.com/Bongorian/5igna1-release/issues) and include:
+In the app’s Feedback screen, choose **Review diagnostic information**, check the displayed content and optionally copy it into your report. Nothing is sent automatically. Describe the steps that led to the problem and what you expected.
+
+You can also open an [issue](https://github.com/Bongorian/5igna1-release/issues) and include:
 
 - App version and download source.
 - Device model, Android version, and front/back camera.

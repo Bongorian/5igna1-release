@@ -321,7 +321,7 @@
     <string name="live_loop">循环</string>
     <string name="live_ping_pong">往返</string>
     <string name="live_step">固定间隔更新</string>
-    <string name="live_editor_hint">调整当前FAULT。应用前的更改仅用于预览。</string>
+    <string name="live_editor_hint">在上方画面查看修改，✓确认，×取消。LIVE关闭时部分故障仍会变化。暂停保留故障状态，不暂停相机画面。</string>
     <string name="live_enabled">LIVE</string>
     <string name="live_style">变化形态</string>
     <string name="live_clock">时间推进方式</string>
@@ -378,39 +378,29 @@
     <string name="media_previous">上一项</string>
     <string name="media_next">下一项</string>
     <string name="media_play">播放</string>
-    <string name="media_gestures">左右滑动切换 · 向下滑动关闭</string>
-    <string name="media_preview_unavailable">无法预览此文件。请点击右上角↗在兼容应用中打开。</string>
+    <string name="media_gestures">照片：双指缩放，拖动平移，点击重置。原始缩放下左右滑动切换，下滑关闭。点击视频播放／暂停。</string>
+    <string name="media_preview_unavailable">无法显示此文件。可用作品下方的↗在其他应用中打开。</string>
     <string name="tutorial_title">操作教程</string>
     <string name="tutorial_skip">跳过</string>
     <string name="tutorial_next">下一步</string>
     <string name="tutorial_done">开始拍摄</string>
     <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_heading_0">创造自己的FAULT</string>
-    <string name="tutorial_body_0">5igna1为相机画面加入刻意设计的数字故障。先试着拍摄，再调整故障的表现。你随时可以从设置重新打开本教程。</string>
-    <string name="tutorial_heading_1">拍摄照片或视频</string>
-    <string name="tutorial_body_1">选择照片或视频，然后点击大拍摄按钮。再次点击可停止录像。点击格式标签可选择JPG或RAW；可用格式取决于相机。顶部可控制照明、位置和录音。</string>
-    <string name="tutorial_heading_2">组合FAULT</string>
-    <string name="tutorial_body_2">点击预览下方的＋选择并组合故障。点击已选的FAULT可调整各项参数。应用可保留编辑，返回则放弃编辑。LEVEL滑块会立即改变整体强度。点击随机图标可尝试新的故障组合。</string>
-    <string name="tutorial_heading_3">通过LIVE增加变化</string>
-    <string name="tutorial_body_3">开启LIVE后，故障会随时间以及已启用的运动、声音等输入变化。暂停可暂停变化，触发故障可触发短暂变化。声音响应需要时会请求麦克风权限。RAW预览只是保存结果的近似效果。</string>
-    <string name="tutorial_heading_4">查看保存的照片和视频</string>
-    <string name="tutorial_body_4">点击缩略图打开已保存的照片和视频。左右滑动可浏览，双指缩放可放大照片，视频提供播放控件。向下滑动返回相机。设置还包含本教程、拍摄选项和语言。</string>
-    <string name="guide_heading_0">触摸信号</string>
-    <string name="guide_heading_1">组合FAULT</string>
-    <string name="guide_heading_2">调整强度</string>
-    <string name="guide_heading_3">用LIVE产生变化</string>
-    <string name="guide_heading_4">选择保存格式</string>
-    <string name="guide_heading_5">捕捉当前信号</string>
-    <string name="guide_heading_6">查看拍摄结果</string>
-    <string name="guide_heading_7">继续探索</string>
-    <string name="guide_body_0">跟随高亮控件练习，不会修改设置或保存媒体。相机和摄像机图标用于选择拍摄模式。横屏时，预览位于左侧，控件位于右侧。</string>
-    <string name="guide_body_1">用＋添加FAULT，它们按信号处理顺序生效。点击已选FAULT进行调整；应用保留修改，返回放弃修改。MEDIA和DISPLAY提供不同模型。SEED确定故障个体，RESEED保留参数并更换个体。点击随机图标重新组合，长按则为整个链重新生成种子。</string>
-    <string name="guide_body_2">LEVEL立即调整整体强度。拖动练习滑块比较效果。长按相机或摄像机图标可选择分辨率。RAW预览是受支持传感器处理的近似效果；仅适用于RGB的FAULT不会处理RAW采样。</string>
-    <string name="guide_body_3">LIVE控制故障时间和变化，旁边的调节图标打开设置。暂停冻结故障变化，触发产生短暂故障，重置重新开始故障时间。相机画面继续更新。关闭LIVE后，部分FAULT仍有自身运动；设备响应需要启用相应输入。</string>
-    <string name="guide_body_4">点击拍摄模式与LIVE之间的格式标签，在支持的相机上循环切换JPG ↔ RAW。视频默认为MP4；在设置中启用RAW视频切换后，支持的相机可切换MP4 ↔ RAW ZIP。RAW视频保存原始DNG序列，不包含音频。使用下方按钮练习切换。</string>
-    <string name="guide_body_5">点击快门拍照，或开始和停止录像。离开应用会停止录像并保存。启用实验功能后，TAP可导入图片或视频，经过后续FAULT处理后保存为JPG或MP4。指南中只会改变练习信号。</string>
-    <string name="guide_body_6">缩略图打开已保存的拍摄结果。左右滑动浏览，双指缩放照片，使用视频播放控件。向下滑动返回相机。照明、位置和音频控件位于顶部，横屏时位于右上方。</string>
-    <string name="guide_body_7">齿轮打开设置，修改立即保存。切换RAW ZIP前，先在这里启用RAW视频。实验功能提供TAP和设备响应，ADVANCED MODE提供详细故障参数。推荐分辨率支持自动负载调节。也可从设置重新打开本指南。</string>
+    <string name="guide_heading_0" formatted="false">5igna1可以做什么</string>
+    <string name="guide_heading_1" formatted="false">选择要加到画面中的效果</string>
+    <string name="guide_heading_2" formatted="false">减弱或增强画面中的效果</string>
+    <string name="guide_heading_3" formatted="false">暂停或改变失真效果的运动</string>
+    <string name="guide_heading_4" formatted="false">选择保存文件的格式</string>
+    <string name="guide_heading_5" formatted="false">拍摄照片或录制视频</string>
+    <string name="guide_heading_6" formatted="false">查看已保存的照片和视频</string>
+    <string name="guide_heading_7" formatted="false">更改拍摄设置或报告问题</string>
+    <string name="guide_body_0" formatted="false">5igna1为相机画面添加失真或颜色变化，并将效果保存为照片或视频。应用中把这些效果称为FAULT。\n\n本指南介绍拍摄、效果调整和查看已保存作品。练习操作不会更改拍摄设置或已保存照片。</string>
+    <string name="guide_body_1" formatted="false">在拍摄画面展开FAULT并按＋。点击列表中的效果名称，可添加或移除该效果。多个效果的组合称为链。\n\n点击效果旁的滑块图标，查看说明并调整。上方画面显示修改结果。✓保存修改，×恢复之前的设置。效果处理顺序固定。</string>
+    <string name="guide_body_2" formatted="false">在拍摄画面展开FAULT并移动LEVEL滑块，所选效果的整体应用量会立即改变。设为0%时不应用效果。\n\n要单独调整一个效果，请点击其名称打开调整画面。这里的修改在按✓之前不会保存。\n\n下方滑块仅供练习，不改变实际拍摄设置。</string>
+    <string name="guide_body_3" formatted="false">在拍摄画面选择效果，打开FAULT栏的LIVE。展开栏并按暂停，添加到画面中的失真图案就会停止运动，被摄对象仍继续运动。按继续可恢复图案运动。\n\n触发故障会添加临时失真；重置时间会将效果时钟返回起点。要改变速度或周期，点击LIVE旁的滑块图标，边看画面边调整，再按✓保存。\n\nLIVE关闭时部分效果仍会运动。LEVEL设为0%才会移除全部效果。</string>
+    <string name="guide_body_4" formatted="false">点击拍摄画面顶部的JPG等格式显示，即可更改保存格式。照片使用JPG或受支持相机的RAW，视频通常使用MP4。\n\n更改分辨率可点击顶部尺寸，或长按PHOTO／VIDEO。\n\nRAW照片与屏幕预览有所不同。设置中可启用的RAW视频保存不含效果和音频的DNG序列。下方格式按钮仅供练习。</string>
+    <string name="guide_body_5" formatted="false">在拍摄画面选择PHOTO，再按中央大按钮即可保存照片。选择VIDEO时，按此按钮开始录像，再按一次停止。\n\n如果效果调整画面尚未关闭，请先按✓保存或×取消。普通录像期间也可使用LIVE暂停和触发故障。\n\n切换应用或锁屏会结束并保存录像，返回后不会自动继续。视频模式没有操作确认振动。</string>
+    <string name="guide_body_6" formatted="false">点击拍摄画面左下方的小照片，即可查看已保存作品。顶部的×返回拍摄，打开照片可选择另一张照片。只有多张作品时才显示切换箭头和张数。\n\n照片下方显示该照片的日期、格式，以及用于查看记录效果设置的SIGNAL。↗在其他应用中打开这张照片。\n\n照片可双指放大、拖动平移、点击重置缩放。重置后可左右滑动切换、下滑关闭。点击视频可播放或暂停。</string>
+    <string name="guide_body_7" formatted="false">点击拍摄画面的齿轮打开设置。这里的修改立即保存。\n\n在模式中启用PRO拍摄模式，可调整相机支持的曝光、对焦等。ADVANCED则用于精细调整添加到画面的效果。\n\n在问题反馈中可查看应用版本、GPU等诊断信息，再按需复制。可按需将复制的内容粘贴到报告中。设置中也可查看Google Play版的更新状态，或重新打开本指南。</string>
     <string name="guide_try">点击高亮控件试一试</string>
     <string name="guide_tried">练习信号已改变 · 再试一次</string>
     <string name="guide_sandbox">仅供练习 · 不会保存</string>
@@ -652,4 +642,12 @@
     <string name="diagnostics_copied">已复制诊断信息</string>
     <string name="diagnostics_hint">查看应用、设备、GPU和拍摄设置后可自行复制。不会自动发送，也不会自动加入照片或邮件草稿。</string>
     <string name="photo_imported">已打开的照片</string>
+    <string name="guide_heading_8" formatted="false">尝试随机组合效果</string>
+    <string name="guide_body_8" formatted="false">在拍摄画面展开FAULT，找到交叉箭头形状的随机按钮。点击后立即重新生成效果组合、参数与整体强度，通常选择2至5个可用效果。\n\n长按同一按钮则保留效果与参数，只改变决定失真图案的SEED。这称为RESEED。\n\n如想保留取消修改的机会，请先按＋打开调整画面，再用其中的随机按钮。✓采用，×恢复之前的设置。录像期间不可使用。</string>
+    <string name="guide_heading_9" formatted="false">点击与滑动画面</string>
+    <string name="guide_body_9" formatted="false">点击拍摄前的相机画面，会重新请求自动对焦，并非将焦点指定在点击位置。左右滑动切换PHOTO／VIDEO。\n\n在效果调整画面中，操作下方控件并在上方查看结果。✓保存修改，×取消。\n\n查看已保存照片时，点击用于重置放大。对于已保存视频，点击用于播放或暂停。</string>
+    <string name="guide_heading_10" formatted="false">使用收到的照片设置拍摄</string>
+    <string name="guide_body_10" formatted="false">从拍摄画面左下方打开查看器，再用顶部的打开照片选择收到的照片。尚未拍摄过也可以使用。\n\n点击照片下方的SIGNAL查看记录的效果设置。选择使用此照片设置拍摄，即可将设置应用到拍摄画面。仅打开照片不会改变设置。\n\n没有设置记录的照片无法提供参数。请传递原始文件。相同设置不会重现被摄对象或所有时间变化。</string>
+    <string name="guide_heading_11" formatted="false">加工已有的照片或视频</string>
+    <string name="guide_body_11" formatted="false">点击拍摄画面的齿轮，在设置中启用实验功能，再选择TAP以读取照片或视频素材。调整效果并按快门，结果会保存为新文件，原件不变。\n\nTAP绕过相机传感器相关效果，从DATA开始添加效果。\n\n对于视频素材，播放按钮控制素材运动；快门控制加工结果的录像。</string>
 </resources>

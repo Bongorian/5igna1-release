@@ -35,6 +35,9 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
     private lateinit var slider: SeekBar
     private lateinit var targetButton: TextView
     private lateinit var spotlight: Spotlight
+    private val topic: Int get() = ORDER[page]
+    val hasPractice: Boolean get() = topic == 2 || topic == 4
+    val hasTarget: Boolean get() = target() != null
     private var changed = false
     private var level = 55
     private var restoreHost = true
@@ -161,14 +164,16 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
         render()
     }
 
-    private fun target(): View? = when (page) {
+    private fun target(): View? = when (topic) {
         1 -> activity.cameraRoot.findViewWithTag("guide-add")
         2 -> activity.strength
         3 -> activity.faultSwitch
         4 -> activity.formatButton
         5 -> activity.capture
         6 -> activity.galleryButton
-        7 -> activity.cameraRoot.findViewWithTag("guide-settings")
+        7, 11 -> activity.cameraRoot.findViewWithTag("guide-settings")
+        8 -> activity.cameraRoot.findViewWithTag("guide-random")
+        10 -> activity.galleryButton
         else -> null
     }
 
@@ -193,7 +198,7 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
                 targetBounds.inset(-a.dp(5f).toFloat(), -a.dp(5f).toFloat())
             }
         }
-        targetButton.visibility = if (targetBounds.isEmpty) View.GONE else View.VISIBLE
+        targetButton.visibility = if (targetBounds.isEmpty || !hasPractice) View.GONE else View.VISIBLE
         targetButton.contentDescription = a.getString(R.string.guide_try) + ": " + heading.text
         targetButton.layoutParams = FrameLayout.LayoutParams(
             targetBounds.width().toInt().coerceAtLeast(1), targetBounds.height().toInt().coerceAtLeast(1)
@@ -228,13 +233,14 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
     private fun render() {
         changed = false
         progress.text = "5IGNA1 / " + activity.getString(R.string.tutorial_progress, page + 1, PAGE_COUNT)
-        heading.setText(HEADINGS[page])
-        body.setText(BODIES[page])
+        heading.setText(HEADINGS[topic])
+        body.setText(BODIES[topic])
         back.isEnabled = page > 0
         back.alpha = if (page > 0) 1f else .3f
         next.setText(if (page == PAGE_COUNT - 1) R.string.tutorial_done else R.string.tutorial_next)
-        demo.visibility = if (page == 4) View.GONE else View.VISIBLE
-        slider.visibility = if (page == 2) View.VISIBLE else View.GONE
+        demo.visibility = if (topic == 2) View.VISIBLE else View.GONE
+        practice.visibility = if (hasPractice) View.VISIBLE else View.GONE
+        slider.visibility = if (topic == 2) View.VISIBLE else View.GONE
         updatePractice()
         demo.invalidate()
         scroll.scrollTo(0, 0)
@@ -245,16 +251,17 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
     }
 
     private fun practice() {
+        if (!hasPractice) return
         changed = !changed
-        if (page == 2) slider.progress = if (changed) 90 else 20
+        if (topic == 2) slider.progress = if (changed) 90 else 20
         demo.invalidate()
         updatePractice()
     }
 
     private fun updatePractice() {
         practice.text = when {
-            page == 4 -> activity.getString(R.string.guide_format_sample, if (changed) "RAW" else "JPG")
-            page == 2 -> activity.getString(R.string.guide_level, level)
+            topic == 4 -> activity.getString(R.string.guide_format_sample, if (changed) "RAW" else "JPG")
+            topic == 2 -> activity.getString(R.string.guide_level, level)
             changed -> activity.getString(R.string.guide_tried)
             else -> activity.getString(R.string.guide_try)
         }
@@ -292,10 +299,10 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
         private val paint = Paint()
         private val colors = intArrayOf(0xffcadf63.toInt(), 0xff6fe0bd.toInt(), 0xff4294ad.toInt(), 0xffee7161.toInt(), 0xffb777c4.toInt(), 0xffd5d6ca.toInt())
         override fun onDraw(canvas: Canvas) {
-            val amount = if (page == 2) level / 100f else if (changed) .85f else .15f
+            val amount = if (topic == 2) level / 100f else if (changed) .85f else .15f
             for (row in 0 until 16) for (col in 0 until 6) {
                 val shift = if (row % 3 == 0) amount * width * .22f else 0f
-                paint.color = colors[(col + if (changed && page == 3) row else 0) % colors.size]
+                paint.color = colors[(col + if (changed && topic == 3) row else 0) % colors.size]
                 val x = col * width / 6f + shift
                 canvas.drawRect(x, row * height / 16f, x + width / 6f, (row + 1) * height / 16f - 1, paint)
             }
@@ -309,8 +316,9 @@ internal class TutorialDialog(val activity: MainActivity, page: Int, private val
 
     companion object {
         const val SEEN = "tutorial.seen"
-        const val PAGE_COUNT = 8
-        private val HEADINGS = intArrayOf(R.string.guide_heading_0, R.string.guide_heading_1, R.string.guide_heading_2, R.string.guide_heading_3, R.string.guide_heading_4, R.string.guide_heading_5, R.string.guide_heading_6, R.string.guide_heading_7)
-        private val BODIES = intArrayOf(R.string.guide_body_0, R.string.guide_body_1, R.string.guide_body_2, R.string.guide_body_3, R.string.guide_body_4, R.string.guide_body_5, R.string.guide_body_6, R.string.guide_body_7)
+        const val PAGE_COUNT = 12
+        private val ORDER = intArrayOf(0, 9, 1, 2, 8, 3, 4, 5, 6, 10, 11, 7)
+        private val HEADINGS = intArrayOf(R.string.guide_heading_0, R.string.guide_heading_1, R.string.guide_heading_2, R.string.guide_heading_3, R.string.guide_heading_4, R.string.guide_heading_5, R.string.guide_heading_6, R.string.guide_heading_7, R.string.guide_heading_8, R.string.guide_heading_9, R.string.guide_heading_10, R.string.guide_heading_11)
+        private val BODIES = intArrayOf(R.string.guide_body_0, R.string.guide_body_1, R.string.guide_body_2, R.string.guide_body_3, R.string.guide_body_4, R.string.guide_body_5, R.string.guide_body_6, R.string.guide_body_7, R.string.guide_body_8, R.string.guide_body_9, R.string.guide_body_10, R.string.guide_body_11)
     }
 }

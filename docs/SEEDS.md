@@ -6,6 +6,11 @@
 
 A **SEED** identifies a fault's pattern. Tap its number in either editor mode to enter a signed 64-bit integer, or tap **RESEED** to generate a new one. The field updates immediately; Apply saves the change and Back/× cancels it. Values outside −9223372036854775808 through 9223372036854775807 are rejected without changing the draft.
 
+## Where to try randomization
+
+Expand FAULT on the capture screen to find shuffle. Tapping immediately regenerates the chain, controls, seeds and overall LEVEL; holding reseeds while preserving the chain and controls. **To try and cancel, open + and use shuffle inside the chain editor.** Inspect the image above, then ✓ to keep or × to restore the state from before editing. Editor shuffle has no hold-to-reseed action. Randomization generates settings once; [LIVE](LIVE_FAULT.md) controls variation over time.
+
+
 | Action | Changes | Retains |
 |---|---|---|
 | Enter SEED / selected-fault RESEED | One structural identity | Route, LEVEL, controls, fixed internal values and fixed EVENT SEED |
