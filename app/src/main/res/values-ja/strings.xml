@@ -651,4 +651,5 @@
     <string name="diagnostics_copy">診断情報をコピー</string>
     <string name="diagnostics_copied">診断情報をコピーしました</string>
     <string name="diagnostics_hint">アプリ・端末・GPU・撮影設定を確認してからコピーできます。自動送信や写真・メール下書きへの自動追加は行いません。</string>
+    <string name="photo_imported">読み込んだ写真</string>
 </resources>

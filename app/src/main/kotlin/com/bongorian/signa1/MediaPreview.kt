@@ -75,6 +75,8 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri?, val initialV
     val time: TextView
     val external: ImageView
     val signal: TextView
+    val footer: LinearLayout
+    val navigation: LinearLayout
     var savedSignal: SavedSignal? = null
     var signalDialog: Dialog? = null
     val seek: SeekBar
@@ -137,6 +139,8 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri?, val initialV
                             break
                         }
                         if (items.isEmpty()) {
+                            footer.visibility = View.GONE
+                            navigation.visibility = View.GONE
                             title.text = a.getString(R.string.photo_open)
                             notice.text = a.getString(R.string.photo_empty)
                             previous.isEnabled = false; next.isEnabled = false; external.isEnabled = false
@@ -238,6 +242,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri?, val initialV
 
     fun showItem() {
         if (closed || items.isEmpty()) return
+        footer.visibility = View.VISIBLE
         val ticket = ++generation
         signalDialog?.dismiss()
         signalDialog = null
@@ -259,14 +264,10 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri?, val initialV
             DateFormat.getDateFormat(a).format(Date(item.taken)) +
                 " · " +
                 DateFormat.getTimeFormat(a).format(Date(item.taken))
-        title.text = if (imported) a.getString(R.string.photo_open) else date
-        page.setText(
-            (if (item.video) "MP4" else if (item.raw) "RAW" else if (imported) "PHOTO" else "JPG") +
-                " · " +
-                (index + 1) +
-                " / " +
-                items.size
-        )
+        val format = if (item.video) "MP4" else if (item.raw) "RAW" else if (imported) "PHOTO" else "JPG"
+        title.text = (if (imported) a.getString(R.string.photo_imported) else date) + " · " + format
+        page.text = "${index + 1} / ${items.size}"
+        navigation.visibility = if (items.size > 1) View.VISIBLE else View.GONE
         previous.setEnabled(index > 0)
         previous.setAlpha(if (index > 0) 1f else .25f)
         next.setEnabled(index + 1 < items.size)
@@ -276,6 +277,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri?, val initialV
         seek.setVisibility(if (item.video) View.VISIBLE else View.GONE)
         seek.setEnabled(false)
         seek.setProgress(0)
+        time.visibility = if (item.video) View.VISIBLE else View.GONE
         time.setText(if (item.video) "0:00 / —" else a.getString(R.string.media_gestures))
         notice.setText(a.getString(R.string.media_loading))
         notice.setVisibility(View.VISIBLE)
@@ -575,14 +577,22 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri?, val initialV
         close.setBackgroundColor(Color.TRANSPARENT)
         header.addView(close, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         close.setOnClickListener(OnClickListener@{ v: View? -> dismiss() })
-        title = a.text(a.getString(R.string.media_preview_title), 13, MainActivity.WHITE)
-        title.setSingleLine(true)
-        title.setEllipsize(TextUtils.TruncateAt.END)
-        title.setGravity(Gravity.CENTER)
-        header.addView(title, LinearLayout.LayoutParams(0, a.dp(ControlSize.STANDARD), 1f))
+        val heading = a.text(a.getString(R.string.media_preview_title), 14, MainActivity.WHITE)
+        heading.setSingleLine(true)
+        heading.ellipsize = TextUtils.TruncateAt.END
+        heading.setPadding(a.dp(8f), 0, a.dp(8f), 0)
+        heading.gravity = Gravity.CENTER_VERTICAL
+        header.addView(heading, LinearLayout.LayoutParams(0, a.dp(ControlSize.STANDARD), 1f))
+        header.addView(a.button(a.getString(R.string.photo_open)).apply {
+            tag = "media-open-photo"
+            textSize = 12f
+            setSingleLine(true)
+            setTextColor(MainActivity.LIME)
+            background = a.detailBg(MainActivity.PANEL, 0)
+            setPadding(a.dp(12f), 0, a.dp(12f), 0)
+            setOnClickListener { a.chooseSettingsPhoto() }
+        }, LinearLayout.LayoutParams(-2, a.dp(ControlSize.STANDARD)))
         external = navigationIcon(R.drawable.ic_open_external, R.string.media_open_external, "media-external")
-        external.setBackgroundColor(Color.TRANSPARENT)
-        header.addView(external, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         external.setOnClickListener(
             OnClickListener@{ v: View? ->
                 if (!items.isEmpty()) a.openExternal(items.get(index).uri)
@@ -610,19 +620,19 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri?, val initialV
         notice = a.text(a.getString(R.string.media_loading), 13, MainActivity.MUTED)
         notice.setGravity(Gravity.CENTER)
         notice.setPadding(a.dp(20f), a.dp(20f), a.dp(20f), a.dp(20f))
-        val footer = LinearLayout(a)
+        footer = LinearLayout(a)
         footer.setOrientation(LinearLayout.VERTICAL)
-        footer.setPadding(0, a.dp(12f), 0, 0)
+        footer.setPadding(0, a.dp(8f), 0, 0)
         time = a.text("", 11, MainActivity.MUTED)
         time.setGravity(Gravity.CENTER)
-        footer.addView(time, LinearLayout.LayoutParams(-1, a.dp(22f)))
+
         signal = a.button(a.getString(R.string.saved_signal_loading))
         signal.setTextSize(11f)
-        signal.setSingleLine(true)
-        signal.ellipsize = TextUtils.TruncateAt.MARQUEE
-        signal.marqueeRepeatLimit = -1
-        signal.isSelected = true
-        signal.isHorizontalFadingEdgeEnabled = true
+        signal.maxLines = 2
+        signal.ellipsize = TextUtils.TruncateAt.END
+        signal.gravity = Gravity.CENTER_VERTICAL
+        signal.setPadding(a.dp(12f), 0, a.dp(12f), 0)
+        signal.background = a.detailBg(MainActivity.PANEL, 0)
         signal.setTextColor(MainActivity.LIME)
         signal.isEnabled = false
         signal.setOnClickListener { showSignal() }
@@ -650,30 +660,41 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri?, val initialV
             }
         )
         val controls = a.row()
+        navigation = controls
         previous = navigationIcon(R.drawable.ic_previous, R.string.media_previous, "media-previous")
         controls.addView(previous, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
         previous.setOnClickListener(OnClickListener@{ v: View? -> move(-1) })
         page = a.text("", 12, MainActivity.MUTED)
         page.setGravity(Gravity.CENTER)
+        title = a.text("", 12, MainActivity.MUTED).apply {
+            setSingleLine(true); ellipsize = TextUtils.TruncateAt.END; gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, 0, 0, a.dp(6f))
+        }
         controls.addView(page, LinearLayout.LayoutParams(0, a.dp(ControlSize.STANDARD), 1f))
         play = a.button("Ⅱ")
         play.setContentDescription(a.getString(R.string.live_pause))
-        controls.addView(play, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)))
+        val playback = a.row()
+        playback.addView(play, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), -2))
+        playback.addView(time, LinearLayout.LayoutParams(0, -2, 1f))
+        footer.addView(playback, 0)
         play.setOnClickListener(OnClickListener@{ v: View? -> togglePlayback() })
         next = navigationIcon(R.drawable.ic_next, R.string.media_next, "media-next")
         val np = LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD))
-        np.leftMargin = a.dp(8f)
+
         controls.addView(next, np)
         next.setOnClickListener(OnClickListener@{ v: View? -> move(1) })
-        footer.addView(controls)
-        // Keep media navigation together, with a separate full-width signal action below it.
-        val signalPosition = LinearLayout.LayoutParams(-1, a.dp(ControlSize.COMPACT))
-        signalPosition.topMargin = a.dp(12f)
-        footer.addView(signal, signalPosition)
-        footer.addView(a.button(a.getString(R.string.photo_open)).apply {
-            tag = "media-open-photo"
-            setOnClickListener { a.chooseSettingsPhoto() }
-        }, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
+        panel.addView(controls, 1, LinearLayout.LayoutParams(-1, -2).apply {
+            topMargin = a.dp(8f)
+            bottomMargin = a.dp(8f)
+        })
+        navigation.visibility = View.GONE
+        footer.addView(title, 0, LinearLayout.LayoutParams(-1, -2))
+        val actions = a.row()
+        actions.addView(signal, LinearLayout.LayoutParams(0, a.dp(ControlSize.STANDARD), 1f))
+        actions.addView(external, LinearLayout.LayoutParams(a.dp(ControlSize.STANDARD), a.dp(ControlSize.STANDARD)).apply {
+            leftMargin = a.dp(8f)
+        })
+        footer.addView(actions, LinearLayout.LayoutParams(-1, -2).apply { topMargin = a.dp(8f) })
         panel.addView(footer)
         bindGestures()
         dialog.setContentView(panel)

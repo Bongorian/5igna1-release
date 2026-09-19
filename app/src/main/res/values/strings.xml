@@ -651,4 +651,5 @@
     <string name="diagnostics_copy">Copy diagnostic information</string>
     <string name="diagnostics_copied">Diagnostic information copied</string>
     <string name="diagnostics_hint">Review app, device, GPU and capture settings before copying. Nothing is sent or added to photos or the email draft automatically.</string>
+    <string name="photo_imported">Opened photo</string>
 </resources>

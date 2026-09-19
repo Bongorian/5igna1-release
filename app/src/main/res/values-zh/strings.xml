@@ -651,4 +651,5 @@
     <string name="diagnostics_copy">复制诊断信息</string>
     <string name="diagnostics_copied">已复制诊断信息</string>
     <string name="diagnostics_hint">查看应用、设备、GPU和拍摄设置后可自行复制。不会自动发送，也不会自动加入照片或邮件草稿。</string>
+    <string name="photo_imported">已打开的照片</string>
 </resources>
