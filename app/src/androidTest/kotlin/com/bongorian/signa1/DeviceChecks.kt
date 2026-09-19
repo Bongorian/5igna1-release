@@ -248,7 +248,9 @@ class DeviceChecks : Instrumentation() {
                     )
                 })
             val action = args!!.getString("action", "photo")
-            if (action == "editor-transitions") {
+            if (action == "photo-import") {
+                result.putString("result", PhotoImportChecks.run(this))
+            } else if (action == "editor-transitions") {
                 result.putString("result", EditorTransitionChecks.run(this))
             } else if (action == "chain-review") {
                 result.putString("result", ChainReviewChecks.run(this))

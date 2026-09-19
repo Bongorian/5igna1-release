@@ -643,4 +643,12 @@
     <string name="stream_digital">デジタル伝送</string>
     <string name="stream_analog">アナログFPV</string>
     <string name="fault_control_streamModel">伝送モデル</string>
+    <string name="photo_open">写真を開く</string>
+    <string name="photo_empty">受け取った写真を開いて、記録されたシグナル設定を確認できます。</string>
+    <string name="photo_open_failed">写真の選択画面を開けませんでした。</string>
+    <string name="photo_use_settings">この写真の設定で撮る</string>
+    <string name="diagnostics_title">診断情報を確認</string>
+    <string name="diagnostics_copy">診断情報をコピー</string>
+    <string name="diagnostics_copied">診断情報をコピーしました</string>
+    <string name="diagnostics_hint">アプリ・端末・GPU・撮影設定を確認してからコピーできます。自動送信や写真・メール下書きへの自動追加は行いません。</string>
 </resources>

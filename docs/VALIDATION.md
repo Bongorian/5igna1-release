@@ -22,3 +22,7 @@ Use [UI verification](UI_REVIEW.md) for current reproduction steps. The JVM suit
 Emulator checks do not certify hardware RAW, microphone quality, sustained speed, heat or battery use. No broad device matrix or multi-hour recording/energy study is claimed. Include version, device/OS, format, resolution/fps, processing mode and reproduction steps with an issue.
 
 [Earlier validation records](https://github.com/Bongorian/5igna1-release/blob/87d36c4acf2f4079c1d84562485d9a4fc2a8894b/docs/VALIDATION.md) remain available in Git history. Read them at their named source scope.
+
+## Unreleased photo import and diagnostics
+
+FOSS debug lint/build and 83 unit tests passed. A regression covers STREAM photo descriptions that omit default FPV macros. The `photo-import` instrumentation action supplies a selected content URI through the system-picker result contract, checks explicit apply/camera return and unchanged source/capture settings, and checks reviewed diagnostic clipboard content without automatic email insertion. Physical execution is pending installation confirmation on the connected CPH2437; the test's supplied picker result does not certify every third-party provider UI.

@@ -54,7 +54,7 @@ import kotlin.math.min
  * App-owned mixed-media viewer. Only the visible item is decoded; close releases playback before
  * camera attachment. No gallery permission, external player, or camera ownership overlap.
  */
-internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVideo: Boolean) {
+internal class MediaPreview(val a: MainActivity, val initial: Uri?, val initialVideo: Boolean, val imported: Boolean = false) {
     internal class Item(
         val uri: Uri,
         val video: Boolean,
@@ -136,7 +136,13 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
                             index = n
                             break
                         }
-                        showItem()
+                        if (items.isEmpty()) {
+                            title.text = a.getString(R.string.photo_open)
+                            notice.text = a.getString(R.string.photo_empty)
+                            previous.isEnabled = false; next.isEnabled = false; external.isEnabled = false
+                            play.visibility = View.GONE; seek.visibility = View.GONE
+                            signal.isEnabled = false; signal.text = a.getString(R.string.saved_signal_missing)
+                        } else showItem()
                     }
                 )
             }
@@ -144,6 +150,8 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
     }
 
     fun scan(): MutableList<Item> {
+        if (imported && initial != null) return mutableListOf(Item(initial, false,
+            runCatching { a.contentResolver.getType(requireNotNull(initial))?.contains("dng") == true }.getOrDefault(false), 0, null))
         val found: MutableList<Item> = ArrayList<Item>()
         val projection =
             arrayOf<String>(
@@ -203,7 +211,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
                         }
                 }
         } catch (ignored: Exception) {}
-        if (found.stream().noneMatch { item: Item? -> item!!.uri == initial }) {
+        if (initial != null && found.stream().noneMatch { item: Item? -> item!!.uri == initial }) {
             var mime: String? = null
             try {
                 mime = a.contentResolver.getType(initial)
@@ -251,9 +259,9 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
             DateFormat.getDateFormat(a).format(Date(item.taken)) +
                 " · " +
                 DateFormat.getTimeFormat(a).format(Date(item.taken))
-        title.setText(date)
+        title.text = if (imported) a.getString(R.string.photo_open) else date
         page.setText(
-            (if (item.video) "MP4" else if (item.raw) "RAW" else "JPG") +
+            (if (item.video) "MP4" else if (item.raw) "RAW" else if (imported) "PHOTO" else "JPG") +
                 " · " +
                 (index + 1) +
                 " / " +
@@ -662,6 +670,10 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         val signalPosition = LinearLayout.LayoutParams(-1, a.dp(ControlSize.COMPACT))
         signalPosition.topMargin = a.dp(12f)
         footer.addView(signal, signalPosition)
+        footer.addView(a.button(a.getString(R.string.photo_open)).apply {
+            tag = "media-open-photo"
+            setOnClickListener { a.chooseSettingsPhoto() }
+        }, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
         panel.addView(footer)
         bindGestures()
         dialog.setContentView(panel)
@@ -708,7 +720,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
         data.typeface = android.graphics.Typeface.MONOSPACE
         data.setLineSpacing(a.dp(3f).toFloat(),1f)
         signalDialog = SignalSheet.content(a,a.getString(R.string.saved_signal_title),body,
-            if (selected.state != null) R.string.saved_signal_use else 0,
+            if (selected.state != null) (if (imported) R.string.photo_use_settings else R.string.saved_signal_use) else 0,
             Runnable {
                 if (!closed && ticket == generation && savedSignal === selected) {
                     if (a.engine.photoBusy || a.recording) {
@@ -721,6 +733,7 @@ internal class MediaPreview(val a: MainActivity, val initial: Uri, val initialVi
                             a.applySettings(CaptureSettings(a.settings).apply { experimentalSignals = enabled })
                     }
                     android.widget.Toast.makeText(a,R.string.saved_signal_applied,android.widget.Toast.LENGTH_SHORT).show()
+                    if (imported) dialog.dismiss()
                 }
             }, .75f)
     }

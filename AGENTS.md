@@ -220,3 +220,7 @@
 ## Owner direction — transition audit and 1.7.4, 2026-09-15
 
 - The owner selected publication of the crash fix, cross-model/camera/format state audit, transition testing and consolidation of distribution records. Complete these as 1.7.4 / code 23, integrate main, publish the signed GitHub APK, update existing GitHub Pages and install DEV. Configured Play Alpha draft automation may run; preserve published tags, signing keys, reviews and tester/country settings.
+
+## Owner direction — photo-based reuse and diagnostics, 2026-09-20
+
+- Add Open photo to the saved-media viewer, available before a first capture, and use embedded settings only after explicit review/apply. Preserve source media and capture preferences; do not require Experimental/TAP or add storage permissions. Extend Feedback with reviewed, optional diagnostic copying, separate from photo metadata and automatic email content. Connected DEV testing is authorized; no release requested.

@@ -643,4 +643,12 @@
     <string name="stream_digital">数字传输</string>
     <string name="stream_analog">模拟 FPV</string>
     <string name="fault_control_streamModel">传输模型</string>
+    <string name="photo_open">打开照片</string>
+    <string name="photo_empty">打开收到的照片，查看其中记录的信号设置。</string>
+    <string name="photo_open_failed">无法打开照片选择器。</string>
+    <string name="photo_use_settings">使用此照片的设置拍摄</string>
+    <string name="diagnostics_title">查看诊断信息</string>
+    <string name="diagnostics_copy">复制诊断信息</string>
+    <string name="diagnostics_copied">已复制诊断信息</string>
+    <string name="diagnostics_hint">查看应用、设备、GPU和拍摄设置后可自行复制。不会自动发送，也不会自动加入照片或邮件草稿。</string>
 </resources>

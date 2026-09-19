@@ -1,5 +1,5 @@
 # 5igna1 Privacy Policy
-Last updated: September 15, 2026
+Last updated: September 20, 2026
 
 Provider: Bongorian
 Contact: dennosamurai@gmail.com
@@ -45,3 +45,5 @@ MP4 videos also contain the signal chain and effect settings at recording start.
 When another app explicitly requests a capture, you review and accept the JPEG or MP4 before it is returned. Only that new capture is handed to the requesting app, with no location tags. Private staging files are deleted after acceptance or cancellation. If a video request supplies no destination, the accepted video remains in shared DCIM/5igna1 storage. The receiving app and its storage provider apply their own policies.
 
 The Google Play edition asks the installed Play Store service about available app updates when Settings opens. This adds no app permissions; the Play Store handles its own network access under Google’s policies. F-Droid/GitHub builds do not include the Play update SDK. No capture media or location is passed to this update check.
+
+The photo viewer can open a photo chosen with the system picker and read its embedded signal settings. Opening does not apply settings or modify the source photo. Diagnostic information (app/device versions, GPU/driver and capture/model settings) is generated on request in Feedback. You can review it and copy it to the system clipboard. It is not automatically sent, added to photos or inserted into email drafts; it excludes media, file paths, location, device identifiers and logs.

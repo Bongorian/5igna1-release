@@ -75,6 +75,20 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
     private var cameraVideoBeforeTap = false
     val capturePhotoFormat: Int get() = if (tapMode) 0 else settings.photoFormat
     val captureRawVideo: Boolean get() = !tapMode && settings.rawVideo
+    private val photoSettingsPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null && externalCapture == null && !recording && !engine.recording && !engine.photoBusy)
+            MediaPreview(this, uri, false, imported = true).show()
+    }
+
+    fun chooseSettingsPhoto() {
+        if (externalCapture != null || recording || engine.recording || engine.photoBusy) return
+        mediaPreview?.dialog?.dismiss()
+        try { photoSettingsPicker.launch("image/*") }
+        catch (_: android.content.ActivityNotFoundException) {
+            Toast.makeText(this, R.string.photo_open_failed, Toast.LENGTH_LONG).show()
+        }
+    }
+
     private val tapPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) { result ->
         val uri = if (result.resultCode == RESULT_OK) result.data?.data else null
         if (uri != null && settings.experimentalSignals && !recording) {
@@ -897,22 +911,7 @@ internal class MainActivity : AppCompatActivity(), GlitchEngine.Listener, Surfac
         cancelEffectPreview()
         if (liveEditor != null) liveEditor!!.dialog!!.dismiss()
         if (liveChainDialog != null) liveChainDialog!!.dismiss()
-        if (latest == null) {
-            Toast.makeText(
-                    this,
-                    getString(R.string.ui_open_your_captured_photos_and_videos_here),
-                    Toast.LENGTH_SHORT,
-                )
-                .show()
-            return
-        }
-        try {
-            if ("application/zip" == getContentResolver().getType(latest!!)) {
-                openExternal(latest!!)
-                return
-            }
-        } catch (ignored: Exception) {}
-        MediaPreview(this, requireNotNull(latest), latestVideo).show()
+        MediaPreview(this, latest, latestVideo).show()
     }
 
     fun openExternal(uri: Uri) {

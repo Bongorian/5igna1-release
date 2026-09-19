@@ -643,4 +643,12 @@
     <string name="stream_digital">Digital stream</string>
     <string name="stream_analog">Analog FPV</string>
     <string name="fault_control_streamModel">Transmission model</string>
+    <string name="photo_open">Open photo</string>
+    <string name="photo_empty">Open a received photo to inspect its signal settings.</string>
+    <string name="photo_open_failed">No photo picker is available.</string>
+    <string name="photo_use_settings">Shoot with this photo’s settings</string>
+    <string name="diagnostics_title">Review diagnostic information</string>
+    <string name="diagnostics_copy">Copy diagnostic information</string>
+    <string name="diagnostics_copied">Diagnostic information copied</string>
+    <string name="diagnostics_hint">Review app, device, GPU and capture settings before copying. Nothing is sent or added to photos or the email draft automatically.</string>
 </resources>

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Open received photos from the saved-media viewer and explicitly reuse their embedded signal settings without modifying the source. The entry is available before the first capture.
+- Add reviewed, opt-in diagnostic copying in Feedback, separate from photo metadata and email drafts.
+- Restore digital STREAM photo metadata with omitted default FPV controls.
+
 - Disable confirmation haptics throughout video mode, including silent/RAW video, fault triggers and recording start/stop. Preserve photo-mode feedback.
 
 ## [1.7.4] - 2026-09-15

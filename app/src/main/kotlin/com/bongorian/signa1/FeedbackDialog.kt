@@ -62,6 +62,31 @@ internal object FeedbackDialog {
         }
         body.addView(include)
         body.addView(a.text(details, 12, MainActivity.MUTED))
+        val diagnostics = a.text("", 12, MainActivity.MUTED).apply {
+            tag = "feedback-diagnostics-text"
+            setTextIsSelectable(true)
+            visibility = android.view.View.GONE
+        }
+        val diagnosticCopy = a.button(a.getString(R.string.diagnostics_copy)).apply {
+            tag = "feedback-diagnostics-copy"
+            visibility = android.view.View.GONE
+            setOnClickListener {
+                (a.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
+                    ClipData.newPlainText(a.getString(R.string.diagnostics_title), diagnostics.text))
+                Toast.makeText(a, R.string.diagnostics_copied, Toast.LENGTH_SHORT).show()
+            }
+        }
+        body.addView(a.button(a.getString(R.string.diagnostics_title)).apply {
+            tag = "feedback-diagnostics"
+            setOnClickListener {
+                diagnostics.text = DiagnosticInfo.snapshot(a)
+                diagnostics.visibility = android.view.View.VISIBLE
+                diagnosticCopy.visibility = android.view.View.VISIBLE
+            }
+        }, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
+        body.addView(a.text(a.getString(R.string.diagnostics_hint), 12, MainActivity.MUTED))
+        body.addView(diagnostics)
+        body.addView(diagnosticCopy, LinearLayout.LayoutParams(-1, a.dp(ControlSize.STANDARD)))
         fun draft() = message.text.toString() + if (include.isChecked) "\n\n$details" else ""
         val copy = a.button(a.getString(R.string.feedback_copy)).apply { tag = "feedback-copy" }
         copy.setOnClickListener {

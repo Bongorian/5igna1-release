@@ -23,6 +23,13 @@ class SavedSignalTest {
         assertEquals(all.encode(),SavedSignal.read(description(all,true,true).replace(" → "," ? "))!!.state!!.encode())
         assertEquals(true,saved.experimental)
     }
+    @Test fun restoresStreamPhotosWithOmittedDefaultsAndAnalogSettings() {
+        val digital = EffectState.defaults().single(Effects.STREAM_ERROR)
+        val analog = digital.edit(false, 1 shl Effects.STREAM_ERROR,
+            digital.parameters().with(Effects.STREAM_ERROR, "streamModel", 1f).with(Effects.STREAM_ERROR, "fpvColorSize", .82f))
+        for (state in listOf(digital, analog))
+            assertEquals(state.encode(), SavedSignal.read(description(state))!!.state!!.encode())
+    }
     @Test fun handlesCleanLegacyTransportDefaultsAndSingleFault() {
         for (state in listOf(EffectState.defaults().amount(0f),EffectState.defaults().single(Effects.CRT),EffectState.defaults().single(Effects.BIT_ERROR))) {
             val saved=SavedSignal.read(description(state))!!

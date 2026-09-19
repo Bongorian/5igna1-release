@@ -41,6 +41,7 @@ internal data class SavedSignal(val description: String, val chain: String, val 
                     }
                     // Older descriptions intentionally omitted these default transport macros.
                     for (control in Effects.CONTROLS[id]) require(control.key in fields ||
+                        (id == Effects.STREAM_ERROR && (control.key == "streamModel" || control.key.startsWith("fpv"))) ||
                         control.key in setOf("transport","reduce","cable","upconvert", "ledRate") || control.key in NetworkDisplay.keys)
                     if (" overrides=" in group) {
                         val tail = group.substringAfter(" overrides=")
