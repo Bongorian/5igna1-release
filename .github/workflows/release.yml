@@ -60,6 +60,13 @@ jobs:
           PY
           ./gradlew --no-daemon assembleFdroidRelease -PsignFdroidRelease=true
           python3 tools/release.py package --certificate-sha256 "$FDROID_CERTIFICATE_SHA256"
+      - name: Retain R8 mapping for this release
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: r8-fdroid-${{ github.ref_name }}
+          path: app/build/outputs/mapping/fdroidRelease/
+          if-no-files-found: error
+          retention-days: 90
       - name: Attach APK and checksum to a draft release
         env:
           GH_TOKEN: ${{ github.token }}

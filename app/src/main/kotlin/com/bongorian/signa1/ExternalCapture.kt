@@ -194,12 +194,12 @@ internal class ExternalCaptureModel : ViewModel() {
 
     companion object {
         fun thumbnail(context: Context, uri: Uri, bound: Int): Bitmap {
+            require(bound > 0)
+            // CaptureSession owns this local content URI; this is not a network image loader.
             val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
             context.contentResolver.openInputStream(uri)!!.use { BitmapFactory.decodeStream(it, null, options) }
             require(options.outWidth > 0 && options.outHeight > 0)
-            var sample = 1
-            while (maxOf(options.outWidth, options.outHeight) / sample > bound) sample *= 2
-            options.inSampleSize = sample
+            options.inSampleSize = ThumbnailSampling.sampleSize(options.outWidth, options.outHeight, bound)
             options.inJustDecodeBounds = false
             return context.contentResolver.openInputStream(uri)!!.use {
                 requireNotNull(BitmapFactory.decodeStream(it, null, options))

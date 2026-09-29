@@ -84,7 +84,9 @@ android {
         }
         release {
             debuggable false
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     // Run existing independent behavior fixtures through Gradle's standard test task.

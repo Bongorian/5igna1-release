@@ -12,6 +12,13 @@ Canonical source: **https://github.com/Bongorian/5igna1-release**. Version 1.0.0
 
 All release flavors use `com.bongorian.signa1`. Core functions remain shared. Matching package IDs do not make different signing certificates interchangeable. Decide Play app signing before enrollment if cross-source updates are wanted. F-Droid signature copying additionally requires an accepted reproducible-build setup, which is not verified here.
 
+Release builds after 1.7.5 enable R8 code optimization and resource shrinking. Keep
+`app/build/outputs/mapping/<variant>/mapping.txt` with the exact APK/AAB that generated
+it for crash retracing; never use another build's mapping. Play AABs include the
+mapping under `BUNDLE-METADATA/com.android.tools.build.obfuscation/proguard.map`.
+Verify optimized builds before publishing, including external camera capture, whose
+ViewModel constructor is called reflectively. Debug builds remain unoptimized.
+
 [Android signing](https://developer.android.com/studio/publish/app-signing) · [F-Droid reproducible builds](https://f-droid.org/en/docs/Reproducible_Builds/)
 
 ## Version rules
