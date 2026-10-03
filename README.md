@@ -1,6 +1,6 @@
 # 5igna1 website
 
-Japanese closed-test recruitment page hosted by GitHub Pages. Static HTML/CSS, without a build dependency or JavaScript. Keep `.nojekyll`.
+Japanese public-release product page hosted by GitHub Pages. Static HTML/CSS, without a build dependency or JavaScript. Keep `.nojekyll`.
 
 - Landing: https://bongorian.github.io/5igna1-release/
 - Japanese privacy policy: https://bongorian.github.io/5igna1-release/privacy/
@@ -12,11 +12,11 @@ GitHub Pages continues to deploy `codex/privacy-pages` at `/`. Publish tested we
 
 Serve this directory with any static HTTP server to preview. Check all relative links and images before publishing. [Asset provenance](ASSETS.md).
 
-## Recruitment
+## Public release
 
-The page recruits Google Play closed-test participants. Do not describe the product or testing as free, promise eligibility, or replace the application contact with a public APK download. Pricing and participation conditions are provided by the owner.
+Updated 2026-10-03 after verifying the unauthenticated Japanese Google Play listing, including its purchase button and 1.7.5 release notes. The primary action is https://play.google.com/store/apps/details?id=com.bongorian.signa1 . Distribution is Japan, Taiwan, United States and Canada; pricing and device eligibility are shown by Play.
 
-The public application link is https://docs.google.com/forms/d/e/1FAIpQLSe3DG5H0_nYEP9pk1v1bQU3BytAQWtgAYScoBTCsI9YMPtdsA/viewform. Use this respondent URL, never the form editor URL. Fields: Google Play email (required), device/Android version (optional), notes (optional). Response summaries are not shared with respondents. The policy includes this form use.
+The page describes released 1.7.5 features, not unreleased R8 optimization work. Historical 1.3.1 screenshots retain their version and provenance caption. The old recruitment form is no longer promoted; existing tester-form privacy disclosures remain applicable to previously collected responses.
 
 ## Play Console privacy URL update
 

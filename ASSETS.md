@@ -7,6 +7,6 @@ Updated 2026-09-09 for the 5igna1 closed-test recruitment page.
 - Photograph fed to the camera: **PXL_20251115_072723406.jpg**, 3072×4080, supplied by the project owner, who stated that they took it and authorized its use for this page. Photograph copyright remains with the owner; it is not covered by the project Apache-2.0 license. The camera crops/scales the source and the app applies its FAULT processing.
 - The original camera source photo is retained in the local application verification folder; the public site contains the captured app UI only. The gallery caption identifies the owner as the photographer and states that the image was supplied to an emulator.
 - App interface: project Apache-2.0. Android system interface: Android Open Source Project, Apache-2.0. Photograph: owner copyright, used with permission. See LICENSE and NOTICE.
-- No generated artwork, external fonts, stock image services, analytics, cookies or JavaScript libraries are embedded. The recruitment button links to the owner's Google Form.
+- No generated artwork, external fonts, stock image services, analytics, cookies or JavaScript libraries are embedded. The primary action now links to the public Google Play listing (updated 2026-10-03).
 
 The initial version used the AOSP fake-camera house pattern. It has been replaced with the photograph above at the owner's request.
