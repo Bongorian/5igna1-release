@@ -1,23 +1,24 @@
 # Distribution status and owner checklist
 
-Last verified: **2026-09-20 (Japan time)**. This is the single current distribution-status record. Release procedures explain how to publish; dated reports preserve evidence and are not current status.
+Last updated: **2026-10-06 (Japan time)**. Dates in individual rows identify their evidence. This is the single current distribution-status record. Release procedures explain how to publish; dated reports preserve evidence and are not current status.
 
 | Stage | Verified state | Evidence / next step |
 |---|---|---|
 | GitHub / Obtainium | 1.7.5 / code 24 published; signed APK and checksum publicly verified | [Release](https://github.com/Bongorian/5igna1-release/releases/tag/v1.7.5); APK SHA-256 `c99133bdf34fc002df5dced38edbc0e089dd372126b8166639aede1c9c8ac2cb` |
 | Current source | 1.7.5 / code 24: photo settings exchange, optional diagnostics, video haptics and viewer/tutorial refinements | Integrated into main; immutable v1.7.5 at `73faba9`; DEV installed |
 | Google Play AAB upload | 1.7.5 / code 24 uploaded to Alpha as a draft | [Successful upload](https://github.com/Bongorian/5igna1-release/actions/runs/35462910259); SHA-256 `eacf07410b3325e3dadcfdacbf0697d92a57a96d849f88c3256af6f0f7a30bd6` |
-| Google Play review submission | Current submission status not verified | Check Play Console; upload success does not prove submission |
+| Google Play production | Public Japanese listing with purchase button and 1.7.5 release notes verified on October 3 | [Google Play](https://play.google.com/store/apps/details?id=com.bongorian.signa1); selected regions: Japan, Taiwan, United States and Canada |
 | Google Play tester delivery | Current served version not verified; historical confirmation is 1.3.0 / code 11 on September 9 | [Historical record](PLAY_1_3_0.md); do not treat this as the current version |
-| F-Droid | Owner-reported 1.0.0 / code 8 submission; current review/merge status not rechecked | [Candidate audit](FDROID_READINESS.md) |
-| Public website | 1.7.5 content and all three privacy languages publicly verified | [Website](https://bongorian.github.io/5igna1-release/); [deployment](https://github.com/Bongorian/5igna1-release/actions/runs/35462912482) |
+| F-Droid | MR updated to 1.7.5 / code 24 on October 6; all 9 CI jobs passed and review replied; maintainer testing/merge pending | [Review and validation](FDROID_READINESS.md); [MR !48124](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/48124) |
+| Public website | Product landing and Google Play links deployed and verified October 3; historical screenshot captions retained | [Website](https://bongorian.github.io/5igna1-release/); [deployment](https://github.com/Bongorian/5igna1-release/actions/runs/37120576487) |
 
 For each release, update the source, GitHub publication and website rows after verifying them. Update the Play upload row only from a successful upload result. Review and tester-delivery rows require separate Console evidence. Record the checked date and link; use “not verified” when no current evidence exists.
 
 ## Remaining owner work
 
-- [ ] Complete Play testing/review/publication as appropriate; preserve tester and country settings.
-- [ ] Respond to F-Droid review and complete the server-side build/merge process.
+- [x] Complete initial Play production publication (public listing verified October 3).
+- [x] Update the F-Droid candidate and respond to review with successful server-side build/scanner results (October 6).
+- [ ] Await F-Droid maintainer testing, merge and public delivery.
 - [ ] Confirm an Obtainium import/install on a device.
 - [ ] Keep a verified signing-key backup on separate offline media. The known Documents backup is on the same computer.
 - [ ] Confirm signature compatibility before claiming cross-store in-place updates. The Play upload key is not the installed APK signing key.

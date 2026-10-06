@@ -228,3 +228,7 @@
 ## Owner direction — 1.7.5 release, 2026-09-20
 
 - Merge completed photo-setting exchange, diagnostics, video haptics and viewer/tutorial improvements into main and release 1.7.5 / code 24 with the existing distribution key. Update GitHub artifacts and existing Pages, and verify configured Play Alpha draft upload. Preserve previous releases, signing keys, Play reviews and tester settings.
+
+## Owner direction — F-Droid review, 2026-10-06
+
+- The owner requested addressing MR !48124's review. Update the F-Droid candidate to the published 1.7.5 / code 24, pinned to `73faba9ca51f6d00ac68385b16a18eca68deba6b`, run its CI and reply with verified results. This supersedes the old instruction to keep that MR on 1.0.0; preserve the original release artifacts and tags. Unreleased R8 work is not part of this submission. Merge/public F-Droid delivery remain the maintainers' decision.

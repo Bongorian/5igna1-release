@@ -1,18 +1,32 @@
-# F-Droid readiness — submission awaiting merge
+# F-Droid readiness — submission review
 
-Audit date: 2026-09-08. Candidate: **5igna1 1.0.0 / versionCode 8**.
+## Current candidate — 2026-10-06
 
-Status reported by the owner on 2026-09-08: the 1.0.0 submission is awaiting merge. This audit describes that submitted candidate; later GitHub/Play releases do not alter this submitted candidate. See the [dated distribution status](LAUNCH_TASKS.md). The candidate metadata continues to pin v1.0.0.
+[MR !48124](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/48124) now targets
+**1.7.5 / versionCode 24**, pinned to the full immutable upstream commit
+`73faba9ca51f6d00ac68385b16a18eca68deba6b`.
+This responds to the [request to update before testing](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/48124#note_3949320110).
+The MR uses normal F-Droid server signing, not signature copying.
 
-The audited 1.0.0 source builds as FOSS. Candidate metadata lint and a scan of the new public source snapshot passed with zero source errors or warnings. This repository starts from the audited current source, with a new Git history and the old development screenshots excluded. Acceptance into F-Droid remains a separate process.
+- Build recipe and CurrentVersion fields were updated together in
+  [abef6948](https://gitlab.com/bongorian/fdroiddata/-/commit/abef6948fb90f348f8cba6e1df9795a284685aec).
+- Local `fdroid lint com.bongorian.signa1` passed with fdroidserver 2.4.5 and
+  fdroiddata's category definitions.
+- [F-Droid CI](https://gitlab.com/bongorian/fdroiddata/-/pipelines/2916472861): all 9 jobs passed,
+  including build/source scan and the binary scanner in `check apk` on the code-24 APK.
+- `com.google.android.play:app-update:2.1.0` is a `playImplementation` dependency.
+  `src/fdroid/.../DistributionUpdates.kt` is a no-op. The generated F-Droid APK passed the independent non-free class scan.
+- Unreleased R8 optimization changes are not part of this candidate.
 
-## Remaining work
+[Replied to the review](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/48124#note_3960262300)
+with the pinned version and CI evidence. Maintainer testing, merge and public
+F-Droid delivery remain pending. See [distribution status](LAUNCH_TASKS.md).
 
-1. Validate the public v1.0.0 tag with `fdroid build --test` in F-Droid's Linux environment, and respond to the pending submission review.
-2. Decide whether ordinary F-Droid signing is sufficient. Cross-source updates are not guaranteed; reproducible builds/signature copying have not been validated.
-3. Complete the publisher's final review of generated promotional artwork and device behavior.
+## Historical 1.0.0 audit — 2026-09-08
 
-GitHub distribution signing is configured locally and the key/recovery files are backed up. Normal F-Droid server signing is independent of GitHub and Play signing. Current automation is documented separately in [Play uploads](PLAY_AUTOMATION.md).
+The evidence below describes the original **1.0.0 / versionCode 8** submission,
+not the current candidate. Published artifacts, tags and signing identities remain
+unchanged. Current automation is documented in [Play uploads](PLAY_AUTOMATION.md).
 
 ## Audit summary
 
